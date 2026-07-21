@@ -236,3 +236,70 @@ def run_active(oracle, box_lo, box_hi, *, budget: int = 200,
 
     return ActiveResult(last_result, box0, box, trajectory, led, predictions,
                         led.spent)
+
+
+# ---- Policy v3: box-search on abstain (docs/DIRECTION_BOXSEARCH.md) ----------
+
+@dataclass
+class BoxSearchResult:
+    active: ActiveResult          # the winning (or last) ActiveResult
+    boxes_tried: int              # K -- for the significance accounting alpha<=K*|H|*q^h
+    heldout_box_ok: bool | None   # did the law survive a fresh independent box?
+    transforms: list              # the box ladder actually attempted
+
+
+def _box_ladder(lo, hi):
+    """Bounded ladder of box transforms, ordered cheap-first. Each moves the input
+    arguments through a different regime; capped so multiple-testing stays bounded."""
+    lo, hi = np.asarray(lo, float), np.asarray(hi, float)
+    yield ("as-declared", lo, hi)
+    yield ("expand-x10", lo / 10.0, hi * 10.0)
+    yield ("shift-up-decade", lo * 10.0, hi * 10.0)
+    yield ("shift-down-decade", lo / 10.0, hi / 10.0)
+    yield ("expand-x100", lo / 100.0, hi * 100.0)
+
+
+def _heldout_box_ok(oracle, active: ActiveResult, floor_abs, seed) -> bool:
+    """Re-query a FRESH sample from the winning (ranged) box and check the recovered
+    law certifies on it -- the box-level fit/cert split that defeats box cherry-picking."""
+    r = active.result
+    if not r.certificate.certified or r.expr is None:
+        return False
+    box = np.asarray(active.box_final, float)
+    rng = np.random.default_rng(seed + 991)
+    X = np.exp(rng.uniform(np.log(box[0]), np.log(box[1]), (60, box.shape[1])))
+    y = np.asarray(oracle(X), float)
+    m = np.isfinite(y)
+    if m.sum() < 8:
+        return False
+    X, y = X[m], y[m]
+    dim = X.shape[1]
+    syms = list(sp.symbols([f"x_{i}" for i in range(dim)])) if dim > 1 \
+        else [sp.Symbol("x_0")]
+    from .certify import check, epsilon
+    pred_eps = epsilon(y, floor_abs=floor_abs)
+    return check(r.expr, syms, X, y, pred_eps)["certified"]
+
+
+def run_active_boxsearch(oracle, box_lo, box_hi, *, budget: int = 200,
+                         policy: Policy = Policy(), floor_abs: float = MACHINE_FLOOR,
+                         seed: int = 0, max_boxes: int = 5) -> BoxSearchResult:
+    """On abstain, search a bounded box ladder; a certification counts only if it also
+    survives a fresh independent box (held-out-box guard). K (boxes tried) is reported
+    for the significance accounting. Sound extension of adaptive ranging."""
+    last = None
+    tried = []
+    for k, (name, lo, hi) in enumerate(_box_ladder(box_lo, box_hi)):
+        if k >= max_boxes:
+            break
+        tried.append(name)
+        active = run_active(oracle, lo, hi, budget=budget, policy=policy,
+                            floor_abs=floor_abs, seed=seed)
+        last = active
+        if active.result.certificate.certified:
+            ok = _heldout_box_ok(oracle, active, floor_abs, seed)
+            if ok:
+                return BoxSearchResult(active, k + 1, True, tried)
+            # certified on this box but NOT on a fresh one -> box-selection artifact,
+            # reject and keep searching (this is the guard doing its job)
+    return BoxSearchResult(last, len(tried), False if last else None, tried)
