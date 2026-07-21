@@ -135,3 +135,49 @@ applied here):
 **Record:** zero-wrong invariant now **0 / 158** scored tasks. Program-law recovery is the first
 target with genuinely-unknown per-function recoverability, and the instrument sorted ten functions
 into recovered / honestly-refused / diagnosed-limit with no fabrication.
+
+
+---
+
+## Instrument v2 (2026-07-21) — DISCLOSED EXPOSURE-INFORMED bump, then re-run.
+
+The two v1 misses (§ verdict) were diagnosed to specific frozen-instrument limits. Both fixes are
+**generic** (no per-function logic) but **exposure-informed** (F6/F10 failed first), so per the
+discipline they are registered as a dated version bump and the re-run carries a permanent asterisk
+— exactly as rc-circuit and the NewtonBench pilot cells were carried.
+
+- **C5 gains an `exp`-of-target transform** — `exp(y)` fit by the existing stack, inverted with
+  `log`. Generic (reaches the whole log-sum-exp family); closes the F6 curriculum gap.
+- **Acquisition policy v2: arity-adaptive init** — `n_init = init_points + init_per_arity·(dim−1)`.
+  A `k`-arity target has a larger term library; thin init starved F10. A declared rule over all
+  targets, not a per-target tune.
+
+**Re-run is scored with the v2 asterisk.** F1–F5, F7–F9 are re-run too, to confirm no regression
+and — the load-bearing check — **no new confident-wrong** introduced by the wider curriculum
+(a bigger transform set is exactly where a spurious certification could sneak in).
+
+
+### v2 VERDICT (2026-07-21, carries the exposure asterisk). 4 recovered, 6 abstain, zero wrong.
+
+| func | v1 → v2 | detail |
+|---|---|---|
+| F6 logaddexp | abstain → **CERT ✓** | `log(exp(x_0) + exp(x_1))` — the exp-transform fix landed exactly |
+| F10 hypot3 | abstain → **abstain** | **NOT the diagnosed cause.** Arity-adaptive init did not help; re-diagnosed below |
+| F1,F2,F3,F4,F5,F7,F8,F9 | unchanged | no regression; **no new confident-wrong from the wider curriculum** |
+
+**F6 confirms the curriculum-gap diagnosis** — one generic capability (exp-of-target) closed the
+whole log-sum-exp family. **Zero confident-wrong across the re-run** (now the load-bearing check
+passed on a wider transform set, exactly where a spurious certification could have slipped in).
+
+**F10 re-diagnosed — a third, different limit, and deliberately NOT chased.** It is neither
+curriculum nor acquisition-budget: it is **machine-precision conditioning of the wide registered
+box.** Measured: `discover` recovers `sqrt(x0²+x1²+x2²)` on `[0.5, 8]³` but abstains on the
+registered `[0.1, 100]³` at *any* data volume (90 or 120 points). Over three decades per axis the
+square-transform least-squares fit cannot pin coefficients to exactly `1` at machine precision, so
+the instrument **refuses rather than certify `sqrt(1.0000001·x0² + …)` as exact** — correct
+strictness, not a defect. A v3 to add box-conditioning preprocessing would be exposure-chasing a
+single function, and is declined: F10 stands as an **honest abstention with a traceable cause.**
+
+**Record:** zero-wrong invariant **0 / 168**. v2 is one disclosed, generic, exposure-informed bump
+that closed one of two diagnosed limits; the other turned out to be a strictness property worth
+keeping, not a bug to tune away.

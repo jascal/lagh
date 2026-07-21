@@ -39,6 +39,10 @@ class Policy:
     """Frozen at instrument registration."""
 
     init_points: int = 40
+    init_per_arity: int = 40    # v2: init = init_points + init_per_arity*(dim-1);
+                                # a k-arity transform target has a larger term library,
+                                # so thin init starved 3-arity recoveries (F10). Declared
+                                # rule, applied to every target, not a per-target tune.
     replicates: int = 2
     max_rounds: int = 8
     batch: int = 20
@@ -140,8 +144,9 @@ def run_active(oracle, box_lo, box_hi, *, budget: int = 200,
             return ActiveResult(Result(cert, None, 0, 0), box0, box, trajectory,
                                 led, [], led.spent)
 
-    # ---- init + replicates ----
-    X = _sample(box, policy.init_points, rng)
+    # ---- init + replicates (arity-adaptive per policy v2) ----
+    n_init = policy.init_points + policy.init_per_arity * (box.shape[1] - 1)
+    X = _sample(box, n_init, rng)
     y = np.asarray(oracle(X), float)
     led.record("init", len(X))
     rep = np.asarray(oracle(np.vstack([X[0]] * policy.replicates)), float)
