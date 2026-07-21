@@ -37,7 +37,7 @@ MODULES = {
     "m8_sound_speed": (["adiabatic_index", "temperature", "molar_mass"],
                        [1.1, 100, 0.01], [1.7, 500, 0.05]),
     "m9_hooke_law": (["x"], [0.1], [10]),
-    "m10_be_distribution": (["omega", "temperature"], [0.5, 100], [10, 1000]),
+    "m10_be_distribution": (["omega", "temperature"], [50, 50], [500, 500]),
     "m11_heat_transfer": (["m", "c", "delta_T"], [0.5, 0.5, 1.0], [10, 10, 100]),
 }
 
@@ -59,6 +59,10 @@ def make_oracle(module: str, law_version: str, difficulty: str = "easy"):
                 y = float(run(noise_level=0.0, difficulty=difficulty,
                               system="vanilla_equation", law_version=law_version, **kw))
             except Exception:                                # noqa: BLE001
+                y = float("nan")
+            # values at/beyond the float64 exact-integer ceiling (2**52) are
+            # overflow/precision saturation artifacts, not signal -> invalid
+            if abs(y) >= 2.0**52:
                 y = float("nan")
             out.append(y)
         return np.array(out)

@@ -22,6 +22,7 @@ from .classes import CURRICULUM, c5_transforms, c6_quasipoly
 from .engine_util import stlsq_supports
 
 PREFILTER_REL = 1e-6
+MIN_TOTAL_POINTS = 8   # never certify on fewer TOTAL valid points (significance floor)
 
 
 @dataclass
@@ -139,6 +140,21 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     eps = epsilon(y_cert, sigma=sigma, se=se_cert, floor_abs=floor_abs)
     bounds = [(float(X_cert[:, j].min()), float(X_cert[:, j].max()))
               for j in range(dim)]
+
+    # minimum-domain guard: certifying on too few TOTAL valid points is not
+    # significant (a constant over 4 overflow-artifact points produced the only
+    # confident-wrong in the program's history). The empirical floor the
+    # significance direction formalizes: |H|*q^h is meaningless when total evidence
+    # is tiny. Counts fit+select+cert so a small cert split alone does not trip it.
+    n_total = (int(np.isfinite(np.asarray(y_fit, float)).sum())
+               + int(np.isfinite(np.asarray(y_sel, float)).sum())
+               + int(np.isfinite(y_cert).sum()))
+    if n_total < MIN_TOTAL_POINTS:
+        cert = Certificate(False, 0, 0, len(X_cert), bounds, "",
+                           abstain=Abstain.RANGE.value,
+                           notes=[f"only {n_total} total valid points "
+                                  f"(< {MIN_TOTAL_POINTS}); too thin to certify"])
+        return Result(cert, None, 0, 0)
 
     # vacuity first: if the zero law certifies, nothing here can be evidence
     if vacuous(syms, X_cert, y_cert, eps):
