@@ -104,34 +104,4 @@ def terms(dim: int, X_fit: np.ndarray, y_fit: np.ndarray, X_cert=None) -> list[T
             fn = (lambda X_, i=i, j=j, ft=ft: X_[:, i] * X_[:, j] * ft.fn(X_))
             out.append(Term(f"x_{i}*x_{j}*{ft.name}", fn, ft.guard,
                             ft.complexity + 2))
-    # FEATURE x FEATURE products: reaches damped oscillations exp(-b*t)*cos(w*t)
-    # and the "envelope x carrier" family. The trap is that neither factor fits y
-    # ALONE (each is modulated by the other), so a global top-K ranking misses
-    # them. Guarantee coverage instead: take the best few features of EACH
-    # transcendental family and pair ACROSS families, so exp x cos is always
-    # formed regardless of single-feature residual.
-    from collections import defaultdict
-    by_family = defaultdict(list)
-    # per-family cap scales DOWN with arity: the pair count is O(pool^2) and the
-    # base library already grows with dim, so a fixed pool explodes discover on
-    # 3-input modules (measured: snell hung). Keep coverage (>=2 per family) while
-    # bounding the pool.
-    per_family = max(2, TOP_PAIR - (dim - 1) * 2)
-    for _, fam, t in found:
-        if len(by_family[fam]) < per_family:
-            by_family[fam].append(t)
-    pool = [t for fam in by_family for t in by_family[fam]]
-    seen = set()
-    for a in range(len(pool)):
-        for b in range(a, len(pool)):
-            fa, fb = pool[a], pool[b]
-            key = tuple(sorted((fa.name, fb.name)))
-            if key in seen:
-                continue
-            seen.add(key)
-            fn = (lambda X_, fa=fa, fb=fb: fa.fn(X_) * fb.fn(X_))
-            out.append(Term(f"({fa.name})*({fb.name})", fn,
-                            (lambda X_, fa=fa, fb=fb:
-                             fa.guard(X_) and fb.guard(X_)),
-                            fa.complexity + fb.complexity))
     return out
