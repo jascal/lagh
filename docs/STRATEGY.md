@@ -62,3 +62,28 @@ registration, then read it **once**. Not before.
 m0–m3 (gravity, coulomb, magnetic, fourier) all versions recovered, zero wrong — the
 power-law/rational/linear families are solid. Full sweep and per-difficulty coverage pending;
 the underdamped-harmonic gap is the known risk to R-cap.
+
+## Amendment 2026-07-21 — no August competition target; deadline framing dropped
+
+We did **not** register for AISB/NLPCC Task 9 (registration closed 2026-05-25), so its 2026-08-01
+submission is unavailable. A fresh web survey confirms the earlier finding: **the LLM-science /
+symbolic-discovery space is paper-benchmarks, not live competitions** — no open submission server
+with a near-term deadline exists that fits. The "August deadline" therefore has **no valid
+target**, and the deadline framing is dropped. This *confirms* the disciplined path: no artificial
+deadline; readiness bar → reserved blind benchmark → self-scored blind read, with `I7` standing in
+for the extinct held-out server.
+
+Sealed candidate leads from the survey (named by metadata only, UNOPENED):
+- **LLM-SRBench** (ICML 2025, 239 problems, 4 domains, anti-memorization) — primary reserved blind.
+- **Gravity-Bench-v1** — gravitational-physics discovery *for agents*; queryable, agent-shaped →
+  a direct fit for the tool-shape (LLM + lagh active recovery). Strong secondary.
+- **SURFACEBENCH** — symbolic surface discovery, geometry-aware. Symbolic, in-class-adjacent.
+- **REFUTE** (2026.06) — scores missing-evidence **refusal**, **calibration**, planted-flaw
+  detection. The one family where *abstention is the scored metric*: a native fit for the
+  zero-wrong + significance-α story. Flags a whole benchmark class (epistemic-calibration) where
+  the federation wins by design rather than by bolt-on.
+
+Decision: keep developing lagh against NewtonBench-dev to the readiness bar; build the tool-shape
+(MCP) so lagh/i-orca become LLM-orchestrated; then a single blind read of a reserved benchmark on
+our schedule. The externally-adjudicated live win remains desirable but is not currently available;
+watch for a new competition (esp. calibration-scored) rather than force a dead one.
