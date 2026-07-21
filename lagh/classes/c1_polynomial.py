@@ -40,4 +40,29 @@ def terms(dim: int, X_fit=None, y_fit=None, X_cert=None) -> list[Term]:
                         ("log", np.log), ("sqrt", np.sqrt)):
             fn = (lambda j, f: lambda X: f(X[:, j]))(j, f)
             out.append(Term(f"{name}(x_{j})", fn, finite_guard(fn), 2))
+    # FRACTIONAL-power features (Half-1: rational exponents), guarded x>0. Bounded to
+    # half/third integers that cover physics (^1.5, ^2.5, ^0.5, ^-1.5, cube roots).
+    # These stay in the EXACT-rational class -- the irrational boundary is not crossed.
+    from fractions import Fraction as _F
+    FRAC_EXP = [_F(1,2), _F(3,2), _F(5,2), _F(-1,2), _F(-3,2),
+                _F(1,3), _F(2,3), _F(4,3)]
+    def _pos(j):
+        return (lambda X, j=j: bool(np.all(X[:, j] > 1e-9)))
+    for j in range(dim):
+        for e in FRAC_EXP:
+            ef = float(e)
+            fn = (lambda X, j=j, ef=ef: X[:, j] ** ef)
+            nm = f"x_{j}**({e.numerator}/{e.denominator})"
+            out.append(Term(nm, fn, _pos(j), 2 + abs(e.numerator)))
+    # input * fractional-power-of-another-input (decay: lambda * t^1.5) -- half only,
+    # to bound growth
+    for j in range(dim):
+        for k in range(dim):
+            if j == k:
+                continue
+            for e in (_F(1,2), _F(3,2), _F(1,3), _F(2,3)):
+                ef = float(e)
+                fn = (lambda X, j=j, k=k, ef=ef: X[:, j] * X[:, k] ** ef)
+                nm = f"x_{j}*x_{k}**({e.numerator}/{e.denominator})"
+                out.append(Term(nm, fn, _pos(k), 3))
     return out
