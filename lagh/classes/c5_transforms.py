@@ -20,6 +20,11 @@ def transforms(y: np.ndarray):
         out.append(("log", np.log(y), lambda e: sp.exp(e)))
         out.append(("inv", 1.0 / y, lambda e: 1 / e))
     out.append(("square", y * y, lambda e: sp.sqrt(e)))
+    # CAP-D: sqrt-FORWARD (fit sqrt(y), invert by squaring) reaches y = (rational)^2
+    # and any y = g(x)^2 where g is lower-tier -- the C2 rational base becomes visible
+    # under the root. Guarded y>=0. Complements "square" (which fits y^2 for y=sqrt(.)).
+    if np.all(y >= 0):
+        out.append(("sqrt", np.sqrt(y), lambda e: e * e))
     if np.all(np.abs(y) <= np.pi / 2):
         out.append(("sin", np.sin(y), lambda e: sp.asin(e)))
     # exp-of-target: reaches log(sum of exps) forms (logaddexp family). exp(y) is a
@@ -31,4 +36,4 @@ def transforms(y: np.ndarray):
 
 def apply(name: str, y: np.ndarray) -> np.ndarray:
     return {"log": np.log, "inv": lambda v: 1.0 / v, "square": lambda v: v * v,
-            "sin": np.sin, "exp": np.exp}[name](np.asarray(y, float))
+            "sqrt": np.sqrt, "sin": np.sin, "exp": np.exp}[name](np.asarray(y, float))

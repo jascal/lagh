@@ -30,8 +30,14 @@ def candidates(ctx) -> list[Candidate]:
     yscale = float(np.sqrt(np.mean(y_va**2))) + 1e-300
     out: list[Candidate] = []
 
+    # pure-term denominators = single-VARIABLE terms (x_j, x_j**p, x_j**(p/q),
+    # sin(x_j), ...). The prior string heuristic ("*" not in name) wrongly excluded
+    # integer powers, because "x_j**2" contains "**": d=m^2 was never tried, so
+    # k/m - b^2/(4 m^2) (underdamped) and every P/x_j**p rational was unreachable at C2.
+    # Free-symbol count is the correct test: one variable = a pure denominator; a
+    # genuine cross-product x_i*x_j has two and is excluded.
     denom_idx = [i for i, t in enumerate(terms)
-                 if t.name != "1" and ("*" not in t.name or "(" in t.name)]
+                 if t.name != "1" and len(t.sympy().free_symbols) == 1]
 
     # pure-term denominators: y*d = P, plain lstsq, STLSQ-guided numerators
     for j in denom_idx:
