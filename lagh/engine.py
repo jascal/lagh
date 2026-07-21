@@ -18,7 +18,7 @@ from .base import (Candidate, admissible, design_matrix, lstsq, snap_all,
                    to_expr, eval_expr)
 from .certify import (Abstain, Certificate, check, coherent, epsilon,
                       sample_box, vacuous)
-from .classes import CURRICULUM, c5_transforms, c6_quasipoly
+from .classes import CURRICULUM, c5_transforms, c6_quasipoly, c7_levy
 from .engine_util import stlsq_supports
 
 PREFILTER_REL = 1e-6
@@ -123,7 +123,7 @@ def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
 
 def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              sigma: float = 0.0, se_cert=None, floor_abs: float = 1e-12,
-             max_tier: int = 6) -> Result:
+             max_tier: int = 7) -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
     Splits must be disjoint: fit, select, certify. Certification is exhaustive on
@@ -167,6 +167,33 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     # impostors that agree on the sampled tube but diverge as functions are caught)
     P = sample_box(X_cert, extend=0.5)
     yscale = float(np.sqrt(np.mean(y_cert**2)))
+
+    # C7: the Lévy-exponent grammar. On a CF-domain target (1-D positive input,
+    # nonpositive output = log|phi|), the general library under-determines the exponent
+    # (fractional-power impostors); this restricted grammar makes the true form unique.
+    # Tried BEFORE the general fallthrough but only on its domain.
+    if max_tier >= 7 and dim == 1 and c7_levy.is_levy_domain(X_fit, y_fit):
+        class _Ctx:
+            pass
+        cx = _Ctx(); cx.X_fit, cx.y_fit = X_fit, y_fit
+        cx.X_sel, cx.y_sel = np.asarray(X_sel, float), np.asarray(y_sel, float)
+        cx.se_scale = float(np.mean(se_cert)) if se_cert is not None else 0.0
+        lc = c7_levy.candidates(cx)
+        certifying = [c for c in lc
+                      if check(c.expr, syms, X_cert, y_cert, eps)["certified"]]
+        if certifying:
+            classes = coherent(certifying, syms, sample_box(X_cert, extend=0.5),
+                               yscale)
+            if len(classes) == 1:
+                w = min(classes[0][1], key=lambda z: z.complexity)
+                cert = Certificate(True, 0, 0, len(X_cert), bounds, str(w.expr),
+                                   notes=["Lévy exponent (C7)"])
+                return Result(cert, w.expr, 7, len(lc))
+            cert = Certificate(False, 0, 0, len(X_cert), bounds, "",
+                               abstain=Abstain.STRUCTURAL.value,
+                               notes=[f"{len(classes)} Lévy exponents certify"])
+            return Result(cert, None, 7, len(lc))
+
     total = 0
     for tier in [t for t, _ in CURRICULUM if t <= max_tier]:
         cands = _tier_candidates(tier, syms, dim, X_fit, y_fit, X_sel, y_sel, X_cert)

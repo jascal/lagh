@@ -98,3 +98,35 @@ processes that are not infinitely divisible (those abstain — correctly).
 - **Net:** the honesty core generalized to the stochastic domain (statistical `ε`, ranging, the
   extended-coherence improvement that helps everywhere), and the remaining work is a focused
   domain grammar, not a soundness question. The zero-wrong record stands.
+
+## C7 GRAMMAR VERDICT (2026-07-21). Built; Gaussian recovers; zero-wrong; range-limited.
+
+C7 (`lagh/classes/c7_levy.py`): a specialized Lévy-exponent tier — restricted to the
+Lévy-Khintchine building blocks (`−a u²`, `λ(cos wu−1)`, `−c log(1+u²/d)`, `−e|u|^α` rational-α)
+and their independent sums, coefficients by NNLS (Lévy coefficients ≥ 0), inner params grid-snapped
+to small rationals (no irrational admitted — L5 stays out by the boundary). Runs FIRST on the CF
+domain (1-D positive input, nonpositive output), before the general library that under-determines it.
+
+| target | outcome |
+|---|---|
+| **L1 Gaussian** | **recovered `−0.855 u²`, correct, unique** |
+| L2 compound Poisson | abstain (many forms certify) |
+| L3 variance-gamma | abstain |
+| L4 stable, rational α | abstain |
+| L5 stable, irrational α | abstain (correct — boundary) |
+| L6 mixed | abstain |
+| **confident-wrong** | **0 / 6 (PL-3 holds)** |
+
+**What's established:** the grammar is sound and the cleanest law (Gaussian) recovers uniquely,
+zero confident-wrong. **The limit is the achievable CF range, not the grammar:** the reliable
+window (`|φ̂| > 8/√n`) is cut at the first CF dip, before the distinguishing features are visible —
+compound Poisson's oscillation and the different asymptotics of VG/stable/Gaussian only separate
+over a wider `u`. Over the short window many Lévy forms are statistically indistinguishable, and
+extended-coherence correctly abstains rather than pick one.
+
+**Honest partial, not a failure:** the honesty core generalized to the stochastic domain
+(statistical ε, CF ranging, the extended-coherence improvement), a specialized grammar was added,
+and the well-conditioned case recovers with the invariant intact. Fuller recovery needs a wider
+reliable CF window — larger `n` (grows slowly, √log), a lower floor multiplier (riskier), or the
+distinguishing asymptotic captured by design (e.g. sampling `u` adaptively around the CF's
+informative region). Left as the next increment; the zero-wrong record stands.
