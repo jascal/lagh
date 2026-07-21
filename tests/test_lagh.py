@@ -177,3 +177,54 @@ def test_micro_predictions_recorded_and_scored():
     for rec in r.predictions:
         for p in rec["predictions"]:
             assert 0.0 <= p["hit_rate"] <= 1.0
+
+
+# -- Ehrhart quasi-polynomial recovery (exact integer domain) ----------------
+
+def test_ehrhart_counts_are_exact():
+    from fractions import Fraction
+    from lagh.adapters.ehrhart import lattice_count
+    # unit interval [0,1]: L(t) = t+1
+    assert [lattice_count([Fraction(1)], t) for t in (1, 2, 5)] == [2, 3, 6]
+    # [0, 3/2]: L(t) = floor(3t/2)+1 -> t=1:2, t=2:4, t=3:5
+    assert [lattice_count([Fraction(3, 2)], t) for t in (1, 2, 3)] == [2, 4, 5]
+
+
+def test_ehrhart_recovers_and_validates_out_of_range():
+    from fractions import Fraction
+    from lagh.adapters.ehrhart import lattice_count
+    from lagh.quasipoly import recover
+    inter = [Fraction(5, 2), Fraction(7, 3)]           # period 6, degree 2
+    ts = list(range(1, 49))
+    Ls = [lattice_count(inter, t) for t in ts]
+    r = recover(ts, Ls)
+    assert r.certified
+    # exact match far beyond the fit range -- interpolation cannot do this
+    for t in range(60, 90):
+        assert r.quasipoly(t) == lattice_count(inter, t)
+
+
+def test_ehrhart_abstains_when_budget_too_small():
+    from fractions import Fraction
+    from lagh.adapters.ehrhart import lattice_count
+    from lagh.quasipoly import recover
+    inter = [Fraction(5, 2), Fraction(7, 3)]           # needs many t for period 6
+    ts = list(range(1, 8))                             # far too few
+    Ls = [lattice_count(inter, t) for t in ts]
+    r = recover(ts, Ls)
+    assert not r.certified and r.abstain == "range"
+
+
+def test_ehrhart_never_confidently_wrong_on_random_polytopes():
+    from lagh.adapters.ehrhart import lattice_count, random_simplex
+    from lagh.quasipoly import recover
+    rng = np.random.default_rng(99)
+    for _ in range(12):
+        dim = int(rng.integers(1, 4))
+        inter = random_simplex(dim, rng)
+        ts = list(range(1, 49))
+        Ls = [lattice_count(inter, t) for t in ts]
+        r = recover(ts, Ls)
+        if r.certified:                                # if it answers, it is right
+            for t in range(50, 80):
+                assert r.quasipoly(t) == lattice_count(inter, t)
