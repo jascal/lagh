@@ -112,8 +112,13 @@ def terms(dim: int, X_fit: np.ndarray, y_fit: np.ndarray, X_cert=None) -> list[T
     # formed regardless of single-feature residual.
     from collections import defaultdict
     by_family = defaultdict(list)
+    # per-family cap scales DOWN with arity: the pair count is O(pool^2) and the
+    # base library already grows with dim, so a fixed pool explodes discover on
+    # 3-input modules (measured: snell hung). Keep coverage (>=2 per family) while
+    # bounding the pool.
+    per_family = max(2, TOP_PAIR - (dim - 1) * 2)
     for _, fam, t in found:
-        if len(by_family[fam]) < TOP_PAIR:
+        if len(by_family[fam]) < per_family:
             by_family[fam].append(t)
     pool = [t for fam in by_family for t in by_family[fam]]
     seen = set()
