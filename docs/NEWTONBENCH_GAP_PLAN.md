@@ -35,6 +35,15 @@ hard_v0 (`(m1+m2)²/r^{1.5}`), hard_v2 (`(m1²+m2²)r²`); m1_coulomb medium_v0 
 (`(q1+q2)³/r²`), hard_v1 (`q2²(q1+q2)³/r²`).
 
 ## CAP-D — rational base raised to a power, via a `sqrt` target-transform
+> **PROBE 2026-07-21 — REDIRECTED.** The underdamped *pure rational* `easy_v2` (`k/m − b²/4m²`) is
+> exactly reachable (`y·m² = km − b²/4`, resid 1e-14, C2 pure-denom `d=m²` hits it) yet **abstains
+> STRUCTURAL** on the box `[2,1,0.1]..[10,5,1]` — multiple materially-different rationals certify.
+> So underdamped is **box under-determination, not a grammar reach gap** (the "broaden the box on
+> abstain" failure mode). CAP-D's `sqrt`-transform is still needed for the `(rational)²` variants, but
+> is *insufficient alone*: the base must first be box-disambiguated via broader-box active acquisition
+> (`run_active_boxsearch`). Underdamped's 7 cells are therefore a **box-acquisition** target first,
+> `sqrt`-transform second — reclassified out of the pure-grammar batch.
+
 Add the missing `sqrt` transform (forward `√y`, invert `·²`) so `(rational)²` reduces to a C2 rational
 base. **Predicts (up to 5):** m6_underdamped easy_v1/v2, medium_v1, hard_v1 (the squared/plain rationals
 `(k/m − (b/2m)²)^{1 or 2}`). Fractional-power variants (hard_v0 `^1.5`, hard_v2/medium_v2 `m^{1.3}`) are
