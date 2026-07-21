@@ -75,3 +75,26 @@ empirical characteristic function and certified at significance α over a stated
 symbolic form.* It is **not** a claim about the true law with probability 1 (finite sample, stated
 α), nor about non-symmetric ID laws (v1 is symmetric; the imaginary part / drift is v2), nor about
 processes that are not infinitely divisible (those abstain — correctly).
+
+---
+
+## PARTIAL VERDICT (2026-07-21). Pipeline works; zero-wrong holds; needs a Lévy grammar.
+
+- **Mechanics work:** CF-domain ranging (noise-floor `~1/√n`) + bootstrap statistical `ε` correctly
+  turn a stochastic process into a certifiable real function `L(u)`.
+- **PL-3 CONFIRMED (the invariant):** zero confident-wrong across all six targets — after the
+  extended-coherence fix caught a masked spurious `x^(4/3)` recovery for Gaussian.
+- **PL-1 NOT met yet:** all six currently *abstain*. Cause established, not guessed: the general
+  fractional-power library (C1–C6) is too rich for the narrow achievable CF range — `x^(4/3)`,
+  `x^(2/3)` etc. certify as impostors and the exponent is under-determined. More data does NOT fix
+  it: `n` 20k→200k widens the reliable range only 1.83→2.16 (sqrt-log). The over-abstention is
+  honest, not a bug.
+- **The fix is a Lévy-specific grammar** (next build): restrict this target's curriculum to the
+  Lévy-Khintchine exponent forms — `−a u²` (Gaussian), `λ(cos(bu)−1)` (compound Poisson),
+  `−c log(1+u²/b²)` (VG/Gamma), `−c|u|^α` with **rational** α (stable) — plus their sums. This
+  removes the impostors and makes the true form unique, exactly as C6 is a specialized tier for
+  integer lattices. Irrational-α stable (L5) then abstains for the *right* reason (irrational
+  boundary), not under-determination.
+- **Net:** the honesty core generalized to the stochastic domain (statistical `ε`, ranging, the
+  extended-coherence improvement that helps everywhere), and the remaining work is a focused
+  domain grammar, not a soundness question. The zero-wrong record stands.
