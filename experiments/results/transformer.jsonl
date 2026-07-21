@@ -1,0 +1,6 @@
+{"checkpoint": "grokked", "exact_acc": 1.0, "b0": 0, "certified": true, "period": 11, "note": "period=11 degree=0", "period_correct": true, "ext_ref_ok": true, "idiom_correct": true, "confident_wrong": false}
+{"checkpoint": "grokked", "exact_acc": 1.0, "b0": 3, "certified": true, "period": 11, "note": "period=11 degree=0", "period_correct": true, "ext_ref_ok": true, "idiom_correct": true, "confident_wrong": false}
+{"checkpoint": "grokked", "exact_acc": 1.0, "b0": 7, "certified": true, "period": 11, "note": "period=11 degree=0", "period_correct": true, "ext_ref_ok": true, "idiom_correct": true, "confident_wrong": false}
+{"checkpoint": "undertrained", "exact_acc": 0.876, "b0": 0, "certified": true, "period": 11, "note": "period=11 degree=0", "period_correct": true, "ext_ref_ok": true, "idiom_correct": true, "confident_wrong": false}
+{"checkpoint": "undertrained", "exact_acc": 0.876, "b0": 3, "certified": true, "period": 11, "note": "period=11 degree=0", "period_correct": true, "ext_ref_ok": true, "idiom_correct": true, "confident_wrong": false}
+{"checkpoint": "undertrained", "exact_acc": 0.876, "b0": 7, "certified": true, "period": 11, "note": "period=11 degree=0", "period_correct": true, "ext_ref_ok": true, "idiom_correct": true, "confident_wrong": false}
