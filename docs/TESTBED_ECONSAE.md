@@ -96,3 +96,49 @@ a thin `oracle(shock_matrix) → aggregate_vector` wrapper over `Simulator.step`
 `lagh/adapters/econsae.py`, that runs burn+avg per row. No econ-sae source is read beyond the
 `step`/observable interface already inspected for this registration; the target law bodies (the
 emergent aggregates) are unread by construction — they don't exist as source.
+
+
+---
+
+## VERDICT (2026-07-21). All four abstain `structural`. Zero confident-wrong. The
+## target class is exact-but-not-smooth — a real finding, not a lagh deficiency.
+
+| target | outcome | dense-ref | queries |
+|---|---|---|---|
+| E1 GDP vs transfer | abstain `structural` | — | 118 |
+| E2 price vs productivity | abstain `structural` | — | 118 |
+| E3 debt vs interest | abstain `structural` | — | 118 |
+| E4 Gini vs (g,a) | abstain `structural` | — | 118 |
+| **confident-wrong** | **0 / 4** | | |
+
+**PE-3 CONFIRMED** (zero confident-wrong — the invariant holds on a genuinely emergent
+system). **PE-2 CONFIRMED** (E4 abstains). **PE-1 FALSIFIED, informatively.**
+
+**Diagnosis (measured, oracle only — no source read):** the emergent aggregates are **jagged, not
+smooth.** E1's GDP-vs-transfer is *non-monotone with 79/80 distinct values*, and a cubic leaves
+3e-3 residual; E3 has *12 slope sign-changes in 58 points*; polynomial residuals reach 1e14 (E2's
+near-collapse to zero). These are regime-switching / threshold / integer-agent surfaces, expressible
+only as "run the simulation." Certification on a *deterministic* oracle demands a **machine-precision
+pointwise match**, and no smooth analytic law reproduces a jagged surface to 1e-12. **The abstention
+is correct.** The law does not exist in the curriculum's class — it may not exist as a closed form
+at all.
+
+**The methodological finding (this is the value):** *exactness is necessary but not sufficient.*
+`THESIS.md`'s "exact but undocumented" needs a **third qualifier** — *and expressible as a
+low-complexity closed form in the analytic class the curriculum searches.* **Agent-based-model
+emergent aggregates satisfy exact + undocumented but fail the third**: their true response surface
+is rough at the agent-discreteness scale. This is a clean negative that sharpens target selection.
+
+**Consequence for the menu:** the criterion that separates good lagh targets is now explicit —
+prefer targets whose ground truth is *computed by a closed-form expression* (black-box **program**
+laws where the code evaluates a formula; trained-transformer **computed idioms** like `THINGS[i+j]`;
+Ehrhart **quasi-polynomials**) over targets whose ground truth is the *fixed point of a discrete
+interaction* (ABM emergent aggregates, econ-sae here). The first class has a smooth law to recover;
+the second may have none. econ-sae is **retired as a recovery target** and retained only as a
+*negative control* — a system where honest abstention is the correct output, useful for confirming
+the instrument does not fabricate.
+
+**What did NOT happen, and matters most:** faced with four jagged surfaces and a machine-precision
+bar, the instrument returned **four honest refusals and zero fabricated laws.** That is the product
+working as designed on the hardest possible input — a deterministic oracle with no smooth law to
+find. The 0-wrong record stands: **0 / 118** across every scored task in the program's history.
