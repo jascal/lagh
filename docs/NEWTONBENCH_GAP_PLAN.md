@@ -9,7 +9,13 @@ Ground rule: a capability is scored PASS only if (a) it unlocks its predicted ce
 previously-recovered cell, (c) it adds zero confident-wrong across the whole 108. Register → implement
 → isolated verify (predicted module + a regression module) → targeted re-sweep → score.
 
-## CAP-B — input × trig-monomial products / trig ratios  *(implement first: cleanest, contained)*
+## CAP-B — input × trig-monomial products / trig ratios  ✅ SCORED PASS (2026-07-21)
+**Result under the real NewtonBench harness (noise + active acquisition):** malus **1/9 → 6/9** —
+recovered easy_v0/v1/v2, medium_v0/v1, hard_v0 (the 5 predicted + easy_v0); the 3 `^e` cells abstain
+structural; **0 confident-wrong.** Prediction met exactly. Registered bound: emitted only for dim≤2
+(the features are admissible on any input, so dim≥3 blows up the C2 search; all trig gaps are dim-2).
+NewtonBench algebraic 55→60 / 88. Below is the pre-registration, unchanged.
+
 Feature: `x_i · sin^a(x_j) cos^b(x_j)`, small `a` and signed `b` (covers `(α sinθ+β cosθ)²` →
 {sin², cos², sincos}, `tan²=sin²cos^{-2}`, `cot²=cos²sin^{-2}`, `sin²/cos³`). Guarded finite.
 **Predicts (5):** m7_malus easy_v1 (`I₀tan²θ`), easy_v2 (`I₀cot²θ`), medium_v0 (`I₀(2sinθ+cosθ)²`),
