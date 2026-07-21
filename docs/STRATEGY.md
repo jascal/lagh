@@ -63,6 +63,30 @@ m0–m3 (gravity, coulomb, magnetic, fourier) all versions recovered, zero wrong
 power-law/rational/linear families are solid. Full sweep and per-difficulty coverage pending;
 the underdamped-harmonic gap is the known risk to R-cap.
 
+## FULL SWEEP + READINESS ASSESSMENT (2026-07-21, `experiments/results/newtonbench_all.jsonl`)
+
+After CAP-B (trig), the C2 power-denominator bug fix, and CAP-D (`sqrt`-transform):
+**64/108 recovered (was 55), 64/88 algebraic = 73% of the exact ceiling, confident-wrong 0/108.**
+Per-difficulty **module** coverage (any version): **easy 11/12, medium 11/12 (was 8/12), hard 6/12.**
+
+| gate | status | evidence |
+|---|---|---|
+| **R-cap** (≥10/12 on ≥2 difficulties) | **✅ MET** | easy 11/12 **and** medium 11/12 |
+| **R-zero** (zero confident-wrong, full sweep) | **✅ MET** | 0/108 |
+| **R-gap** (each gap closed or bounded w/ cause) | **≈ needs a bounding pass** | remaining abstains classify cleanly (see below); doc them one-line each |
+| **R-noise** (explicit noisy-regime decision) | **❌ OPEN — the gating decision** | all sweeps are clean deterministic oracles; MDBench showed noise is the weak point. Must decide: clear a stated noisy-dev bar, or register the blind read *clean/low-noise only* |
+
+**Remaining abstains, all accounted for (R-gap material):** 11 irrational-`^e` cells (out of class BY
+DESIGN — the wedge, correct-abstain); 9 inverse-trig (all m4_snell — needs an `arcsin/atan` tier,
++9 ceiling); the rest are CAP-A fractional-grid (hooke, frac-underdamped), CAP-C (gravity/coulomb
+high-degree), CAP-E (BE rational-of-exp), CAP-F (sound transcendental×power) — each a registered,
+scoped capability in `NEWTONBENCH_GAP_PLAN.md`. The old "underdamped is the R-cap risk" note is
+**superseded**: underdamped was a C2 reach bug (now 4/9), not the blocker.
+
+**Bottom line:** two of four gates (R-cap, R-zero) are now MET on dev. The blind read remains sealed
+— it is gated on **R-noise (an explicit decision)** and an R-gap bounding pass, and the blind read is
+a deliberate one-shot the user authorizes, never an automatic consequence of hitting coverage.
+
 ## Amendment 2026-07-21 — no August competition target; deadline framing dropped
 
 We did **not** register for AISB/NLPCC Task 9 (registration closed 2026-05-25), so its 2026-08-01
