@@ -56,3 +56,29 @@ complementary rather than competing.
    measured property, not a gap to close — and route those cells to the LLM in the composite.
 4. R-cap is re-evaluated with (1)+(2); if hard still < 10/12 due to irrational exponents, that is
    the honest ceiling for lagh-alone, and the composite is the path.
+
+## Design principle: DO NOT add an irrational-exponent class (load-bearing)
+
+The rational/irrational exponent line is the exact-certifiable boundary, not a limitation to
+overcome. Adding irrational support (`x^e`) is refused, for five compounding reasons:
+
+1. **Breaks "certified."** `e` is non-terminating; supporting it means approximating it, which turns
+   the certificate from "holds exactly" into "fits within tolerance for this approximation" — i.e.
+   approximate SR, the thing lagh exists not to be. It would rebuild PySR and discard the only
+   distinguishing claim.
+2. **Destroys the significance guarantee.** `α ≤ |H|·q^h` needs `|H|` finite/countable (bounded-
+   denominator rationals). A continuous real exponent is uncountably many hypotheses; `|H|→∞`,
+   significance collapses — the multiple-testing failure the min-domain guard just fought.
+3. **Forces the nonlinear search we refused.** A real-exponent fit is a search, not a solve, and a
+   continuous-parameter residual-minimizer ALWAYS fits within tolerance → it never abstains,
+   deleting the product.
+4. **The abstention is a TRUE statement.** On a genuine `x^e`, "not an exact rational-closed-form"
+   is correct. Supporting it replaces true refusal with fabricated certification of an
+   approximation — the confident-wrong direction.
+5. **No principled stop past the line.** Irrational exponents → irrational coefficients →
+   transcendental compositions → algebraic numbers → …; rational/irrational is the only principled
+   boundary where "certify" has content.
+
+**The coincidence is the design cohering:** fractional-RATIONAL exponents stay in-class (add them,
+exact); irrational ones are out (abstain). The composite covers `x^e` via the LLM's
+constants-disregarded structure judgment. lagh's abstention there is the value working, not failing.
