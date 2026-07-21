@@ -65,4 +65,49 @@ def terms(dim: int, X_fit=None, y_fit=None, X_cert=None) -> list[Term]:
                 fn = (lambda X, j=j, k=k, ef=ef: X[:, j] * X[:, k] ** ef)
                 nm = f"x_{j}*x_{k}**({e.numerator}/{e.denominator})"
                 out.append(Term(nm, fn, _pos(k), 3))
+    # CAP-B: trig-MONOMIAL products sin^a(x_k) cos^b(x_k), standalone and times another
+    # input x_j. A general structural class: any law that is a (product of an input and a)
+    # trigonometric monomial of another input -- (alpha sin + beta cos)^2 expands to the
+    # (2,0)/(0,2)/(1,1) block; tan^2 = (2,-2); cot^2 = (-2,2); sin^2/cos^3 = (2,-3). The
+    # ratio blocks are guarded so the denominator stays bounded away from zero on the box.
+    # REGISTERED BOUND (NEWTONBENCH_GAP_PLAN.md): emitted only for dim<=2. These features
+    # are admissible on any input (cos(mass) is defined), so at dim>=3 they roughly double
+    # the term count and blow up the C2 rational search; every trig-shaped law in the gap
+    # set is dim-2 (input x trig-of-angle). A dim>=3 trig law would be silently missed --
+    # this is a stated cap, not a claim of coverage.
+    TRIG_AB = [(2, 0), (0, 2), (1, 1), (2, -2), (-2, 2), (2, -3)] if dim <= 2 else []
+    def _cos_ok(k):
+        return (lambda X, k=k: bool(np.all(np.abs(np.cos(X[:, k])) > 1e-6)))
+    def _sin_ok(k):
+        return (lambda X, k=k: bool(np.all(np.abs(np.sin(X[:, k])) > 1e-6)))
+    def _trig(a, b):
+        def f(X, k):
+            v = np.ones(len(X))
+            if a: v = v * np.sin(X[:, k]) ** a
+            if b: v = v * np.cos(X[:, k]) ** b
+            return v
+        return f
+    for k in range(dim):
+        for a, b in TRIG_AB:
+            base = _trig(a, b)
+            # guard: negative sin/cos power needs that function bounded away from 0
+            if b < 0 and a < 0:
+                guard = lambda X, ck=_cos_ok(k), sk=_sin_ok(k): ck(X) and sk(X)
+            elif b < 0:
+                guard = _cos_ok(k)
+            elif a < 0:
+                guard = _sin_ok(k)
+            else:
+                guard = ALWAYS
+            nm = f"sin(x_{k})**{a}*cos(x_{k})**{b}"
+            out.append(Term(nm, (lambda base=base, k=k: lambda X: base(X, k))(),
+                            guard, 3 + abs(a) + abs(b)))
+            for j in range(dim):
+                if j == k:
+                    continue
+                nmj = f"x_{j}*sin(x_{k})**{a}*cos(x_{k})**{b}"
+                out.append(Term(nmj,
+                                (lambda base=base, j=j, k=k:
+                                 lambda X: X[:, j] * base(X, k))(),
+                                guard, 4 + abs(a) + abs(b)))
     return out
