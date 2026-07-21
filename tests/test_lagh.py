@@ -228,3 +228,33 @@ def test_ehrhart_never_confidently_wrong_on_random_polytopes():
         if r.certified:                                # if it answers, it is right
             for t in range(50, 80):
                 assert r.quasipoly(t) == lattice_count(inter, t)
+
+
+# -- C6 promotion: discover() escalates to the quasi-poly tier ----------------
+
+def test_discover_escalates_to_c6_on_integer_lattice():
+    from fractions import Fraction
+    from lagh.adapters.ehrhart import lattice_count
+    from lagh import discover
+    inter = [Fraction(5, 2), Fraction(7, 3)]           # period 6, degree 2
+    ts = np.arange(1, 49, dtype=float)
+    Ls = np.array([lattice_count(inter, int(t)) for t in ts], float)
+    i = np.random.default_rng(0).permutation(48)
+    a, b = 30, 39
+    r = discover(ts[i[:a], None], Ls[i[:a]], ts[i[a:b], None], Ls[i[a:b]],
+                 ts[i[b:], None], Ls[i[b:]])
+    assert r.certificate.certified and r.tier == 6
+    for t in range(60, 80):
+        assert r.expr(t) == lattice_count(inter, t)
+
+
+def test_discover_still_prefers_float_tiers_for_smooth_laws():
+    """A plain polynomial over integer x must NOT be over-promoted to C6."""
+    from lagh import discover
+    f = lambda X: 2 * X[:, 0] ** 2 - 3 * X[:, 0] + 1     # noqa: E731
+    X = np.arange(1, 40, dtype=float)[:, None]
+    y = f(X)
+    i = np.random.default_rng(1).permutation(39)
+    r = discover(X[i[:24]], y[i[:24]], X[i[24:31]], y[i[24:31]],
+                 X[i[31:]], y[i[31:]])
+    assert r.certificate.certified and r.tier <= 2      # C1/C2, not C6

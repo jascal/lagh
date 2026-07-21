@@ -9,8 +9,14 @@ A class contributes any of:
 The engine escalates tier by tier, only when the certifying set is empty.
 """
 
-from . import c1_polynomial, c2_rational, c3_powerlaw, c4_inner, c5_transforms
+from . import (c1_polynomial, c2_rational, c3_powerlaw, c4_inner,
+               c5_transforms, c6_quasipoly)
 
+# C1-C5 are FLOAT candidate-list classes driven by the engine's proposal loop.
+# C6 (quasi-polynomial, exact integer) is NOT a candidate list -- it is a full
+# exact-arithmetic recovery the engine escalates into when C1-C5 fail on an
+# integer-lattice target. It is registered here for curriculum completeness; the
+# engine invokes c6_quasipoly directly.
 CURRICULUM = [
     (1, c1_polynomial),
     (2, c2_rational),
@@ -18,3 +24,4 @@ CURRICULUM = [
     (4, c4_inner),
     (5, c5_transforms),
 ]
+EXACT_TIERS = [(6, c6_quasipoly)]

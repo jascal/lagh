@@ -18,7 +18,7 @@ from .base import (Candidate, admissible, design_matrix, lstsq, snap_all,
                    to_expr, eval_expr)
 from .certify import (Abstain, Certificate, check, coherent, epsilon,
                       sample_box, vacuous)
-from .classes import CURRICULUM, c5_transforms
+from .classes import CURRICULUM, c5_transforms, c6_quasipoly
 from .engine_util import stlsq_supports
 
 PREFILTER_REL = 1e-6
@@ -122,7 +122,7 @@ def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
 
 def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              sigma: float = 0.0, se_cert=None, floor_abs: float = 1e-12,
-             max_tier: int = 5) -> Result:
+             max_tier: int = 6) -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
     Splits must be disjoint: fit, select, certify. Certification is exhaustive on
@@ -171,6 +171,23 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                            notes=[f"{len(classes)} materially different classes "
                                   f"certify at tier {tier}"])
         return Result(cert, None, tier, total)
+
+    # C6: escalate to the exact-integer quasi-polynomial tier when the float tiers
+    # are exhausted AND the target is an integer lattice. Float tiers structurally
+    # cannot certify exact-integer data, so this is the honest terminus, not a
+    # fallback -- and it fires only after C1-C5 have genuinely failed (parsimony).
+    X_all = np.vstack([X_fit, np.asarray(X_sel, float), X_cert])
+    y_all = np.concatenate([np.asarray(y_fit, float).ravel(),
+                            np.asarray(y_sel, float).ravel(), y_cert])
+    if max_tier >= 6 and dim == 1 and c6_quasipoly.is_integer_lattice(X_all, y_all):
+        qr = c6_quasipoly.recover_integer(X_all[:, 0], y_all)
+        if qr.certified:
+            cert = Certificate(True, 0, 0, qr.domain_size, bounds, str(qr.quasipoly),
+                               notes=[qr.note])
+            return Result(cert, qr.quasipoly, 6, total)
+        cert = Certificate(False, 0, 0, qr.domain_size, bounds, "",
+                           abstain=qr.abstain, notes=[qr.note])
+        return Result(cert, None, 6, total)
 
     cert = Certificate(False, len(X_cert), 0, len(X_cert), bounds, "",
                        abstain=Abstain.STRUCTURAL.value,
