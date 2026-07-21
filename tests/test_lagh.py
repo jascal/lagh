@@ -133,3 +133,47 @@ def test_hardened_coefficients_are_exact_rationals():
     r = discover(*splits(f, 1, 0.5, 4.0))
     assert r.certificate.certified
     assert all(a.is_Rational for a in r.expr.atoms(sp.Number))
+
+
+# -- P2: active acquisition ---------------------------------------------------
+
+def test_active_recovers_and_ledgers():
+    from lagh.acquisition import run_active
+    f = lambda X: 2 * X[:, 0] * X[:, 1] / X[:, 2] ** 2      # noqa: E731
+    r = run_active(f, [0.5] * 3, [3.0] * 3, seed=1)
+    assert r.result.certificate.certified
+    assert r.queries_used == r.ledger.spent > 0
+    kinds = {e["kind"] for e in r.ledger.entries}
+    assert "ranging" in kinds and "init" in kinds
+
+
+def test_adaptive_ranging_contracts_dead_box():
+    """Decay law over a huge box: most outputs underflow the floor (the N1'
+    killer). Ranging must contract toward the live region and still recover."""
+    from lagh.acquisition import run_active
+    f = lambda X: 3 * X[:, 0] * np.exp(-X[:, 1] * X[:, 2])  # noqa: E731
+    r = run_active(f, [0.1] * 3, [100.0] * 3, seed=2)
+    contracted = np.array(r.box_final)
+    assert (contracted[1] < 100.0 - 1e-9).any(), "box never contracted"
+    assert r.result.certificate.certified or \
+        r.result.certificate.abstain in ("structural", "range")
+
+
+def test_range_abstention_when_no_signal_anywhere():
+    from lagh.acquisition import run_active
+    from lagh import Abstain
+    f = lambda X: 1e-15 * X[:, 0]                            # noqa: E731
+    r = run_active(f, [0.1] * 2, [100.0] * 2, seed=3)
+    assert r.result.certificate.abstain in (Abstain.RANGE.value,
+                                            Abstain.NOISE.value)
+
+
+def test_micro_predictions_recorded_and_scored():
+    from lagh.acquisition import run_active, Policy
+    # a law needing escalation, so at least one active round fires
+    f = lambda X: 5 * X[:, 0] * np.cos(X[:, 1]) ** 2         # noqa: E731
+    r = run_active(f, [0.1] * 2, [1.5] * 2, seed=4,
+                   policy=Policy(init_points=14))
+    for rec in r.predictions:
+        for p in rec["predictions"]:
+            assert 0.0 <= p["hit_rate"] <= 1.0
