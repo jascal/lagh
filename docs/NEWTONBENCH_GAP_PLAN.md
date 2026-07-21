@@ -35,14 +35,18 @@ hard_v0 (`(m1+m2)²/r^{1.5}`), hard_v2 (`(m1²+m2²)r²`); m1_coulomb medium_v0 
 (`(q1+q2)³/r²`), hard_v1 (`q2²(q1+q2)³/r²`).
 
 ## CAP-D — rational base raised to a power, via a `sqrt` target-transform
-> **PROBE 2026-07-21 — REDIRECTED.** The underdamped *pure rational* `easy_v2` (`k/m − b²/4m²`) is
-> exactly reachable (`y·m² = km − b²/4`, resid 1e-14, C2 pure-denom `d=m²` hits it) yet **abstains
-> STRUCTURAL** on the box `[2,1,0.1]..[10,5,1]` — multiple materially-different rationals certify.
-> So underdamped is **box under-determination, not a grammar reach gap** (the "broaden the box on
-> abstain" failure mode). CAP-D's `sqrt`-transform is still needed for the `(rational)²` variants, but
-> is *insufficient alone*: the base must first be box-disambiguated via broader-box active acquisition
-> (`run_active_boxsearch`). Underdamped's 7 cells are therefore a **box-acquisition** target first,
-> `sqrt`-transform second — reclassified out of the pure-grammar batch.
+> **RESOLVED 2026-07-21 — it was REACH, not box. ✅ implemented.** The first probe misread the
+> "structural" abstain as multiplicity; it was the *terminal no-candidate* case. Root cause: **C2's
+> pure-term-denominator pass returned 0 candidates** for `k/m − b²/4m²` even though `x_1²`, `x_0x_1`,
+> `x_2²` were all present. Two bugs, both fixed:
+> 1. **C2 `denom_idx` string bug** — excluded any term whose name contains `*`, but `x_j**2` contains
+>    `**`, so integer-power denominators were never tried. Fixed to `free_symbols == 1` (single
+>    variable). *General reach fix* for every `P/x_j**p` rational — not underdamped-specific.
+> 2. **CAP-D `sqrt`-forward transform** added (fit `√y`, invert by squaring) so `(rational)²` reduces
+>    to the C2 base under the root.
+> Result: `easy_v2` recovers `(x_0x_1 − x_2²/4)/x_1²` exactly; `(rational)²` variants recover via
+> `sqrt`→C2. Box-widening was NOT the fix — the abstains were never box-shaped. Scoring the 7 cells
+> under noise: targeted re-sweep pending.
 
 Add the missing `sqrt` transform (forward `√y`, invert `·²`) so `(rational)²` reduces to a C2 rational
 base. **Predicts (up to 5):** m6_underdamped easy_v1/v2, medium_v1, hard_v1 (the squared/plain rationals
