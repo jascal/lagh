@@ -1,0 +1,10 @@
+{"func": "F1_hypot", "arity": 2, "certified": true, "abstain": null, "law": "sqrt(x_0**2 + x_1**2)", "dense_ref_correct": true, "confident_wrong": false, "queries": 58, "tier": 5, "seconds": 6.9}
+{"func": "F2_log2", "arity": 1, "certified": true, "abstain": null, "law": "1206321*log(x_0)/836158", "dense_ref_correct": true, "confident_wrong": false, "queries": 58, "tier": 1, "seconds": 0.0}
+{"func": "F3_gamma", "arity": 1, "certified": false, "abstain": "structural", "law": null, "dense_ref_correct": null, "confident_wrong": false, "queries": 118, "tier": 6, "seconds": 8.7}
+{"func": "F4_erf", "arity": 1, "certified": false, "abstain": "structural", "law": null, "dense_ref_correct": null, "confident_wrong": false, "queries": 118, "tier": 6, "seconds": 10.6}
+{"func": "F5_atan2", "arity": 2, "certified": false, "abstain": "structural", "law": null, "dense_ref_correct": null, "confident_wrong": false, "queries": 118, "tier": 6, "seconds": 52.9}
+{"func": "F6_logaddexp", "arity": 2, "certified": false, "abstain": "structural", "law": null, "dense_ref_correct": null, "confident_wrong": false, "queries": 118, "tier": 6, "seconds": 45.2}
+{"func": "F7_expm1", "arity": 1, "certified": true, "abstain": null, "law": "exp(x_0) - 1", "dense_ref_correct": true, "confident_wrong": false, "queries": 58, "tier": 1, "seconds": 0.0}
+{"func": "F8_copysign", "arity": 2, "certified": false, "abstain": "structural", "law": null, "dense_ref_correct": null, "confident_wrong": false, "queries": 118, "tier": 6, "seconds": 36.3}
+{"func": "F9_remainder", "arity": 2, "certified": false, "abstain": "structural", "law": null, "dense_ref_correct": null, "confident_wrong": false, "queries": 118, "tier": 6, "seconds": 45.7}
+{"func": "F10_hypot3", "arity": 3, "certified": false, "abstain": "structural", "law": null, "dense_ref_correct": null, "confident_wrong": false, "queries": 118, "tier": 6, "seconds": 61.9}
