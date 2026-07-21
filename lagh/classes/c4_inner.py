@@ -18,6 +18,7 @@ from ..base import Term, finite_guard, lstsq, snap_small
 TIER = 4
 B_GRID = np.concatenate([-np.logspace(-2, 2, 13), np.logspace(-2, 2, 13)])
 TOP_K = 8
+TOP_PAIR = 6   # feature x feature products among the best few
 
 
 def _cores(dim: int):
@@ -91,9 +92,9 @@ def terms(dim: int, X_fit: np.ndarray, y_fit: np.ndarray, X_cert=None) -> list[T
             name = f"{T_name}({bq.numerator}/{bq.denominator}*({u_name}))" \
                 if bq.denominator != 1 else f"{T_name}({bq.numerator}*({u_name}))"
             fn = (lambda X_, T=T, bf=bf, u_fn=u_fn: T(bf * u_fn(X_)))
-            found.append((best_r, Term(name, fn, finite_guard(fn), 3)))
+            found.append((best_r, T_name, Term(name, fn, finite_guard(fn), 3)))
     found.sort(key=lambda t: t[0])
-    feats = [t for _, t in found[:TOP_K]]
+    feats = [t for _, _, t in found[:TOP_K]]
     out = list(feats)
     for ft in feats:
         for i in range(dim):
@@ -103,4 +104,29 @@ def terms(dim: int, X_fit: np.ndarray, y_fit: np.ndarray, X_cert=None) -> list[T
             fn = (lambda X_, i=i, j=j, ft=ft: X_[:, i] * X_[:, j] * ft.fn(X_))
             out.append(Term(f"x_{i}*x_{j}*{ft.name}", fn, ft.guard,
                             ft.complexity + 2))
+    # FEATURE x FEATURE products: reaches damped oscillations exp(-b*t)*cos(w*t)
+    # and the "envelope x carrier" family. The trap is that neither factor fits y
+    # ALONE (each is modulated by the other), so a global top-K ranking misses
+    # them. Guarantee coverage instead: take the best few features of EACH
+    # transcendental family and pair ACROSS families, so exp x cos is always
+    # formed regardless of single-feature residual.
+    from collections import defaultdict
+    by_family = defaultdict(list)
+    for _, fam, t in found:
+        if len(by_family[fam]) < TOP_PAIR:
+            by_family[fam].append(t)
+    pool = [t for fam in by_family for t in by_family[fam]]
+    seen = set()
+    for a in range(len(pool)):
+        for b in range(a, len(pool)):
+            fa, fb = pool[a], pool[b]
+            key = tuple(sorted((fa.name, fb.name)))
+            if key in seen:
+                continue
+            seen.add(key)
+            fn = (lambda X_, fa=fa, fb=fb: fa.fn(X_) * fb.fn(X_))
+            out.append(Term(f"({fa.name})*({fb.name})", fn,
+                            (lambda X_, fa=fa, fb=fb:
+                             fa.guard(X_) and fb.guard(X_)),
+                            fa.complexity + fb.complexity))
     return out
