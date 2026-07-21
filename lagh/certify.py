@@ -87,10 +87,27 @@ def vacuous(syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray) -> bool:
     return check(sp.Integer(0), syms, X, y, eps)["certified"]
 
 
-def sample_box(X: np.ndarray, n: int = N_PROBE, seed: int = 0) -> np.ndarray:
+def sample_box(X: np.ndarray, n: int = N_PROBE, seed: int = 0,
+               extend: float = 0.0) -> np.ndarray:
+    """Uniform samples of the state box, optionally EXTENDED beyond it by `extend`
+    fraction of the range on each side. Coherence uses extend>0 so two laws that agree
+    only on the thin sampled tube but diverge as functions are flagged as different --
+    the thin-domain under-determination fix (MDBench C9 / Levy narrow CF range)."""
     rng = np.random.default_rng(seed)
     lo, hi = X.min(axis=0), X.max(axis=0)
-    return rng.uniform(lo, hi, size=(n, X.shape[1]))
+    if extend <= 0:
+        return rng.uniform(lo, hi, size=(n, X.shape[1]))
+    # extend in LOG space (all lagh sampling is log-uniform/positive), so the extension
+    # stays in the valid domain -- an additive extension went negative and broke
+    # fractional-power/log/sqrt laws (measured).
+    pos = lo > 0
+    out = rng.uniform(lo, hi, size=(n, X.shape[1]))
+    if np.any(pos):
+        llo, lhi = np.log(np.where(pos, lo, 1)), np.log(np.where(pos, hi, 1))
+        span = lhi - llo
+        ext = rng.uniform(llo - extend * span, lhi + extend * span, size=(n, X.shape[1]))
+        out = np.where(pos, np.exp(ext), out)
+    return out
 
 
 def max_divergence(expr_a, expr_b, syms, P: np.ndarray, yscale: float) -> float:

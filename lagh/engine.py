@@ -163,7 +163,9 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                            notes=["VACUOUS: eps swallows the signal"])
         return Result(cert, None, 0, 0)
 
-    P = sample_box(X_cert)
+    # coherence probe EXTENDS beyond the cert box (thin-domain under-determination:
+    # impostors that agree on the sampled tube but diverge as functions are caught)
+    P = sample_box(X_cert, extend=0.5)
     yscale = float(np.sqrt(np.mean(y_cert**2)))
     total = 0
     for tier in [t for t, _ in CURRICULUM if t <= max_tier]:
