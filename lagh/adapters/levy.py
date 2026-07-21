@@ -94,14 +94,30 @@ def reliable_u_max(X, U, n, floor_mult=8.0, n_probe=200):
     return float(ug[below[0]]) if len(below) else float(U)
 
 
+def adaptive_cf_grid(X, n, *, U_wide=16.0, floor_mult=8.0, n_probe=600, n_keep=70):
+    """Sample u over the UNION of reliable regions {u : |φ̂(u)| > floor}, not just the
+    first interval. For an oscillatory CF (compound Poisson) |φ̂| dips at u=π then
+    RECOVERS at u=2π; capturing those recovery bumps reveals the oscillation and
+    distinguishes it from a monotonic exponent. For a monotonic CF this reduces to the
+    single reliable interval. Adaptive ranging that unions instead of truncating."""
+    floor = floor_mult / np.sqrt(n)
+    ug = np.linspace(U_wide / n_probe, U_wide, n_probe)
+    phi = np.abs(np.exp(1j * np.outer(ug, X)).mean(axis=1))
+    reliable = ug[phi > floor]
+    if len(reliable) == 0:
+        reliable = ug[:5]
+    if len(reliable) > n_keep:
+        reliable = reliable[np.linspace(0, len(reliable) - 1, n_keep).astype(int)]
+    return reliable
+
+
 def make_cf_dataset(name, *, n=20000, U=6.0, n_grid=60, seed=0):
     """Sample the process, build (u, L̂(u), se(u)) over the RELIABLE u-range (where the
     empirical CF is above the sampling floor). u is the 1-D input; L̂(u) the output;
     se the statistical epsilon. Returns (u, L, se, u_max) for disclosure."""
     rng = np.random.default_rng(seed)
     X = GENERATORS[name](n, rng)
-    u_max = reliable_u_max(X, U, n)
-    u = np.linspace(u_max / n_grid, u_max, n_grid)
+    u = adaptive_cf_grid(X, n)                       # union of reliable regions
     L = empirical_L(X, u)
     se = bootstrap_se(X, u, seed=seed + 1)
-    return u[:, None], L, se, u_max
+    return u[:, None], L, se, float(u.max())

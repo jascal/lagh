@@ -130,3 +130,35 @@ and the well-conditioned case recovers with the invariant intact. Fuller recover
 reliable CF window — larger `n` (grows slowly, √log), a lower floor multiplier (riskier), or the
 distinguishing asymptotic captured by design (e.g. sampling `u` adaptively around the CF's
 informative region). Left as the next increment; the zero-wrong record stands.
+
+## ADAPTIVE-CF VERDICT (2026-07-21). Union sampling; compound Poisson recovers; 2/6; zero-wrong.
+
+Replaced first-dip truncation (`reliable_u_max`) with **union-of-reliable-regions** sampling
+(`adaptive_cf_grid`): probe `|φ̂(u)|` over a wide `u`, keep the *union* `{u : |φ̂| > 8/√n}` rather
+than the first interval. An oscillatory CF (compound Poisson) dips at `u=π` then **recovers** at
+`u=2π`; the union captures those recovery bumps, and the recovered oscillation is what pins the form.
+
+| target | before (first-dip) | after (union) |
+|---|---|---|
+| **L1 Gaussian** | recovered `−0.855 u²` | recovered (unchanged) |
+| **L2 compound Poisson** | abstain | **recovered `2(cos u − 1)`, correct, unique** |
+| L3 variance-gamma | abstain | abstain |
+| L4 stable, rational α | abstain | abstain |
+| L5 stable, irrational α | abstain (boundary) | abstain (boundary) |
+| L6 mixed | abstain | abstain |
+| **confident-wrong** | 0 / 6 | **0 / 6 (PL-3 holds)** |
+
+**What union sampling fixed and why it's exactly that one:** compound Poisson is the only *oscillatory*
+Lévy block, so once the recovery bumps make the oscillation visible, `cos(wu)−1` is the unique form that
+fits — the grammar pins it. **Why L3/L4/L6 still abstain — established, not guessed:** the extended-
+coherence probe finds **82 materially-different Lévy forms** all certifying for L6 (a Gaussian `u²` is
+confusable with `log(1+u²/d)` and `|u|^α` over the short *monotonic* reliable range; a 2-block sum has
+more freedom). 82 distinct classes over the observation set = genuine under-determination = **correct
+STRUCTURAL abstention**, not a coherence failure. The monotonic forms have no recovery bumps to widen
+their range, so union sampling cannot separate them.
+
+**The remaining lever is data quantity, not grammar.** Fewer forms fit as the floor drops (`8/√n` →
+wider reliable `u` → the differing asymptotics of `u²` vs `log` vs `|u|^α` become visible). That is a
+larger-`n` / lower-floor question, a clean separate increment. **Net: 2/6 recovered (both well-
+conditioned cases: the pure Gaussian and the pure oscillation), zero confident-wrong, the honesty core
+now spans deterministic and stochastic domains.** The zero-wrong record stands.
