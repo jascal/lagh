@@ -83,13 +83,14 @@ def prompt_for(pid: str) -> str:
                          n=len(inp))
 
 
-def run_cell(pid: str, timeout: int) -> tuple[str, dict | None]:
-    """Invoke hermes headless for one cell; return (raw_output, parsed RESULT|None)."""
+def run_cell(pid: str, timeout: int, trace: bool = False) -> tuple[str, dict | None]:
+    """Invoke hermes headless for one cell; return (raw_output, parsed RESULT|None).
+    trace=True uses `hermes chat -q` (full tool transcript, for debugging) instead of
+    `hermes -z` (clean final answer, the default -- no markdown to mangle the law)."""
+    cmd = (["hermes", "chat", "-q", prompt_for(pid)] if trace
+           else ["hermes", "-z", prompt_for(pid)])
     try:
-        # -z = headless/scripting output (no markdown rendering, which was eating the
-        # `*` operators out of the reported law and causing false confident-wrongs)
-        p = subprocess.run(["hermes", "-z", prompt_for(pid)],
-                           capture_output=True, text=True, timeout=timeout)
+        p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
         raw = (p.stdout or "") + (p.stderr or "")
     except subprocess.TimeoutExpired:
         return "TIMEOUT", None
@@ -160,6 +161,9 @@ def main():
     ap.add_argument("--cells", default="")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--timeout", type=int, default=240)
+    ap.add_argument("--trace", action="store_true",
+                    help="save the FULL tool transcript (hermes chat -q) instead of just "
+                         "the final answer -- use to see whether the model called discover")
     ap.add_argument("--out", default=os.path.join(os.path.dirname(__file__), "bench_results"))
     args = ap.parse_args()
 
@@ -171,7 +175,7 @@ def main():
     rows = []
     for k, pid in enumerate(ids, 1):
         t0 = time.time()
-        raw, res = run_cell(pid, args.timeout)
+        raw, res = run_cell(pid, args.timeout, args.trace)
         open(os.path.join(args.out, pid.replace("/", "_") + ".txt"), "w").write(raw)
         status = (res or {}).get("status")
         law = (res or {}).get("law")
