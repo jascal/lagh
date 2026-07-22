@@ -24,6 +24,11 @@ import time
 
 import numpy as np
 import sympy as sp
+from sympy.parsing.sympy_parser import (convert_xor,                  # noqa: E402
+                                        implicit_multiplication_application,
+                                        parse_expr, standard_transformations)
+
+_TF = standard_transformations + (implicit_multiplication_application, convert_xor)
 
 os.environ.setdefault("LAB_SOURCE", "newtonbench")
 from lagh.lab import get_source                                       # noqa: E402
@@ -50,8 +55,8 @@ Procedure:
 
 Honesty: report only what the tools certified; do not invent a law; do not assume the textbook form.
 
-End with EXACTLY ONE final line and nothing after it (the law as lagh returned it, in x_0.. variables):
-RESULT: {{"status": "certified"|"consistent"|"abstained", "law": "<sympy expr in x_0.. or null>", "via": "recover"|"verify"|"none"}}
+End with EXACTLY ONE final line and nothing after it. Write it as RAW TEXT -- no markdown, no bold/italics -- and copy the law VERBATIM from the tool with every * and ** operator intact (e.g. 3*x_0**2, NOT 3x_0^2 and NOT 3x_0*2):
+RESULT: {{"status": "certified"|"consistent"|"abstained", "law": "<the exact sympy expr lagh returned in x_0.. variables, or null>", "via": "recover"|"verify"|"none"}}
 """
 
 
@@ -79,7 +84,9 @@ def prompt_for(pid: str) -> str:
 def run_cell(pid: str, timeout: int) -> tuple[str, dict | None]:
     """Invoke hermes headless for one cell; return (raw_output, parsed RESULT|None)."""
     try:
-        p = subprocess.run(["hermes", "chat", "-q", prompt_for(pid)],
+        # -z = headless/scripting output (no markdown rendering, which was eating the
+        # `*` operators out of the reported law and causing false confident-wrongs)
+        p = subprocess.run(["hermes", "-z", prompt_for(pid)],
                            capture_output=True, text=True, timeout=timeout)
         raw = (p.stdout or "") + (p.stderr or "")
     except subprocess.TimeoutExpired:
@@ -105,25 +112,30 @@ def _to_x(expr, dim):
     return expr.xreplace(subs)
 
 
-def score_law(pid: str, law: str) -> tuple[bool, float]:
-    """Dense-compare the reported law to the real oracle. Returns (correct, rel_err)."""
+def score_law(pid: str, law: str):
+    """Dense-compare the reported law to the real oracle. Returns (correct, rel_err),
+    or None if the law can't be parsed/evaluated at all -- a formatting/capture issue,
+    NOT a wrong law (so it is never miscounted as a confident-wrong)."""
     m, d, v = pid.split("/")
     inp, lo, hi = MODULES[m]
     dim = len(inp)
+    try:
+        expr = _to_x(parse_expr(str(law), transformations=_TF), dim)  # implicit-mult tolerant
+    except Exception:                                                # noqa: BLE001
+        return None
     orc = make_oracle(m, v, d)
     rng = np.random.default_rng(20260722)
     X = np.exp(rng.uniform(np.log(np.maximum(np.array(lo, float), 1e-9)),
                            np.log(np.array(hi, float)), (200, dim)))
     y = np.asarray(orc(X), float)
     try:
-        expr = _to_x(sp.sympify(law), dim)
         f = sp.lambdify([sp.Symbol(f"x_{i}") for i in range(dim)], expr, "numpy")
         got = np.broadcast_to(np.asarray(f(*X.T), float), y.shape)
     except Exception:                                                # noqa: BLE001
-        return False, float("inf")
+        return None
     ok = np.isfinite(got) & np.isfinite(y) & (np.abs(y) > 1e-9)
     if ok.sum() < 20:
-        return False, float("inf")
+        return None
     re_ = float(np.median(np.abs(got[ok] - y[ok]) / np.abs(y[ok])))
     return re_ < 1e-2, re_
 
@@ -165,8 +177,9 @@ def main():
         if res is None:
             cat = "ERROR"
         elif status in ("certified", "consistent") and law and str(law).lower() != "null":
-            ok, err = score_law(pid, law)
-            cat = "CORRECT" if ok else "CONFIDENT_WRONG"
+            sc = score_law(pid, law)
+            cat = ("PARSE_ERROR" if sc is None
+                   else ("CORRECT" if sc[0] else "CONFIDENT_WRONG"))
         else:  # abstained / no law
             cat = "MISS" if base.get(pid) else "HONEST_ABSTAIN"
         rows.append({"pid": pid, "cat": cat, "status": status, "via": via,
@@ -184,7 +197,7 @@ def main():
     print("\n" + "=" * 52)
     print(f"SCORECARD ({len(rows)} cells)")
     print("=" * 52)
-    for k in ("CORRECT", "HONEST_ABSTAIN", "MISS", "CONFIDENT_WRONG", "ERROR"):
+    for k in ("CORRECT", "HONEST_ABSTAIN", "MISS", "CONFIDENT_WRONG", "PARSE_ERROR", "ERROR"):
         print(f"  {k:<16} {c[k]}")
     print(f"\n  composite (MiniMax+lagh) certified-correct: {comp}/{len(rows)}")
     print(f"  lagh-alone (direct sweep) on same cells:    {base_n}/{len(rows)}")
