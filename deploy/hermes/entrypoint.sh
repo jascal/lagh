@@ -33,7 +33,8 @@ model:
   default: "${LLM_MODEL:-MiniMax-M3}"
   provider: custom
   base_url: "${LLM_BASE_URL:-https://api.minimax.io/v1}"
-  key_env: LLM_API_KEY          # read the key from the container env, never inline
+  api_key: "${LLM_API_KEY}"     # inlined from the container env (key_env wasn't honored
+                                # by this Hermes build; the file lives only in the local volume)
 
 mcp_servers:
   lagh:
