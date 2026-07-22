@@ -21,10 +21,15 @@ certificate or a reasoned abstention.
 This step is why you do not need to be good at choosing sample points: lagh does that part.
 
 **HARD RULE — you may NOT abstain without having called `lab.discover` first.** Reporting
-`{"status":"abstained","via":"none"}` is ONLY legal after `lab.discover` (and, per the steps
-below, `lagh.recover`) has actually run and returned an abstention. "I'm not sure" is never a
-reason to abstain — it is the reason to call `lab.discover`. Caution means *delegate*, not
-*give up*. Skipping the tool and abstaining is a FAILURE, not honesty.
+`{"status":"abstained","via":"none"}` is ONLY legal after `lab.discover` has actually run and
+returned an abstention. "I'm not sure" is never a reason to abstain — it is the reason to call
+`lab.discover`. Caution means *delegate*, not *give up*. Skipping the tool and abstaining is a
+FAILURE, not honesty.
+
+Once `lab.discover` has abstained you MAY abstain immediately — discover already ran lagh's full
+adaptive loop, so a single discover-abstain is sufficient grounds. Step 2 (hand-sampling) is
+OPTIONAL: do it only if you have a specific reason to think a particular box or form would help.
+Do NOT loop discover→recover→discover repeatedly; it rarely changes the verdict and wastes time.
 
 ## Step 2 — Hand-sample only if discover abstained (exact recipe)
 1. Choose **at least 20 rows** of X. For EACH row, pick EACH input **independently at random**
@@ -44,9 +49,8 @@ constant is not identifiable from the data — keep that hedge; it is weaker tha
 
 ## Honesty — non-negotiable
 - Report ONLY what a tool **certified**. If nothing certifies **after you have actually run
-  `lab.discover` (and hand-sampled + `lagh.recover` on abstain)**, then abstain — never
-  invent, never fall back to the textbook formula. But abstaining *before* doing that work is
-  not honesty, it is skipping the job.
+  `lab.discover`**, then abstain — never invent, never fall back to the textbook formula. But
+  abstaining *before* even calling `lab.discover` is not honesty, it is skipping the job.
 - A `lagh.fit` output is a **guess**, never a result.
 - Attribute every claim: `[recover]`/`[discover]` = certified by lagh; `[verify]` = your
   hypothesis checked; `[me]` = your own inference. Do not present a guess as a certificate.
