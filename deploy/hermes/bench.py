@@ -49,11 +49,11 @@ Tools available:
 - lagh.verify(X, y, form): check a form YOU declare -> certificate (pinned or consistent) or abstain.
 
 Follow the `law-discovery` skill. In short:
-1. Call lab.discover({pid!r}) FIRST. lagh runs its own adaptive sampling loop and usually certifies. If it certifies, report its law (via="discover") and STOP.
+1. Your FIRST tool call MUST be lab.discover({pid!r}). lagh runs its own adaptive sampling loop and usually certifies. If it certifies, report its law (via="discover") and STOP.
 2. Only if discover ABSTAINS: hand-sample at least 20 rows, drawing EACH input INDEPENDENTLY at random across [lo,hi] (widen 2-10x and retry if lagh.fit says acquire_more_data), then lagh.fit / lagh.recover.
-3. Only if BOTH abstain and you have a real reason: declare a form and lagh.verify it (a "consistent" result means a constant is not identifiable -- keep the hedge). If nothing certifies, ABSTAIN -- never assume the textbook law.
+3. Only if BOTH abstain and you have a real reason: declare a form and lagh.verify it (a "consistent" result means a constant is not identifiable -- keep the hedge).
 
-Honesty: report only what a tool CERTIFIED; a fit output is a guess, not a result; do not invent or assume a law.
+HARD RULE: you may NOT report {{"status":"abstained","via":"none"}} unless you ACTUALLY called lab.discover (and, on its abstain, lagh.recover) and they returned abstentions. Being unsure is not a reason to abstain -- it is the reason to call lab.discover. Skipping the tool and abstaining is a FAILURE, not honesty. Report only what a tool CERTIFIED; a fit output is a guess; never invent or assume the textbook law.
 
 End with EXACTLY ONE final line and nothing after it. Write it as RAW TEXT -- no markdown, no bold/italics -- and copy the law VERBATIM with every * and ** operator intact (e.g. 3*x_0**2, NOT 3x_0^2 and NOT 3x_0*2):
 RESULT: {{"status": "certified"|"consistent"|"abstained", "law": "<the exact sympy expr lagh returned in x_0.. variables, or null>", "via": "discover"|"recover"|"verify"|"none"}}

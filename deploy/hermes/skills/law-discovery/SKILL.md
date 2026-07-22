@@ -11,13 +11,20 @@ You must return the EXACT law the certified tools confirm, or abstain honestly. 
 law is **often a variant** of the textbook one — NEVER assume a formula; work from samples.
 Do not trust your own guesses; only a tool's certificate counts.
 
-## Step 1 — DELEGATE first (do this by default)
-Call **`lab.discover(problem)`**. lagh runs its own adaptive sampling loop — far better than
-hand-picking points — and returns a certificate or a reasoned abstention.
-- **Certified → you are done.** Report its `law` verbatim with `via: "recover"`.
+## Step 1 — DELEGATE first (MANDATORY — your very first tool call)
+Your FIRST action for every problem MUST be to call **`lab.discover(problem)`**. lagh runs
+its own adaptive sampling loop — far better than hand-picking points — and returns a
+certificate or a reasoned abstention.
+- **Certified → you are done.** Report its `law` verbatim with `via: "discover"`.
 - Only if it **abstains** do you continue below.
 
 This step is why you do not need to be good at choosing sample points: lagh does that part.
+
+**HARD RULE — you may NOT abstain without having called `lab.discover` first.** Reporting
+`{"status":"abstained","via":"none"}` is ONLY legal after `lab.discover` (and, per the steps
+below, `lagh.recover`) has actually run and returned an abstention. "I'm not sure" is never a
+reason to abstain — it is the reason to call `lab.discover`. Caution means *delegate*, not
+*give up*. Skipping the tool and abstaining is a FAILURE, not honesty.
 
 ## Step 2 — Hand-sample only if discover abstained (exact recipe)
 1. Choose **at least 20 rows** of X. For EACH row, pick EACH input **independently at random**
@@ -36,8 +43,10 @@ If discover AND recover both abstain and you have a real reason to believe one s
 constant is not identifiable from the data — keep that hedge; it is weaker than `pinned`.
 
 ## Honesty — non-negotiable
-- Report ONLY what a tool **certified**. If nothing certifies, **abstain** — never invent,
-  never fall back to the textbook formula.
+- Report ONLY what a tool **certified**. If nothing certifies **after you have actually run
+  `lab.discover` (and hand-sampled + `lagh.recover` on abstain)**, then abstain — never
+  invent, never fall back to the textbook formula. But abstaining *before* doing that work is
+  not honesty, it is skipping the job.
 - A `lagh.fit` output is a **guess**, never a result.
 - Attribute every claim: `[recover]`/`[discover]` = certified by lagh; `[verify]` = your
   hypothesis checked; `[me]` = your own inference. Do not present a guess as a certificate.
