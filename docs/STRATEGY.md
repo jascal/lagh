@@ -74,7 +74,7 @@ Per-difficulty **module** coverage (any version): **easy 11/12, medium 11/12 (wa
 | **R-cap** (≥10/12 on ≥2 difficulties) | **✅ MET** | easy 11/12 **and** medium 11/12 |
 | **R-zero** (zero confident-wrong, full sweep) | **✅ MET** | 0/108 |
 | **R-gap** (each gap closed or bounded w/ cause) | **≈ needs a bounding pass** | remaining abstains classify cleanly (see below); doc them one-line each |
-| **R-noise** (explicit noisy-regime decision) | **◐ SETTLED by restriction** (`RNOISE_STUDY.md`) | study done: NO gross fabrication under noise (0 wrong beyond 3× noise at any level), but EXACT recovery is clean-data-only (36 within-noise near-misses certified-as-exact at 1%). Blind read registered clean/low-noise for the exact claim; the weaker 'accurate-to-declared-noise or abstain' claim holds at all levels |
+| **R-noise** (explicit noisy-regime decision) | **◐ SETTLED** (`RNOISE_STUDY.md`, corrected 2026-07-22) | with `certify.pinned()` + STRUCTURAL scoring: exact-structure-or-abstain holds to ~1% noise (**0/65 structural CW** at 60 & 40 dB), 3/65 cross-form failures only at 10 dB. The original '36 CW' was a coefficient-representation scoring artifact. Blind read registrable for **SNR ≥ ~40 dB with the structural guarantee**; clean-only only if the exact coefficient must be certified |
 
 **Remaining abstains, all accounted for (R-gap material):** 11 irrational-`^e` cells (out of class BY
 DESIGN — the wedge, correct-abstain); 9 inverse-trig (all m4_snell — needs an `arcsin/atan` tier,
