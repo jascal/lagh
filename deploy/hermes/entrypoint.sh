@@ -77,5 +77,14 @@ if [ -z "${LLM_API_KEY:-}" ]; then
     echo "[entrypoint] NOTE: LLM_API_KEY is empty -- set it in deploy/hermes/.env before running Hermes."
 fi
 
+# install the repo's Hermes skills (auto-discovered from ~/.hermes/skills on startup).
+# The law-discovery skill gives weaker models the explicit sampling/delegation recipe;
+# it doesn't constrain strong models.
+if [ -d "${LAGH_SRC}/deploy/hermes/skills" ]; then
+    mkdir -p /root/.hermes/skills
+    cp -r "${LAGH_SRC}/deploy/hermes/skills/." /root/.hermes/skills/
+    echo "[entrypoint] skills installed: $(ls /root/.hermes/skills 2>/dev/null | tr '\n' ' ')"
+fi
+
 echo "[entrypoint] ready. Run:  docker compose exec -it hermes hermes"
 exec "$@"

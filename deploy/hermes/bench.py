@@ -48,17 +48,15 @@ Tools available:
 - lab.discover(problem): DELEGATE the whole thing to lagh -- it runs its OWN adaptive sampling loop against the oracle and certifies where a hand-picked sample often can't. Your best move when recover abstains.
 - lagh.verify(X, y, form): check a form YOU declare -> certificate (pinned or consistent) or abstain.
 
-Procedure:
-1. Pick at least 12 points spread across the suggested domain (log-spaced if it spans decades); call lab.sample.
-2. lagh.fit to scout. If it says acquire_more_data or continuum, sample a WIDER range (you may go outside the suggested domain) and try again.
-3. lagh.recover on your best (X, y).
-4. If recover ABSTAINS, call lab.discover(problem) -- lagh runs its full active-acquisition loop and usually certifies. Report ITS certificate (via="recover"). Do NOT give up before trying discover.
-5. Only if discover ALSO abstains may you declare a form and lagh.verify it; if still nothing certifies, abstain honestly.
+Follow the `law-discovery` skill. In short:
+1. Call lab.discover({pid!r}) FIRST. lagh runs its own adaptive sampling loop and usually certifies. If it certifies, report its law (via="discover") and STOP.
+2. Only if discover ABSTAINS: hand-sample at least 20 rows, drawing EACH input INDEPENDENTLY at random across [lo,hi] (widen 2-10x and retry if lagh.fit says acquire_more_data), then lagh.fit / lagh.recover.
+3. Only if BOTH abstain and you have a real reason: declare a form and lagh.verify it (a "consistent" result means a constant is not identifiable -- keep the hedge). If nothing certifies, ABSTAIN -- never assume the textbook law.
 
-Honesty: report only what the tools certified; do not invent a law; do not assume the textbook form.
+Honesty: report only what a tool CERTIFIED; a fit output is a guess, not a result; do not invent or assume a law.
 
-End with EXACTLY ONE final line and nothing after it. Write it as RAW TEXT -- no markdown, no bold/italics -- and copy the law VERBATIM from the tool with every * and ** operator intact (e.g. 3*x_0**2, NOT 3x_0^2 and NOT 3x_0*2):
-RESULT: {{"status": "certified"|"consistent"|"abstained", "law": "<the exact sympy expr lagh returned in x_0.. variables, or null>", "via": "recover"|"verify"|"none"}}
+End with EXACTLY ONE final line and nothing after it. Write it as RAW TEXT -- no markdown, no bold/italics -- and copy the law VERBATIM with every * and ** operator intact (e.g. 3*x_0**2, NOT 3x_0^2 and NOT 3x_0*2):
+RESULT: {{"status": "certified"|"consistent"|"abstained", "law": "<the exact sympy expr lagh returned in x_0.. variables, or null>", "via": "discover"|"recover"|"verify"|"none"}}
 """
 
 
