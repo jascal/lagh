@@ -63,7 +63,11 @@ mcp_servers:
   lab:
     command: "${LAGH_PY}"
     args: ["-m", "lagh.lab.server"]
-    # problems/sample -- the hidden problem oracle to discover against
+    # Hermes spawns MCP servers with a controlled env, so the lab source + NewtonBench
+    # path must be passed EXPLICITLY here (container env does NOT propagate through).
+    env:
+      LAB_SOURCE: "${LAB_SOURCE:-proxy}"
+      NEWTONBENCH_DIR: "${NEWTONBENCH_DIR:-/opt/NewtonBench}"
 YAML
 else
     echo "[entrypoint] Hermes config already present (${HERMES_CFG}); leaving it."
