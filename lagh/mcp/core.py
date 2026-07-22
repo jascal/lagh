@@ -76,7 +76,7 @@ def _strength(expr, syms, X_cert, y_cert, eps, sigma) -> str:
 
 def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
             max_tier: int = 7, budget: int = 200, box_search: bool = False,
-            seed: int = 0) -> dict:
+            seed: int = 0, time_budget_s: float | None = 45.0) -> dict:
     """Bounded. Discover an exact law. Two modes:
 
     * **active** (`oracle` + `box` given, in-process only): lagh DRIVES the oracle --
@@ -100,10 +100,12 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
         lo, hi = np.asarray(box[0], float), np.asarray(box[1], float)
         sig = float(sigma) if sigma and sigma > 0 else None
         if box_search:
-            bs = run_active_boxsearch(oracle, lo, hi, budget=budget, seed=seed)
+            bs = run_active_boxsearch(oracle, lo, hi, budget=budget, seed=seed,
+                                      time_budget_s=time_budget_s)
             active = bs.active
         else:
-            active = run_active(oracle, lo, hi, budget=budget, sigma_declared=sig, seed=seed)
+            active = run_active(oracle, lo, hi, budget=budget, sigma_declared=sig, seed=seed,
+                                time_budget_s=time_budget_s)
         r = active.result
         c = r.certificate
         bf = np.asarray(active.box_final, float)

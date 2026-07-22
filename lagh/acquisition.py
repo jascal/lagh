@@ -22,6 +22,7 @@ The two mechanisms, as adopted:
 
 from __future__ import annotations
 
+import time as _time
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -112,10 +113,14 @@ def _contract(box: np.ndarray, prof: dict) -> np.ndarray:
 
 def run_active(oracle, box_lo, box_hi, *, budget: int = 200,
                policy: Policy = Policy(), sigma_declared: float | None = None,
-               floor_abs: float = MACHINE_FLOOR, seed: int = 0) -> ActiveResult:
+               floor_abs: float = MACHINE_FLOOR, seed: int = 0,
+               time_budget_s: float | None = None) -> ActiveResult:
     """oracle: X (n,d) -> y (n,). Deterministic or noisy; replicates estimate sigma
-    when it is not declared."""
+    when it is not declared. `time_budget_s` caps wall-clock: on a cell beyond the
+    grammar (e.g. inverse-trig), the acquisition rounds otherwise churn to `max_rounds`
+    without ever certifying -- the budget makes it stop and abstain promptly instead."""
     rng = np.random.default_rng(seed)
+    deadline = None if time_budget_s is None else _time.time() + time_budget_s
     box0 = np.array([np.asarray(box_lo, float), np.asarray(box_hi, float)])
     box = box0.copy()
     led = Ledger()
@@ -163,6 +168,8 @@ def run_active(oracle, box_lo, box_hi, *, budget: int = 200,
     stall = 0
 
     for rnd in range(policy.max_rounds):
+        if deadline is not None and _time.time() > deadline:
+            break  # out of time -> fall through to the abstain (last_result uncertified)
         idx = rng.permutation(len(X))
         a, b = int(0.6 * len(X)), int(0.8 * len(X))
         r = discover(X[idx[:a]], y[idx[:a]], X[idx[a:b]], y[idx[a:b]],
@@ -283,18 +290,25 @@ def _heldout_box_ok(oracle, active: ActiveResult, floor_abs, seed) -> bool:
 
 def run_active_boxsearch(oracle, box_lo, box_hi, *, budget: int = 200,
                          policy: Policy = Policy(), floor_abs: float = MACHINE_FLOOR,
-                         seed: int = 0, max_boxes: int = 5) -> BoxSearchResult:
+                         seed: int = 0, max_boxes: int = 5,
+                         time_budget_s: float | None = None) -> BoxSearchResult:
     """On abstain, search a bounded box ladder; a certification counts only if it also
     survives a fresh independent box (held-out-box guard). K (boxes tried) is reported
-    for the significance accounting. Sound extension of adaptive ranging."""
+    for the significance accounting. Sound extension of adaptive ranging. `time_budget_s`
+    caps total wall-clock across the whole ladder so an uncertifiable cell abstains
+    promptly instead of grinding every box x max_rounds (the inverse-trig timeout)."""
     last = None
     tried = []
+    deadline = None if time_budget_s is None else _time.time() + time_budget_s
     for k, (name, lo, hi) in enumerate(_box_ladder(box_lo, box_hi)):
         if k >= max_boxes:
             break
+        if deadline is not None and _time.time() > deadline:
+            break  # ladder out of time -> return the last (abstain) result
         tried.append(name)
+        remaining = None if deadline is None else max(0.5, deadline - _time.time())
         active = run_active(oracle, lo, hi, budget=budget, policy=policy,
-                            floor_abs=floor_abs, seed=seed)
+                            floor_abs=floor_abs, seed=seed, time_budget_s=remaining)
         last = active
         if active.result.certificate.certified:
             ok = _heldout_box_ok(oracle, active, floor_abs, seed)

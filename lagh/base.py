@@ -108,6 +108,12 @@ def admissible(terms: Sequence[Term], *Xs: np.ndarray) -> list[Term]:
 def lstsq(M: np.ndarray, y: np.ndarray):
     if M.shape[1] == 0:
         return None
+    # A non-finite design matrix (NaN/Inf from e.g. arcsin out-of-domain or log<=0 on the
+    # inverse-trig class) makes LAPACK's gelsd spam `DLASCL illegal value` on stderr and
+    # grind -- guard BEFORE the call. Semantics are unchanged (such fits return None
+    # anyway via the finiteness check below); this just short-circuits cheaply and quietly.
+    if not (np.isfinite(M).all() and np.isfinite(y).all()):
+        return None
     try:
         c, *_ = np.linalg.lstsq(M, y, rcond=None)
     except np.linalg.LinAlgError:

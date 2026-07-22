@@ -63,6 +63,7 @@ def test_server_respects_lab_source_and_hides_truth(monkeypatch):
 
     from lagh.lab.server import build_server
     build_server()
-    assert set(reg) == {"problems", "sample"} and "truth" not in reg
+    # safe surface: query tools + the delegate-to-lagh `discover`; never a ground-truth tool
+    assert set(reg) == {"problems", "sample", "discover"} and "truth" not in reg
     out = reg["sample"]("orbit", [[2.0, 3.0, 1.5]])
     assert out["source"] == "proxy" and "y" in out
