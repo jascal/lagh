@@ -8,3 +8,6 @@ __pycache__/
 
 # editable-install artifact
 *.egg-info/
+
+# benchmark run outputs
+deploy/hermes/bench_results/
