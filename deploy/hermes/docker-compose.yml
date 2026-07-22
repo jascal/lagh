@@ -11,13 +11,18 @@ services:
     stdin_open: true          # so `docker compose exec -it hermes hermes` is interactive
     tty: true
     environment:
-      # MiniMax (OpenAI-compatible). Values come from .env (which is gitignored).
+      # MiniMax via its Anthropic-compatible endpoint. Values come from .env (gitignored).
       LLM_MODEL: "${LLM_MODEL:-MiniMax-M3}"
-      LLM_BASE_URL: "${LLM_BASE_URL:-https://api.minimax.io/v1}"
+      LLM_BASE_URL: "${LLM_BASE_URL:-https://api.minimax.io/anthropic}"
       LLM_API_KEY: "${LLM_API_KEY:?set LLM_API_KEY in deploy/hermes/.env}"
+      # which lab benchmark to serve: proxy (self-contained) or newtonbench (real dev cells)
+      LAB_SOURCE: "${LAB_SOURCE:-proxy}"
+      NEWTONBENCH_DIR: /opt/NewtonBench
     volumes:
       # the lagh source (so its MCP server + live edits are in the container)
       - ../../:/opt/lagh
+      # NewtonBench checkout (read-only) so the `newtonbench` lab source can query it
+      - ../../../NewtonBench:/opt/NewtonBench:ro
       # persist Hermes config / sessions / logs across restarts
       - hermes-home:/root/.hermes
 volumes:

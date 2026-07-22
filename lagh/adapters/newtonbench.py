@@ -11,12 +11,15 @@ bodies. Domain boxes are each function's declared positive-real safe range.
 from __future__ import annotations
 
 import importlib
+import os
 import sys
 from pathlib import Path
 
 import numpy as np
 
-NB = Path("/home/allans/code/NewtonBench")
+# NewtonBench checkout location -- overridable so the adapter works off-host (e.g. the
+# path a container mounts it at), defaulting to the workspace layout.
+NB = Path(os.environ.get("NEWTONBENCH_DIR", "/home/allans/code/NewtonBench"))
 if str(NB) not in sys.path:
     sys.path.insert(0, str(NB))
 

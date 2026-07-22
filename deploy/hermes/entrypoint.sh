@@ -10,10 +10,18 @@ HERMES_CFG="${HERMES_CFG:-/root/.hermes/config.yaml}"
 
 # 1) lagh (+ the mcp extra) into its isolated venv, editable so host edits reflect live
 if [ -f "${LAGH_SRC}/pyproject.toml" ]; then
-    if ! "${LAGH_PY}" -c "import lagh.mcp" 2>/dev/null; then
+    # reinstall if either the mcp OR the lab subpackage is missing (a warm venv from an
+    # older image may predate lagh.lab)
+    if ! "${LAGH_PY}" -c "import lagh.mcp, lagh.lab" 2>/dev/null; then
         echo "[entrypoint] installing lagh[mcp] (editable) from ${LAGH_SRC} ..."
         "${LAGH_PY}" -m pip install -q --upgrade pip
         "${LAGH_PY}" -m pip install -q -e "${LAGH_SRC}[mcp]"
+    fi
+    # the `newtonbench` lab source imports openai (via NewtonBench's eval chain); install
+    # it only when NewtonBench is actually mounted, so the proxy-only case stays lean
+    if [ -d "${NEWTONBENCH_DIR:-/opt/NewtonBench}" ] && ! "${LAGH_PY}" -c "import openai" 2>/dev/null; then
+        echo "[entrypoint] installing openai (for the newtonbench lab source) ..."
+        "${LAGH_PY}" -m pip install -q openai
     fi
     echo "[entrypoint] lagh ready: $("${LAGH_PY}" -c 'import lagh; print(lagh.__version__)')"
 else

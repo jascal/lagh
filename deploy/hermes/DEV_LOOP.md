@@ -27,15 +27,25 @@ for the real dev cells where that adapter's deps are present).
 >    - `acquire_more_data` / `under_determined` → sample a **wider** range (you may go
 >      outside the suggested_domain) and repeat.
 > 3. Call `lagh.recover` on your best (X, y). Report **verbatim** what it returns.
-> 4. State the outcome honestly:
->    - certified → give the `law` and its `strength` (`pinned`/`consistent`), and repeat
->      lagh's finite-domain caveat. Do NOT claim more than the certificate says.
->    - abstained → report the `abstain` reason as the answer. An abstention is a correct,
->      honest result (e.g. non-smooth data, or an out-of-class irrational exponent) — do
->      NOT invent a law to fill the gap.
+> 4. State the outcome, **attributing every claim to its source**. Tag each line:
+>    - `[recover]` — what `lagh.recover` returned (a certificate OR an abstention). Quote
+>      it. If it abstained, SAY "recover abstained[reason]" — never hide it.
+>    - `[fit]` — a scout **conjecture**, explicitly NOT certified. Never write "recover
+>      found X" when it was `fit`; a fit guess is not a result.
+>    - `[verify: <the form YOU declared>]` — you may bring a prior and check it. State the
+>      form you declared and what verify returned (`certified` + `pinned`/`consistent`).
+>      `verify` confirms YOUR hypothesis fits; it does NOT mean it's the unique law.
+>    - `[me]` — your own inference/interpretation, clearly separated from tool output.
 >
-> Never present a `fit` conjecture as if it were certified. When you're done, give a
-> one-line-per-problem summary: `id → certified law | or abstain[reason]`.
+> Honesty rules: an abstention is a correct answer — do NOT invent a law to fill a gap.
+> A `consistent` (not `pinned`) strength means the constant is not identifiable from data;
+> keep that hedge. Never present a `fit` conjecture, or a `verify` of your own declared
+> form, as if `recover` had discovered it.
+>
+> When done, one line per problem, showing the PROVENANCE, e.g.:
+>   `orbit    → [recover] certified G*m1*m2/r^2 (pinned)`
+>   `steps    → [recover] abstained[structural]; [verify floor(2x)] certified (pinned)`
+>   `exotic   → [recover] abstained; [verify 2*x^E] certified (consistent — E not identifiable)`
 
 ---
 
