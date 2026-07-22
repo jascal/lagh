@@ -1,0 +1,24 @@
+# Hermes Agent (MiniMax-backed MCP host) + lagh (certified-law MCP server), one container.
+# Start:   cd deploy/hermes && cp .env.example .env && $EDITOR .env && docker compose up -d --build
+# Use:     docker compose exec -it hermes hermes           # interactive agent; lagh tools available
+# Verify:  docker compose exec -it hermes hermes mcp test lagh
+# Stop:    docker compose down          (state persists in the named volume)
+services:
+  hermes:
+    build: .
+    image: lagh-hermes:latest
+    container_name: lagh-hermes
+    stdin_open: true          # so `docker compose exec -it hermes hermes` is interactive
+    tty: true
+    environment:
+      # MiniMax (OpenAI-compatible). Values come from .env (which is gitignored).
+      LLM_MODEL: "${LLM_MODEL:-MiniMax-M3}"
+      LLM_BASE_URL: "${LLM_BASE_URL:-https://api.minimax.io/v1}"
+      LLM_API_KEY: "${LLM_API_KEY:?set LLM_API_KEY in deploy/hermes/.env}"
+    volumes:
+      # the lagh source (so its MCP server + live edits are in the container)
+      - ../../:/opt/lagh
+      # persist Hermes config / sessions / logs across restarts
+      - hermes-home:/root/.hermes
+volumes:
+  hermes-home:
