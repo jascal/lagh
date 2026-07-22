@@ -35,6 +35,24 @@ with a `proved` / `open` tag — not a tool name.
   cannot be read off it by accident. `fit` is a scout; to make a conjecture
   trustworthy, feed it to `recover` or `verify`.
 
+## Active acquisition (two modes)
+
+lagh's strength is *adaptive* querying — ranging to find the informative box, then
+budget-metered multi-objective queries. That needs a **live oracle**, which JSON can't
+carry, so `recover` has two modes:
+
+- **In-process (library):** hand lagh the oracle and box and it drives the whole loop:
+  ```python
+  from lagh.mcp import recover
+  recover(oracle=lambda X: 3*X[:,0]**2, box=[[0.5],[4.0]])          # → certificate + `acquisition` provenance
+  recover(oracle=my_oracle, box=[lo, hi], box_search=True)          # broaden-the-box ladder on abstain, held-out-box guarded
+  ```
+  The certificate comes with `acquisition` = {queries_used, budget_spent, box_final, …}.
+- **Over the wire (caller-driven):** the data-only tool can't call back to your oracle,
+  so on a thin/under-determined abstain it returns `next_action:"acquire"` +
+  `suggested_box` (10× wider). Re-sample that box, call `recover` again — the acquisition
+  loop, driven by you.
+
 ## The loop `fit` is built for
 
 `fit`'s real product is the **diagnosis**, not the guess. It names the next move:

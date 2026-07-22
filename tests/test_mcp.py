@@ -107,3 +107,29 @@ def test_server_registers_the_three_acts_and_delegates_to_core(monkeypatch):
     X = np.exp(np.random.default_rng(0).uniform(0, 1, (120, 1)))
     out = registered["fit"](X.tolist(), (3 * X[:, 0] ** 2).tolist())
     assert "certified" not in out and out["tag"] == "exploratory"
+
+
+def test_recover_active_drives_the_oracle_and_reports_acquisition():
+    """Active mode: give recover a live oracle + box; lagh runs the acquisition loop
+    (ranging + adaptive queries) and returns the certificate WITH provenance."""
+    oracle = lambda X: 3 * X[:, 0] ** 2                        # noqa: E731
+    r = recover(oracle=oracle, box=[[0.5], [4.0]])
+    assert r["certified"] is True and r["strength"] == "pinned"
+    assert r["acquisition"]["mode"] == "active"
+    assert r["acquisition"]["queries_used"] > 0                # it actually queried
+
+
+def test_recover_box_search_reports_boxes_and_heldout_guard():
+    oracle = lambda X: 2.0 * X[:, 0] * X[:, 1]                 # noqa: E731
+    r = recover(oracle=oracle, box=[[0.5, 0.5], [3.0, 3.0]], box_search=True)
+    assert r["certified"] is True
+    assert r["acquisition"]["mode"] == "box-search"
+    assert "boxes_tried" in r["acquisition"] and "heldout_box_ok" in r["acquisition"]
+
+
+def test_recover_data_abstain_offers_a_broadened_box_for_the_caller_loop():
+    import numpy as np
+    X, y = _data(lambda X: np.round(X[:, 0] * 7) % 3, 1, 0.5, 4.0)
+    r = recover(X, y)
+    assert r["certified"] is False
+    assert r["next_action"] == "acquire" and "suggested_box" in r

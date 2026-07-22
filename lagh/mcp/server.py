@@ -46,6 +46,12 @@ def build_server():
         under noise it certifies the exact STRUCTURE or abstains (coefficients are
         noise-limited). The certificate is over the domain you sampled, not a claim
         about the world -- check the `bounds` match your question.
+
+        ACTIVE ACQUISITION over the wire is CALLER-DRIVEN: on a thin/under-determined
+        abstain this returns `next_action:"acquire"` + a broadened `suggested_box` --
+        re-sample your oracle over that box and call `recover` again. (In-process
+        callers can instead hand lagh the oracle directly and let it run the full
+        adaptive loop; that path can't cross the JSON wire.)
         """
         return core.recover(X, y, sigma=sigma)
 

@@ -22,6 +22,7 @@ from fractions import Fraction
 import numpy as np
 import sympy as sp
 
+from ..acquisition import run_active, run_active_boxsearch
 from ..base import eval_expr, lstsq
 from ..certify import (Abstain, coherent, epsilon, pinned, sample_box)
 from ..engine import discover
@@ -78,22 +79,76 @@ def _strength(expr, syms, X_cert, y_cert, eps, sigma) -> str:
 
 # --------------------------------------------------------------------------- recover
 
-def recover(X, y, *, sigma: float = 0.0, max_tier: int = 7) -> dict:
-    """Bounded. Discover an exact law from (X, y). Returns a Certificate or an
-    Abstention -- never a bare guess."""
+def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
+            max_tier: int = 7, budget: int = 200, box_search: bool = False,
+            seed: int = 0) -> dict:
+    """Bounded. Discover an exact law. Two modes:
+
+    * **active** (`oracle` + `box` given, in-process only): lagh DRIVES the oracle --
+      adaptive ranging, budget-metered multi-objective queries, per-round
+      micro-predictions -- via `run_active` (or `run_active_boxsearch` on abstain if
+      `box_search=True`, the "broaden-the-box" ladder with a held-out-box guard). This
+      is the real acquisition loop; the certificate comes with `acquisition` provenance
+      (queries used, budget spent, the box it settled on).
+    * **data** (`X`, `y` given, the MCP-wire default): one-shot certification of the
+      points you provide. On abstain it returns `next_action:"acquire"` + a broadened
+      `suggested_box` so the CALLER can run the acquisition loop (JSON can't carry a
+      live oracle across the wire).
+
+    Returns a Certificate or an Abstention -- never a bare guess."""
+    # ---- active-acquisition path: lagh drives a live oracle ----
+    if oracle is not None:
+        if not box or len(box) != 2:
+            return {"tag": "open", "tool": "recover", "certified": False,
+                    "abstain": "bad-request",
+                    "note": "active recover needs box=[lo_vector, hi_vector]"}
+        lo, hi = np.asarray(box[0], float), np.asarray(box[1], float)
+        sig = float(sigma) if sigma and sigma > 0 else None
+        if box_search:
+            bs = run_active_boxsearch(oracle, lo, hi, budget=budget, seed=seed)
+            active = bs.active
+        else:
+            active = run_active(oracle, lo, hi, budget=budget, sigma_declared=sig, seed=seed)
+        r = active.result
+        c = r.certificate
+        bf = np.asarray(active.box_final, float)
+        acq = {"mode": "box-search" if box_search else "active",
+               "queries_used": int(active.queries_used),
+               "budget_spent": int(active.ledger.spent),
+               "box_final": bf.tolist(), "ranging_steps": len(active.ranging_trajectory)}
+        if box_search:
+            acq["boxes_tried"] = bs.boxes_tried
+            acq["heldout_box_ok"] = bs.heldout_box_ok
+        if not c.certified:
+            return {"tag": "open", "tool": "recover", "certified": False,
+                    "abstain": c.abstain, "domain_size": c.domain_size,
+                    "acquisition": acq,
+                    "note": "; ".join(map(str, c.notes)) if c.notes else ""}
+        # the parametric gate already ran inside discover() -> certified ⇒ pinned
+        strength = "consistent" if _has_irrational(r.expr) else "pinned"
+        return {"tag": "proved", "tool": "recover", "certified": True,
+                "law": str(r.expr), "strength": strength, "domain_size": c.domain_size,
+                "tier": r.tier, "bounds": bf.tolist(), "acquisition": acq,
+                "note": "certified over the actively-acquired domain, not proved for the world"}
+
+    # ---- data-only path (MCP wire): one-shot on provided points ----
     X, y = _prep(X, y)
     if len(X) < 8:
         return {"tag": "open", "tool": "recover", "certified": False,
                 "abstain": Abstain.RANGE.value,
                 "note": f"only {len(X)} finite points; too thin to certify"}
     dim = X.shape[1]
+    syms = _syms(dim)
     r = discover(*_split(X, y), sigma=float(sigma), max_tier=max_tier)
     c = r.certificate
     if not c.certified:
+        lo, hi = X.min(axis=0), X.max(axis=0)
         return {"tag": "open", "tool": "recover", "certified": False,
                 "abstain": c.abstain, "domain_size": c.domain_size,
-                "note": "; ".join(map(str, c.notes)) if c.notes else ""}
-    syms = _syms(dim)
+                "next_action": "acquire",
+                "suggested_box": [(lo / 10).tolist(), (hi * 10).tolist()],
+                "note": ((("; ".join(map(str, c.notes)) + " | ") if c.notes else "")
+                         + "re-sample the suggested_box (10x wider) and call recover again")}
     eps = epsilon(y, sigma=float(sigma))
     return {"tag": "proved", "tool": "recover", "certified": True,
             "law": str(r.expr), "strength": _strength(r.expr, syms, X, y, eps, sigma),
