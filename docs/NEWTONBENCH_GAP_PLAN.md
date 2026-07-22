@@ -53,7 +53,23 @@ base. **Predicts (up to 5):** m6_underdamped easy_v1/v2, medium_v1, hard_v1 (the
 `(k/m − (b/2m)²)^{1 or 2}`). Fractional-power variants (hard_v0 `^1.5`, hard_v2/medium_v2 `m^{1.3}`) are
 weaker — may need CAP-A too; registered as *stretch*, not core.
 
-## CAP-E — rational-of-exponential `1/(e^{u}−1)` (Bose–Einstein)
+## CAP-E — rational-of-exponential `1/(e^{u}−1)` (Bose–Einstein)  ❌ REVERTED — UNSOUND AT SCALE
+> **Attempted + reverted 2026-07-21.** A `bose` transform (forward `log(1/y+1)`, invert `1/(e^e−1)`)
+> recovered all four BE forms *in isolation* (nice `C=1`) but **produced a confident-wrong on the real
+> oracle** (medium_v1). Two coupled causes: (1) `log(1/y+1)` is numerically ill-conditioned for large
+> `y` — the real BE outputs are ~1e10, so `1/y+1 ≈ 1` and catastrophic cancellation gives a ~5-digit
+> `τ`; (2) the power-law tier emitted the resulting coefficient (~1.05e-14) as a **raw float, unsnapped**,
+> and at output scale ~1e10 the relative `eps` was loose enough for that float form to certify while
+> being 3e-5 off. The real BE coefficients are ~1e-14 — **un-representable as exact rationals** — so the
+> transform recovered *zero* real BE cells and only manufactured a false certificate. **Reverted; the
+> invariant is the product.** Re-introducing BE safely needs BOTH `np.log1p(1/y)` stability AND an
+> exact-coefficient gate (reject certified candidates carrying un-snappable `Float` coefficients) — a
+> separate, carefully-verified task. **LESSON: target-transforms that compress the signal (`log`, `inv`,
+> `bose`) can spuriously certify at extreme output scale; prefer additive polynomial/power features
+> whose coefficients are exact rationals by construction (lstsq→snap), and add an exact-coefficient
+> gate before any more transform capabilities.**
+
+### (original CAP-E pre-registration, superseded by the revert above)
 The `inv` transform already yields `e^u − 1`; needs C4 inner `e^{C·ω^p/T^q}` with fractional inner
 powers. **Predicts (up to 5):** m10_be easy_v1/v2, medium_v1/v2, hard_v1 (`1/(e^{…}−1)` with rational
 inner exponents). hard_v2 (`1/(−ln(...)−1)`) is a different inner (log) — stretch.
