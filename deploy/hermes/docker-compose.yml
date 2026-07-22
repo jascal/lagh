@@ -11,10 +11,15 @@ services:
     stdin_open: true          # so `docker compose exec -it hermes hermes` is interactive
     tty: true
     environment:
-      # MiniMax via its Anthropic-compatible endpoint. Values come from .env (gitignored).
+      # Backing model, provider-agnostic. Values come from .env (gitignored); swap providers
+      # by editing .env then `docker compose up -d` (recreates + regenerates the Hermes config).
       LLM_MODEL: "${LLM_MODEL:-MiniMax-M3}"
       LLM_BASE_URL: "${LLM_BASE_URL:-https://api.minimax.io/anthropic}"
       LLM_API_KEY: "${LLM_API_KEY:?set LLM_API_KEY in deploy/hermes/.env}"
+      # api_mode MUST be forwarded or gen_config always defaults to the OpenAI dialect:
+      # empty = OpenAI (Grok/GPT); 'anthropic_messages' = MiniMax's /anthropic endpoint.
+      LLM_API_MODE: "${LLM_API_MODE:-}"
+      LLM_PROVIDER_NAME: "${LLM_PROVIDER_NAME:-model}"
       # which lab benchmark to serve: proxy (self-contained) or newtonbench (real dev cells)
       LAB_SOURCE: "${LAB_SOURCE:-proxy}"
       NEWTONBENCH_DIR: /opt/NewtonBench
