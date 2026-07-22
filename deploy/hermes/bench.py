@@ -165,7 +165,10 @@ def main():
     ap.add_argument("--out", default=os.path.join(os.path.dirname(__file__), "bench_results"))
     args = ap.parse_args()
 
-    os.makedirs(args.out, exist_ok=True)
+    # resolve a relative --out against THIS script's dir (the mounted repo, visible on the
+    # host) rather than the container cwd (/work), so results aren't stranded in the container
+    out = args.out if os.path.isabs(args.out) else os.path.join(os.path.dirname(__file__), args.out)
+    os.makedirs(out, exist_ok=True)
     ids = cells(args)
     base = lagh_alone_map()
     print(f"running {len(ids)} cell(s) [subset={args.subset}] through MiniMax+Hermes+lagh\n",
@@ -174,7 +177,7 @@ def main():
     for k, pid in enumerate(ids, 1):
         t0 = time.time()
         raw, res = run_cell(pid, args.timeout, args.trace)
-        open(os.path.join(args.out, pid.replace("/", "_") + ".txt"), "w").write(raw)
+        open(os.path.join(out, pid.replace("/", "_") + ".txt"), "w").write(raw)
         status = (res or {}).get("status")
         law = (res or {}).get("law")
         via = (res or {}).get("via")
@@ -191,7 +194,7 @@ def main():
         print(f"  [{k:>3}/{len(ids)}] {pid:<28} {cat:<16} via={via or '-':<7} "
               f"{(str(law)[:34] if law else '')}", flush=True)
 
-    json.dump(rows, open(os.path.join(args.out, "results.json"), "w"), indent=1)
+    json.dump(rows, open(os.path.join(out, "results.json"), "w"), indent=1)
     from collections import Counter
     c = Counter(r["cat"] for r in rows)
     comp = c["CORRECT"]
