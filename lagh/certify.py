@@ -37,6 +37,7 @@ class Abstain(str, Enum):
     SURROGATE = "surrogate"    # rests on high-disagreement surrogate region
     NUMERICAL = "numerical"    # law undefined/unstable inside its own domain
     RANGE = "range"            # sampled box carries no signal above the floor
+    PARAMETRIC = "parametric"  # exact rational params not pinned within the noise band
 
 
 @dataclass
@@ -117,6 +118,74 @@ def max_divergence(expr_a, expr_b, syms, P: np.ndarray, yscale: float) -> float:
     d = np.abs(va - vb)
     d = d[np.isfinite(d)]
     return float(d.max()) / max(yscale, 1e-300) if d.size else float("inf")
+
+
+def pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray,
+           P: np.ndarray, yscale: float, sigma: float, tau: float = TAU) -> bool:
+    """Parametric-uncertainty abstention (docs/RNOISE_STUDY.md).
+
+    Coherence catches FUNCTIONAL under-determination (rival materially-different laws).
+    Measurement noise instead creates PARAMETRIC mis-determination: one law whose exact
+    rational coefficient/exponent was snapped from a noisy fit, with no functional rival
+    generated -- so it certifies as exact when a *nearby* rational fits the noisy data
+    just as well. This tests the snap for that: for each rational parameter, is there a
+    materially-different neighbour-rational, within the declared noise band, that ALSO
+    certifies? If so the exact value is not identified at this noise -> not pinned.
+
+    On CLEAN data (sigma<=0) this is a strict no-op (always pinned) -- the deterministic
+    behaviour, and the zero-wrong-on-clean record, are preserved by construction. The
+    gate only ever REMOVES certifications under declared noise; it can never add one.
+    """
+    if sigma <= 0 or expr is None:
+        return True
+    from fractions import Fraction
+    y = np.asarray(y, float).ravel()
+    ev_P = eval_expr(expr, syms, P)                   # original law on the probe box
+    if ev_P is None:
+        return True
+    rats = sorted({a for a in expr.atoms(sp.Rational) if a != 0},
+                  key=lambda a: (a.q, abs(a.p)))
+    for r in rats:
+        v = float(r)
+        if v == 0:
+            continue
+        seen = set()
+        for kmul in (1.0, 2.0, 4.0):
+            for s in (1, -1):
+                vp = v * (1 + s * kmul * sigma)
+                for md in (max(2, r.q), 2 * r.q, 4 * r.q):
+                    rp = Fraction(vp).limit_denominator(int(md))
+                    key = (rp.numerator, rp.denominator)
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    if (rp.numerator, rp.denominator) == (r.p, r.q):
+                        continue
+                    alt = expr.xreplace({r: sp.Rational(rp.numerator, rp.denominator)})
+                    if alt == expr:
+                        continue
+                    av = eval_expr(alt, syms, X)      # neighbour on the cert points
+                    if av is None or not np.all(np.isfinite(av)):
+                        continue
+                    d2 = float(np.dot(av, av))
+                    if d2 <= 0:
+                        continue
+                    # refit ONE overall scale: a different exponent needs its own
+                    # coefficient to compete -- without this the neighbour never fits
+                    # and every wrong snap looks pinned.
+                    alpha = float(np.dot(av, y) / d2)
+                    if not np.isfinite(alpha) or alpha == 0:
+                        continue
+                    ap = eval_expr(alt, syms, P)
+                    if ap is None:
+                        continue
+                    diff = np.abs(alpha * ap - ev_P)
+                    diff = diff[np.isfinite(diff)]
+                    if not diff.size or float(diff.max()) / max(yscale, 1e-300) <= tau:
+                        continue                     # same function at best scale
+                    if np.all(np.abs(alpha * av - y) <= eps):
+                        return False                 # a different rational also fits
+    return True
 
 
 def coherent(certifying: list, syms, P: np.ndarray, yscale: float,

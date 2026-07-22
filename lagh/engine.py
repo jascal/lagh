@@ -16,7 +16,7 @@ import sympy as sp
 
 from .base import (Candidate, admissible, design_matrix, lstsq, snap_all,
                    to_expr, eval_expr)
-from .certify import (Abstain, Certificate, check, coherent, epsilon,
+from .certify import (Abstain, Certificate, check, coherent, epsilon, pinned,
                       sample_box, vacuous)
 from .classes import CURRICULUM, c5_transforms, c6_quasipoly, c7_levy
 from .engine_util import stlsq_supports
@@ -208,6 +208,16 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
         classes = coherent(certifying, syms, P, yscale)
         if len(classes) == 1:
             winner = min(classes[0][1], key=lambda z: z.complexity)
+            # parametric-uncertainty gate: under declared noise, abstain if the winner's
+            # exact rational params are not pinned (a neighbour-rational within the noise
+            # band also certifies). No-op on clean data -- preserves the deterministic
+            # zero-wrong record; only ever removes a noisy false-exact certificate.
+            if not pinned(winner.expr, syms, X_cert, y_cert, eps, P, yscale, sigma):
+                cert = Certificate(False, 0, 0, len(X_cert), bounds, str(winner.expr),
+                                   abstain=Abstain.PARAMETRIC.value,
+                                   notes=["exact rational parameters not pinned within "
+                                          f"the noise band (sigma={sigma:g})"])
+                return Result(cert, None, tier, total)
             cert = Certificate(True, 0, 0, len(X_cert), bounds, str(winner.expr))
             return Result(cert, winner.expr, tier, total)
         cert = Certificate(False, 0, 0, len(X_cert), bounds,
