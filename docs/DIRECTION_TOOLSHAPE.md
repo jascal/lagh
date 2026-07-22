@@ -44,15 +44,90 @@ licenses the guarantee.
 
 ## Two concrete tool shapes (compatible, not competing)
 
-1. **MCP server + skill.** lagh exposes `discover` / `certify` as MCP tools; a skill tells the LLM
-   *when* a subproblem is law-discovery-shaped and how to set up the oracle. Portable to any
-   MCP-speaking agent. This is the modern, host-agnostic form.
+1. **MCP server + skill.** lagh exposes `recover` / `verify` / `fit` as MCP tools (verbs and
+   schemas fixed in *"MCP surface"* below); a skill tells the LLM *when* a subproblem is
+   law-discovery-shaped and how to set up the oracle. Portable to any MCP-speaking agent. This is
+   the modern, host-agnostic form.
 2. **claymore spoke (`sgiandubh`-shaped).** lagh served as a bounded OpenAI-compatible expert;
    `claymore` hub fans the query, drops abstainers (the bound *is* the router), ranks survivors by
    α, falls back to a hub LLM. The workspace-native form; the routing logic is already designed.
 
 MCP is the transport; claymore is the routing doctrine. A first build can be the MCP server (small)
 and let any agent, including a claymore hub, consume it.
+
+## MCP surface: the verbs, the schemas, the wall (registered 2026-07-22)
+
+Fixed before the server is built, so the naming can't be reverse-justified. Grounded in the
+Orca-family convention (`orca-lang/packages/orca-lang/src/tools.ts`: `parse_machine`,
+`verify_machine`, `compile_machine`, `generate_machine` — `verb_object`, snake_case, and the
+checking verb is **`verify`**, never `certify`).
+
+**Naming principle — name the ACT the tool performs, not the CLAIM it hopes to make.** `verify`,
+`parse`, `compile`, `fit`, `recover` name acts. `certify` names an *outcome* (a certificate issued),
+so it overclaims as a tool identity and grammatically presupposes success — wrong for a checker
+whose honest result may be abstention. The strong claim lives in the **typed return value**, earned
+by the act and carrying its proved/empirical/open tag, exactly as `verify_machine` returns a result
+that may be *"not verified."* Certification is demoted from the surface to where it is earned.
+
+**The three tools:**
+
+| tool | bound | act | returns | tag |
+|---|---|---|---|---|
+| `fit` | **UNBOUNDED** | best-guess over the unconstrained basis (free exponents, `e`/`π`, complex) + identifiability diagnosis | `Conjecture[]` + `Diagnosis` — **no `certified` field** | `exploratory` |
+| `recover` | bounded | discover an exact law from data | `Certificate` \| `Abstention` | `proved` / `open` |
+| `verify` | bounded | check a caller-**declared** form over the domain | `Certificate` \| `Abstention` | `proved` / `open` |
+
+`recover` and `verify` are the two bounded acts (find-a-law vs check-a-given-law); both return
+cert-or-abstain, neither is named for the certificate. `fit` is the scout that feeds the proposer
+(the LLM), explicitly downgraded.
+
+**The wall is structural, not conventional.** What in-process type discipline had to enforce by
+habit becomes the schema:
+- `fit`'s return shape has **no `certified` affordance at all** — the field where a guarantee would
+  live does not exist, so a guarantee cannot be read off it by accident. Enforced by *absence*, not
+  by a label the caller must remember to check.
+- `recover` / `verify` return the structured `Certificate` (law, domain `|D|`, `nmiss`/`nuncov`,
+  tier/class provenance, α) or the structured `Abstain{domain|structural|noise|surrogate|numerical|
+  range|parametric}` — the discrete refusal signal (`B2`).
+
+**`fit`'s real product is the diagnosis, not the guess.** A point estimate is commodity SR — the
+thing lagh exists *not* to trust. `fit`'s differentiated output is lagh's identifiability read-out
+(from the coherence / parametric-pinning machinery): *what can be pinned, what can't, and what it
+would take.* It carries a `next_action` pointer that names the caller's next move and closes the
+**scout → declare → check** loop:
+- `pinned: 5/2, no rival` → `recover` / `verify` this form
+- `continuum ~2.71, nearest constant e` → *declare* the irrational, `verify` it (a *consistent*
+  certificate, never *pinned* — see below)
+- `two forms tie over [a,b]` → `acquire` data outside `[a,b]`
+- `complex root pair beats any real form` → oscillation / resonance regime
+
+**A-priori class selection is the interface, not an inference.** Which grammar/ε-regime
+(deterministic-exact vs statistical-significance vs exploratory-unbounded) is a **prior the caller
+declares** — it *must* be, because the deterministic/probabilistic distinction is not identifiable
+from finite noisy data (`RNOISE_STUDY.md`). The MCP tools *are* that interface: choosing
+`recover`/`verify` over `fit` is the caller owning the prior. Two consequences the schema carries:
+- **Certificate strength differs by declared form.** A rational form can certify **`pinned`** (this
+  law, *no rival within the noise* — discreteness supplies the "nothing else fits"). A caller-declared
+  *irrational* (`x^e`) can only certify **`consistent`** (fits within ε; the constant is not
+  identifiable — a continuum always admits a neighbour). `verify`'s result field distinguishes
+  `pinned` from `consistent`; only `pinned` is the strong claim.
+- **Free-continuum / irrational / complex search lives ONLY in `fit`.** The bounded tools never
+  search a continuum (non-identifiable → re-opens confident-wrong). Want an irrational? *Declare* it
+  and `verify` returns a `consistent` certificate; never ask `recover` to find one.
+
+**Federation flag (claymore).** "bounded vs unbounded" is a capability flag in the tool/catalog
+metadata. `claymore` routes bounded tools by abstention (*the bound is the router*); an unbounded
+`fit` **never abstains**, so it must not travel the same trust path — a hub that treated a `fit`
+conjecture as a bounded expert's answer would silently break the composite guarantee. The flag keeps
+exploratory scouts off the certified routing / α-ranking lane at every federation layer.
+
+**The one residual (stated so it isn't assumed away).** MCP fixes *tool*-confusion — capabilities
+and contracts are unambiguous; "what is allowed where" is settled. It does not fix *reasoning*-use:
+nothing stops a model from narrating a clearly-labelled `Conjecture` to a user as fact. Disjoint
+schemas make that require ignoring a structural signal (far harder than accidental confusion), but
+the composite guarantee's final honesty still rests on the reasoning layer respecting the wall the
+interface draws — an argument for the schema being aggressive (separate tools, disjoint shapes,
+absent affordances) rather than subtle.
 
 ## Honest risks (recorded up front)
 
