@@ -22,7 +22,14 @@ Feature: `x_i · sin^a(x_j) cos^b(x_j)`, small `a` and signed `b` (covers `(α s
 medium_v1 (`I₀sin²/cos³`), hard_v0 (`I₀(2sinθ+1.5cosθ)²`). Must still abstain: malus medium_v2/hard_v1/
 hard_v2 (`^e`, irrational).
 
-## CAP-A — wider fractional-power grid + input×fractional products
+## CAP-A — wider fractional-power grid + input×fractional products  ◐ PART 1 SCORED (+2)
+> **Part 1 (2026-07-21): extend C3 exponent denom caps 4→{3,5,10}.** Data-driven exponent snapping
+> from the log-log slope, each cap one checked candidate (no feature inflation). **Scored under noise:
+> hooke 5→6/9 (easy_v2 `x^{17/5}`), sound 6→7/9 (hard_v2 `(RTM^1.5)^{-2.8}`), zero confident-wrong.**
+> Total 64→66/108. **Part 2 DEFERRED** — the multi-term hooke *sums* (medium_v2/hard_v1/hard_v2) need
+> additive C1 fractional features (`x^{17/5}`, `x^{-3/10}`, `x^{-10/3}` as summands), which inflates
+> the feature set combinatorially; not added until an exact-coefficient gate is in place (CAP-E lesson).
+
 Add denominators 5, 10, 3 to `FRAC_EXP` (`x^{17/5}=x^{3.4}`, `x^{-3/10}=x^{-0.3}`, `x^{-10/3}`), and the
 `x_i·x_j^{p/q}` products over the same grid. **Risk: inflates the feature set globally → impostor/zero-
 wrong exposure; the extended-coherence probe must hold.** Verify zero-wrong on ≥3 unrelated modules.
