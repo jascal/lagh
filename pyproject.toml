@@ -16,6 +16,7 @@ mcp = ["mcp>=1.0"]
 
 [project.scripts]
 lagh-mcp = "lagh.mcp.server:main"
+lab-mcp = "lagh.lab.server:main"
 
 [tool.setuptools.packages.find]
 include = ["lagh*"]

@@ -50,6 +50,10 @@ mcp_servers:
     command: "${LAGH_PY}"
     args: ["-m", "lagh.mcp.server"]
     # recover/verify/fit -- certified law discovery
+  lab:
+    command: "${LAGH_PY}"
+    args: ["-m", "lagh.lab.server"]
+    # problems/sample -- the hidden problem oracle to discover against
 YAML
 else
     echo "[entrypoint] Hermes config already present (${HERMES_CFG}); leaving it."
