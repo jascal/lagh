@@ -46,6 +46,29 @@ def build_server():
             return {"error": str(e)}
         return {"problem": problem, "source": src.name, "n": len(y), "y": y}
 
+    @server.tool()
+    def discover(problem: str) -> dict:
+        """DELEGATE the full discovery to lagh. lagh runs its OWN active-acquisition loop
+        -- adaptive ranging, budgeted multi-objective queries, and a broaden-the-box
+        ladder on abstain -- directly against the problem's oracle, and returns a
+        certificate (certified law + strength + acquisition provenance) or a reasoned
+        abstention. Use this when your own sample+recover abstains: lagh samples the
+        oracle far more effectively than a manual pass, so it often certifies where a
+        hand-picked set of points cannot. `problem` is an id from `problems`."""
+        import numpy as np
+        from lagh.mcp.core import recover as _recover
+        cards = {c["id"]: c for c in src.problems()}
+        if problem not in cards:
+            return {"error": f"unknown problem {problem!r}"}
+        lo, hi = cards[problem]["suggested_domain"]
+
+        def oracle(X):
+            return np.asarray(src.sample(problem, np.asarray(X, float).tolist()), float)
+
+        r = _recover(oracle=oracle, box=[lo, hi], box_search=True)
+        r["problem"] = problem
+        return r
+
     return server
 
 

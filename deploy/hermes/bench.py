@@ -45,13 +45,15 @@ Tools available:
 - lab.sample(problem, X): query the oracle. problem={pid!r}. X is a list of rows; each row has {n} number(s) in the input column order above. Returns y for each row.
 - lagh.fit(X, y): scout -- conjectures + a diagnosis (pinned / continuum / acquire_more_data). A guess, NOT a certificate.
 - lagh.recover(X, y): discover an exact law -> a certificate (certified true, law, strength) OR an abstention (certified false, abstain reason).
+- lab.discover(problem): DELEGATE the whole thing to lagh -- it runs its OWN adaptive sampling loop against the oracle and certifies where a hand-picked sample often can't. Your best move when recover abstains.
 - lagh.verify(X, y, form): check a form YOU declare -> certificate (pinned or consistent) or abstain.
 
 Procedure:
 1. Pick at least 12 points spread across the suggested domain (log-spaced if it spans decades); call lab.sample.
 2. lagh.fit to scout. If it says acquire_more_data or continuum, sample a WIDER range (you may go outside the suggested domain) and try again.
 3. lagh.recover on your best (X, y).
-4. If recover abstains you MAY declare a form and lagh.verify it -- but never fabricate; if nothing certifies, abstain.
+4. If recover ABSTAINS, call lab.discover(problem) -- lagh runs its full active-acquisition loop and usually certifies. Report ITS certificate (via="recover"). Do NOT give up before trying discover.
+5. Only if discover ALSO abstains may you declare a form and lagh.verify it; if still nothing certifies, abstain honestly.
 
 Honesty: report only what the tools certified; do not invent a law; do not assume the textbook form.
 
