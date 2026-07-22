@@ -171,7 +171,8 @@ def main():
     os.makedirs(out, exist_ok=True)
     ids = cells(args)
     base = lagh_alone_map()
-    print(f"running {len(ids)} cell(s) [subset={args.subset}] through MiniMax+Hermes+lagh\n",
+    model = os.environ.get("LLM_MODEL", "the configured model")  # provider-agnostic header
+    print(f"running {len(ids)} cell(s) [subset={args.subset}] through {model}+Hermes+lagh\n",
           flush=True)
     rows = []
     for k, pid in enumerate(ids, 1):
@@ -206,7 +207,7 @@ def main():
     print("=" * 52)
     for k in ("CORRECT", "HONEST_ABSTAIN", "MISS", "CONFIDENT_WRONG", "PARSE_ERROR", "ERROR"):
         print(f"  {k:<16} {c[k]}")
-    print(f"\n  composite (MiniMax+lagh) certified-correct: {comp}/{len(rows)}")
+    print(f"\n  composite ({model}+lagh) certified-correct: {comp}/{len(rows)}")
     print(f"  lagh-alone (direct sweep) on same cells:    {base_n}/{len(rows)}")
     print(f"  gains (composite got, lagh-alone missed):   {len(gains)}  {gains}")
     print(f"  losses (lagh-alone got, composite missed):  {len(losses)}  {losses}")
