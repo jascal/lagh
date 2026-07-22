@@ -27,8 +27,16 @@ ENV PATH="/root/.hermes/bin:${PATH}"
 # --- lagh in its OWN venv, isolated from Hermes' deps ---
 # The lagh source is mounted at /opt/lagh at runtime; the entrypoint installs it editable
 # into this venv on first boot so `/opt/lagh-venv/bin/python -m lagh.mcp.server` is the
-# command Hermes spawns for the MCP server. Pre-create the venv here to save boot time.
-RUN python -m venv /opt/lagh-venv
+# command Hermes spawns. PRE-INSTALL the deps here (baked into the image) so a fresh venv
+# on every recreate/model-swap already has them -- the entrypoint then only re-links lagh
+# (fast) instead of reinstalling scipy/sklearn/pandas each time. Includes NewtonBench's
+# eval-chain deps (openai/requests/scipy/sklearn/pandas/...) so the newtonbench lab source
+# imports without a runtime install.
+RUN python -m venv /opt/lagh-venv \
+    && /opt/lagh-venv/bin/pip install --no-cache-dir -q --upgrade pip \
+    && /opt/lagh-venv/bin/pip install --no-cache-dir -q \
+       numpy sympy "mcp>=1.0" \
+       openai requests scipy scikit-learn pandas python-dotenv fix-busted-json
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
