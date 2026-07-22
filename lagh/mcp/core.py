@@ -54,16 +54,11 @@ def _split(X, y, seed=0):
 
 
 def _has_irrational(expr) -> bool:
-    """A declared irrational the data cannot pin: e/pi/golden constants, or a Float
-    that is not a clean bounded rational."""
-    if expr.has(sp.E, sp.pi, sp.GoldenRatio, sp.EulerGamma):
-        return True
-    for f in expr.atoms(sp.Float):
-        if Fraction(float(f)).limit_denominator(10 ** 6) != Fraction(float(f)):
-            # a Float that only approximates -- treat as un-pinnable
-            if abs(float(f) - round(float(f))) > 1e-9:
-                return True
-    return False
+    """A DECLARED irrational constant the data cannot pin -- the symbolic e/pi/golden
+    that a declared form like x**E introduces. A fitted Float coefficient (a physical
+    constant like 6.674e-5) is NOT this: it is an identified value, so it must not make
+    the law 'consistent' -- that would mislabel every constant-carrying law."""
+    return bool(expr.has(sp.E, sp.pi, sp.GoldenRatio, sp.EulerGamma))
 
 
 def _strength(expr, syms, X_cert, y_cert, eps, sigma) -> str:
