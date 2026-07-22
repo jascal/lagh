@@ -17,11 +17,13 @@ if [ -f "${LAGH_SRC}/pyproject.toml" ]; then
         "${LAGH_PY}" -m pip install -q --upgrade pip
         "${LAGH_PY}" -m pip install -q -e "${LAGH_SRC}[mcp]"
     fi
-    # the `newtonbench` lab source imports openai (via NewtonBench's eval chain); install
-    # it only when NewtonBench is actually mounted, so the proxy-only case stays lean
-    if [ -d "${NEWTONBENCH_DIR:-/opt/NewtonBench}" ] && ! "${LAGH_PY}" -c "import openai" 2>/dev/null; then
-        echo "[entrypoint] installing openai (for the newtonbench lab source) ..."
-        "${LAGH_PY}" -m pip install -q openai
+    # the `newtonbench` lab source imports NewtonBench's eval chain (openai, requests, ...)
+    # at module load; install its deps when NewtonBench is mounted so the source can load
+    NB_DIR="${NEWTONBENCH_DIR:-/opt/NewtonBench}"
+    if [ -d "${NB_DIR}" ] && ! "${LAGH_PY}" -c "import openai, requests" 2>/dev/null; then
+        echo "[entrypoint] installing newtonbench source deps (openai, requests, its requirements) ..."
+        [ -f "${NB_DIR}/requirements.txt" ] && "${LAGH_PY}" -m pip install -q -r "${NB_DIR}/requirements.txt" || true
+        "${LAGH_PY}" -m pip install -q openai requests
     fi
     echo "[entrypoint] lagh ready: $("${LAGH_PY}" -c 'import lagh; print(lagh.__version__)')"
 else
