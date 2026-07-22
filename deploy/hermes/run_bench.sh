@@ -20,5 +20,15 @@ if ! $DOCKER exec lagh-hermes printenv LAB_SOURCE 2>/dev/null | grep -qx newtonb
   exit 1
 fi
 
+# DETERMINISTIC skill environment: refresh our law-discovery skill from the repo and drop
+# any Hermes `/learn`-captured loop (e.g. law-discovery-loop) that would route the model
+# back into slow manual sampling. Reproducibility -- the score must not depend on whatever
+# got auto-learned. Targeted: touches only these, not the bundled skills.
+echo "[run_bench] resetting skill env (fresh law-discovery, drop learned loops)" >&2
+$DOCKER exec lagh-hermes bash -lc '
+  rm -rf /root/.hermes/skills/law-discovery-loop /root/.hermes/skills/*law-discovery*loop* 2>/dev/null
+  mkdir -p /root/.hermes/skills
+  cp -r /opt/lagh/deploy/hermes/skills/. /root/.hermes/skills/' >/dev/null 2>&1 || true
+
 exec $DOCKER exec -it lagh-hermes \
   /opt/lagh-venv/bin/python /opt/lagh/deploy/hermes/bench.py "$@"
