@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "lagh": {
+      "command": ".venv/bin/python",
+      "args": ["-m", "lagh.mcp.server"],
+      "description": "Certified law discovery. Tools: recover (bounded: discover an exact law -> certificate|abstain), verify (bounded: check a declared form -> certificate|abstain, pinned|consistent), fit (unbounded scout: conjectures + identifiability diagnosis, NOT certificates)."
+    }
+  }
+}

@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lagh"
+version = "0.1.0"
+description = "A general-purpose certified law discoverer: an exact closed-form law with an exhaustive certificate over a stated domain, or a machine-readable refusal."
+requires-python = ">=3.10"
+dependencies = ["numpy", "sympy"]
+
+[project.optional-dependencies]
+# the MCP transport is optional: `import lagh.mcp` (the tool logic) works without it;
+# only running the server needs the SDK.
+mcp = ["mcp>=1.0"]
+
+[project.scripts]
+lagh-mcp = "lagh.mcp.server:main"
+
+[tool.setuptools.packages.find]
+include = ["lagh*"]
