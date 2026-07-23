@@ -41,7 +41,8 @@ def _load_machine():
         "certified": True, "law": _pl(p).get("law", ""),
         "strength": _pl(p).get("strength", ""), "outcome": "proved"})
     m.register_action("record_characterization", lambda ctx, p: {
-        "characterization": _pl(p).get("class", ""), "move": _pl(p).get("move", "")})
+        "characterization": _pl(p).get("class", ""), "move": _pl(p).get("move", ""),
+        "char_why": _pl(p).get("why", "")})
     m.register_action("emit_hedge", lambda ctx, p: {"certified": False, "outcome": "empirical"})
     return m, finals
 
@@ -63,7 +64,8 @@ def _step(state, ctx, oracle, box, propose_fn, seed):
             return "DISCOVERED_LAW", {"law": r["law"], "strength": r.get("strength", "")}
         ch = r.get("characterization", {}) or {}
         return "DISCOVER_ABSTAINED", {"class": ch.get("class", "unresolved"),
-                                      "move": ch.get("research", {}).get("move", "report_and_stop")}
+                                      "move": ch.get("research", {}).get("move", "report_and_stop"),
+                                      "why": ch.get("why", "")}
     if state == "routing":
         move = ctx.get("move", "report_and_stop")
         if move in ("acquire_divergent", "acquire_more_data"):
@@ -79,7 +81,10 @@ def _step(state, ctx, oracle, box, propose_fn, seed):
             return "RECOVERED", {"law": r["law"], "strength": r.get("strength", "")}
         return "RECOVER_ABSTAINED", {}
     if state == "proposing":
-        form = propose_fn(ctx, box) if propose_fn else None   # the ONE bounded LLM call
+        X, y = _sample(oracle, box, n=24, seed=seed + 3)       # samples for the proposer to see
+        info = {"problem": ctx.get("problem", ""), "class": ctx.get("characterization", ""),
+                "why": ctx.get("char_why", ""), "box": box, "X": X.tolist(), "y": y.tolist()}
+        form = propose_fn(info) if propose_fn else None        # the ONE bounded LLM call
         return ("FORM_PROPOSED", {"form": form}) if form else ("NO_FORM", {})
     if state == "verifying":
         X, y = _sample(oracle, box, seed=seed + 2)
