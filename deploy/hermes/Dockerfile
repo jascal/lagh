@@ -35,7 +35,7 @@ ENV PATH="/root/.hermes/bin:${PATH}"
 RUN python -m venv /opt/lagh-venv \
     && /opt/lagh-venv/bin/pip install --no-cache-dir -q --upgrade pip \
     && /opt/lagh-venv/bin/pip install --no-cache-dir -q \
-       numpy sympy "mcp>=1.0" \
+       numpy sympy "mcp>=1.0" orca-runtime-python \
        openai requests scipy scikit-learn pandas python-dotenv fix-busted-json
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh

@@ -13,6 +13,9 @@ dependencies = ["numpy", "sympy"]
 # the MCP transport is optional: `import lagh.mcp` (the tool logic) works without it;
 # only running the server needs the SDK.
 mcp = ["mcp>=1.0"]
+# the research state-machine driver (machine/driver.py) needs the Orca runtime to drive
+# the verified spec. `import lagh` and the tools work without it; only the driver needs it.
+machine = ["orca-runtime-python"]
 
 [project.scripts]
 lagh-mcp = "lagh.mcp.server:main"
