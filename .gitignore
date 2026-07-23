@@ -11,3 +11,9 @@ __pycache__/
 
 # benchmark run outputs
 deploy/hermes/bench_results/
+deploy/hermes/bench_results_*/
+machine/run_results.json
+
+# editor backups / swap files
+*~
+\#*\#
