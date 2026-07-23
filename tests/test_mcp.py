@@ -132,4 +132,11 @@ def test_recover_data_abstain_offers_a_broadened_box_for_the_caller_loop():
     X, y = _data(lambda X: np.round(X[:, 0] * 7) % 3, 1, 0.5, 4.0)
     r = recover(X, y)
     assert r["certified"] is False
-    assert r["next_action"] == "acquire" and "suggested_box" in r
+    # abstain now carries a hedged characterization + a research-move pointer (the middle
+    # rung of the degradation ladder), alongside the broadened box for the caller loop.
+    assert "suggested_box" in r and "characterization" in r
+    ch = r["characterization"]
+    assert ch["certified"] is False and "law" not in ch          # never a certificate
+    assert r["next_action"] == ch["research"]["move"]
+    assert r["next_action"] in ("acquire_more_data", "acquire_divergent",
+                                "declare_and_verify", "report_and_stop")

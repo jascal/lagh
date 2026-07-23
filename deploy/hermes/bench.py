@@ -48,15 +48,17 @@ Tools available:
 - lab.discover(problem): DELEGATE the whole thing to lagh -- it runs its OWN adaptive sampling loop against the oracle and certifies where a hand-picked sample often can't. Your best move when recover abstains.
 - lagh.verify(X, y, form): check a form YOU declare -> certificate (pinned or consistent) or abstain.
 
-Follow the `law-discovery` skill. In short:
-1. Your FIRST tool call MUST be lab.discover({pid!r}). lagh runs its own adaptive sampling loop and usually certifies. If it certifies, report its law (via="discover") and STOP.
-2. Only if discover ABSTAINS: hand-sample at least 20 rows, drawing EACH input INDEPENDENTLY at random across [lo,hi] (widen 2-10x and retry if lagh.fit says acquire_more_data), then lagh.fit / lagh.recover.
-3. Only if BOTH abstain and you have a real reason: declare a form and lagh.verify it (a "consistent" result means a constant is not identifiable -- keep the hedge).
+You are a BOLD proposer; lagh is a SOUND checker. Every form you invent is run through verify/recover -- a wrong guess is rejected, never certified -- so explore boldly; the honesty constraint is only at the OUTPUT (report only what certified, plus any labeled hedge).
 
-HARD RULE: you may NOT report {{"status":"abstained","via":"none"}} unless you ACTUALLY called lab.discover({pid!r}) and it returned an abstention. Being unsure is not a reason to abstain -- it is the reason to call lab.discover. Once discover abstains you MAY abstain immediately (it already ran lagh's full loop); hand-sampling is optional and do NOT loop discover->recover->discover. Skipping the tool and abstaining is a FAILURE, not honesty. Report only what a tool CERTIFIED; a fit output is a guess; never invent or assume the textbook law.
+Follow the `law-discovery` skill. In short:
+1. Your FIRST tool call MUST be lab.discover({pid!r}). If it certifies, report its law (via="discover") and STOP.
+2. On ABSTAIN, lagh returns a `characterization` (a GUESS, not a certificate) with a `research.move`. Do what it says: report_and_stop (report the characterization as a hedge and abstain -- do NOT sample again); acquire_divergent (sample a WIDER/asymptotic box where rivals separate, then recover); acquire_more_data (>=20 more independent-random rows over a 2-10x wider box, then recover); declare_and_verify (declare a trig/inverse-trig or other form and lagh.verify it -- accept a "consistent" hedge).
+3. STOP RULE: at most 2 research moves; if nothing certifies, report_and_stop. Do NOT loop discover->recover->discover.
+
+HARD RULE: you may NOT report status="abstained" unless you ACTUALLY called lab.discover({pid!r}) and it (and any research move) abstained. Being unsure is not a reason to abstain -- it is the reason to call lab.discover. Report only what a tool CERTIFIED; a fit output or characterization is a guess; never invent or assume the textbook law. On abstain, put lagh's characterization `class` in the characterization field as a hedge.
 
 End with EXACTLY ONE final line and nothing after it. Write it as RAW TEXT -- no markdown, no bold/italics -- and copy the law VERBATIM with every * and ** operator intact (e.g. 3*x_0**2, NOT 3x_0^2 and NOT 3x_0*2):
-RESULT: {{"status": "certified"|"consistent"|"abstained", "law": "<the exact sympy expr lagh returned in x_0.. variables, or null>", "via": "discover"|"recover"|"verify"|"none"}}
+RESULT: {{"status": "certified"|"consistent"|"abstained", "law": "<the exact sympy expr lagh returned in x_0.. variables, or null>", "via": "discover"|"recover"|"verify"|"none", "characterization": "<lagh's class on abstain, else null>"}}
 """
 
 

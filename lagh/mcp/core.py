@@ -25,6 +25,7 @@ import sympy as sp
 from ..acquisition import run_active, run_active_boxsearch
 from ..base import eval_expr, lstsq
 from ..certify import (Abstain, coherent, epsilon, pinned, sample_box)
+from ..characterize import characterize
 from ..engine import discover
 
 # nameable constants a free-fit exponent might be reaching for (fit's diagnosis)
@@ -35,6 +36,22 @@ _NAMED = [("e", float(np.e)), ("pi", float(np.pi)), ("sqrt2", float(np.sqrt(2)))
 
 def _syms(dim: int) -> list[sp.Symbol]:
     return [sp.Symbol(f"x_{i}") for i in range(dim)]
+
+
+def _characterize_oracle(oracle, box_final, abstain_reason, seed=0):
+    """Characterize the abstain of an ACTIVE (oracle) recover: the acquired points are not
+    kept on ActiveResult, so re-sample box_final (log-uniform, as acquisition does) and
+    diagnose. Isolated and best-effort -- any failure just omits the characterization."""
+    try:
+        box = np.asarray(box_final, float)
+        lo, hi = box[0], box[1]
+        rng = np.random.default_rng(seed + 7)
+        Xc = np.exp(rng.uniform(np.log(np.maximum(lo, 1e-12)), np.log(np.maximum(hi, 1e-12)),
+                                (200, len(lo))))
+        yc = np.asarray(oracle(Xc), float)
+        return characterize(Xc, yc, abstain_reason=abstain_reason)
+    except Exception:                                              # noqa: BLE001
+        return None
 
 
 def _prep(X, y):
@@ -117,10 +134,15 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
             acq["boxes_tried"] = bs.boxes_tried
             acq["heldout_box_ok"] = bs.heldout_box_ok
         if not c.certified:
-            return {"tag": "open", "tool": "recover", "certified": False,
-                    "abstain": c.abstain, "domain_size": c.domain_size,
-                    "acquisition": acq,
-                    "note": "; ".join(map(str, c.notes)) if c.notes else ""}
+            ch = _characterize_oracle(oracle, bf, c.abstain, seed)
+            out = {"tag": "open", "tool": "recover", "certified": False,
+                   "abstain": c.abstain, "domain_size": c.domain_size,
+                   "acquisition": acq,
+                   "note": "; ".join(map(str, c.notes)) if c.notes else ""}
+            if ch is not None:                    # middle rung: a hedged diagnosis, not a law
+                out["characterization"] = ch
+                out["next_action"] = ch["research"]["move"]
+            return out
         # the parametric gate already ran inside discover() -> certified ⇒ pinned
         strength = "consistent" if _has_irrational(r.expr) else "pinned"
         return {"tag": "proved", "tool": "recover", "certified": True,
@@ -140,12 +162,14 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
     c = r.certificate
     if not c.certified:
         lo, hi = X.min(axis=0), X.max(axis=0)
+        ch = characterize(X, y, sigma=float(sigma), abstain_reason=c.abstain)
         return {"tag": "open", "tool": "recover", "certified": False,
                 "abstain": c.abstain, "domain_size": c.domain_size,
-                "next_action": "acquire",
+                "next_action": ch["research"]["move"],
+                "characterization": ch,
                 "suggested_box": [(lo / 10).tolist(), (hi * 10).tolist()],
                 "note": ((("; ".join(map(str, c.notes)) + " | ") if c.notes else "")
-                         + "re-sample the suggested_box (10x wider) and call recover again")}
+                         + "see characterization.research for the next move")}
     eps = epsilon(y, sigma=float(sigma))
     return {"tag": "proved", "tool": "recover", "certified": True,
             "law": str(r.expr), "strength": _strength(r.expr, syms, X, y, eps, sigma),
