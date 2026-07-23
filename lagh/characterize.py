@@ -137,6 +137,13 @@ def _research_move(cls, pl, ex, abstain_reason):
         return ("report_and_stop",
                 "an exact rational law is impossible here; report the characterization as "
                 "a hedge and abstain -- do NOT keep sampling")
+    if cls == "non-algebraic":
+        # bounded output + no power-law/exp fit -> a trig/inverse-trig shot is worth ONE
+        # propose+verify. In the machine this is structurally bounded (proposing->verifying
+        # ->terminal, no loop); the sound checker rejects a wrong form, so it is safe.
+        return ("declare_and_verify",
+                "declare a trig / inverse-trig (or saturating) form and lagh.verify it ONCE; "
+                "if it does not certify, report_and_stop")
     if not _has_structure(pl, ex):
         return ("report_and_stop",
                 "no exploitable structure in the samples -- more sampling is unlikely to "
