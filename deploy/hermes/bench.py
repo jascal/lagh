@@ -83,22 +83,43 @@ def prompt_for(pid: str) -> str:
                          n=len(inp))
 
 
-def run_cell(pid: str, timeout: int, trace: bool = False) -> tuple[str, dict | None]:
+_TRANSIENT = ("at capacity", "high demand", "rate limit", "ratelimit", "429",
+              "overloaded", "temporarily unavailable", "service tier", "try again in")
+
+
+def _is_transient(raw: str) -> bool:
+    """Provider-side blip (503 capacity / 429 rate limit), NOT a model result. These must
+    be retried, not scored -- an xAI 'at capacity' on a certifiable cell is infrastructure,
+    not a miss. Distinct from TIMEOUT (a real lagh-thrash signal) and a bad RESULT."""
+    s = raw.lower()
+    return any(k in s for k in _TRANSIENT)
+
+
+def run_cell(pid: str, timeout: int, trace: bool = False,
+             retries: int = 2, backoff: int = 30) -> tuple[str, dict | None]:
     """Invoke hermes headless for one cell; return (raw_output, parsed RESULT|None).
     trace=True uses `hermes chat -q` (full tool transcript, for debugging) instead of
-    `hermes -z` (clean final answer, the default -- no markdown to mangle the law)."""
+    `hermes -z` (clean final answer, the default -- no markdown to mangle the law).
+    Retries transient PROVIDER errors (capacity/rate) with backoff; never retries TIMEOUT
+    or a genuine no-RESULT (those are real signals)."""
     cmd = (["hermes", "chat", "-q", prompt_for(pid)] if trace
            else ["hermes", "-z", prompt_for(pid)])
-    try:
-        p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
-        raw = (p.stdout or "") + (p.stderr or "")
-    except subprocess.TimeoutExpired:
-        return "TIMEOUT", None
-    except Exception as e:                                            # noqa: BLE001
-        return f"ERROR: {e}", None
-    m = list(re.finditer(r"RESULT:\s*(\{.*?\})", raw, re.S))
-    if not m:
-        return raw, None
+    raw = ""
+    for attempt in range(retries + 1):
+        try:
+            p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+            raw = (p.stdout or "") + (p.stderr or "")
+        except subprocess.TimeoutExpired:
+            return "TIMEOUT", None
+        except Exception as e:                                        # noqa: BLE001
+            return f"ERROR: {e}", None
+        m = list(re.finditer(r"RESULT:\s*(\{.*?\})", raw, re.S))
+        if m:
+            break
+        if attempt < retries and _is_transient(raw):
+            time.sleep(backoff * (attempt + 1))                      # 30s, 60s -- let capacity recover
+            continue
+        return raw, None                                             # no RESULT, not transient -> real
     try:
         return raw, json.loads(m[-1].group(1))
     except Exception:                                                # noqa: BLE001
