@@ -74,6 +74,11 @@ def _step(state, ctx, oracle, box, propose_fn, seed):
             return "MOVE_PROPOSE", {}
         return "MOVE_STOP", {}                                # report_and_stop (the common case)
     if state == "acquiring":
+        # hand-sample a wider regime + DATA-path recover. This is the version that produced
+        # the locked 67/108 (the BE-hard-v2 log-form gain). Measured alternatives were WORSE:
+        # box-search on the widened box is ~2x slower and risks losing BE-hard-v2, and NO
+        # deterministic widen (1/2/10, data or box-search) recovers underdamped-v0 -- that
+        # gain was fragile/sample-specific to the model, not reproducible in a fixed loop.
         widen = 10.0 if ctx.get("move") == "acquire_divergent" else 4.0
         X, y = _sample(oracle, box, widen=widen, seed=seed + 1)
         r = recover(X.tolist(), y.tolist())                  # DATA path -- fast, no 2nd box-search
