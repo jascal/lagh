@@ -34,14 +34,16 @@ NOT a certificate) with a **`research.move`**. Do exactly what the move says, th
 
 | `research.move` | what you do |
 |-----------------|-------------|
-| **`report_and_stop`** | An exact law is impossible/unreachable here (e.g. an irrational exponent, or no structure). **Report the characterization as a hedge and abstain. Do NOT sample again.** |
-| **`acquire_divergent`** | Rivals fit the sampled range. Sample a **WIDER / asymptotic** regime (widen the box 10×, favor extremes) where the candidate forms separate, then `lagh.recover`. |
-| **`acquire_more_data`** | Sample **≥20 more rows**, each input **independently at random** across a **2–10× wider** box (log-uniform if `hi/lo>100`), then `lagh.recover`. |
-| **`declare_and_verify`** | The shape looks non-algebraic (trig / inverse-trig / saturating). **Declare a specific form** from prior knowledge and `lagh.verify(X, y, "<form>")`. A `consistent` result = fits but a constant isn't identifiable — keep that hedge. |
+| **`report_and_stop`** | An exact law is impossible/unreachable here (irrational exponent, or no exploitable structure). **Report the characterization as a hedge and abstain. Do NOT sample again.** This is the common case — most abstains are genuinely hopeless; stopping fast is correct. |
+| **`acquire_divergent`** | lagh found near-monomial structure but rivals fit the sampled range. Hand-sample a **WIDER / asymptotic** regime (widen 10×, favor extremes) where the forms separate, then call **`lagh.recover(X, y)`** on those points — **NOT `lab.discover` again** (that re-runs the slow ~60s loop). |
+| **`acquire_more_data`** | Hand-sample **≥20 more rows**, each input **independently at random** across a **2–10× wider** box (log-uniform if `hi/lo>100`), then **`lagh.recover(X, y)`** — again NOT `lab.discover`. |
+| **`declare_and_verify`** (optional) | If you have a strong prior about the form (trig / inverse-trig / saturating), declare it and `lagh.verify(X, y, "<form>")` ONCE. A `consistent` result = fits but a constant isn't identifiable — keep that hedge. Otherwise `report_and_stop`. |
 
-**STOP RULE — at most 2 research moves.** If two moves do not produce a certificate, switch
-to `report_and_stop`: report the characterization and abstain. Do NOT loop
-discover→recover→discover; it rarely changes the verdict and wastes time.
+**STOP RULE — at most ONE research move, then report_and_stop.** `lab.discover` already ran
+lagh's full ~60s adaptive loop; a second one rarely changes the verdict and risks the
+timeout. Do a research move ONLY when the tool tells you to (`acquire_*`), use
+`lagh.recover(X, y)` for it (fast), and if it doesn't certify, `report_and_stop`. NEVER call
+`lab.discover` a second time.
 
 ## Honesty — non-negotiable
 - Report ONLY what a tool **certified** (`recover`/`verify` → `pinned`/`consistent`). If

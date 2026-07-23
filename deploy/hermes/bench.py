@@ -52,8 +52,8 @@ You are a BOLD proposer; lagh is a SOUND checker. Every form you invent is run t
 
 Follow the `law-discovery` skill. In short:
 1. Your FIRST tool call MUST be lab.discover({pid!r}). If it certifies, report its law (via="discover") and STOP.
-2. On ABSTAIN, lagh returns a `characterization` (a GUESS, not a certificate) with a `research.move`. Do what it says: report_and_stop (report the characterization as a hedge and abstain -- do NOT sample again); acquire_divergent (sample a WIDER/asymptotic box where rivals separate, then recover); acquire_more_data (>=20 more independent-random rows over a 2-10x wider box, then recover); declare_and_verify (declare a trig/inverse-trig or other form and lagh.verify it -- accept a "consistent" hedge).
-3. STOP RULE: at most 2 research moves; if nothing certifies, report_and_stop. Do NOT loop discover->recover->discover.
+2. On ABSTAIN, lagh returns a `characterization` (a GUESS, not a certificate) with a `research.move`. Do what it says: report_and_stop (report the characterization as a hedge and abstain -- do NOT sample again; this is the COMMON case); acquire_divergent / acquire_more_data (hand-sample a WIDER box, then call lagh.recover(X, y) on those points -- NOT lab.discover again); declare_and_verify (only with a strong prior: declare a form and lagh.verify it once, accept a "consistent" hedge).
+3. STOP RULE: at most ONE research move, then report_and_stop. lab.discover already ran the full ~60s loop -- NEVER call it a second time; use lagh.recover(X, y) for any research step.
 
 HARD RULE: you may NOT report status="abstained" unless you ACTUALLY called lab.discover({pid!r}) and it (and any research move) abstained. Being unsure is not a reason to abstain -- it is the reason to call lab.discover. Report only what a tool CERTIFIED; a fit output or characterization is a guess; never invent or assume the textbook law. On abstain, put lagh's characterization `class` in the characterization field as a hedge.
 

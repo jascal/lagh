@@ -29,6 +29,10 @@ _RAT_TOL = 1e-3      # exponent within this of a small rational => "pins"
 _NAMED_TOL = 5e-3    # non-pinning exponent within this of a named constant => wedge hint
 _FIT_CLEAN = 0.05    # log-fit residual below this => a clean fit of that shape
 _FIT_POOR = 0.10     # log-fit residual above this => that shape does NOT explain the data
+_STRUCT_RESID = 0.03  # residual below this => a near-monomial worth a research move; above
+                      # it, sampling won't help -> report_and_stop (keeps the timeout bounded).
+                      # Tight on purpose: the only observed gain (underdamped, residual ~0.01)
+                      # is a near-monomial; hopeless cells (snell 0.05-0.5, BE 0.08) sit above.
 
 
 def _prep(X, y):
@@ -113,31 +117,40 @@ def _exponential(X, y):
     return {"input": best[0], "fit_residual": round(best[1], 5), "rate": round(best[2], 5)}
 
 
-def _research_move(cls, abstain_reason):
-    """The playbook pointer: one next move for the caller, keyed on the class and the
-    abstain reason. `report_and_stop` is the terminal signal that ends thrashing."""
+def _has_structure(pl, ex):
+    """Did lagh find something EXPLOITABLE -- a NEAR-MONOMIAL (residual < _STRUCT_RESID) or a
+    clean exponential? If not, more sampling won't help, so the caller must stop, not thrash.
+    This discriminator keeps the timeout bounded: the only observed gain candidate
+    (underdamped, residual ~0.01) has structure; hopeless out-of-grammar cells (snell ~0.05-0.5,
+    BE ~0.08) do not. Kept tight ON PURPOSE -- a false 'has structure' costs a research loop."""
+    return bool((pl and pl["fit_residual"] < _STRUCT_RESID)
+                or (ex and ex["fit_residual"] < _STRUCT_RESID))
+
+
+def _research_move(cls, pl, ex, abstain_reason):
+    """The playbook pointer: one next move for the caller. `report_and_stop` is the terminal
+    signal that ends thrashing -- it is the DEFAULT for any cell without exploitable
+    structure, so hopeless cells abstain fast instead of researching to the timeout. Only a
+    cell where lagh actually found near-monomial structure earns a (bounded) research move,
+    and that move uses the FAST data-path lagh.recover -- never a second slow lab.discover."""
     if cls == "irrational-power":
         return ("report_and_stop",
                 "an exact rational law is impossible here; report the characterization as "
                 "a hedge and abstain -- do NOT keep sampling")
-    if cls == "non-algebraic":
-        return ("declare_and_verify",
-                "declare a trig / inverse-trig (or saturating) form from prior knowledge "
-                "and call verify; if none certifies, report_and_stop")
+    if not _has_structure(pl, ex):
+        return ("report_and_stop",
+                "no exploitable structure in the samples -- more sampling is unlikely to "
+                "help; report the characterization as a hedge and abstain. (You MAY try ONE "
+                "declared form via lagh.verify if you have a strong prior, then stop.)")
+    # near-monomial structure WAS found -> ONE bounded research move is worth it
     if abstain_reason == "structural":
         return ("acquire_divergent",
-                "rival forms fit the sampled range; sample a WIDER / asymptotic regime "
-                "where they separate, then recover")
-    if abstain_reason in ("range", "noise"):
-        return ("acquire_more_data",
-                "widen the box 2-10x and add points where the signal is strongest, then "
-                "recover")
-    if cls in ("power-law", "exponential", "additive-or-mixed"):
-        return ("acquire_more_data",
-                "structure looks algebraic but did not pin; add independent-random points "
-                "across a wider box and recover")
-    return ("report_and_stop",
-            "no actionable structure surfaced; report the characterization and abstain")
+                "near-monomial but rivals fit the sampled range; hand-sample a WIDER / "
+                "asymptotic regime where they separate, then call lagh.recover(X, y) on those "
+                "points (NOT lab.discover -- that re-runs the slow loop)")
+    return ("acquire_more_data",
+            "near-monomial that did not pin; hand-sample independent-random points across a "
+            "wider box, then call lagh.recover(X, y) (NOT lab.discover)")
 
 
 def _classify(pl, ex, bounded):
@@ -185,7 +198,7 @@ def characterize(X, y, *, sigma: float = 0.0, abstain_reason: str | None = None)
         pl = _power_law(X, y)
         ex = _exponential(X, y)
         cls, why = _classify(pl, ex, bounded)
-        move, detail = _research_move(cls, abstain_reason)
+        move, detail = _research_move(cls, pl, ex, abstain_reason)
         out = {"tag": "empirical", "certified": False, "kind": "characterization",
                "shape": shape, "class": cls, "why": why,
                "research": {"move": move, "detail": detail},
