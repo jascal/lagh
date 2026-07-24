@@ -85,6 +85,37 @@ inner exponents). hard_v2 (`1/(−ln(...)−1)`) is a different inner (log) — 
 **Predicts (2):** m8_sound hard_v0 (`√(e^γ RT²/M^{1.5})` = `e^{γ/2}R^{0.5}TM^{-0.75}`), hard_v1
 (`ln(γ)TR/M^{1/3}`). m5_decay easy_v2 (`e^{−(λt)^{0.5}}`) is exp-of-fractional-inner — stretch.
 
+## CAP-G — angular / inverse-trig tier (REGISTERED 2026-07-23, before code)
+The 9 m4_snell cells (outside the 88-ceiling, +9 if landed) share ONE structure:
+`y = deg(T^-1(C * x_i^p * x_j^q * G(rad(x_k))))`, T,G in {sin,cos,tan}, p,q small
+rationals. A restricted class fits `log T(rad(y)) = c0 + sum p_j log x_j + r log G(rad(x_k))`
+per (T, G, k), snaps exponents, and verifies -- 3x3xdim fits, no feature inflation, both
+angle conventions (deg/rad) guarded by range plausibility (deg: x_k in (0,360); rad:
+x_k in (0,2pi)). **Predicts (9): all m4_snell cells, all difficulties/versions.** Must
+break nothing (candidates only add; checker decides); zero confident-wrong over the 108.
+
+## CAP-C scoring note (2026-07-23) — ✅ SCORED PASS, exceeded prediction
+Landed as (a) targeted triples/quads from top singles in the C2 pure-denominator
+numerator search, (b) degree-4/5 cross-monomials (dim<=3, registered bound), and (c)
+the **escalating snap** (10^6 -> 10^9 -> 10^12 -> exact dyadic; escalates only when the
+small cap cannot reproduce the fitted float to 1e-11 relative) -- the 10^6 cap was a
+general reach bug: G-scale constants (6.674e-5 = 3337/5e7) mis-snapped by ~1e-8 and
+failed certification for EVERY multi-term law carrying a small physical constant.
+All 5 predicted cells recover exactly (gravity hard_v0/v2, coulomb medium_v0/v1,
+hard_v1). The escalating snap surfaced dyadic-garbage overfit impostors at
+floor-dominated epsilon; the exact-coefficient gate now runs per certifying CANDIDATE
+(not per winner), which rejects them before coherence. Full re-sweep pending.
+
+## Capability scoring, 2026-07-23 session (isolated probes; full re-sweep running)
+
+| cap | predicted | landed | note |
+|---|---|---|---|
+| **CAP-C** | 5 | **5/5** ✅ | + the escalating-snap reach fix it surfaced (see above) |
+| **CAP-G** (angular) | 9 | **9/9** ✅ | all m4_snell; 3 instrument bugs found+fixed on the way: NaN rows poisoning lstsq, coherence dropping partially-defined laws, NaN sigma from a declined replicate; `dense_ok` scorer fixed to score on the oracle's own domain |
+| **CAP-E** (bose/fermi transforms, log1p) | 5 | **2/5** | medium_v1 + hard_v1 recover with the exact 1.0513e-14 constant (decimal-rational). easy_v1/easy_v2/medium_v2 are **oracle-precision-limited**: their u=C·ω^p·T^q sits at 1e-15..1e-10 where float64 `exp(u)-1` in the benchmark's own arithmetic carries >=1e-5 relative error -- exact certification is impossible BY MEASUREMENT; correct abstain, reclassified out of the gap set (R-gap bounded) |
+| **CAP-F** (generalized monomial, c9) | 2 | **2/2** ✅ | e^gamma and ln(gamma) sound-speed hard cells; m5 easy_v2 stretch still open (exp of a CROSS-monomial, not in the class) |
+| **CAP-A part 2** (fractional summands) | 3 | **3/3** ✅ | hooke medium_v2/hard_v1/hard_v2, exact multi-term sums, ~0.1s each; gate precondition met |
+
 ## Out of scope (correctly abstained, NOT gaps)
 - 11 irrational-exponent cells (`^e`) — the boundary; must stay abstained (the wedge).
 - m2_magnetic hard_v0 `(I1+I2)^{1.5}` — fractional power of a **sum**, not a monomial; genuinely hard,

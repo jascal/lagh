@@ -22,16 +22,22 @@ r.certificate.abstain     # else: domain|structural|noise|surrogate|numerical|ra
 ```
 
 - `lagh/certify.py` — the fixed honesty core: exhaustive check, four-term ε model,
-  null-law vacuity, set-coherence. Never per-target, never per-class.
+  null-law vacuity, set-coherence, the exact-coefficient gate (unpinned Float /
+  huge-denominator coefficients never certify). Never per-target, never per-class.
 - `lagh/classes/` — the math-class curriculum, complete at registration:
-  C1 polynomial · C2 rational (implicit + pure-denominator) · C3 power-law ·
-  C4 inner-scaled transcendentals · C5 target transforms.
+  C1 polynomial (+ fractional/trig-product/high-degree features) · C2 rational ·
+  C3 power-law · C4 inner-scaled transcendentals · C5 target transforms (incl.
+  bose/fermi) · C6 quasi-polynomial · C7 Lévy · C8 angular/inverse-trig ·
+  C9 generalized monomial (e^x / ln x factors).
 - `lagh/engine.py` — MDL-ordered tier escalation; escalates **only** when the
   certifying set is empty (ambiguity is a verdict, not a reason to escalate).
-
-Not yet here (see design doc): P2 acquisition (active loop, **adaptive ranging**,
-budget/exposure ledgers), P3 synthetic curriculum battery + predictions-as-harness,
-C6 composition closure, C7 discrete tier.
+- `lagh/acquisition.py` — P2 active loop: adaptive ranging, ledgers, box-search.
+- `lagh/passive.py` — the fixed-dataset regime (no oracle): K re-splits + a
+  full-data exhaustive gate (`docs/DIRECTION_PASSIVE.md`).
+- `lagh/submit.py` — two-track benchmark submission: certified law, else labeled
+  conjecture (`docs/DIRECTION_OUTPUT_POLICY.md`).
+- `machine/` — the research loop as a verified Orca state machine; the LLM is a
+  bounded k-form proposer at exactly one state (`docs/DIRECTION_MACHINE.md`).
 
 ```bash
 .venv/bin/python -m pytest tests/ -q
