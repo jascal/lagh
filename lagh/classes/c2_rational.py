@@ -64,6 +64,14 @@ def candidates(ctx) -> list[Candidate]:
         top = [k for _, k in singles[:12]]
         sups |= {tuple(sorted((a, b))) for ai, a in enumerate(top)
                  for b in top[ai + 1:]}
+        # CAP-C: sum-expansions over a pure denominator ((m1+m2)^2/r^1.5 is a 3-term
+        # numerator; q2^2(q1+q2)^3/r^2 is 4-term). STLSQ misses them for the same
+        # collinearity reason it missed the pairs, so add targeted triples and quads
+        # from the best singles -- bounded (C(8,3)+C(6,4)=71 extra lstsq per denom),
+        # and the checker still decides.
+        top8 = top[:8]
+        sups |= {tuple(sorted(t)) for t in combinations(top8, 3)}
+        sups |= {tuple(sorted(t)) for t in combinations(top8[:6], 4)}
         for sup in sups:
             if len(sup) > 4:
                 continue

@@ -35,6 +35,27 @@ def terms(dim: int, X_fit=None, y_fit=None, X_cert=None) -> list[Term]:
         out.append(Term(f"x_{i}*x_{j}*x_{k}",
                         (lambda i, j, k: lambda X:
                          X[:, i] * X[:, j] * X[:, k])(i, j, k), ALWAYS, 4))
+    # CAP-C: higher cross-degree monomials x_j**a * x_k**b (a+b in {4,5}) and pure
+    # 4th/5th powers. REGISTERED BOUND (NEWTONBENCH_GAP_PLAN.md): dim<=3 only -- the
+    # whole registered gap set (gravity/coulomb charge-sum expansions) is dim-3, and
+    # at higher arity these inflate the C2 numerator pools quadratically.
+    if dim <= 3:
+        for j in range(dim):
+            for p in (4, 5):
+                out.append(Term(f"x_{j}**{p}",
+                                (lambda j, p: lambda X: X[:, j] ** p)(j, p),
+                                ALWAYS, 1 + p))
+        for j in range(dim):
+            for k in range(dim):
+                if j == k:
+                    continue
+                for a, b in ((3, 1), (4, 1), (3, 2), (2, 2)):
+                    if (a, b) == (2, 2) and j > k:
+                        continue                       # symmetric pair once
+                    out.append(Term(f"x_{j}**{a}*x_{k}**{b}",
+                                    (lambda j, k, a, b:
+                                     lambda X: X[:, j]**a * X[:, k]**b)(j, k, a, b),
+                                    ALWAYS, 2 + a + b))
     for j in range(dim):
         for name, f in (("sin", np.sin), ("cos", np.cos), ("exp", np.exp),
                         ("log", np.log), ("sqrt", np.sqrt)):
@@ -54,6 +75,18 @@ def terms(dim: int, X_fit=None, y_fit=None, X_cert=None) -> list[Term]:
             fn = (lambda X, j=j, ef=ef: X[:, j] ** ef)
             nm = f"x_{j}**({e.numerator}/{e.denominator})"
             out.append(Term(nm, fn, _pos(j), 2 + abs(e.numerator)))
+    # CAP-A part 2: denom-5/10/3 fractional powers as ADDITIVE summands (hooke's
+    # multi-term sums x^{17/5}+x^{1/2}+x^{-10/3}). Deferred until the
+    # exact-coefficient gate existed (CAP-E lesson); now bounded to dim<=2 -- the
+    # registered gap cells are dim-1 -- so the global feature inflation risk the
+    # deferral named stays contained.
+    if dim <= 2:
+        for j in range(dim):
+            for e in (_F(17, 5), _F(-3, 10), _F(-10, 3)):
+                ef = float(e)
+                fn = (lambda X, j=j, ef=ef: X[:, j] ** ef)
+                out.append(Term(f"x_{j}**({e.numerator}/{e.denominator})", fn,
+                                _pos(j), 2 + abs(e.numerator)))
     # input * fractional-power-of-another-input (decay: lambda * t^1.5) -- half only,
     # to bound growth
     for j in range(dim):
