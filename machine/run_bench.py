@@ -23,7 +23,7 @@ import sympy as sp
 os.environ.setdefault("LAB_SOURCE", "newtonbench")
 from lagh.adapters.newtonbench import MODULES, make_oracle          # noqa: E402
 from machine.driver import run_sync                                 # noqa: E402
-from machine.llm import _load_env, propose_form                     # noqa: E402
+from machine.llm import _load_env, propose_forms                     # noqa: E402
 
 _load_env()  # load machine/.env into os.environ BEFORE the have_llm gate reads it
 
@@ -105,7 +105,7 @@ def main():
         t0 = time.time()
         # always pass propose_form -- it self-degrades to None when unconfigured, so this is
         # a no-op in lagh-alone mode and calls the LLM only when machine/.env is set.
-        out = run_sync(pid, oracle, box, propose_fn=propose_form)
+        out = run_sync(pid, oracle, box, propose_fn=propose_forms)
         law = out.get("law", "")
         if out["outcome"] == "proved" and law:
             sc = score(pid, law)

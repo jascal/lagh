@@ -89,13 +89,23 @@ def _step(state, ctx, oracle, box, propose_fn, seed):
         X, y = _sample(oracle, box, n=24, seed=seed + 3)       # samples for the proposer to see
         info = {"problem": ctx.get("problem", ""), "class": ctx.get("characterization", ""),
                 "why": ctx.get("char_why", ""), "box": box, "X": X.tolist(), "y": y.tolist()}
-        form = propose_fn(info) if propose_fn else None        # the ONE bounded LLM call
-        return ("FORM_PROPOSED", {"form": form}) if form else ("NO_FORM", {})
+        forms = propose_fn(info) if propose_fn else None       # the ONE bounded LLM call
+        if isinstance(forms, str):                             # single-form propose_fn compat
+            forms = [forms]
+        forms = [f for f in (forms or []) if f]
+        return ("FORM_PROPOSED", {"forms": forms}) if forms else ("NO_FORM", {})
     if state == "verifying":
+        # verify the WHOLE proposal set here: the checker is sound, so extra proposals
+        # are free upside (a wrong form is refuted, never accepted), and the verified
+        # topology is untouched -- one propose state, one verify state, still bounded
+        # (k is a constant of the proposer, not a loop).
         X, y = _sample(oracle, box, seed=seed + 2)
-        r = verify(X.tolist(), y.tolist(), ctx.get("form", ""))
-        if r.get("certified"):
-            return "VERIFIED", {"law": r["law"], "strength": r.get("strength", "")}
+        for form in ctx.get("forms", []) or [ctx.get("form", "")]:
+            if not form:
+                continue
+            r = verify(X.tolist(), y.tolist(), form)
+            if r.get("certified"):
+                return "VERIFIED", {"law": r["law"], "strength": r.get("strength", "")}
         return "VERIFY_REFUTED", {}
     raise RuntimeError(f"no step for state {state!r}")
 
@@ -111,8 +121,9 @@ async def run(problem: str, oracle, box, *, propose_fn=None, seed: int = 0) -> d
     while str(m.state) not in finals and guard < 8:          # 8 = spec's longest path; a backstop
         guard += 1
         name, payload = _step(str(m.state), m.context, oracle, box, propose_fn, seed)
-        if name == "FORM_PROPOSED":                          # carry the form for verify (context)
-            m.context["form"] = payload.get("form", "")
+        if name == "FORM_PROPOSED":                          # carry the forms for verify (context)
+            m.context["forms"] = payload.get("forms", [])
+            m.context["form"] = (payload.get("forms") or [""])[0]
         await m.send(name, payload)
     c = m.context
     return {"outcome": c.get("outcome", "empirical"), "law": c.get("law", ""),
