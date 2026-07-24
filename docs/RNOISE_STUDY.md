@@ -91,3 +91,41 @@ cases at 10%. The blind read can be registered **for SNR ≥ ~40 dB (≤1% noise
 guarantee intact**, tightening to clean-only only if the exact *coefficient* (not just structure) must
 be certified. The parametric gate did its job (nearby-rational mis-snaps → abstain); the remaining
 exposure is a heavier-noise, cross-form failure mode.
+
+---
+
+## RE-CONFIRMATION (2026-07-24) — post-capability instrument, PASSIVE regime
+
+`experiments/run_rnoise_passive.py` (jsonl in `experiments/results/`): same three
+levels, declared sigma, one fixed n=250 dataset per cell, `discover_passive`,
+scored against the 87-cell clean-passive truth set. The clean-data-only scope of
+the exact-coefficient gate (it stands down under declared noise; `pinned()` owns
+the parametric question there) was set as part of this study.
+
+| σ_rel | certified (of 87) | correct structure | STRUCTURAL-CW | gross-wrong (>3× noise) |
+|---|---|---|---|---|
+| 0.001 | 46 | 44 | **2** | **0** |
+| 0.01 | 38 | 36 | **2** | **0** |
+| 0.1 | 19 | 18 | **1** | **0** |
+
+**No-fabrication holds everywhere** (0 certified laws wrong beyond 3× noise; the
+worst is ~1.2×). The structural picture adds ONE newly-characterized degeneracy
+class beyond the 2026-07-22 verdict:
+
+- **Asymptotic-structure indistinguishability (the 4 flagged cells at ≤1%):** both
+  are the SAME two BE cells at both levels, recovering `C/(√ω·T^q)` — the exact
+  `1/u` asymptote of the true `1/(e^u−1)`, same exponents, same coefficient, max
+  deviation from clean truth 4-5e-5 at σ=0.001 (≈20× BELOW the noise floor). The
+  distinguishing term is unmeasurable at that SNR on that domain: the instrument
+  certified a form accurate to well within noise whose extra structure the data
+  cannot resolve. NOT a fabrication; it is what "structure" means at a noise
+  floor. On a symbolic-accuracy-scored benchmark this still scores WRONG —
+  quantified exposure on dev: **2/87 truth cells (2.3%)**.
+- The 10% failure remains the registered cross-form mode (1/19 here:
+  `(k/m−(b/2m)²)² → 0.96·k²/m²`, error ≈ the noise).
+
+**Gate verdict:** unchanged in substance — structural guarantee to ~1% noise
+minus the (now named, bounded) asymptotic-degeneracy exposure; clean data remains
+the exact-symbolic regime. The blind-read registration's `sigma=0` clause stands:
+noisy blind data will fail certification and fall to the labeled-conjecture
+track rather than risk a within-noise-degenerate certificate.
