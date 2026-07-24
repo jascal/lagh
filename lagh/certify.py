@@ -193,7 +193,7 @@ def pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray,
 
 
 def float_pinned(expr, syms, X: np.ndarray, y: np.ndarray,
-                 eps: np.ndarray) -> tuple[bool, sp.Expr]:
+                 eps: np.ndarray, sigma: float = 0.0) -> tuple[bool, sp.Expr]:
     """The exact-coefficient gate (NEWTONBENCH_GAP_PLAN.md CAP-E lesson).
 
     A winner carrying a raw `Float` coefficient is claiming exactness it cannot show:
@@ -213,8 +213,18 @@ def float_pinned(expr, syms, X: np.ndarray, y: np.ndarray,
     Rational atoms with denominator > 10^6 (the escalating-snap outputs) carry the
     same exposure as raw Floats -- a huge-denominator rational is a float in a
     costume -- so they are gated identically.
+
+    CLEAN-DATA ONLY (the mirror of pinned()'s clean no-op): under declared noise the
+    epsilon is sigma-widened, so a +-1e-5 coefficient perturbation can never break
+    certification and the rejection rule would kill every float-carrying candidate
+    (measured: 60 dB gravity abstained). Under noise, coefficients are inherently
+    noise-limited floats (RNOISE_STUDY.md corrected verdict -- the claim is
+    STRUCTURAL there) and decimal-snapping would fabricate false exactness, so the
+    gate stands down entirely and pinned() owns the parametric question.
     """
     from fractions import Fraction
+    if sigma > 0:
+        return True, expr
     floats = sorted((a for a in expr.atoms(sp.Float, sp.Rational)
                      if isinstance(a, sp.Float)
                      or (a.q > 10**6 and not isinstance(a, sp.Integer))),

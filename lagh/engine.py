@@ -228,7 +228,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                 # certification precision, else this is not an exact-law candidate
                 # (dense overfits with dyadic-garbage coefficients certify at
                 # floor-dominated eps and would poison coherence). Reject-only.
-                ok, gated = float_pinned(c.expr, syms, X_cert, y_cert, eps)
+                ok, gated = float_pinned(c.expr, syms, X_cert, y_cert, eps, sigma)
                 if not ok:
                     continue
                 c.expr = gated
