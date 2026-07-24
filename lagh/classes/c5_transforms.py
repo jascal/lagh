@@ -31,9 +31,20 @@ def transforms(y: np.ndarray):
     # clean C4 sum e^x0 + e^x1; invert with log. Guarded so exp(y) does not overflow.
     if np.all(y <= 30):
         out.append(("exp", np.exp(y), lambda e: sp.log(e)))
+    # CAP-E: rational-of-exponential (Bose-Einstein / Fermi-Dirac). np.log1p is the
+    # registered stability fix -- log(1/y + 1) cancelled catastrophically at y~1e10
+    # and manufactured the program's only confident-wrong; log1p(1/y) does not. The
+    # exact-coefficient gate (the other registered precondition) now rejects any
+    # loose-epsilon float certificate this transform could produce.
+    if np.all(y > 0):
+        out.append(("bose", np.log1p(1.0 / y), lambda e: 1 / (sp.exp(e) - 1)))
+    if np.all((y > 0) & (y < 1)):
+        out.append(("fermi", np.log((1.0 - y) / y), lambda e: 1 / (sp.exp(e) + 1)))
     return out
 
 
 def apply(name: str, y: np.ndarray) -> np.ndarray:
     return {"log": np.log, "inv": lambda v: 1.0 / v, "square": lambda v: v * v,
-            "sqrt": np.sqrt, "sin": np.sin, "exp": np.exp}[name](np.asarray(y, float))
+            "sqrt": np.sqrt, "sin": np.sin, "exp": np.exp,
+            "bose": lambda v: np.log1p(1.0 / v),
+            "fermi": lambda v: np.log((1.0 - v) / v)}[name](np.asarray(y, float))
