@@ -74,6 +74,26 @@ P1 is restated instrument-relative: *passive recovers ≥ 90% of what the same-d
 active sweep recovers.* P2-P4 unchanged. The partial first-attempt log (66 cells,
 all pre-gate) was discarded unread beyond the crash line.
 
-## Results
+## Results (2026-07-24, `experiments/results/newtonbench_passive.jsonl`)
 
-*(to be filled by the sweep; predictions above stay frozen)*
+Both sampling variants, all 108 cells, one fixed n=250 dataset each, no oracle:
+
+| variant | recovered | confident-wrong | lost vs same-day active | gained |
+|---|---|---|---|---|
+| loguniform | **87/108** | **0** | **0** | 0 |
+| uniform | **87/108** | **0** | **0** | 0 |
+
+**Prediction scoring (registered above, unchanged):**
+- **P1 — EXCEEDED.** Retention is 100% (bar was ≥90%): the passive mode matches the
+  active loop **cell-for-cell**, identical 21-cell abstain set.
+- **P2 — MET.** Zero confident-wrong in both variants.
+- **P3 — MET (at equality).** uniform = loguniform; the predicted low-decade
+  sampling penalty did not materialize at n=250 on these boxes.
+- **P4 — MET.** No false unlocks.
+
+**Verdict:** on NewtonBench-dev, lagh's recovery power lives entirely in the
+grammar + certifier; oracle access adds nothing at this n. The fixed-dataset
+regime of the reserved blind candidates is NOT a handicap for the instrument as
+it now stands. (Caveats that keep this a dev claim: clean cells only, n=250,
+benchmark-declared boxes; the noisy passive regime is unmeasured — that is the
+R-noise re-confirmation work.)
