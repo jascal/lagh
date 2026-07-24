@@ -1,101 +1,56 @@
 # R-gap closure: every curriculum gap bounded with a one-line cause
 
-**Registered 2026-07-22.** R-gap (`STRATEGY.md`) requires *every known curriculum gap either
-closed or explicitly bounded with a one-line cause*. Of 108 NewtonBench-dev cells, **66
-recovered** (closed); the **42 non-recovered** are each bounded below, grouped into four
-buckets. **Zero cells are unexplained.**
+**Rewritten 2026-07-23** against the post-capability sweep (`experiments/results/
+newtonbench_all.jsonl`: **87/108 recovered, 0 confident-wrong**). Supersedes the
+2026-07-22 version (66/108 baseline) — notably its "UNITS/IRRATIONAL-IN-PRACTICE"
+bucket was **wrong**: the 9 degree-unit snell cells were never effectively
+out-of-class; symbolic `pi` carries the unit exactly and CAP-G recovers all 9.
 
-## Buckets
+## Buckets (21 abstains, zero unexplained)
 
 | bucket | count | meaning |
-|---|---|---|
-| **OUT-OF-CLASS** | 11 | an exact-rational instrument fundamentally cannot — correct-abstain, the honest ceiling |
-| **UNITS / IRRATIONAL-IN-PRACTICE** | 9 | the benchmark's degree units inject π/180; effectively out-of-class for this oracle |
-| **REGISTERED-CAPABILITY** | 14 | scoped, buildable — registered in NEWTONBENCH_GAP_PLAN.md |
-| **REACH-BOUNDED** | 8 | exact closed form exists; a stated new tier/capability would be required |
+|---|---:|---|
+| **OUT-OF-CLASS (`^e` wedge)** | 11 | irrational exponent; no exact-rational form exists — correct-abstain, permanent |
+| **ORACLE-PRECISION-LIMITED** | 3 | the benchmark's own float64 `exp(u)−1` at u≤1e-10 carries ≥1e-5 relative error; exactness is unmeasurable there — correct-abstain, permanent for THIS oracle |
+| **OPEN-CAPABILITY (scoped)** | 6 | exact form exists; the needed grammar extension is named below, unbuilt |
+| **DECLARED OUT-OF-SCOPE** | 1 | m2 hard_v0 `(I1+I2)^1.5` — fractional power of a sum; excluded by registered decision (NEWTONBENCH_GAP_PLAN.md) |
 
-Only the **11 OUT-OF-CLASS** cells are a permanent exact-instrument limit (the irrational-`^e`
-wedge). The **9 units** cells are benchmark-specific (degrees). The remaining
-**14+8 = 22** are the *addressable* frontier — each named, none silent.
+**Achievable-ceiling accounting:** 97 grammar-representable (88 algebraic + 9
+angular) − 3 oracle-precision-limited = **94 measurable; 87/94 = 93% recovered.**
+The addressable frontier is the 6 OPEN-CAPABILITY cells.
 
-## Per-cell bounding (all 42)
+## Per-cell bounding (all 21)
 
-### OUT-OF-CLASS (11)
+### OUT-OF-CLASS — the `^e` wedge (11): correct-abstain by design
+`m1_coulomb hard v0/v2` · `m5_decay hard v0/v1/v2` · `m7_malus medium v2, hard v1/v2`
+· `m11_heat hard v0/v1/v2` — each ground truth carries an irrational exponent
+(`^e`); an exact closed form does not exist; any "recovery" would be a
+confident-wrong. These 11 are the zero-wrong line, not a gap.
 
+### ORACLE-PRECISION-LIMITED (3): correct-abstain by measurement
 | cell | cause |
 |---|---|
-| `m11_heat_transfer hard v0` | irrational exponent (^e) — no exact-rational form exists; correct-abstain (the wedge) |
-| `m11_heat_transfer hard v1` | irrational exponent (^e) — no exact-rational form exists; correct-abstain (the wedge) |
-| `m11_heat_transfer hard v2` | irrational exponent (^e) — no exact-rational form exists; correct-abstain (the wedge) |
-| `m1_coulomb_force hard v0` | irrational exponent (^e) — no exact-rational form exists; correct-abstain (the wedge) |
-| `m1_coulomb_force hard v2` | irrational exponent (^e) — no exact-rational form exists; correct-abstain (the wedge) |
-| `m5_radioactive_decay hard v0` | irrational exponent (^e) — no exact-rational form exists; correct-abstain (the wedge) |
-| `m5_radioactive_decay hard v1` | irrational exponent (^e) — no exact-rational form exists; correct-abstain (the wedge) |
-| `m5_radioactive_decay hard v2` | irrational exponent (^e) — no exact-rational form exists; correct-abstain (the wedge) |
-| `m7_malus_law hard v1` | irrational exponent (^e) — no exact-rational form exists; correct-abstain (the wedge) |
-| `m7_malus_law hard v2` | irrational exponent (^e) — no exact-rational form exists; correct-abstain (the wedge) |
-| `m7_malus_law medium v2` | irrational exponent (^e) — no exact-rational form exists; correct-abstain (the wedge) |
+| `m10_be easy v1` | u=C·√ω/T ∈ [1e-16, 4e-15]: float64 `exp(u)−1` in the oracle is ≥50% noise; y also saturates the 2^52 ceiling |
+| `m10_be easy v2` | same mechanism, u ∈ 1e-16 range; most of the box returns NaN at the ceiling |
+| `m10_be medium v2` | same mechanism (u=C·√ω·T^2.3 small over the box) |
 
-### UNITS / IRRATIONAL-IN-PRACTICE (9)
+### OPEN-CAPABILITY (6): exact form exists, extension named
+| cell | cause (one line) |
+|---|---|
+| `m5_decay easy v2` | `N0·e^{−(λt)^{3/2}}` — exp of a CROSS-monomial inner; C4's inner pool has no x_i^p·x_j^q monomials (scoped extension: fractional cross-monomial inners) |
+| `m5_decay medium v2` | `N0^{9/5}·e^{−(λt)^{3/2}}` — same inner, plus fractional prefactor power |
+| `m6_underdamped medium v2` | `k·m^{−13/10} − b^2/4m^2` (verified against laws.py) — denom-10 fractional summand at dim-3; CAP-A2's registered bound is dim≤2 (scoped: lift to dim≤3 for negative denom-10 exponents) |
+| `m6_underdamped hard v0` | `(k/m − b/2m^2)^{3/2}` (verified) — rational outer power 3/2; CAP-D's transform pair covers only {sqrt, square} (scoped: y^{p/q} outer-transform family for small p/q) |
+| `m6_underdamped hard v2` | `k·m^{−13/10} − (b/2m)^{7/10}` (verified) — composite-BASE fractional power `(b/2m)^{7/10}`; exactly representable in sympy but the feature grammar has no (x_i/x_j)^{p/q} composite bases (scoped) |
+| `m10_be hard v2` | `1/(−ln(...)−1)` — rational-of-LOG inner (a `log1p`-analogue transform with log inner; registered CAP-E stretch, unbuilt) |
 
+### DECLARED OUT-OF-SCOPE (1)
 | cell | cause |
 |---|---|
-| `m4_snell_law easy v0` | inverse-trig (acos/asin/atan) in DEGREES → π/180 factors make it irrational-in-practice; radian form would need an arcsin/atan tier |
-| `m4_snell_law easy v1` | inverse-trig (acos/asin/atan) in DEGREES → π/180 factors make it irrational-in-practice; radian form would need an arcsin/atan tier |
-| `m4_snell_law easy v2` | inverse-trig (acos/asin/atan) in DEGREES → π/180 factors make it irrational-in-practice; radian form would need an arcsin/atan tier |
-| `m4_snell_law hard v0` | inverse-trig (acos/asin/atan) in DEGREES → π/180 factors make it irrational-in-practice; radian form would need an arcsin/atan tier |
-| `m4_snell_law hard v1` | inverse-trig (acos/asin/atan) in DEGREES → π/180 factors make it irrational-in-practice; radian form would need an arcsin/atan tier |
-| `m4_snell_law hard v2` | inverse-trig (acos/asin/atan) in DEGREES → π/180 factors make it irrational-in-practice; radian form would need an arcsin/atan tier |
-| `m4_snell_law medium v0` | inverse-trig (acos/asin/atan) in DEGREES → π/180 factors make it irrational-in-practice; radian form would need an arcsin/atan tier |
-| `m4_snell_law medium v1` | inverse-trig (acos/asin/atan) in DEGREES → π/180 factors make it irrational-in-practice; radian form would need an arcsin/atan tier |
-| `m4_snell_law medium v2` | inverse-trig (acos/asin/atan) in DEGREES → π/180 factors make it irrational-in-practice; radian form would need an arcsin/atan tier |
+| `m2_magnetic hard v0` | `(I1+I2)^{3/2}` — fractional power of a SUM; composite-power capability declined by registered decision (feature-inflation risk > single-cell gain) |
 
-### REGISTERED-CAPABILITY (14)
+## R-gap verdict
 
-| cell | cause |
-|---|---|
-| `m0_gravity hard v0` | high-degree monomial product / (sum)^n / r² — CAP-C, unbuilt |
-| `m0_gravity hard v2` | high-degree monomial product / (sum)^n / r² — CAP-C, unbuilt |
-| `m10_be_distribution easy v1` | 1/(e^u−1) power-law inner — CAP-E; reverted as numerically unsound at scale, needs a log1p-stable transform (structure recoverable, coeff a float like G) |
-| `m10_be_distribution easy v2` | 1/(e^u−1) power-law inner — CAP-E; reverted as numerically unsound at scale, needs a log1p-stable transform (structure recoverable, coeff a float like G) |
-| `m10_be_distribution hard v1` | 1/(e^u−1) power-law inner — CAP-E; reverted as numerically unsound at scale, needs a log1p-stable transform (structure recoverable, coeff a float like G) |
-| `m10_be_distribution hard v2` | 1/(e^u−1) power-law inner — CAP-E; reverted as numerically unsound at scale, needs a log1p-stable transform (structure recoverable, coeff a float like G) |
-| `m10_be_distribution medium v1` | 1/(e^u−1) power-law inner — CAP-E; reverted as numerically unsound at scale, needs a log1p-stable transform (structure recoverable, coeff a float like G) |
-| `m10_be_distribution medium v2` | 1/(e^u−1) power-law inner — CAP-E; reverted as numerically unsound at scale, needs a log1p-stable transform (structure recoverable, coeff a float like G) |
-| `m1_coulomb_force hard v1` | high-degree monomial product / (sum)^n / r² — CAP-C, unbuilt |
-| `m8_sound_speed hard v0` | transcendental×power (e^γ, ln γ) — CAP-F, unbuilt |
-| `m8_sound_speed hard v1` | transcendental×power (e^γ, ln γ) — CAP-F, unbuilt |
-| `m9_hooke_law hard v1` | multi-term fractional-power SUM — CAP-A part 2; deferred additive C1 fractional features (inflation risk) |
-| `m9_hooke_law hard v2` | multi-term fractional-power SUM — CAP-A part 2; deferred additive C1 fractional features (inflation risk) |
-| `m9_hooke_law medium v2` | multi-term fractional-power SUM — CAP-A part 2; deferred additive C1 fractional features (inflation risk) |
-
-### REACH-BOUNDED (8)
-
-| cell | cause |
-|---|---|
-| `m2_magnetic_force hard v0` | (I1+I2)^{3/2} — rational power of a SUM (exact form exists), not a monomial; needs a composite-fractional-power capability |
-| `m5_radioactive_decay easy v2` | exp(−(λt)^p) fractional inner-transcendental — exact form, beyond current C4 |
-| `m5_radioactive_decay medium v2` | exp(−(λt)^p) fractional inner-transcendental — exact form, beyond current C4 |
-| `m6_underdamped_harmonic easy v0` | fractional-exponent rational (m^1.3) or degree-5 numerator — exact form, beyond current reach |
-| `m6_underdamped_harmonic hard v0` | fractional-exponent rational (m^1.3) or degree-5 numerator — exact form, beyond current reach |
-| `m6_underdamped_harmonic hard v1` | fractional-exponent rational (m^1.3) or degree-5 numerator — exact form, beyond current reach |
-| `m6_underdamped_harmonic hard v2` | fractional-exponent rational (m^1.3) or degree-5 numerator — exact form, beyond current reach |
-| `m6_underdamped_harmonic medium v2` | fractional-exponent rational (m^1.3) or degree-5 numerator — exact form, beyond current reach |
-
-## R-gap: MET
-
-Every non-recovered cell carries a one-line cause; nothing is silently unexplained. R-gap is satisfied.
-
-## Readiness bar — COMPLETE
-
-| gate | status |
-|---|---|
-| **R-cap** | ✅ MET (easy 11/12, medium 11/12) |
-| **R-zero** | ✅ MET (0/108 confident-wrong, clean) |
-| **R-noise** | ◐ SETTLED (`RNOISE_STUDY.md`) — exact-structure-or-abstain to ~1% noise; registrable for SNR ≥ ~40 dB |
-| **R-gap** | ✅ MET (this doc) |
-
-`R-cap ∧ R-zero ∧ R-noise ∧ R-gap` now hold/settled on NewtonBench-dev. The reserved **blind read is
-ELIGIBLE** — but it stays a deliberate, user-authorized one-shot: choose the sealed benchmark, freeze
-its published SOTA into a registration, restrict to SNR ≥ 40 dB for the structural guarantee, then read
-**once**. Never automatic from this doc.
+Every non-recovered cell is bounded with a cause; 14 of 21 are *correct-abstain*
+(wedge + precision), 6 are scoped-and-named extensions, 1 is a registered
+exclusion. **R-gap is MET** on this dev set as "closed or explicitly bounded".

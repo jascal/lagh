@@ -87,6 +87,29 @@ scoped capability in `NEWTONBENCH_GAP_PLAN.md`. The old "underdamped is the R-ca
 — it is gated on **R-noise (an explicit decision)** and an R-gap bounding pass, and the blind read is
 a deliberate one-shot the user authorizes, never an automatic consequence of hitting coverage.
 
+## RE-SWEEP 2026-07-23 — post-capability baseline (supersedes the table above)
+
+After the exact-coefficient gate, the escalating-snap reach fix, CAP-C, CAP-G
+(angular/inverse-trig), CAP-E (bose/fermi), CAP-F (generalized monomial), CAP-A2:
+
+**87/108 recovered, confident-wrong 0/108. Module coverage: easy 12/12,
+medium 12/12, hard 10/12.** Ceiling accounting: 97 grammar-representable − 3
+oracle-precision-limited = 94 measurable → **87/94 = 93% of the achievable ceiling.**
+
+| gate | status | evidence |
+|---|---|---|
+| **R-cap** | **✅ MET (exceeded)** | easy 12/12, medium 12/12, hard 10/12 |
+| **R-zero** | **✅ MET** | 0/108 across the full re-sweep |
+| **R-gap** | **✅ MET** | `RGAP_CLOSURE.md` rewritten 2026-07-23: all 21 abstains bounded (11 wedge, 3 oracle-precision, 6 scoped-open, 1 registered exclusion), zero unexplained |
+| **R-noise** | ◐ unchanged | `RNOISE_STUDY.md` decision stands (structural guarantee to ~40 dB); must be re-confirmed on the post-capability instrument before registration |
+
+**New since the last table:** the PASSIVE regime (fixed datasets, no oracle — what
+the blind candidates actually are) is built (`DIRECTION_PASSIVE.md`, predictions
+pre-registered, sweep in flight), and the submission policy for accuracy-scored
+benchmarks is pre-registered (`DIRECTION_OUTPUT_POLICY.md`: certified track +
+labeled-conjecture track). The blind read remains sealed and user-authorized; the
+remaining pre-read work is the passive-sweep verdict + an R-noise re-confirmation.
+
 ## Amendment 2026-07-21 — no August competition target; deadline framing dropped
 
 We did **not** register for AISB/NLPCC Task 9 (registration closed 2026-05-25), so its 2026-08-01
