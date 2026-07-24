@@ -27,6 +27,7 @@ from ..base import eval_expr, lstsq
 from ..certify import (Abstain, coherent, epsilon, pinned, sample_box)
 from ..characterize import characterize
 from ..engine import discover
+from ..passive import discover_passive
 
 # nameable constants a free-fit exponent might be reaching for (fit's diagnosis)
 _NAMED = [("e", float(np.e)), ("pi", float(np.pi)), ("sqrt2", float(np.sqrt(2))),
@@ -150,7 +151,9 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
                 "tier": r.tier, "bounds": bf.tolist(), "acquisition": acq,
                 "note": "certified over the actively-acquired domain, not proved for the world"}
 
-    # ---- data-only path (MCP wire): one-shot on provided points ----
+    # ---- data-only path (MCP wire): the PASSIVE regime (docs/DIRECTION_PASSIVE.md):
+    # K deterministic re-splits + the full-data exhaustive gate, one code path shared
+    # with benchmark submission track A.
     X, y = _prep(X, y)
     if len(X) < 8:
         return {"tag": "open", "tool": "recover", "certified": False,
@@ -158,7 +161,8 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
                 "note": f"only {len(X)} finite points; too thin to certify"}
     dim = X.shape[1]
     syms = _syms(dim)
-    r = discover(*_split(X, y), sigma=float(sigma), max_tier=max_tier)
+    pr = discover_passive(X, y, sigma=float(sigma), max_tier=max_tier, seed=seed)
+    r = pr.result
     c = r.certificate
     if not c.certified:
         lo, hi = X.min(axis=0), X.max(axis=0)
