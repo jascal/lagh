@@ -34,6 +34,42 @@ from lagh.submit import submission                                  # noqa: E402
 OUT = Path("experiments/results/blind_llmsrbench_submissions.jsonl")
 SCORE_OUT = Path("experiments/results/blind_llmsrbench_scores.json")
 SUB_CAP = 600
+# AMENDMENT (2026-07-24, logged in BLIND_READ_REGISTRATION.md): per-problem
+# discovery wall-clock cap, added after problem 2 (a 6-var transform took 72 min)
+# and BEFORE any scoring was computed. Direction of bias: conservative only -- a
+# timeout demotes a would-be certificate to a cheap fallback conjecture/abstain;
+# it can never add or upgrade a submission.
+TIME_CAP_S = 600
+
+
+def _fallback_conjecture(X, y):
+    """Timeout fallback: the free-exponent log-log probe only (cheap, seconds)."""
+    m = np.isfinite(y) & np.all(np.isfinite(X), axis=1)
+    X, y = X[m], y[m]
+    if len(X) < 10 or not (np.all(X > 0) and np.all(y > 0)):
+        return {"track": "abstain", "expr": None, "tag": "open",
+                "detail": "discovery timeout; no cheap conjecture available"}
+    L = np.column_stack([np.ones(len(X)), np.log(X)])
+    c, *_ = np.linalg.lstsq(L, np.log(y), rcond=None)
+    expr = sp.Float(float(np.exp(c[0])))
+    from fractions import Fraction
+    for i, a in enumerate(c[1:]):
+        fr = Fraction(float(a)).limit_denominator(12)
+        expr *= sp.Symbol(f"x_{i}") ** sp.Rational(fr.numerator, fr.denominator)
+    return {"track": "conjecture", "expr": str(expr), "tag": "empirical",
+            "detail": "discovery timeout; log-log probe conjecture, NOT certified"}
+
+
+def _submission_capped(X, y, cap_s=TIME_CAP_S):
+    import multiprocessing as mp
+    ctx = mp.get_context("fork")
+    with ctx.Pool(1) as pool:
+        async_r = pool.apply_async(submission, (X, y))
+        try:
+            return async_r.get(timeout=cap_s), False
+        except mp.TimeoutError:
+            pool.terminate()
+            return _fallback_conjecture(X, y), True
 
 
 def load_all_problems():
@@ -84,10 +120,11 @@ def phase1():
             X, y = _train_xy(p)
             t0 = time.time()
             n = len(X)
+            timed_out = False
             if n > SUB_CAP:
                 idx = np.sort(np.random.default_rng(0).choice(n, SUB_CAP,
                                                               replace=False))
-                sub = submission(X[idx], y[idx])
+                sub, timed_out = _submission_capped(X[idx], y[idx])
                 if sub["track"] == "certified":
                     # registered rule: the certificate must survive the FULL train set
                     dim = X.shape[1]
@@ -104,9 +141,10 @@ def phase1():
                                "detail": "subsample certificate failed the "
                                          "full-train exhaustive check; demoted"}
             else:
-                sub = submission(X, y)
+                sub, timed_out = _submission_capped(X, y)
             rec = {"id": pid, "module": mod_name, "eq": str(p.equation_idx),
                    "n_train": int(n), "dim": int(X.shape[1]), **sub,
+                   "timed_out": timed_out,
                    "secs": round(time.time() - t0, 1)}
             f.write(json.dumps(rec) + "\n")
             f.flush()

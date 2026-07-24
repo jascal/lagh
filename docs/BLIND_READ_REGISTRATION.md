@@ -64,6 +64,18 @@ conjectures, never certificates. The passive R-noise re-confirmation
 (`experiments/run_rnoise_passive.py`, running at registration time) informs the
 *interpretation* of abstains but does not change this protocol.
 
+## 3b. LOGGED AMENDMENTS (during the run, before any scoring)
+
+- **2026-07-24, after problem 2 of 240, before phase 2 ever ran:** a per-problem
+  discovery wall-clock cap of **600 s** was added (problem 2, a 6-variable
+  transform, took 72 minutes; uncapped completion was infeasible). On timeout the
+  submission falls back to a cheap log-log-probe conjecture (or abstain).
+  Direction of bias: **conservative only** — a timeout can demote a would-be
+  certificate, never create or upgrade a submission. `timed_out` is recorded
+  per problem and reported.
+- Dataset ships **240** problems (phys_osc = 44), not the paper's 239; all 240
+  are run, none skipped.
+
 ## 4. Honesty commitments
 
 - One read. No re-runs after seeing scores; no grammar changes, no threshold
