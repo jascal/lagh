@@ -10,7 +10,7 @@ The engine escalates tier by tier, only when the certifying set is empty.
 """
 
 from . import (c1_polynomial, c2_rational, c3_powerlaw, c4_inner,
-               c5_transforms, c6_quasipoly)
+               c5_transforms, c6_quasipoly, c8_angular, c9_genmonomial)
 
 # C1-C5 are FLOAT candidate-list classes driven by the engine's proposal loop.
 # C6 (quasi-polynomial, exact integer) is NOT a candidate list -- it is a full
@@ -22,6 +22,8 @@ CURRICULUM = [
     (2, c2_rational),
     (3, c3_powerlaw),
     (4, c4_inner),
+    (4, c9_genmonomial),
     (5, c5_transforms),
+    (5, c8_angular),
 ]
 EXACT_TIERS = [(6, c6_quasipoly)]
