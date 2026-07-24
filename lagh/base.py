@@ -56,9 +56,22 @@ def finite_guard(fn: Callable) -> Callable[[np.ndarray], bool]:
 
 
 def snap(c: float, max_denom: int = MAX_DENOM) -> Fraction:
+    """Smallest-cap rational that reproduces the fitted float. The 10^6 cap alone was
+    a measured reach bug: a multi-term law carrying a small physical constant
+    (G=6.674e-5 needs denominator 5e7) mis-snapped by ~1e-8 relative and failed
+    certification -- so gravity/coulomb sums were unreachable by every snapped
+    channel. Escalation triggers only when the small cap cannot reproduce the float
+    to 1e-11 relative, so optimizer noise still snaps to nice rationals (1-3e-13
+    -> 1); the checker (plus the coefficient gate on winners) still decides."""
     if not np.isfinite(c):
         raise ValueError(f"cannot snap non-finite coefficient {c}")
-    return Fraction(float(c)).limit_denominator(max_denom)
+    f = Fraction(float(c))
+    scale = max(abs(float(c)), 1e-300)
+    for md in (max_denom, 10**9, 10**12):
+        s = f.limit_denominator(md)
+        if abs(float(s) - float(c)) <= 1e-11 * scale:
+            return s
+    return f            # exact dyadic representation of the float
 
 
 def snap_all(coeffs: Sequence[float]) -> list[Fraction]:

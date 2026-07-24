@@ -154,11 +154,20 @@ def run_active(oracle, box_lo, box_hi, *, budget: int = 200,
     X = _sample(box, n_init, rng)
     y = np.asarray(oracle(X), float)
     led.record("init", len(X))
-    rep = np.asarray(oracle(np.vstack([X[0]] * policy.replicates)), float)
+    # replicate at a FINITE observation: an oracle that declines (NaN) at X[0]
+    # (e.g. total internal reflection) poisoned sigma, and NaN sigma corrupted
+    # every downstream epsilon and gate
+    fin = np.flatnonzero(np.isfinite(y))
+    i0 = int(fin[0]) if fin.size else 0
+    rep = np.asarray(oracle(np.vstack([X[i0]] * policy.replicates)), float)
     led.record("replicates", policy.replicates)
-    sigma = (sigma_declared if sigma_declared is not None
-             else float(np.std(np.concatenate([rep, [y[0]]]))
-                        / max(abs(y[0]), 1e-30)))
+    if sigma_declared is not None:
+        sigma = sigma_declared
+    else:
+        sigma = float(np.std(np.concatenate([rep, [y[i0]]]))
+                      / max(abs(y[i0]), 1e-30))
+        if not np.isfinite(sigma):
+            sigma = 0.0
 
     dim = X.shape[1]
     syms = list(sp.symbols([f"x_{i}" for i in range(dim)])) if dim > 1 \

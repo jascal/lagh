@@ -16,8 +16,8 @@ import sympy as sp
 
 from .base import (Candidate, admissible, design_matrix, lstsq, snap_all,
                    to_expr, eval_expr)
-from .certify import (Abstain, Certificate, check, coherent, epsilon, pinned,
-                      sample_box, vacuous)
+from .certify import (Abstain, Certificate, check, coherent, epsilon,
+                      float_pinned, pinned, sample_box, vacuous)
 from .classes import CURRICULUM, c5_transforms, c6_quasipoly, c7_levy
 from .engine_util import stlsq_supports
 
@@ -107,7 +107,8 @@ def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
             tctx = Ctx(syms, t_terms, X_fit, ty_fit, X_sel, ty_sel)
             inner = _linear_candidates(tctx)
             for t2, mod2 in active:
-                if hasattr(mod2, "candidates"):
+                if hasattr(mod2, "candidates") and \
+                        not getattr(mod2, "RAW_TARGET_ONLY", False):
                     inner += mod2.candidates(tctx)
             for c in inner:
                 try:
@@ -132,7 +133,27 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     X_fit = np.asarray(X_fit, float)
     X_cert = np.asarray(X_cert, float)
     y_cert = np.asarray(y_cert, float).ravel()
+    # A non-finite observation is "the oracle declined here" (e.g. total internal
+    # reflection returns NaN) -- it is NOT evidence and must not poison the fits:
+    # one NaN row made every lstsq return None, so whole in-class cells abstained.
+    # Dropping it up front is sound: the certification domain is the finite rows'
+    # bounds, and check() then never sees a NaN it would vacuously "cover".
+    X_sel = np.atleast_2d(np.asarray(X_sel, float))
+    y_fit = np.asarray(y_fit, float).ravel()
+    y_sel = np.asarray(y_sel, float).ravel()
+    mf = np.isfinite(y_fit) & np.all(np.isfinite(X_fit), axis=1)
+    ms = np.isfinite(y_sel) & np.all(np.isfinite(X_sel), axis=1)
+    mc = np.isfinite(y_cert) & np.all(np.isfinite(X_cert), axis=1)
+    X_fit, y_fit, X_sel, y_sel = X_fit[mf], y_fit[mf], X_sel[ms], y_sel[ms]
+    X_cert, y_cert = X_cert[mc], y_cert[mc]
+    if se_cert is not None:
+        se_cert = np.asarray(se_cert, float).ravel()[mc]
     dim = X_fit.shape[1]
+    if min(len(y_fit), len(y_sel), len(y_cert)) < 2:
+        cert = Certificate(False, 0, 0, int(len(y_cert)), [], "",
+                           abstain=Abstain.RANGE.value,
+                           notes=["a split is empty after dropping non-finite rows"])
+        return Result(cert, None, 0, 0)
     syms = sp.symbols([f"x_{i}" for i in range(dim)])
     if dim == 1:
         syms = [syms] if not isinstance(syms, (list, tuple)) else list(syms)
@@ -202,6 +223,15 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
         for c in sorted(cands, key=lambda z: z.complexity):
             r = check(c.expr, syms, X_cert, y_cert, eps)
             if r["certified"]:
+                # exact-coefficient gate (CAP-E lesson), per CANDIDATE: every Float /
+                # huge-denominator coefficient must be pinned by the data at
+                # certification precision, else this is not an exact-law candidate
+                # (dense overfits with dyadic-garbage coefficients certify at
+                # floor-dominated eps and would poison coherence). Reject-only.
+                ok, gated = float_pinned(c.expr, syms, X_cert, y_cert, eps)
+                if not ok:
+                    continue
+                c.expr = gated
                 certifying.append(c)
         if not certifying:
             continue                              # escalate: reach, not ambiguity

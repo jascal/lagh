@@ -112,12 +112,16 @@ def sample_box(X: np.ndarray, n: int = N_PROBE, seed: int = 0,
 
 
 def max_divergence(expr_a, expr_b, syms, P: np.ndarray, yscale: float) -> float:
+    """Compared on the FINITE OVERLAP of the probe: an inverse-trig law is genuinely
+    undefined on part of an extended box (asin beyond its branch) and that is not
+    evidence of difference -- but fewer than 8 comparable points is no evidence of
+    sameness either, so tiny overlaps stay 'different' (conservative -> abstain)."""
     va, vb = eval_expr(expr_a, syms, P), eval_expr(expr_b, syms, P)
     if va is None or vb is None:
         return float("inf")
     d = np.abs(va - vb)
     d = d[np.isfinite(d)]
-    return float(d.max()) / max(yscale, 1e-300) if d.size else float("inf")
+    return float(d.max()) / max(yscale, 1e-300) if d.size >= 8 else float("inf")
 
 
 def pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray,
@@ -136,7 +140,7 @@ def pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray,
     behaviour, and the zero-wrong-on-clean record, are preserved by construction. The
     gate only ever REMOVES certifications under declared noise; it can never add one.
     """
-    if sigma <= 0 or expr is None:
+    if not np.isfinite(sigma) or sigma <= 0 or expr is None:
         return True
     from fractions import Fraction
     y = np.asarray(y, float).ravel()
@@ -188,6 +192,60 @@ def pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray,
     return True
 
 
+def float_pinned(expr, syms, X: np.ndarray, y: np.ndarray,
+                 eps: np.ndarray) -> tuple[bool, sp.Expr]:
+    """The exact-coefficient gate (NEWTONBENCH_GAP_PLAN.md CAP-E lesson).
+
+    A winner carrying a raw `Float` coefficient is claiming exactness it cannot show:
+    at loose epsilon (extreme output scale -- the reverted BE transform) a coefficient
+    3e-5 off the truth certified anyway. The gate demands the data actually PIN each
+    float: perturbing it by ±1e-5/±1e-4 relative must BREAK certification. If a
+    perturbed value also certifies, the coefficient is not identified at certification
+    precision and the exact claim is unfounded -> reject (parametric abstain).
+
+    A pinned float is then snapped to the shortest-decimal exact rational that still
+    certifies (6.674e-5 -> 3337/50000000), so certified laws carry exact rationals;
+    a pinned float with no certifying decimal snap is kept as-is (identified to
+    certification precision, honestly not a short decimal).
+
+    Gates only ever REMOVE or strengthen certifications -- never add one.
+
+    Rational atoms with denominator > 10^6 (the escalating-snap outputs) carry the
+    same exposure as raw Floats -- a huge-denominator rational is a float in a
+    costume -- so they are gated identically.
+    """
+    from fractions import Fraction
+    floats = sorted((a for a in expr.atoms(sp.Float, sp.Rational)
+                     if isinstance(a, sp.Float)
+                     or (a.q > 10**6 and not isinstance(a, sp.Integer))),
+                    key=lambda f: abs(float(f)))
+    if not floats:
+        return True, expr
+    for f in floats:
+        v = float(f)
+        if v == 0:
+            continue
+        for rel in (1e-5, 1e-4):
+            for s in (1, -1):
+                alt = expr.xreplace({f: sp.Float(v * (1 + s * rel))})
+                if alt == expr:
+                    continue
+                if check(alt, syms, X, y, eps)["certified"]:
+                    return False, expr
+    snapped = expr
+    for f in floats:
+        v = float(f)
+        for digits in range(1, 13):
+            fr = Fraction(f"{v:.{digits}e}")
+            cand = snapped.xreplace({f: sp.Rational(fr.numerator, fr.denominator)})
+            if cand == snapped:
+                break
+            if check(cand, syms, X, y, eps)["certified"]:
+                snapped = cand
+                break
+    return True, snapped
+
+
 def coherent(certifying: list, syms, P: np.ndarray, yscale: float,
              tau: float = TAU) -> list:
     """Greedy tau-clustering of certifying laws into functional equivalence classes.
@@ -196,7 +254,12 @@ def coherent(certifying: list, syms, P: np.ndarray, yscale: float,
     reps: list[tuple] = []
     for cand in certifying:
         v = eval_expr(cand.expr, syms, P)
-        if v is None or not np.all(np.isfinite(v)):
+        # a certified law may be legitimately undefined on part of the EXTENDED
+        # probe (inverse-trig branch bounds); it stays a rival as long as enough of
+        # the probe evaluates. Requiring all-finite silently deleted the true law
+        # from coherence -> 0 classes -> a false structural abstain (measured on
+        # snell asin/acos cells).
+        if v is None or np.isfinite(v).sum() < max(8, len(P) // 20):
             continue
         for i, (rexpr, members) in enumerate(reps):
             if max_divergence(cand.expr, rexpr, syms, P, yscale) <= tau:
