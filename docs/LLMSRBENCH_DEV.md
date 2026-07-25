@@ -46,6 +46,15 @@ separate files.
   whether it approaches the 31.5%/20.2% SOTA numbers is the open question the
   sweep answers (no prediction).
 
+## Amendment v1.1 (after 16 problems of v1, before any scoring)
+
+v1's single 600s cap starved the proposer: sigma-widened discovery is slower
+(more certifying candidates per tier), so 14/16 early problems timed out
+BEFORE the LLM stage and emitted bare abstains. v1.1 = per-stage caps
+(discovery 350s; proposer+verify 200s; log-log fallback always reachable).
+The 16 v1 rows were discarded and the sweep restarted clean. Positive early
+signal kept for the record: 2 grammar certificates in those 16 (P1 direction).
+
 ## Results
 
 *(filled after the sweep; predictions frozen above)*

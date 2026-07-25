@@ -23,7 +23,13 @@ sys.path.insert(0, "/home/allans/code/llm-srbench")
 
 SIGMA_REP = 1e-4
 SUB_CAP = 600
-TIME_CAP_S = 600
+# v1.1: per-STAGE caps (registered amendment in LLMSRBENCH_DEV.md). v1's single
+# 600s cap starved the proposer: sigma-widened discovery is slower, so timeouts
+# fired before the LLM stage ever ran and emitted bare abstains -- strictly worse
+# than the blind run's fallback. Discovery gets 350s; the proposer+verify stage
+# gets its own 200s; the log-log fallback is always reachable.
+DISCOVER_CAP_S = 350
+PROPOSE_CAP_S = 200
 WORKERS = 8
 OUT = Path("experiments/results/dev_llmsrbench_v1.jsonl")
 SCORE_OUT = Path("experiments/results/dev_llmsrbench_v1_scores.json")
@@ -33,17 +39,33 @@ def _timeout_handler(signum, frame):
     raise TimeoutError("per-problem cap")
 
 
+def _fallback_conjecture(X, y):
+    """Cheap log-log probe -- always reachable, never times out."""
+    m = np.isfinite(y) & np.all(np.isfinite(X), axis=1)
+    X, y = X[m], y[m]
+    if len(X) < 10 or not (np.all(X > 0) and np.all(y > 0)):
+        return None
+    from fractions import Fraction
+    L = np.column_stack([np.ones(len(X)), np.log(X)])
+    c, *_ = np.linalg.lstsq(L, np.log(y), rcond=None)
+    expr = sp.Float(float(np.exp(c[0])))
+    for i, a in enumerate(c[1:]):
+        fr = Fraction(float(a)).limit_denominator(12)
+        expr *= sp.Symbol(f"x_{i}") ** sp.Rational(fr.numerator, fr.denominator)
+    return str(expr)
+
+
 def solve_one(args):
-    """Worker: one problem -> submission record. Runs under signal.alarm cap."""
+    """Worker: one problem -> submission record. Per-STAGE alarm caps (v1.1) so a
+    slow discovery can never starve the proposer or the fallback."""
     pid, X, y = args
     from lagh.certify import check, epsilon
     from lagh.characterize import characterize
-    from lagh.mcp.core import fit, verify
+    from lagh.mcp.core import verify
     from lagh.passive import discover_passive
     from machine.llm import propose_forms
 
     signal.signal(signal.SIGALRM, _timeout_handler)
-    signal.alarm(TIME_CAP_S)
     t0 = time.time()
     rec = {"id": pid, "n_train": int(len(X)), "dim": int(X.shape[1]),
            "timed_out": False}
@@ -53,10 +75,19 @@ def solve_one(args):
         if n > SUB_CAP:
             idx = np.sort(np.random.default_rng(0).choice(n, SUB_CAP, replace=False))
             Xd, yd = X[idx], y[idx]
-        r = discover_passive(Xd, yd, sigma=SIGMA_REP)
-        syms = [sp.Symbol(f"x_{i}") for i in range(X.shape[1])]
-        m = np.isfinite(y) & np.all(np.isfinite(X), axis=1)
-        if r.certified:
+
+        # ---- stage 1: grammar discovery (DISCOVER_CAP_S) ----
+        r = None
+        try:
+            signal.alarm(DISCOVER_CAP_S)
+            r = discover_passive(Xd, yd, sigma=SIGMA_REP)
+        except TimeoutError:
+            rec["timed_out"] = True
+        finally:
+            signal.alarm(0)
+        if r is not None and r.certified:
+            syms = [sp.Symbol(f"x_{i}") for i in range(X.shape[1])]
+            m = np.isfinite(y) & np.all(np.isfinite(X), axis=1)
             ok = check(r.result.expr, syms, X[m], y[m],
                        epsilon(y[m], sigma=SIGMA_REP))["certified"] if n > SUB_CAP \
                 else True
@@ -65,48 +96,49 @@ def solve_one(args):
                            tag="empirical-structural", channel="grammar",
                            detail=f"certified at declared sigma_rep={SIGMA_REP}")
                 return rec
-        # abstained (or demoted): characterization -> k-form LLM proposer
-        ch = characterize(Xd, yd, sigma=SIGMA_REP,
-                          abstain_reason=r.result.certificate.abstain)
+
+        # ---- stage 2: characterize -> k-form LLM proposer -> verify (PROPOSE_CAP_S)
         forms = []
         try:
+            signal.alarm(PROPOSE_CAP_S)
+            abstain = r.result.certificate.abstain if r is not None else "timeout"
+            ch = characterize(Xd, yd, sigma=SIGMA_REP, abstain_reason=abstain)
             k = min(24, len(Xd))
             forms = propose_forms({"class": ch.get("class", ""),
                                    "why": ch.get("why", ""),
                                    "X": Xd[:k].tolist(), "y": yd[:k].tolist()},
                                   k=3) or []
-        except Exception:                                      # noqa: BLE001
-            pass
-        for form in forms:
-            try:
+            for form in forms:
                 v = verify(Xd[np.isfinite(yd)].tolist(),
                            yd[np.isfinite(yd)].tolist(), form, sigma=SIGMA_REP)
-            except Exception:                                  # noqa: BLE001
-                continue
-            if v.get("certified"):
-                rec.update(track="certified", expr=v["law"],
-                           tag="empirical-structural", channel="llm-verified",
-                           detail="LLM proposal verified by the sound checker "
-                                  f"at sigma_rep={SIGMA_REP}")
-                return rec
+                if v.get("certified"):
+                    rec.update(track="certified", expr=v["law"],
+                               tag="empirical-structural", channel="llm-verified",
+                               detail="LLM proposal verified by the sound checker "
+                                      f"at sigma_rep={SIGMA_REP}")
+                    return rec
+        except TimeoutError:
+            rec["timed_out"] = True
+        except Exception:                                      # noqa: BLE001
+            pass
+        finally:
+            signal.alarm(0)
         if forms:
             rec.update(track="conjecture", expr=forms[0], tag="empirical",
                        channel="llm-conjecture",
                        detail="unverified LLM proposal (best of k)")
             return rec
-        f = fit(Xd.tolist(), yd.tolist(), sigma=SIGMA_REP)
-        conj = (f.get("conjectures") or [{}])[0].get("form") or \
-            r.result.certificate.law or None
+
+        # ---- stage 3: always-reachable fallback ----
+        conj = _fallback_conjecture(Xd, yd) or \
+            (r.result.certificate.law if r is not None else None) or None
         if conj:
             rec.update(track="conjecture", expr=conj, tag="empirical",
-                       channel="fit-probe", detail="fit-scout conjecture")
+                       channel="fit-probe", detail="log-log fallback conjecture")
         else:
             rec.update(track="abstain", expr=None, tag="open", channel="none",
-                       detail=r.result.certificate.abstain or "structural")
-        return rec
-    except TimeoutError:
-        rec.update(track="abstain", expr=None, tag="open", channel="timeout",
-                   detail="per-problem cap", timed_out=True)
+                       detail=(r.result.certificate.abstain if r is not None
+                               else "timeout") or "structural")
         return rec
     except Exception as e:                                     # noqa: BLE001
         rec.update(track="abstain", expr=None, tag="open", channel="error",
