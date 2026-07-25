@@ -24,7 +24,7 @@ from ..base import Candidate, lstsq, snap
 
 TIER = 4
 _EXP_CAP = 10
-_FIT_TOL = 1e-8
+_FIT_TOL = 1e-3   # loose: the checker decides (1e-8 was dead at sigma_rep=1e-4)
 _CONJ_TOL = 5e-2      # loose: a conjecture is a labeled guess, not a certificate
 
 
@@ -32,6 +32,9 @@ def candidates(ctx) -> list[Candidate]:
     X = np.asarray(ctx.X_fit, float)
     y = np.asarray(ctx.y_fit, float).ravel()
     dim = X.shape[1]
+    sign = 1                          # CAP-N: constant-sign closure, as in C3
+    if np.all(y < 0):
+        sign, y = -1, -np.asarray(y, float)
     if dim > 3 or len(X) < 8 or np.any(X <= 0) or np.any(y <= 0):
         return []
     ly = np.log(y)
@@ -58,7 +61,7 @@ def candidates(ctx) -> list[Candidate]:
             continue
         exps = [Fraction(float(a)).limit_denominator(_EXP_CAP) for a in c[1:]]
         C = snap(float(np.exp(c[0])))
-        expr: sp.Expr = sp.Rational(C.numerator, C.denominator)
+        expr: sp.Expr = sign * sp.Rational(C.numerator, C.denominator)
         for j, (a, e) in enumerate(zip(assign, exps)):
             if e == 0:
                 continue

@@ -14,6 +14,12 @@ TIER = 3
 
 def candidates(ctx) -> list[Candidate]:
     X, y = ctx.X_fit, np.asarray(ctx.y_fit, float).ravel()
+    # CAP-N (LLMSRBENCH_DEV.md): an all-negative target is a monomial with a
+    # constant sign -- fit |y|, restore the sign. 8/19 mined benchmark cells
+    # missed ONLY for this.
+    sign = 1
+    if np.all(y < 0):
+        sign, y = -1, -y
     if np.any(y <= 0) or np.any(X <= 0):
         return []
     L = np.column_stack([np.ones(len(X)), np.log(X)])
@@ -34,7 +40,7 @@ def candidates(ctx) -> list[Candidate]:
         if not np.all(np.isfinite(base)) or np.sum(base**2) == 0:
             continue
         k = float(np.dot(base, y) / np.dot(base, base))
-        expr = sp.Float(k)
+        expr = sp.Float(sign * k)
         for i, e in enumerate(exps):
             expr = expr * ctx.syms[i] ** sp.Rational(e.numerator, e.denominator)
         out.append(Candidate(expr=expr, complexity=int(sp.count_ops(expr)),
