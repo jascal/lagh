@@ -20,11 +20,14 @@ import numpy as np
 
 
 def _load_env() -> None:
+    """deploy/hermes/.env is the authoritative credential store (the docker dir);
+    machine/.env is the local fallback. First file loaded wins per var."""
     try:
         from dotenv import load_dotenv
-        p = Path(__file__).with_name(".env")
-        if p.exists():
-            load_dotenv(p)
+        for p in (Path(__file__).parent.parent / "deploy" / "hermes" / ".env",
+                  Path(__file__).with_name(".env")):
+            if p.exists():
+                load_dotenv(p)
     except Exception:                                          # noqa: BLE001
         pass
 
