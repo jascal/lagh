@@ -154,7 +154,15 @@ def solve_one(args):
 def _gt_expr_dev(problem):
     from sympy.core.function import AppliedUndef
     eq = problem.gt_equation
-    e = sp.sympify(eq.expression)
+    # parse with the problem's OWN symbol names bound to Symbols, so names like
+    # `gamma`/`beta` do not resolve to sympy FUNCTIONS (measured crash: gamma-1)
+    names = {str(s) for s in eq.symbols}
+    import re
+    names |= set(re.findall(r"[A-Za-z_][A-Za-z_0-9]*", eq.expression))
+    keep = {"sqrt", "exp", "log", "sin", "cos", "tan", "asin", "acos", "atan",
+            "sinh", "cosh", "tanh", "pi", "E", "Abs"}
+    local = {n: sp.Symbol(n) for n in names if n not in keep}
+    e = sp.sympify(eq.expression, locals=local)
     e = e.replace(lambda x: isinstance(x, AppliedUndef),
                   lambda x: sp.Symbol(x.func.__name__))
     subs = {sp.Symbol(str(s)): sp.Symbol(f"x_{i}")

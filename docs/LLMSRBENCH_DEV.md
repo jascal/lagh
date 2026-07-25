@@ -55,6 +55,40 @@ BEFORE the LLM stage and emitted bare abstains. v1.1 = per-stage caps
 The 16 v1 rows were discarded and the sweep restarted clean. Positive early
 signal kept for the record: 2 grammar certificates in those 16 (P1 direction).
 
-## Results
+## Results (v1.1 sweep 2026-07-25; judge v3 = as_independent constant strip +
+locals-dict gt parsing; scores in `dev_llmsrbench_v1_scores_v2.json`)
 
-*(filled after the sweep; predictions frozen above)*
+| | SA | Acc₀.₁(ID) | certified | cert struct-wrong | notes |
+|---|---|---|---|---|---|
+| **ALL** | **12.5%** | 16.25% | 36 | 6 | blind read was 0.42% |
+| **LSR-Transform** | **27.0%** | 27.9% | **30 (all SA-correct)** | **0** | frozen SOTA 31.53% |
+| LSR-Synth (4 domains) | 0% | ~6% | 6 | 6 | novel-term wall |
+
+Certified channels: grammar 16 (incl. the 1 judge-error), **llm-verified 19** —
+grok proposes, the sound checker certifies at σ_rep. Conjecture track: 108
+submissions, 0 SA-correct (the log-log floor and raw LLM guesses earn numeric
+Acc points but no structural hits).
+
+**Prediction scoring:**
+- **P1 FAILED** (≥15 synth certificates; got 6, all structurally wrong): synth's
+  novel terms are the real wall — not representation, not epsilon.
+- **P2 FAILED in the good direction** (<10 Transform certs; got 30): the
+  llm-verified channel was not in the prediction's model of the world.
+- **P3 FAILED as stated, with structure:** Transform certificates are **30/30
+  structurally correct — zero fabrication where a full structure was reachable.**
+  All 6 synth certificates are structurally wrong the same way: a certified
+  skeleton that omits the novel term, which stays inside the σ_rep envelope even
+  on OOD (all 6 pass Acc₀.₁ OOD). This is the RNOISE **asymptotic-degeneracy
+  class at benchmark scale** — the certificate is numerically honest and
+  symbolically incomplete. Naming + gating this (e.g. residual-structure probe
+  before certifying at σ>0) is now a registered instrument direction.
+- **P4 MET, exceeded** (≥5 proposer wins on Transform; got 19 verified, all
+  SA-correct).
+- **P5 MET** (12.5% = 30× the blind 0.42%).
+
+**Read on the SOTA gap:** Transform 27.0% vs LLM-SR's 31.53% — within 4.5 points
+of the best published system, with a claim it cannot make (30 machine-checked
+certificates, zero structurally wrong). The gap is entirely conjecture-side;
+synth is a grammar/term problem, not an epsilon problem. Next (no-LLM per user
+directive): mine the 19 verified forms into grammar capabilities; census the
+synth novel terms; build the residual-structure gate.
