@@ -215,6 +215,53 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                notes=[f"{len(classes)} Lévy exponents certify"])
             return Result(cert, None, 7, len(lc))
 
+    # CAP-S: cost-aware cheap pre-pass (LLMSRBENCH_DEV.md, registered). At dim>=3
+    # a time-budgeted run can die inside C2's implicit enumeration before the
+    # cheap closed-form classes (C3/C9/C8, and C3 under target transforms) ever
+    # run -- 12/19 LLM-verified benchmark certificates were plain C3 monomials the
+    # loop never reached. The pre-pass proposes only those (~50 log-fits) and
+    # applies the FULL verdict machinery (certification, coefficient gate,
+    # coherence on the extended probe, pinned); a unique certifying class returns,
+    # anything else falls through to the untouched escalation loop.
+    if dim >= 3 and max_tier >= 3:
+        from .classes import c3_powerlaw, c8_angular, c9_genmonomial
+        pctx = Ctx(syms, [], X_fit, y_fit, X_sel, y_sel)
+        pcands = (c3_powerlaw.candidates(pctx) + c9_genmonomial.candidates(pctx)
+                  + c8_angular.candidates(pctx))
+        for tname, ty_fit, inv in c5_transforms.transforms(y_fit):
+            try:
+                ty_sel = c5_transforms.apply(tname, y_sel)
+            except Exception:                                 # noqa: BLE001
+                continue
+            if not (np.all(np.isfinite(ty_fit)) and np.all(np.isfinite(ty_sel))):
+                continue
+            tctx = Ctx(syms, [], X_fit, ty_fit, X_sel, ty_sel)
+            for c in c3_powerlaw.candidates(tctx):
+                try:
+                    expr = inv(c.expr)
+                except Exception:                             # noqa: BLE001
+                    continue
+                if expr.has(sp.zoo, sp.oo, -sp.oo, sp.nan):
+                    continue
+                pcands.append(Candidate(expr=expr, complexity=c.complexity + 1,
+                                        channel=f"prepass-t-{tname}"))
+        pcert = []
+        for c in sorted(pcands, key=lambda z: z.complexity):
+            if check(c.expr, syms, X_cert, y_cert, eps)["certified"]:
+                ok, gated = float_pinned(c.expr, syms, X_cert, y_cert, eps, sigma)
+                if ok:
+                    c.expr = gated
+                    pcert.append(c)
+        if pcert:
+            classes = coherent(pcert, syms, P, yscale)
+            if len(classes) == 1:
+                w = min(classes[0][1], key=lambda z: z.complexity)
+                if pinned(w.expr, syms, X_cert, y_cert, eps, P, yscale, sigma):
+                    cert = Certificate(True, 0, 0, len(X_cert), bounds,
+                                       str(w.expr), notes=["CAP-S cheap pre-pass"])
+                    return Result(cert, w.expr, 3, len(pcands))
+            # ambiguity or unpinned -> the full loop decides (conservative)
+
     total = 0
     for tier in [t for t, _ in CURRICULUM if t <= max_tier]:
         cands = _tier_candidates(tier, syms, dim, X_fit, y_fit, X_sel, y_sel, X_cert)

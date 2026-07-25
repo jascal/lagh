@@ -158,11 +158,20 @@ def _gt_expr_dev(problem):
     # `gamma`/`beta` do not resolve to sympy FUNCTIONS (measured crash: gamma-1)
     names = {str(s) for s in eq.symbols}
     import re
-    names |= set(re.findall(r"[A-Za-z_][A-Za-z_0-9]*", eq.expression))
+    expr_s = eq.expression
     keep = {"sqrt", "exp", "log", "sin", "cos", "tan", "asin", "acos", "atan",
             "sinh", "cosh", "tanh", "pi", "E", "Abs"}
+    # benchmark data artifact: some expression strings carry a stray `_f` suffix
+    # on numeric literals (`0.325..._f`) -- strip it before tokenizing
+    expr_s = re.sub(r"(\d)_f\b", r"\1", expr_s)
+    # functional notation: A(t) / P(t) / x(t) mean "the observable named A/P/x"
+    # (the dataset column), not a call -- collapse f(arg) -> f for non-math names
+    expr_s = re.sub(
+        r"\b([A-Za-z_]\w*)\s*\(\s*[A-Za-z_]\w*\s*\)",
+        lambda m: m.group(1) if m.group(1) not in keep else m.group(0), expr_s)
+    names |= set(re.findall(r"[A-Za-z_][A-Za-z_0-9]*", expr_s))
     local = {n: sp.Symbol(n) for n in names if n not in keep}
-    e = sp.sympify(eq.expression, locals=local)
+    e = sp.sympify(expr_s, locals=local)
     e = e.replace(lambda x: isinstance(x, AppliedUndef),
                   lambda x: sp.Symbol(x.func.__name__))
     subs = {sp.Symbol(str(s)): sp.Symbol(f"x_{i}")

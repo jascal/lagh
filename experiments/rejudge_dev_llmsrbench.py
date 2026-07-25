@@ -28,6 +28,17 @@ POS = {sp.Symbol(f"x_{i}"): sp.Symbol(f"x_{i}", positive=True) for i in range(12
 
 def canon(e):
     e = sp.sympify(e).xreplace(POS)
+    # gt strings carry FLOAT exponents (x**0.333333333333333); rationalize the
+    # near-rational ones so they compare equal to a grammar's exact Rational(1,3)
+    # and so strip_consts never mistakes an exponent for a coefficient
+    def _rx(x):
+        fr = sp.nsimplify(x.exp, rational=True, tolerance=1e-6)
+        if fr.is_Rational and fr.q <= 24 and \
+                abs(float(fr) - float(x.exp)) < 1e-6:
+            return sp.Pow(x.base, fr)
+        return x
+    e = e.replace(lambda x: isinstance(x, sp.Pow) and isinstance(x.exp, sp.Float),
+                  _rx)
     return sp.powsimp(sp.together(sp.expand(e)), force=True)
 
 
@@ -69,6 +80,7 @@ def _h(s, f):
 
 
 def equivalent(pred_s, gt):
+    prev = signal.getsignal(signal.SIGALRM)   # restore the caller's handler after
     signal.signal(signal.SIGALRM, _h)
     try:
         signal.alarm(30)
@@ -87,6 +99,7 @@ def equivalent(pred_s, gt):
         return False, "judge-v2-error"
     finally:
         signal.alarm(0)
+        signal.signal(signal.SIGALRM, prev)
 
 
 def main():

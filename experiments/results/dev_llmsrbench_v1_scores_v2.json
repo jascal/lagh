@@ -2,12 +2,12 @@
  "summary": {
   "ALL": {
    "n": 240,
-   "SA": 12.5,
+   "SA": 13.75,
    "acc01_id": 16.25,
    "certified": {
     "n": 36,
-    "SA_correct": 30,
-    "structural_wrong": 6,
+    "SA_correct": 33,
+    "structural_wrong": 3,
     "llm_verified": 19
    },
    "conjecture": {
@@ -36,12 +36,12 @@
   },
   "bio_pop_growth": {
    "n": 24,
-   "SA": 0.0,
+   "SA": 4.17,
    "acc01_id": 8.33,
    "certified": {
     "n": 2,
-    "SA_correct": 0,
-    "structural_wrong": 2,
+    "SA_correct": 1,
+    "structural_wrong": 1,
     "llm_verified": 0
    },
    "conjecture": {
@@ -53,12 +53,12 @@
   },
   "chem_react": {
    "n": 36,
-   "SA": 0.0,
+   "SA": 5.56,
    "acc01_id": 8.33,
    "certified": {
     "n": 3,
-    "SA_correct": 0,
-    "structural_wrong": 3,
+    "SA_correct": 2,
+    "structural_wrong": 1,
     "llm_verified": 0
    },
    "conjecture": {
@@ -2245,11 +2245,12 @@
    "detail": "certified at declared sigma_rep=0.0001",
    "secs": 0.2,
    "module": "chem_react",
-   "sa": false,
+   "sa": true,
    "judge_error": "Sympify of expression 'could not parse '-0.3254156367450257*sqrt(A(t)) + 0.32541",
    "acc01_id": true,
    "acc01_ood": true,
-   "sa_v1": false
+   "sa_v1": false,
+   "sa_v2_how": "structure"
   },
   {
    "id": "chem_react/CRK1",
@@ -2423,11 +2424,12 @@
    "detail": "certified at declared sigma_rep=0.0001",
    "secs": 0.2,
    "module": "chem_react",
-   "sa": false,
+   "sa": true,
    "judge_error": "Sympify of expression 'could not parse '-0.24581249010242617*A(t) + 0.2458124901",
    "acc01_id": true,
    "acc01_ood": true,
-   "sa_v1": false
+   "sa_v1": false,
+   "sa_v2_how": "structure"
   },
   {
    "id": "chem_react/CRK7",
@@ -2918,10 +2920,11 @@
    "detail": "certified at declared sigma_rep=0.0001",
    "secs": 0.3,
    "module": "bio_pop_growth",
-   "sa": false,
+   "sa": true,
    "acc01_id": true,
    "acc01_ood": true,
-   "sa_v1": false
+   "sa_v1": false,
+   "sa_v2_how": "structure"
   },
   {
    "id": "bio_pop_growth/BPG6",

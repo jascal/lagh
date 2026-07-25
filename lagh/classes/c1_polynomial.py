@@ -98,6 +98,16 @@ def terms(dim: int, X_fit=None, y_fit=None, X_cert=None) -> list[Term]:
                 fn = (lambda X, j=j, k=k, ef=ef: X[:, j] * X[:, k] ** ef)
                 nm = f"x_{j}*x_{k}**({e.numerator}/{e.denominator})"
                 out.append(Term(nm, fn, _pos(k), 3))
+    # CAP-R (LLMSRBENCH_DEV.md): plain ratio monomials x_i/x_j. The affine-
+    # denominator rationals (x_0/(x_1*(x_2+1))) need P-terms like x_0/x_1 in the
+    # C2 implicit pass; without them four verified benchmark laws were
+    # unreachable. Bounded: dim<=5, n(n-1) terms, positive-input guard.
+    if dim <= 5:
+        for j in range(dim):
+            for k in range(dim):
+                if j != k:
+                    fn = (lambda X, j=j, k=k: X[:, j] / X[:, k])
+                    out.append(Term(f"x_{j}/x_{k}", fn, _pos(k), 3))
     # CAP-B: trig-MONOMIAL products sin^a(x_k) cos^b(x_k), standalone and times another
     # input x_j. A general structural class: any law that is a (product of an input and a)
     # trigonometric monomial of another input -- (alpha sin + beta cos)^2 expands to the
@@ -108,7 +118,17 @@ def terms(dim: int, X_fit=None, y_fit=None, X_cert=None) -> list[Term]:
     # the term count and blow up the C2 rational search; every trig-shaped law in the gap
     # set is dim-2 (input x trig-of-angle). A dim>=3 trig law would be silently missed --
     # this is a stated cap, not a claim of coverage.
-    TRIG_AB = [(2, 0), (0, 2), (1, 1), (2, -2), (-2, 2), (2, -3)] if dim <= 2 else []
+    # Bound lifted 2 -> 3 (LLMSRBENCH_DEV.md): at dim 3 the features are emitted
+    # only for ANGLE-PLAUSIBLE columns (range within (0, 2*pi)), so mass/charge
+    # columns don't inflate the search -- the sec-form laws x_0/(x_1*cos(x_2))
+    # were unreachable under the old blanket dim<=2 bound.
+    TRIG_AB = [(2, 0), (0, 2), (1, 1), (2, -2), (-2, 2), (2, -3), (0, -1),
+               (-1, 0)] if dim <= 3 else []
+    def _angleish(k):
+        if X_fit is None or dim <= 2:
+            return True
+        col = np.asarray(X_fit, float)[:, k]
+        return bool(np.all((col > 0) & (col < 2 * np.pi)))
     def _cos_ok(k):
         return (lambda X, k=k: bool(np.all(np.abs(np.cos(X[:, k])) > 1e-6)))
     def _sin_ok(k):
@@ -121,6 +141,8 @@ def terms(dim: int, X_fit=None, y_fit=None, X_cert=None) -> list[Term]:
             return v
         return f
     for k in range(dim):
+        if not _angleish(k):
+            continue
         for a, b in TRIG_AB:
             base = _trig(a, b)
             # guard: negative sin/cos power needs that function bounded away from 0

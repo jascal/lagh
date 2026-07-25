@@ -60,9 +60,17 @@ locals-dict gt parsing; scores in `dev_llmsrbench_v1_scores_v2.json`)
 
 | | SA | Acc₀.₁(ID) | certified | cert struct-wrong | notes |
 |---|---|---|---|---|---|
-| **ALL** | **12.5%** | 16.25% | 36 | 6 | blind read was 0.42% |
+| **ALL** | **13.75%** | 16.25% | 36 | **3** | blind read was 0.42% |
 | **LSR-Transform** | **27.0%** | 27.9% | **30 (all SA-correct)** | **0** | frozen SOTA 31.53% |
-| LSR-Synth (4 domains) | 0% | ~6% | 6 | 6 | novel-term wall |
+| LSR-Synth (4 domains) | ~2.3% | ~6% | 6 | 3 | novel-term wall, softened |
+
+*(Judge v4: three successive judge defects fixed against the benchmark's own
+data quirks — float exponents `x**0.333333333333333` rationalized; `A(t)`
+functional notation collapsed; a literal `_f`-suffix ARTIFACT IN THE BENCHMARK'S
+OWN gt STRINGS stripped. Each fix only ever upgraded our SA — the conservative
+lower-bound property is preserved. 3 certificates remain structurally wrong,
+all grammar-channel synth: CRK13, BPG3, PO18 — the true asymptotic-degeneracy
+residue, smaller than first reported.)*
 
 Certified channels: grammar 16 (incl. the 1 judge-error), **llm-verified 19** —
 grok proposes, the sound checker certifies at σ_rep. Conjecture track: 108
@@ -85,6 +93,25 @@ Acc points but no structural hits).
 - **P4 MET, exceeded** (≥5 proposer wins on Transform; got 19 verified, all
   SA-correct).
 - **P5 MET** (12.5% = 30× the blind 0.42%).
+
+## Registered capabilities from proposal mining (2026-07-25, before code)
+
+The 19 grok-verified certificates, clustered — each cluster becomes a registered
+change with predicted cells, scored by re-probing those problems GRAMMAR-ONLY:
+
+- **CAP-S — cost-aware cheap pre-pass (instrument scheduling, no grammar change).**
+  12/19 verified forms are plain C3 power-law monomials the tier loop never
+  reached: at dim≥4 the time budget dies inside C2's implicit enumeration before
+  tier 3 runs. Pre-pass = {C3, C9, C8, C3-under-C5-transforms} candidates
+  (≈50 cheap log-fits), full certification + gate + coherence + pinned; unique
+  certifying class → return; anything else falls through to the normal loop.
+  **Predicts ≥10 of the 12 monomial cells recover lagh-alone; zero regressions
+  on the NewtonBench-dev 108 (re-run to verify).**
+- **CAP-R — ratio features `x_i/x_j`** (dim≤5, complexity 3): unlocks
+  affine-denominator rationals via the C2 implicit pass. **Predicts 4 cells**
+  (`x_0/(x_1(x_2+1))` ×2, `x_0/(x_1x_2)−1`, `1+x_1x_3/(x_0x_2)`).
+- **CAP-B bound lift 2→3 with an angle-plausibility guard** (trig features only
+  for columns with range ⊂ (0, 2π)): **predicts the 3 sec-form cells.**
 
 **Read on the SOTA gap:** Transform 27.0% vs LLM-SR's 31.53% — within 4.5 points
 of the best published system, with a claim it cannot make (30 machine-checked
