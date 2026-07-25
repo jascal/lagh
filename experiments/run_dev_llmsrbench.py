@@ -40,7 +40,16 @@ def _timeout_handler(signum, frame):
 
 
 def _fallback_conjecture(X, y):
-    """Cheap log-log probe -- always reachable, never times out."""
+    """Cheap conjectures, best first: CAP-T unsnapped generalized monomial
+    (continuous exponents -- the Arrhenius class), else the log-log probe.
+    Always reachable, never times out."""
+    from lagh.classes.c9_genmonomial import conjecture as c9_conjecture
+    try:
+        c = c9_conjecture(X, y)
+        if c is not None:
+            return c[0]
+    except Exception:                                          # noqa: BLE001
+        pass
     m = np.isfinite(y) & np.all(np.isfinite(X), axis=1)
     X, y = X[m], y[m]
     if len(X) < 10 or not (np.all(X > 0) and np.all(y > 0)):

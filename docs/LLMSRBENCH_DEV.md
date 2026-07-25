@@ -113,6 +113,34 @@ change with predicted cells, scored by re-probing those problems GRAMMAR-ONLY:
 - **CAP-B bound lift 2→3 with an angle-plausibility guard** (trig features only
   for columns with range ⊂ (0, 2π)): **predicts the 3 sec-form cells.**
 
+## Synth census (2026-07-25, judge-v4 parser) + registered capabilities round 2
+
+Ground-truth term families (129 synth problems; 32 chem/bio parse-fails remain
+— deeper `A(t)`-notation variants, census-only issue):
+
+- **phys_osc (44):** sparse LINEAR combinations over a small nonlinear library —
+  `sin(x_j)`, `x^3`, `x`, `exp(-|x|)`, `log(|x|+1)`, `|x|^{1/3}`, `x_i(1-x_j^2)`
+  products, with per-problem float constants. This is lagh's linear channel with
+  missing library terms.
+- **matsci (25):** Arrhenius-family `x_0^p * exp(-E/x_1)` (+ shifted `(x_1-c)`
+  factors) with CONTINUOUS fitted exponents — outside the exact-rational class
+  by construction; winnable only as labeled conjectures (the official judge
+  strips parameters).
+- **bio/chem:** additive mixes of logistic rationals `x^2/(cx+1)`, `x^{1/3}`,
+  `sqrt(x)`, exp terms — partially in-grammar today (2 chem certificates).
+
+Registered, predictions before code:
+
+- **CAP-P — damped/saturating library features** (dim≤3): `exp(-|x_j|)`,
+  `log(|x_j|+1)`, `|x_j|^{1/3}`, and `x_i ×` each. **Predicts ≥15 of 44
+  phys_osc problems certify** (gt = sparse linear combo once the features
+  exist) **with zero structural wrongs.**
+- **CAP-T — continuous-parameter conjecture mode (track B, no LLM):** when
+  certification abstains, emit the UNSNAPPED c9/c3 fit (float exponents kept)
+  as the labeled conjecture; add `1/x_j` to c9's factor pool (Arrhenius).
+  **Predicts first nonzero matsci SA** (judge treats float exponents as
+  parameters, official-protocol style).
+
 **Read on the SOTA gap:** Transform 27.0% vs LLM-SR's 31.53% — within 4.5 points
 of the best published system, with a claim it cannot make (30 machine-checked
 certificates, zero structurally wrong). The gap is entirely conjecture-side;

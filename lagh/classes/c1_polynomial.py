@@ -98,6 +98,25 @@ def terms(dim: int, X_fit=None, y_fit=None, X_cert=None) -> list[Term]:
                 fn = (lambda X, j=j, k=k, ef=ef: X[:, j] * X[:, k] ** ef)
                 nm = f"x_{j}*x_{k}**({e.numerator}/{e.denominator})"
                 out.append(Term(nm, fn, _pos(k), 3))
+    # CAP-P (LLMSRBENCH_DEV.md): damped / saturating library features. Measured
+    # need: oscillator-family laws are sparse LINEAR combos over exactly these --
+    # exp(-|x|) damping, log(|x|+1) soft saturation, |x|^{1/3} sublinear response
+    # -- plus input x feature products. Bounded dim<=3; all guarded finite.
+    if dim <= 3:
+        _damped = [("exp(-Abs(x_{j}))", lambda X, j: np.exp(-np.abs(X[:, j]))),
+                   ("log(Abs(x_{j}) + 1)",
+                    lambda X, j: np.log(np.abs(X[:, j]) + 1.0)),
+                   ("Abs(x_{j})**(1/3)",
+                    lambda X, j: np.abs(X[:, j]) ** (1.0 / 3.0))]
+        for j in range(dim):
+            for nm_t, f in _damped:
+                fn = (lambda X, j=j, f=f: f(X, j))
+                out.append(Term(nm_t.format(j=j), fn, ALWAYS, 3))
+                for i in range(dim):
+                    if i == j:
+                        continue
+                    fni = (lambda X, i=i, j=j, f=f: X[:, i] * f(X, j))
+                    out.append(Term(f"x_{i}*" + nm_t.format(j=j), fni, ALWAYS, 4))
     # CAP-R (LLMSRBENCH_DEV.md): plain ratio monomials x_i/x_j. The affine-
     # denominator rationals (x_0/(x_1*(x_2+1))) need P-terms like x_0/x_1 in the
     # C2 implicit pass; without them four verified benchmark laws were
