@@ -253,15 +253,21 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
         pcert = []
         for c in sorted(pcands, key=lambda z: z.complexity):
             if check(c.expr, syms, X_cert, y_cert, eps)["certified"]:
-                ok, gated = float_pinned(c.expr, syms, X_cert, y_cert, eps, sigma)
-                if ok:
+                if sigma <= 0:      # same ordering rule as the main loop: under
+                    ok, gated = float_pinned(c.expr, syms, X_cert, y_cert, eps,
+                                             sigma)
+                    if not ok:      # noise, coherence sees the full set and the
+                        continue    # winner is gated below
                     c.expr = gated
-                    pcert.append(c)
+                pcert.append(c)
         if pcert:
             classes = coherent(pcert, syms, P, yscale)
             if len(classes) == 1:
                 w = min(classes[0][1], key=lambda z: z.complexity)
-                if pinned(w.expr, syms, X_cert, y_cert, eps, P, yscale, sigma):
+                if pinned(w.expr, syms, X_cert, y_cert, eps, P, yscale, sigma) \
+                        and (sigma <= 0
+                             or float_pinned(w.expr, syms, X_cert, y_cert, eps,
+                                             sigma)[0]):
                     cert = Certificate(True, 0, 0, len(X_cert), bounds,
                                        str(w.expr), notes=["CAP-S cheap pre-pass"])
                     return Result(cert, w.expr, 3, len(pcands))
@@ -276,15 +282,21 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
         for c in sorted(cands, key=lambda z: z.complexity):
             r = check(c.expr, syms, X_cert, y_cert, eps)
             if r["certified"]:
-                # exact-coefficient gate (CAP-E lesson), per CANDIDATE: every Float /
-                # huge-denominator coefficient must be pinned by the data at
-                # certification precision, else this is not an exact-law candidate
-                # (dense overfits with dyadic-garbage coefficients certify at
-                # floor-dominated eps and would poison coherence). Reject-only.
-                ok, gated = float_pinned(c.expr, syms, X_cert, y_cert, eps, sigma)
-                if not ok:
-                    continue
-                c.expr = gated
+                # exact-coefficient gate (CAP-E lesson), per CANDIDATE on CLEAN
+                # data: dyadic-garbage overfits certify at floor-dominated eps and
+                # would poison coherence. Under DECLARED NOISE the gate moves to
+                # the WINNER instead (below): gating candidates first removed the
+                # true-but-marginal rival that coherence needed to flag admitted
+                # impostors, and impostors then certified ALONE (measured: RNOISE
+                # 60 dB structural-CW 2 -> 8). Coherence must see the full
+                # certifying set under noise; the winner still cannot carry
+                # unpinned coefficients.
+                if sigma <= 0:
+                    ok, gated = float_pinned(c.expr, syms, X_cert, y_cert, eps,
+                                             sigma)
+                    if not ok:
+                        continue
+                    c.expr = gated
                 certifying.append(c)
         if not certifying:
             continue                              # escalate: reach, not ambiguity
@@ -301,6 +313,19 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                    notes=["exact rational parameters not pinned within "
                                           f"the noise band (sigma={sigma:g})"])
                 return Result(cert, None, tier, total)
+            if sigma > 0:
+                # noise-regime coefficient gate, WINNER-level (see candidate loop
+                # note): the unique coherent winner still cannot carry coefficients
+                # the data does not pin at the sigma scale (sub-epsilon junk terms)
+                fp_ok, _ = float_pinned(winner.expr, syms, X_cert, y_cert, eps,
+                                        sigma)
+                if not fp_ok:
+                    cert = Certificate(False, 0, 0, len(X_cert), bounds,
+                                       str(winner.expr),
+                                       abstain=Abstain.PARAMETRIC.value,
+                                       notes=["winner carries coefficients not "
+                                              "pinned at the declared noise scale"])
+                    return Result(cert, None, tier, total)
             cert = Certificate(True, 0, 0, len(X_cert), bounds, str(winner.expr))
             return Result(cert, winner.expr, tier, total)
         cert = Certificate(False, 0, 0, len(X_cert), bounds,
