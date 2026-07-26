@@ -183,6 +183,28 @@ prefilter was not the (only) blocker. Open diagnosis for the next round —
 per-cell abstain reasons on phys_osc (candidates constructed but not certifying?
 coherence ambiguity? mixed-sign input guards starving the library?).
 
+## phys_osc diagnosis (2026-07-26, instrumented — the CAP-P failure explained)
+
+The true oscillator structures **certify at σ_rep when fitted directly** (all
+probed cells, nmiss 0). Two mechanisms block autonomous recovery, both now
+measured, not conjectured:
+
+1. **Support proposal fails under library collinearity.** With ~84 admissible
+   terms whose damped/saturating members are monotone-similar (x, x³, |x|^{1/3},
+   log(|x|+1)), STLSQ, top-N-singles combinations, AND greedy OMP all fail to
+   propose the true 4-term support (PO33: zero candidates survive the
+   prefilter). Needs a real sparse-recovery pass (LASSO path / iterative
+   reweighting / exhaustive size-3/4 over a correlation-pruned sublibrary).
+2. **Minimality is split-myopic.** The damped term x₀·e^{−|x₀|} is material
+   only near x₀≈0; on the 20% cert split its contribution sits inside ε, so
+   per-candidate minimality flags the TRUE law as non-minimal and kills it
+   (PO1: 4 certifying candidates → 0 after minimality). The test must run on
+   the full fit∪sel∪cert data, and arguably on a probe of the box.
+
+Both are scoped instrument work with RNOISE re-validation required (minimality
+placement has already been through three veto rounds). Registered as the next
+round; not attempted as a patch inside this one.
+
 **Read on the SOTA gap:** Transform 27.0% vs LLM-SR's 31.53% — within 4.5 points
 of the best published system, with a claim it cannot make (30 machine-checked
 certificates, zero structurally wrong). The gap is entirely conjecture-side;

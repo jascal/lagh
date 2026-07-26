@@ -112,9 +112,9 @@ def terms(dim: int, X_fit=None, y_fit=None, X_cert=None) -> list[Term]:
             for nm_t, f in _damped:
                 fn = (lambda X, j=j, f=f: f(X, j))
                 out.append(Term(nm_t.format(j=j), fn, ALWAYS, 3))
+                # SELF-products included (i == j): x*exp(-|x|) is the canonical
+                # damped-oscillator term; skipping it was the measured PO1 gap
                 for i in range(dim):
-                    if i == j:
-                        continue
                     fni = (lambda X, i=i, j=j, f=f: X[:, i] * f(X, j))
                     out.append(Term(f"x_{i}*" + nm_t.format(j=j), fni, ALWAYS, 4))
     # CAP-R (LLMSRBENCH_DEV.md): plain ratio monomials x_i/x_j. The affine-

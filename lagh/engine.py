@@ -56,6 +56,43 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
     yscale = float(np.sqrt(np.mean(y_va**2))) + 1e-300
     sups = stlsq_supports(M_tr, y_tr)
     sups |= {c for size in (1, 2) for c in combinations(range(len(ctx.terms)), size)}
+    # Targeted size-3..5 supports from the best singles -- the same measured
+    # lesson as C2's pairs/triples fix, finally applied to the linear channel:
+    # STLSQ cannot isolate sparse multi-term supports in a collinear library, so
+    # 3+-term LINEAR laws (the oscillator family) were unreachable by proposal.
+    # Bounded: C(10,3)+C(8,4)+C(6,5) = 196 extra lstsq.
+    singles = []
+    for k in range(len(ctx.terms)):
+        c1 = lstsq(M_tr[:, [k]], y_tr)
+        if c1 is None:
+            continue
+        rr = y_tr - M_tr[:, [k]] @ c1
+        singles.append((float(rr @ rr), k))
+    singles.sort()
+    top = [k for _, k in singles[:10]]
+    sups |= {tuple(sorted(t)) for t in combinations(top, 3)}
+    sups |= {tuple(sorted(t)) for t in combinations(top[:8], 4)}
+    sups |= {tuple(sorted(t)) for t in combinations(top[:6], 5)}
+    # Orthogonal matching pursuit: greedy forward selection against the residual,
+    # every prefix emitted as a support. Top-N single rankings miss collinear
+    # members of a sparse sum (measured: a 4-term oscillator support was never
+    # proposed); OMP is the standard sparse-recovery tool for exactly this.
+    omp: list[int] = []
+    resid = y_tr.copy()
+    for _ in range(6):
+        with np.errstate(all="ignore"):
+            norms = np.sqrt(np.einsum("ij,ij->j", M_tr, M_tr))
+            scores = np.abs(M_tr.T @ resid) / np.where(norms > 0, norms, np.inf)
+        scores[omp] = -1
+        k = int(np.argmax(scores))
+        if scores[k] <= 0:
+            break
+        omp.append(k)
+        c_o = lstsq(M_tr[:, omp], y_tr)
+        if c_o is None:
+            break
+        resid = y_tr - M_tr[:, omp] @ c_o
+        sups.add(tuple(sorted(omp)))
     out = []
     for sup in sups:
         cols = list(sup)
@@ -298,6 +335,14 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                     if not ok:
                         continue
                     c.expr = gated
+                elif not minimal(c.expr, syms, X_cert, y_cert, eps):
+                    # noise regime, per-CANDIDATE minimality: polynomial overfits
+                    # certify inside the sigma envelope and poison coherence
+                    # ("4 materially different classes", measured PO1). Unlike the
+                    # vetoed float-gate this cannot delete a TRUE rival -- a true
+                    # law has no droppable term -- so the RNOISE ordering lesson
+                    # is respected.
+                    continue
                 certifying.append(c)
         if not certifying:
             continue                              # escalate: reach, not ambiguity
