@@ -166,6 +166,23 @@ The grok proposer's residual value is +1.7 SA points. Mining scorecard:
   **sigma-aware prefilter** is the registered next lever (engine + c2), with
   CAP-P re-scored after it.
 
+## Grammar-only sweep v3 (2026-07-26, validated noise-gate configuration)
+
+| | SA | cert (ok/wrong) | v2 |
+|---|---|---|---|
+| ALL | 11.67 | 25 (23/2) | 12.08, 26 (24/2) |
+| Transform | 22.52 | 20 (20/0) | 23.42, 21 |
+| phys_osc | **0.00** | **0** | 0 |
+
+Net-neutral on SA (−0.4: the minimality gate traded one Transform certificate)
+— but the round's real product was soundness: the PO12 quantized-overfit vector
+is closed, the noise gates are hardened through three RNOISE-vetoed iterations,
+and the final configuration restores the noise baseline exactly (46/38/19,
+CW 2/2/1). **CAP-P has now failed twice as registered** (0/44 phys_osc): the
+prefilter was not the (only) blocker. Open diagnosis for the next round —
+per-cell abstain reasons on phys_osc (candidates constructed but not certifying?
+coherence ambiguity? mixed-sign input guards starving the library?).
+
 **Read on the SOTA gap:** Transform 27.0% vs LLM-SR's 31.53% — within 4.5 points
 of the best published system, with a claim it cannot make (30 machine-checked
 certificates, zero structurally wrong). The gap is entirely conjecture-side;
