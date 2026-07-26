@@ -129,3 +129,21 @@ minus the (now named, bounded) asymptotic-degeneracy exposure; clean data remain
 the exact-symbolic regime. The blind-read registration's `sigma=0` clause stands:
 noisy blind data will fail certification and fall to the labeled-conjecture
 track rather than risk a within-noise-degenerate certificate.
+
+---
+
+## RE-VALIDATION (2026-07-26) — noise-gate rounds 1-3
+
+Instrument changes for the quantized-benchmark regime (sigma-aware prefilters,
+coefficient-gate behavior under noise) were iterated against this study as the
+veto gate. Round 2 (10σ perturbation winner gate + uncapped prefilter widening)
+REGRESSED both axes (CW 2→8 at 60 dB, recovery 46→28→veto). Round 3 —
+prefilter widening **capped at the representation-noise scale (3e-4)** + a
+**minimality winner gate** (a droppable term = overfit; every true term is
+load-bearing) — **restores the baseline exactly** under the judge-v4 structure
+comparator: recovery 46/38/19, structural-CW 2/2/1 (the same two BE
+asymptotic-degeneracy cells + the known 10% cross-form), gross-wrong 0/0/0.
+The PO12 quantized-benchmark overfit vector stays closed (verified abstain).
+Note: this study's inline scorer still used the v1 comparator and flagged 3
+written-form artifacts (√(a/b) vs √a/√b); scored numbers above are from the
+judge-v4 re-score of the recorded laws.
