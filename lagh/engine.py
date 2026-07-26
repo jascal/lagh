@@ -17,7 +17,7 @@ import sympy as sp
 from .base import (Candidate, admissible, design_matrix, lstsq, snap_all,
                    to_expr, eval_expr)
 from .certify import (Abstain, Certificate, check, coherent, epsilon,
-                      float_pinned, pinned, sample_box, vacuous)
+                      float_pinned, minimal, pinned, sample_box, vacuous)
 from .classes import CURRICULUM, c5_transforms, c6_quasipoly, c7_levy
 from .engine_util import stlsq_supports
 
@@ -66,11 +66,13 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
         if not np.all(np.isfinite(pred)):
             continue
         vr = float(np.sqrt(np.mean((pred - y_va) ** 2)))
-        # sigma-aware (LLMSRBENCH_DEV.md): under declared noise a CORRECT law's
-        # validation residual sits at ~sigma*yscale; a clean-data 1e-6 gate
-        # rejected every multi-term law on quantized data before certification
-        # (the third instance of this bug family). sigma=0 -> unchanged.
-        if vr > max(PREFILTER_REL, 3.0 * ctx.sigma) * yscale:
+        # sigma-aware, REPRESENTATION-SCALE ONLY (LLMSRBENCH_DEV.md): a clean-data
+        # 1e-6 gate rejected every multi-term law on quantized data (sigma_rep ~
+        # 1e-4) before certification. The widening is CAPPED at 3e-4: at
+        # statistical noise (>=1e-3) it admitted impostors without adding
+        # recoveries (measured RNOISE regression -- the noisy-recoverable set
+        # lives in the unprefiltered channels). sigma=0 -> unchanged.
+        if vr > max(PREFILTER_REL, min(3.0 * ctx.sigma, 3e-4)) * yscale:
             continue
         sub = [ctx.terms[i] for i in cols]
         expr = to_expr(sub, snap_all(c))
@@ -266,8 +268,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                 w = min(classes[0][1], key=lambda z: z.complexity)
                 if pinned(w.expr, syms, X_cert, y_cert, eps, P, yscale, sigma) \
                         and (sigma <= 0
-                             or float_pinned(w.expr, syms, X_cert, y_cert, eps,
-                                             sigma)[0]):
+                             or minimal(w.expr, syms, X_cert, y_cert, eps)):
                     cert = Certificate(True, 0, 0, len(X_cert), bounds,
                                        str(w.expr), notes=["CAP-S cheap pre-pass"])
                     return Result(cert, w.expr, 3, len(pcands))
@@ -313,19 +314,15 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                    notes=["exact rational parameters not pinned within "
                                           f"the noise band (sigma={sigma:g})"])
                 return Result(cert, None, tier, total)
-            if sigma > 0:
-                # noise-regime coefficient gate, WINNER-level (see candidate loop
-                # note): the unique coherent winner still cannot carry coefficients
-                # the data does not pin at the sigma scale (sub-epsilon junk terms)
-                fp_ok, _ = float_pinned(winner.expr, syms, X_cert, y_cert, eps,
-                                        sigma)
-                if not fp_ok:
-                    cert = Certificate(False, 0, 0, len(X_cert), bounds,
-                                       str(winner.expr),
-                                       abstain=Abstain.PARAMETRIC.value,
-                                       notes=["winner carries coefficients not "
-                                              "pinned at the declared noise scale"])
-                    return Result(cert, None, tier, total)
+            if sigma > 0 and not minimal(winner.expr, syms, X_cert, y_cert, eps):
+                # noise-regime winner gate: every term must be load-bearing (a
+                # droppable term = an overfit certified inside epsilon)
+                cert = Certificate(False, 0, 0, len(X_cert), bounds,
+                                   str(winner.expr),
+                                   abstain=Abstain.PARAMETRIC.value,
+                                   notes=["winner is not minimal: a term can be "
+                                          "dropped with certification intact"])
+                return Result(cert, None, tier, total)
             cert = Certificate(True, 0, 0, len(X_cert), bounds, str(winner.expr))
             return Result(cert, winner.expr, tier, total)
         cert = Certificate(False, 0, 0, len(X_cert), bounds,

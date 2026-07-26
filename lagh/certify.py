@@ -261,6 +261,26 @@ def float_pinned(expr, syms, X: np.ndarray, y: np.ndarray,
     return True, snapped
 
 
+def minimal(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray) -> bool:
+    """Parsimony enforcement for noise-regime winners: a JUNK term is one you can
+    DROP with certification intact (its whole contribution sits inside epsilon);
+    every term of a true minimal law is load-bearing. Replaces the sigma-scaled
+    perturbation gate, which wrongly rejected real small terms (a 1%-of-y term
+    shifts predictions ~0.1 sigma under its own perturbation -- invisible).
+    Reject-only; single-term and non-Add winners are trivially minimal."""
+    e = sp.expand(expr)
+    if not e.is_Add:
+        return True
+    terms = e.as_ordered_terms()
+    if len(terms) < 2:
+        return True
+    for i in range(len(terms)):
+        reduced = sp.Add(*[t for j, t in enumerate(terms) if j != i])
+        if check(reduced, syms, X, y, eps)["certified"]:
+            return False               # a smaller law also certifies -> not minimal
+    return True
+
+
 def coherent(certifying: list, syms, P: np.ndarray, yscale: float,
              tau: float = TAU) -> list:
     """Greedy tau-clustering of certifying laws into functional equivalence classes.
