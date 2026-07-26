@@ -141,6 +141,31 @@ Registered, predictions before code:
   **Predicts first nonzero matsci SA** (judge treats float exponents as
   parameters, official-protocol style).
 
+## Grammar-only sweep v2 (2026-07-25, ZERO LLM calls, judge v4)
+
+| | SA | cert (SA-ok / wrong) | vs v1.1 (with grok) |
+|---|---|---|---|
+| **ALL** | **12.08%** | 26 (24 / **2**) | 13.75%, 36 certs |
+| **LSR-Transform** | **23.42%** | **21 (21 / 0)** | 27.0%, 30 certs |
+| chem / bio | 5.6% / 4.2% | 5 (3 / 2) | first synth SA points |
+| matsci / phys_osc | 0 / 0 | 0 | unchanged |
+
+**The round's verdict: the instrument now reaches 88% of the LLM-composite's SA
+autonomously** (12.08 vs 13.75), with zero fabrication on Transform (21/21).
+The grok proposer's residual value is +1.7 SA points. Mining scorecard:
+- **CAP-S/R/B/N/G2 + gate fix: PASS** — grammar-channel Transform certificates
+  11 → 21, all structurally correct, most in <1 s via the pre-pass.
+- **CAP-T: PARTIAL** — 5 Transform conjecture SA hits (first-ever conjecture-track
+  SA); the matsci prediction FAILED (0 SA — continuous exponents fit numerically,
+  acc01 8%, but the judge's structure signature keeps distinct float exponents).
+- **CAP-P: FAILED as registered** (0/44 phys_osc certificates vs ≥15 predicted).
+  Post-hoc diagnosis identifies the likely blocker, same family as the _FIT_TOL
+  bug: the linear channel's `PREFILTER_REL = 1e-6` validation gate rejects
+  every candidate whose residual sits at the declared σ_rep = 1e-4 — correct
+  multi-term laws are filtered before certification on quantized data. A
+  **sigma-aware prefilter** is the registered next lever (engine + c2), with
+  CAP-P re-scored after it.
+
 **Read on the SOTA gap:** Transform 27.0% vs LLM-SR's 31.53% — within 4.5 points
 of the best published system, with a claim it cannot make (30 machine-checked
 certificates, zero structurally wrong). The gap is entirely conjecture-side;

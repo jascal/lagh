@@ -31,8 +31,9 @@ SUB_CAP = 600
 DISCOVER_CAP_S = 350
 PROPOSE_CAP_S = 200
 WORKERS = 8
-OUT = Path("experiments/results/dev_llmsrbench_v1.jsonl")
-SCORE_OUT = Path("experiments/results/dev_llmsrbench_v1_scores.json")
+_TAG = os.environ.get("DEV_SWEEP_TAG", "v1")
+OUT = Path(f"experiments/results/dev_llmsrbench_{_TAG}.jsonl")
+SCORE_OUT = Path(f"experiments/results/dev_llmsrbench_{_TAG}_scores.json")
 
 
 def _timeout_handler(signum, frame):

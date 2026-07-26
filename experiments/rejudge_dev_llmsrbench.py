@@ -20,8 +20,10 @@ import sympy as sp
 sys.path.insert(0, str(Path(__file__).parent.parent))
 sys.path.insert(0, "/home/allans/code/llm-srbench")
 
-IN = Path("experiments/results/dev_llmsrbench_v1_scores.json")
-OUT = Path("experiments/results/dev_llmsrbench_v1_scores_v2.json")
+import os
+_TAG = os.environ.get("DEV_SWEEP_TAG", "v1")
+IN = Path(f"experiments/results/dev_llmsrbench_{_TAG}_scores.json")
+OUT = Path(f"experiments/results/dev_llmsrbench_{_TAG}_scores_v2.json")
 
 POS = {sp.Symbol(f"x_{i}"): sp.Symbol(f"x_{i}", positive=True) for i in range(12)}
 
