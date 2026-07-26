@@ -214,17 +214,20 @@ def float_pinned(expr, syms, X: np.ndarray, y: np.ndarray,
     same exposure as raw Floats -- a huge-denominator rational is a float in a
     costume -- so they are gated identically.
 
-    CLEAN-DATA ONLY (the mirror of pinned()'s clean no-op): under declared noise the
-    epsilon is sigma-widened, so a +-1e-5 coefficient perturbation can never break
-    certification and the rejection rule would kill every float-carrying candidate
-    (measured: 60 dB gravity abstained). Under noise, coefficients are inherently
-    noise-limited floats (RNOISE_STUDY.md corrected verdict -- the claim is
-    STRUCTURAL there) and decimal-snapping would fabricate false exactness, so the
-    gate stands down entirely and pinned() owns the parametric question.
+    Under declared noise the perturbation is SIGMA-SCALED instead of standing down
+    (the stand-down left a hole: with the prefilter also sigma-widened, a
+    dyadic-garbage polynomial overfit CERTIFIED on quantized benchmark data --
+    the measured PO12 confident-wrong). At +-10/30 sigma: a REAL coefficient
+    (determined to ~sigma/sqrt(n)) shifts predictions by ~10 sigma|y| > the 4
+    sigma|y| epsilon and breaks certification -> pinned; a junk term contributing
+    below epsilon is invisible to its own perturbation -> unpinned -> rejected.
+    Conservative direction only: a true-but-marginal term can be rejected
+    (abstain), never accepted wrongly. Decimal-snapping stays clean-data-only
+    (snapping under noise would fabricate false exactness).
     """
     from fractions import Fraction
-    if sigma > 0:
-        return True, expr
+    noisy = sigma > 0
+    rels = (10.0 * sigma, 30.0 * sigma) if noisy else (1e-5, 1e-4)
     floats = sorted((a for a in expr.atoms(sp.Float, sp.Rational)
                      if isinstance(a, sp.Float)
                      or (a.q > 10**6 and not isinstance(a, sp.Integer))),
@@ -235,13 +238,15 @@ def float_pinned(expr, syms, X: np.ndarray, y: np.ndarray,
         v = float(f)
         if v == 0:
             continue
-        for rel in (1e-5, 1e-4):
+        for rel in rels:
             for s in (1, -1):
                 alt = expr.xreplace({f: sp.Float(v * (1 + s * rel))})
                 if alt == expr:
                     continue
                 if check(alt, syms, X, y, eps)["certified"]:
                     return False, expr
+    if noisy:
+        return True, expr          # pinned; no decimal-snap under noise
     snapped = expr
     for f in floats:
         v = float(f)

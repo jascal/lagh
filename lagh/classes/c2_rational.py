@@ -83,7 +83,7 @@ def candidates(ctx) -> list[Candidate]:
             if not np.all(np.isfinite(pred)):
                 continue
             vr = float(np.sqrt(np.mean((pred - y_va) ** 2)))
-            if vr > PREFILTER_REL * yscale:
+            if vr > max(PREFILTER_REL, 3.0 * getattr(ctx, "sigma", 0.0)) * yscale:
                 continue
             expr = to_expr([terms[i] for i in cols], snap_all(c)) / terms[j].sympy()
             out.append(Candidate(expr=expr, complexity=int(sp.count_ops(expr)),
@@ -121,7 +121,7 @@ def candidates(ctx) -> list[Candidate]:
                     if not np.all(np.isfinite(pred)):
                         continue
                     vr = float(np.sqrt(np.mean((pred - y_va) ** 2)))
-                    if vr > PREFILTER_REL * yscale:
+                    if vr > max(PREFILTER_REL, 3.0 * getattr(ctx, "sigma", 0.0)) * yscale:
                         continue
                     num = to_expr([terms[i] for i in p_sup], snap_all(p_c))
                     den = sp.Integer(1) + to_expr([terms[i] for i in q_sup],

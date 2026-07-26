@@ -33,6 +33,7 @@ class Ctx:
     y_fit: np.ndarray
     X_sel: np.ndarray
     y_sel: np.ndarray
+    sigma: float = 0.0    # declared noise: prefilters must not out-tighten epsilon
 
 
 @dataclass
@@ -65,7 +66,11 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
         if not np.all(np.isfinite(pred)):
             continue
         vr = float(np.sqrt(np.mean((pred - y_va) ** 2)))
-        if vr > PREFILTER_REL * yscale:
+        # sigma-aware (LLMSRBENCH_DEV.md): under declared noise a CORRECT law's
+        # validation residual sits at ~sigma*yscale; a clean-data 1e-6 gate
+        # rejected every multi-term law on quantized data before certification
+        # (the third instance of this bug family). sigma=0 -> unchanged.
+        if vr > max(PREFILTER_REL, 3.0 * ctx.sigma) * yscale:
             continue
         sub = [ctx.terms[i] for i in cols]
         expr = to_expr(sub, snap_all(c))
@@ -75,7 +80,7 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
 
 
 def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
-                     X_cert) -> list[Candidate]:
+                     X_cert, sigma: float = 0.0) -> list[Candidate]:
     """All candidates available at `tier`, lower tiers included."""
     active = [(t, m) for t, m in CURRICULUM if t <= tier]
     base_terms = []
@@ -83,7 +88,7 @@ def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
         if hasattr(mod, "terms"):
             base_terms += mod.terms(dim, X_fit, y_fit, X_cert)
     terms = admissible(base_terms, X_fit, X_cert)
-    ctx = Ctx(syms, terms, X_fit, y_fit, X_sel, y_sel)
+    ctx = Ctx(syms, terms, X_fit, y_fit, X_sel, y_sel, sigma)
     cands = _linear_candidates(ctx)
     for t, mod in active:
         if hasattr(mod, "candidates"):
@@ -104,7 +109,7 @@ def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
                 if hasattr(mod2, "terms"):
                     t_terms += mod2.terms(dim, X_fit, ty_fit, X_cert)
             t_terms = admissible(t_terms, X_fit, X_cert)
-            tctx = Ctx(syms, t_terms, X_fit, ty_fit, X_sel, ty_sel)
+            tctx = Ctx(syms, t_terms, X_fit, ty_fit, X_sel, ty_sel, sigma)
             inner = _linear_candidates(tctx)
             for t2, mod2 in active:
                 if hasattr(mod2, "candidates") and \
@@ -225,7 +230,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     # anything else falls through to the untouched escalation loop.
     if dim >= 3 and max_tier >= 3:
         from .classes import c3_powerlaw, c8_angular, c9_genmonomial
-        pctx = Ctx(syms, [], X_fit, y_fit, X_sel, y_sel)
+        pctx = Ctx(syms, [], X_fit, y_fit, X_sel, y_sel, sigma)
         pcands = (c3_powerlaw.candidates(pctx) + c9_genmonomial.candidates(pctx)
                   + c8_angular.candidates(pctx))
         for tname, ty_fit, inv in c5_transforms.transforms(y_fit):
@@ -235,7 +240,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                 continue
             if not (np.all(np.isfinite(ty_fit)) and np.all(np.isfinite(ty_sel))):
                 continue
-            tctx = Ctx(syms, [], X_fit, ty_fit, X_sel, ty_sel)
+            tctx = Ctx(syms, [], X_fit, ty_fit, X_sel, ty_sel, sigma)
             for c in c3_powerlaw.candidates(tctx):
                 try:
                     expr = inv(c.expr)
@@ -264,7 +269,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
 
     total = 0
     for tier in [t for t, _ in CURRICULUM if t <= max_tier]:
-        cands = _tier_candidates(tier, syms, dim, X_fit, y_fit, X_sel, y_sel, X_cert)
+        cands = _tier_candidates(tier, syms, dim, X_fit, y_fit, X_sel, y_sel,
+                                 X_cert, sigma)
         total += len(cands)
         certifying = []
         for c in sorted(cands, key=lambda z: z.complexity):
