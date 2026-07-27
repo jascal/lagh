@@ -1,0 +1,59 @@
+{
+ "P1_planets": {
+  "certified": true,
+  "law": "0.999943555460897*x_0**(3/2)",
+  "alpha_log10": -14.100091232899818,
+  "abstain": null,
+  "n": 8,
+  "exponent_is_3_2": true,
+  "C_fit": 0.998998826685198
+ },
+ "P1_jupiter_moons": {
+  "certified": true,
+  "law": "6.45771594616075e-9*x_0**(3/2)",
+  "alpha_log10": -17.968236007637334,
+  "abstain": null,
+  "n": 8,
+  "exponent_is_3_2": true,
+  "C_fit": 6.454456080563586e-09
+ },
+ "P1_saturn_moons": {
+  "certified": false,
+  "law": null,
+  "alpha_log10": null,
+  "abstain": "structural",
+  "n": 9
+ },
+ "P1_saturn_secondary_no_resonance_J2_envelope": {
+  "certified": true,
+  "law": "1.18116387081884e-8*x_0**(3/2)",
+  "alpha_log10": -15.050802756212718
+ },
+ "P2_constants": {
+  "planets": [
+   1.0002059277470898,
+   0.9977917256233062
+  ],
+  "jup": [
+   6.4494241899189356e-09,
+   6.459487971208237e-09
+  ],
+  "sat": [
+   1.179899773853775e-08,
+   1.1760218446655727e-08
+  ]
+ },
+ "P2_within_agree": {
+  "planets": true,
+  "jup": true,
+  "sat": true
+ },
+ "P2_across_differ": true,
+ "P3_P4_sunspots": {
+  "raw_series_certified": false,
+  "raw_abstain": "structural",
+  "cycle_period_conjecture_yr": 10.9975,
+  "n_cycles": 24,
+  "waldmeier_corr_rise_vs_amp": -0.7713484925644861
+ }
+}

@@ -161,9 +161,22 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
                 "note": f"only {len(X)} finite points; too thin to certify"}
     dim = X.shape[1]
     syms = _syms(dim)
-    pr = discover_passive(X, y, sigma=float(sigma), max_tier=max_tier, seed=seed)
-    r = pr.result
-    c = r.certificate
+    if len(X) < 15:
+        # TINY-DATA mode (measured need: Kepler III from 8 planets): the
+        # 60/20/20 split machinery collapses below ~15 points. Certify
+        # EXHAUSTIVELY on all n points with fit=sel=cert; the selection
+        # exposure this permits is exactly what alpha = |H|*q^h quantifies
+        # (h is dof-discounted), and the certificate says so.
+        r = discover(X, y, X, y, X, y, sigma=float(sigma), max_tier=max_tier)
+        r.certificate.notes.append(
+            "tiny-data mode: exhaustive certification on all points; "
+            "selection exposure bounded by the stated alpha")
+        c = r.certificate
+    else:
+        pr = discover_passive(X, y, sigma=float(sigma), max_tier=max_tier,
+                              seed=seed)
+        r = pr.result
+        c = r.certificate
     if not c.certified:
         lo, hi = X.min(axis=0), X.max(axis=0)
         ch = characterize(X, y, sigma=float(sigma), abstain_reason=c.abstain)
