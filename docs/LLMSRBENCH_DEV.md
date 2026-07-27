@@ -222,6 +222,24 @@ round; not attempted as a patch inside this one.
   prediction renewed at lower confidence); RNOISE profile unchanged
   (46/38/19, CW 2/2/1) — any regression vetoes the round.
 
+## CAMPAIGN FROZEN — sweep v4 (2026-07-27, final configuration)
+
+| | SA | cert (ok/wrong) | note |
+|---|---|---|---|
+| v2 (peak SA) | 12.08 | 26 (24/**2**) | pre-boundary |
+| v3 | 11.67 | 25 (23/**2**) | |
+| **v4 (final)** | **9.17** | **19 (19/0)** | significance boundary + repair + α on every cert |
+
+The closing trade, chosen deliberately: −2.9 SA points for a **completely clean
+certified track** (zero structural wrongs anywhere on the benchmark, every
+certificate carrying a validated α bound). RNOISE final: recovery 48/38/19
+(above baseline at 60 dB — parsimony repair recovered cells), CW 2/2/1 (the
+irreducible BE-degeneracy pair + the known 10% cross-form), gross-wrong 0.
+Per `ROADMAP.md`, LLM-SRBench dev iteration ENDS here; the campaign's findings
+feed H1b (the instrument report), and further capability work must serve a
+horizon deliverable. Campaign arc for the record: blind 0.42% → composite
+13.75% → autonomous 12.08% → **certified-clean 9.17% with α**.
+
 **Read on the SOTA gap:** Transform 27.0% vs LLM-SR's 31.53% — within 4.5 points
 of the best published system, with a claim it cannot make (30 machine-checked
 certificates, zero structurally wrong). The gap is entirely conjecture-side;
