@@ -117,7 +117,16 @@ changed):**
   is a labeled conjecture or an abstention.
 - **P5 MET:** heavy abstention as registered (131 of 134 sweep cells end as
   scout-level conjectures; the certified set is exactly the registered
-  definitional list — no unregistered certificate appeared).
+  definitional list — no unregistered certificate appeared). The conjecture
+  stratum's best find is physics: **parallax_error ∝ SNR_G^(−0.88)** (twin:
+  σ5d_max, exponent −0.92) — the photon-limited centroiding law (theory: −1)
+  bent by bright-star systematic floors, discovered blind across the
+  photometry/astrometry boundary; runner-up `σ5d_max → parallax_error`
+  (power 0.95, 19% unexplained scatter) is the tightest non-certified
+  relation, correctly held below certification since both columns project
+  the same astrometric covariance; and `flux → flux_error` prefers affine
+  over the Poisson square root — a correct diagnosis that the SNR > 100
+  quality cut leaves flux errors systematics-dominated.
 - **P6 MET:** zero confident-wrong — the one near-event (the 12-point
   interpolation) was caught by its own α bound and converted into an
   engine-wide gate before any result stood.
