@@ -201,7 +201,8 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
 
 # ---------------------------------------------------------------------------- verify
 
-def verify(X, y, form: str, *, sigma: float = 0.0) -> dict:
+def verify(X, y, form: str, *, sigma: float = 0.0,
+           floor_abs: float = 1e-12) -> dict:
     """Bounded. Check a caller-DECLARED form. The form is a sympy expression in
     x_0..x_{d-1}; its single overall scale is refit, then it is checked over the
     domain. A rational form can certify `pinned`; a declared irrational only
@@ -229,7 +230,7 @@ def verify(X, y, form: str, *, sigma: float = 0.0) -> dict:
     # snap the refit scale to a rational when clean (keeps the exact claim exact)
     a_snap = Fraction(alpha).limit_denominator(10 ** 6)
     scaled = sp.Rational(a_snap.numerator, a_snap.denominator) * expr
-    eps = epsilon(yc, sigma=float(sigma))
+    eps = epsilon(yc, sigma=float(sigma), floor_abs=float(floor_abs))
     pred = eval_expr(scaled, syms, Xc)
     if pred is None or not np.all(np.isfinite(pred)):
         return {"tag": "open", "tool": "verify", "certified": False,

@@ -1,0 +1,10 @@
+{
+ "adql": "\nSELECT TOP 800 source_id, pf, phi31_g, metallicity\nFROM gaiadr3.vari_rrlyrae\nWHERE best_classification = 'RRab' AND pf IS NOT NULL\n  AND phi31_g IS NOT NULL AND metallicity IS NOT NULL\n",
+ "n_rows": 800,
+ "columns": [
+  "source_id",
+  "pf",
+  "phi31_g",
+  "metallicity"
+ ]
+}

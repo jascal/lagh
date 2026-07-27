@@ -59,6 +59,35 @@ WHERE radial_velocity IS NOT NULL AND parallax > 5
 ORDER BY random_index
 """
 
+C3_ADQL = """
+SELECT TOP 1000 source_id, nss_solution_type, period, eccentricity,
+       a_thiele_innes, b_thiele_innes, f_thiele_innes, g_thiele_innes,
+       parallax
+FROM gaiadr3.nss_two_body_orbit
+WHERE nss_solution_type = 'Orbital' AND period IS NOT NULL
+  AND a_thiele_innes IS NOT NULL AND b_thiele_innes IS NOT NULL
+  AND f_thiele_innes IS NOT NULL AND g_thiele_innes IS NOT NULL
+  AND parallax IS NOT NULL AND parallax > 0
+"""
+
+C4RR_ADQL = """
+SELECT TOP 800 source_id, pf, phi31_g, metallicity
+FROM gaiadr3.vari_rrlyrae
+WHERE best_classification = 'RRab' AND pf IS NOT NULL
+  AND phi31_g IS NOT NULL AND metallicity IS NOT NULL
+"""
+
+C4CEP_ADQL = """
+SELECT TOP 500 v.source_id, v.pf, v.int_average_g,
+       g.parallax, g.parallax_over_error
+FROM gaiadr3.vari_cepheid AS v
+JOIN gaiadr3.gaia_source AS g ON v.source_id = g.source_id
+WHERE v.pf IS NOT NULL AND v.int_average_g IS NOT NULL
+  AND v.type_best_classification = 'DCEP'
+  AND v.mode_best_classification = 'FUNDAMENTAL'
+  AND g.parallax_over_error > 10 AND g.parallax > 0
+"""
+
 C0_ADQL = """
 SELECT TOP 400 source_id, random_index,
        phot_g_mean_mag, phot_g_mean_flux, phot_g_mean_flux_error,

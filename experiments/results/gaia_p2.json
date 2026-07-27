@@ -1,0 +1,41 @@
+{
+ "c3_snapshot": "/home/allans/code/lagh/experiments/gaia/data/c3_67fabb172bf7.csv",
+ "c3_n": 1000,
+ "P1_no_single_kepler": {
+  "certified": false,
+  "abstain": "structural"
+ },
+ "P2_mass_proxy": {
+  "median_msun": 0.04888634875758393,
+  "q10": 0.008823516111582563,
+  "q90": 0.11014592937829114
+ },
+ "c4rr_snapshot": "/home/allans/code/lagh/experiments/gaia/data/c4rr_bf9b07ed638a.csv",
+ "c4rr_n": 800,
+ "P3_floor_abs": 4.20168062554053e-07,
+ "P3_rrab_metallicity": {
+  "certified": false,
+  "law": null,
+  "alpha_log10": null,
+  "abstain": "structural"
+ },
+ "P3_declared_form_verify": {
+  "form": "(3.0336834)*1 + (-20.127524)*x_0 + (1.3684267)*x_1 + (6.27)*x_0*x_1 + (-0.72000002)*x_1**2",
+  "certified": true,
+  "strength": "pinned",
+  "law": "6.27*x_0*x_1 - 20.127524*x_0 - 0.72000002*x_1**2 + 1.3684267*x_1 + 3.0336834",
+  "note": "pinned: this exact form, no rival within the noise"
+ },
+ "P3_residual_decode": {
+  "scout_max_abs_res": 3.5139451393106924e-07,
+  "scout_med_abs_res": 8.122027517210029e-08
+ },
+ "c4cep_snapshot": "/home/allans/code/lagh/experiments/gaia/data/c4cep_db0dbc7d8842.csv",
+ "c4cep_n": 500,
+ "P4_leavitt": {
+  "track": "conjecture",
+  "tag": "empirical",
+  "expr": "0.0712349906724989 - 2.21145713747103*x_0",
+  "slope": -2.21145713747103
+ }
+}

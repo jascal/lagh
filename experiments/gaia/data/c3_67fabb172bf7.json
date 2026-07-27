@@ -1,0 +1,15 @@
+{
+ "adql": "\nSELECT TOP 1000 source_id, nss_solution_type, period, eccentricity,\n       a_thiele_innes, b_thiele_innes, f_thiele_innes, g_thiele_innes,\n       parallax\nFROM gaiadr3.nss_two_body_orbit\nWHERE nss_solution_type = 'Orbital' AND period IS NOT NULL\n  AND a_thiele_innes IS NOT NULL AND b_thiele_innes IS NOT NULL\n  AND f_thiele_innes IS NOT NULL AND g_thiele_innes IS NOT NULL\n  AND parallax IS NOT NULL AND parallax > 0\n",
+ "n_rows": 1000,
+ "columns": [
+  "source_id",
+  "nss_solution_type",
+  "period",
+  "eccentricity",
+  "a_thiele_innes",
+  "b_thiele_innes",
+  "f_thiele_innes",
+  "g_thiele_innes",
+  "parallax"
+ ]
+}

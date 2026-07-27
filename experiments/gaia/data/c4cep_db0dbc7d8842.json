@@ -1,0 +1,11 @@
+{
+ "adql": "\nSELECT TOP 500 v.source_id, v.pf, v.int_average_g,\n       g.parallax, g.parallax_over_error\nFROM gaiadr3.vari_cepheid AS v\nJOIN gaiadr3.gaia_source AS g ON v.source_id = g.source_id\nWHERE v.pf IS NOT NULL AND v.int_average_g IS NOT NULL\n  AND v.type_best_classification = 'DCEP'\n  AND v.mode_best_classification = 'FUNDAMENTAL'\n  AND g.parallax_over_error > 10 AND g.parallax > 0\n",
+ "n_rows": 500,
+ "columns": [
+  "source_id",
+  "pf",
+  "int_average_g",
+  "parallax",
+  "parallax_over_error"
+ ]
+}
