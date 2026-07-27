@@ -302,6 +302,20 @@ def fit(X, y, *, sigma: float = 0.0, top: int = 5) -> dict:
     except Exception:                                          # noqa: BLE001
         pass
 
+    # last-resort AFFINE conjecture (always available -- the power-law probe
+    # requires positive data and real-world series cross zero; measured: Okun
+    # on raw macro data abstained with NO conjecture)
+    try:
+        A = np.column_stack([np.ones(len(X))] + [X[:, j] for j in range(dim)])
+        c_aff = lstsq(A, y)
+        if c_aff is not None:
+            e_aff = sp.Float(float(c_aff[0])) + sum(
+                sp.Float(float(c_aff[j + 1])) * syms[j] for j in range(dim))
+            rr = float(np.sqrt(np.mean((A @ c_aff - y) ** 2)))
+            conj.append({"form": str(e_aff), "residual": rr,
+                         "source": "affine-OLS fallback"})
+    except Exception:                                          # noqa: BLE001
+        pass
     out["conjectures"] = conj[:top]
     out["diagnosis"] = diagnosis
     out["next_action"] = next_action

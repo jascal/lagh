@@ -84,7 +84,11 @@ def discover_invariants(data, *, sigma=0.0, max_invariants=10, groups=None):
         return V[:, 0], float(max(w[0], 0.0) / (np.trace(cov) / len(idx) + 1e-300))
 
     accepted = []          # list of (set(idx), dict)
-    cand_sizes = [list(_comb(range(T), k)) for k in (2, 3, 4)]
+    # exhaustive size-5 for small libraries: the greedy extend-near-constant
+    # path never tries {Y,C,I,G,NX} because dropping the LARGE fifth term
+    # leaves a wildly varying 4-subset (measured on the BEA identity)
+    sizes = (2, 3, 4, 5) if T <= 24 else (2, 3, 4)
+    cand_sizes = [list(_comb(range(T), k)) for k in sizes]
     near = []              # for greedy size-5
     for subsets in cand_sizes:
         for idx in subsets:
@@ -95,14 +99,22 @@ def discover_invariants(data, *, sigma=0.0, max_invariants=10, groups=None):
             v, ratio = combo(idx)
             if v is None:
                 continue
-            if ratio > 1e-14:
+            # sigma-scaled eigen gate: at declared noise the smallest variance
+            # ratio of a TRUE invariant is ~(4*sigma)^2, not machine-zero
+            # (measured: the BEA rounding residual failed a 1e-14 gate)
+            gate = max(1e-14, (4.0 * sigma) ** 2)
+            if ratio > gate:
                 if ratio < 1e-6:
                     near.append((ratio, idx))
                 continue
             c = np.zeros(T)
             c[list(idx)] = v / scale[list(idx)]
             vals = M @ c
-            vscale = float(np.mean(np.abs(vals))) + 1e-300
+            # normalize by the CONSTITUENT TERM scale, not the combo's own value:
+            # a zero-valued identity (Y - C - I - G - NX = 0) has vals ~ 0 and a
+            # combo-scale threshold would demand impossible precision
+            vscale = float(max(np.mean(np.abs(M[:, j] * c[j])) for j in idx)) \
+                + 1e-300
             if groups is None:
                 mu = float(np.mean(vals))
                 spread = float(np.max(np.abs(vals - mu)))
@@ -125,8 +137,6 @@ def discover_invariants(data, *, sigma=0.0, max_invariants=10, groups=None):
             accepted.append((iset, {"expr": str(expr), "value": mu2,
                                     "alpha_log10": alpha,
                                     "n_terms": len(idx)}))
-            if len(accepted) >= max_invariants:
-                return [a[1] for a in accepted]
     # greedy size-5: extend the best near-constant size-4 subsets
     near.sort()
     for _, idx in near[:200]:
@@ -139,13 +149,14 @@ def discover_invariants(data, *, sigma=0.0, max_invariants=10, groups=None):
             if any(a[0] <= iset for a in accepted):
                 continue
             v, ratio = combo(tuple(sorted(iset)))
-            if v is None or ratio > 1e-14:
+            if v is None or ratio > max(1e-14, (4.0 * sigma) ** 2):
                 continue
             ids = tuple(sorted(iset))
             c = np.zeros(T)
             c[list(ids)] = v / scale[list(ids)]
             vals = M @ c
-            vscale = float(np.mean(np.abs(vals))) + 1e-300
+            vscale = float(max(np.mean(np.abs(M[:, j] * c[j])) for j in ids)) \
+                + 1e-300
             if groups is None:
                 mu5 = float(np.mean(vals))
                 spread5 = float(np.max(np.abs(vals - mu5)))
@@ -164,9 +175,11 @@ def discover_invariants(data, *, sigma=0.0, max_invariants=10, groups=None):
             accepted.append((iset, {"expr": str(expr),
                                     "value": float(np.mean(M @ c)),
                                     "alpha_log10": alpha, "n_terms": 5}))
-            if len(accepted) >= max_invariants:
-                return [a[1] for a in accepted]
-    return [a[1] for a in accepted]
+    # cap only the RETURNED list (searching every size is cheap; capping the
+    # SEARCH let exact 2-term relations exhaust the budget before size-3 --
+    # measured: A+B+C missed once term-scale normalization correctly admitted
+    # the pairs)
+    return [a[1] for a in accepted[: 4 * max_invariants]]
 
 
 def _numeric_constants(expr_str):

@@ -162,8 +162,13 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
         # missed certification on Lotka-Volterra rates). When snapping loses
         # precision, also emit the raw-float variant -- the clean-data
         # coefficient gate pins and decimal-snaps float winners soundly.
-        if any(abs(float(s_) - ci) > 1e-13 * (abs(ci) + 1e-300)
-               for s_, ci in zip(snapped, c)):
+        # RAW-target pass only (ctx.deep_supports False marks the transform
+        # pass): under a log-family transform these linear coefficients become
+        # EXPONENTS on inversion, and a float variant there certifies x**Float(e)
+        # -- breaking the irrational-exponent wedge (caught by the submit test)
+        if ctx.deep_supports and \
+                any(abs(float(s_) - ci) > 1e-13 * (abs(ci) + 1e-300)
+                    for s_, ci in zip(snapped, c)):
             expr_f = sp.Integer(0)
             for t_, ci in zip(sub, c):
                 expr_f = expr_f + sp.Float(ci) * t_.sympy()

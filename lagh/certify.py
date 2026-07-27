@@ -87,7 +87,8 @@ def significance_log10(expr, y: np.ndarray, eps: np.ndarray,
     if R <= 0 or len(y) == 0:
         return 0.0
     dof = sum(1 for a in expr.atoms(sp.Number) if a not in (0, 1, -1)) \
-        if expr is not None else 0
+        if expr is not None and hasattr(expr, "atoms") else 0
+    # (C6 QuasiPoly and other non-sympy law objects: dof=0, conservative)
     h = max(0, len(y) - dof)
     if h == 0:
         return 0.0
