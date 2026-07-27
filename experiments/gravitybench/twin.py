@@ -78,21 +78,51 @@ def system_id(obs):
     R1 = np.stack([obs[f"star1_{ax}"] for ax in "xyz"], 1)
     R2 = np.stack([obs[f"star2_{ax}"] for ax in "xyz"], 1)
     best = None
-    for i in range(1, len(t) - 1):
-        dt1, dt2 = t[i] - t[i - 1], t[i + 1] - t[i]
-        if dt1 <= 0 or dt2 <= 0 or abs(dt1 - dt2) > 0.02 * max(dt1, dt2):
-            continue
-        if dt1 > 0.005 * (t.max() - t.min()):
-            continue
-        score = abs(t[i] - np.median(t))
-        if best is None or score < best[0]:
-            v1 = (R1[i + 1] - R1[i - 1]) / (dt1 + dt2)
-            v2 = (R2[i + 1] - R2[i - 1]) / (dt1 + dt2)
-            best = (score, t[i], R1[i], R2[i], v1, v2)
+    trips = obs.get("triplets")
+    if trips is not None:
+        for ta, tb_, tc in np.asarray(trips):
+            ia = int(np.argmin(np.abs(t - ta)))
+            ib = int(np.argmin(np.abs(t - tb_)))
+            ic = int(np.argmin(np.abs(t - tc)))
+            dt1, dt2 = t[ib] - t[ia], t[ic] - t[ib]
+            if dt1 <= 0 or dt2 <= 0 or abs(dt1 - dt2) > 0.05 * max(dt1, dt2):
+                continue
+            score = abs(t[ib] - np.median(t))
+            if best is None or score < best[0]:
+                v1 = (R1[ic] - R1[ia]) / (dt1 + dt2)
+                v2 = (R2[ic] - R2[ia]) / (dt1 + dt2)
+                best = (score, t[ib], R1[ib], R2[ib], v1, v2)
+    else:
+        for i in range(1, len(t) - 1):
+            dt1, dt2 = t[i] - t[i - 1], t[i + 1] - t[i]
+            if dt1 <= 0 or dt2 <= 0 or abs(dt1 - dt2) > 0.02 * max(dt1, dt2):
+                continue
+            score = abs(t[i] - np.median(t))
+            if best is None or score < best[0]:
+                v1 = (R1[i + 1] - R1[i - 1]) / (dt1 + dt2)
+                v2 = (R2[i + 1] - R2[i - 1]) / (dt1 + dt2)
+                best = (score, t[i], R1[i], R2[i], v1, v2)
     if best is None:
         raise RuntimeError("no strict-cadence triplet available for epoch state")
     _, t0, r1_0, r2_0, v1_0, v2_0 = best
+    # per-triplet specific orbital energies (for the direct is_bound verdict)
+    energies = []
+    trips = obs.get("triplets")
+    if trips is not None:
+        for ta, tb_, tc in np.asarray(trips):
+            ia = int(np.argmin(np.abs(t - ta)))
+            ib = int(np.argmin(np.abs(t - tb_)))
+            ic = int(np.argmin(np.abs(t - tc)))
+            dt1, dt2 = t[ib] - t[ia], t[ic] - t[ib]
+            if dt1 <= 0 or dt2 <= 0:
+                continue
+            drel_a = R2[ia] - R1[ia]
+            drel_c = R2[ic] - R1[ic]
+            vrel = (drel_c - drel_a) / (dt1 + dt2)
+            rmid = float(np.sqrt(((R2[ib] - R1[ib]) ** 2).sum()))
+            energies.append(0.5 * float((vrel ** 2).sum()) - G_SI * M / rmid)
     return {"q": q, "M": M, "m1": m1, "m2": m2, "p": p_used, "p_raw": p,
+            "triplet_energies": np.asarray(energies),
             "alpha": -(p + 2.0), "tau": tau if lam_ok else None,
             "drift": drift, "epoch": {"t0": float(t0), "r1": r1_0, "r2": r2_0,
                                       "v1": v1_0, "v2": v2_0}}
@@ -160,16 +190,37 @@ class Twin:
         return slice(max(i0, 0), max(i1, i0 + 100))
 
     def period(self):
-        r = self.sep
-        # periastron passages: local minima of separation
-        mins = [i for i in range(1, len(r) - 1)
-                if r[i] < r[i - 1] and r[i] < r[i + 1]]
-        if len(mins) < 2:
+        # angle method on the twin's dense relative trajectory (works from ~1
+        # revolution; separation minima needed two periastra and returned None
+        # on 1.5-period windows -- measured battery failure)
+        dc = self.rel - self.rel.mean(0)
+        _, _, Vt = np.linalg.svd(dc[:: max(1, len(dc) // 2000)],
+                                 full_matrices=False)
+        u, v = dc @ Vt[0], dc @ Vt[1]
+        theta = np.unwrap(np.arctan2(v, u))
+        swept = theta - theta[0]
+        total = abs(swept[-1])
+        if total < 2 * np.pi:
             return None
-        tp = self.T[mins]
-        return float(np.mean(np.diff(tp)))
+        # SAME-ANGLE CROSSING: 2*pi*span/swept is exact only over integer
+        # revolutions (measured 17% bias on 1.5 eccentric revs); the time for
+        # theta to advance exactly 2*pi is exact for any eccentricity
+        sgn = np.sign(swept[-1])
+        target = sgn * 2 * np.pi
+        idx = np.searchsorted(sgn * swept, sgn * target)
+        if idx >= len(self.T):
+            return None
+        f = (target - swept[idx - 1]) / (swept[idx] - swept[idx - 1] + 1e-300)
+        t_cross = self.T[idx - 1] + f * (self.T[idx] - self.T[idx - 1])
+        return float(t_cross - self.T[0])
 
     def is_bound(self):
+        # energy sign DIRECTLY from observed triplets (stored by system_id):
+        # specific orbital energy 0.5 v_rel^2 - GM/r per triplet, majority sign.
+        # Twin-midpoint energy inherited integration error on flybys (measured).
+        tv = self.s.get("triplet_energies")
+        if tv is not None and len(tv):
+            return bool(np.median(tv) < 0)
         mu = self.s["m1"] * self.s["m2"] / self.s["M"]
         i = len(self.T) // 2
         v2 = float((self.vrel[i] ** 2).sum())

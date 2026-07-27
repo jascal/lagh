@@ -25,8 +25,21 @@ def plan_and_observe(observe, maxtime, budget=100, per_request=10):
     P = estimate_period(obs)
     remaining = budget - n_coarse
     if P is None or not np.isfinite(P):
-        t_extra = np.linspace(0.0, maxtime, remaining + 2)[1:-1]
-        return _merge(obs, observe(t_extra)), None
+        # unbound / under-covered: uniform fill PLUS strict-cadence acceleration
+        # triplets across the span (the mass/force-law estimators need them --
+        # measured battery failure on the flyby case)
+        n_trip = 9
+        t_extra = np.linspace(0.0, maxtime, remaining - n_trip + 2)[1:-1]
+        obs = _merge(obs, observe(t_extra))
+        dt = maxtime / 2000.0
+        trips = []
+        for phase in (0.2, 0.5, 0.8):
+            tc = phase * maxtime
+            trips.append((tc - dt, tc, tc + dt))
+        flat = np.clip(np.asarray(trips).ravel(), 0, maxtime)
+        obs = _merge(obs, observe(flat))
+        obs["triplets"] = np.asarray(trips)
+        return obs, None
     # dense pass over ~1.5 periods + acceleration triplets at three phases
     n_trip = 9
     n_dense = remaining - n_trip
@@ -37,13 +50,18 @@ def plan_and_observe(observe, maxtime, budget=100, per_request=10):
     trips = []
     for phase in (0.15, 0.45, 0.8):
         tc = t0 + phase * P
-        trips += [tc - dt, tc, tc + dt]
-    obs = _merge(obs, observe(np.clip(np.asarray(trips), 0, maxtime)))
+        trips.append((tc - dt, tc, tc + dt))
+    flat = np.clip(np.asarray(trips).ravel(), 0, maxtime)
+    obs = _merge(obs, observe(flat))
+    obs["triplets"] = np.asarray(trips)
     return obs, P
 
 
 def _merge(a, b):
-    b = {k: np.asarray(v, float) for k, v in b.items()}
+    """Merge observation frames; the 'triplets' metadata key is carried through
+    untouched (it is planner bookkeeping, not a data column)."""
+    meta = a.pop("triplets", None) if isinstance(a, dict) else None
+    b = {k: np.asarray(v, float) for k, v in b.items() if k != "triplets"}
     if a is None:
         out = b
     else:
@@ -51,7 +69,10 @@ def _merge(a, b):
     order = np.argsort(out["time"])
     dedup = {k: v[order] for k, v in out.items()}
     _, uniq = np.unique(dedup["time"], return_index=True)
-    return {k: v[uniq] for k, v in dedup.items()}
+    out = {k: v[uniq] for k, v in dedup.items()}
+    if meta is not None:
+        out["triplets"] = meta
+    return out
 
 
 # ------------------------------------------------------------------ features
@@ -62,22 +83,25 @@ def separation(obs):
 
 
 def estimate_period(obs):
-    """Phase-dispersion minimization on the separation series: grid trial
-    periods, fold, score by neighbor-difference roughness. Deterministic."""
+    """Angle-based primary estimator: unwrap the in-plane angle of the relative
+    vector; P = 2*pi * span / total swept angle. Works for ANY bound orbit
+    including near-circular (where separation barely modulates and phase-
+    dispersion is blind -- measured battery failure). Returns None when less
+    than ~0.7 revolutions swept (unbound / too-short window)."""
     t = obs["time"]
-    r = separation(obs)
     if len(t) < 8:
         return None
-    r = (r - r.mean()) / (r.std() + 1e-300)
-    span = t.max() - t.min()
-    best = (np.inf, None)
-    for P in np.geomspace(span / 60.0, span * 1.2, 4000):
-        ph = np.mod(t, P) / P
-        o = np.argsort(ph)
-        rough = float(np.sum(np.diff(r[o]) ** 2))
-        if rough < best[0]:
-            best = (rough, P)
-    return best[1]
+    d = np.stack([obs[f"star2_{ax}"] - obs[f"star1_{ax}"] for ax in "xyz"], 1)
+    # orbital plane via the two principal axes of the relative positions
+    dc = d - d.mean(0)
+    _, _, Vt = np.linalg.svd(dc, full_matrices=False)
+    u, v = dc @ Vt[0], dc @ Vt[1]
+    theta = np.unwrap(np.arctan2(v, u))
+    swept = abs(theta[-1] - theta[0])
+    if swept < 0.7 * 2 * np.pi:
+        return None
+    span = t[-1] - t[0]
+    return float(2 * np.pi * span / swept)
 
 
 def refine_period(obs, P0):
@@ -138,19 +162,33 @@ def task_masses(obs, P):
 
 
 def _accels(obs):
-    """Second differences over close-spaced triplets (planner provides them):
-    returns (r_mid, |acc_rel|) arrays for force-law fitting."""
+    """Second differences at the planner's EXPLICIT triplets (metadata carried on
+    the obs dict). Inferring cadence from the merged series was twice-measured
+    fragile: dense-pass rows slipped under absolute caps (0.59 mass error), and
+    accidental near-coincidences between passes defined a bogus finest-cadence
+    under self-scaling (near-circular short-window nan). When no metadata exists
+    (the full-table variant), fall back to uniform-cadence scanning."""
     t = obs["time"]
-    rs, accs = [], []
     d = np.stack([obs[f"star2_{ax}"] - obs[f"star1_{ax}"] for ax in "xyz"], 1)
+    rs, accs = [], []
+    trips = obs.get("triplets")
+    if trips is not None:
+        for ta, tb, tc in np.asarray(trips):
+            ia = int(np.argmin(np.abs(t - ta)))
+            ib = int(np.argmin(np.abs(t - tb)))
+            ic = int(np.argmin(np.abs(t - tc)))
+            dt1, dt2 = t[ib] - t[ia], t[ic] - t[ib]
+            if dt1 <= 0 or dt2 <= 0 or abs(dt1 - dt2) > 0.05 * max(dt1, dt2):
+                continue                 # clipped/collided triplet: skip
+            acc = (d[ic] - 2 * d[ib] + d[ia]) / (dt1 * dt2)
+            rs.append(float(np.sqrt(d[ib] @ d[ib])))
+            accs.append(float(np.sqrt(acc @ acc)))
+        return np.asarray(rs), np.asarray(accs)
+    # full-table fallback: uniform cadence -- every interior point qualifies
     for i in range(1, len(t) - 1):
         dt1, dt2 = t[i] - t[i - 1], t[i + 1] - t[i]
-        # STRICT uniform cadence only: mixed-cadence neighbors at pass
-        # boundaries corrupt the second difference (measured 5.5x error rows)
         if dt1 <= 0 or dt2 <= 0 or abs(dt1 - dt2) > 0.02 * max(dt1, dt2):
             continue
-        if dt1 > 0.005 * (t.max() - t.min()):
-            continue                     # only genuinely close-spaced triplets
         acc = (d[i + 1] - 2 * d[i] + d[i - 1]) / (dt1 * dt2)
         rs.append(float(np.sqrt(d[i] @ d[i])))
         accs.append(float(np.sqrt(acc @ acc)))
@@ -185,10 +223,39 @@ def task_drag_tau(obs):
     A = np.ones((len(t), 2)); A[:, 1] = t
     c, *_ = np.linalg.lstsq(A, r, rcond=None)
     env = np.abs(r - A @ c)
-    m = env > 1e-6 * np.max(env)
-    if m.sum() < 8:
+    # PEAK sequence only: the raw envelope includes near-zero crossings whose
+    # log-scatter swamps the slope's standard error, so even a true 34% decay
+    # failed the significance gate (measured). Local maxima decay cleanly as
+    # e^{-2t/tau}, one per half-orbit.
+    peaks = [i for i in range(1, len(env) - 1)
+             if env[i] >= env[i - 1] and env[i] >= env[i + 1]
+             and env[i] > 0.05 * np.max(env)]
+    if len(peaks) < 4:
         return None
+    t = t[peaks]
+    env = env[peaks]
+    m = np.ones(len(t), bool)
     L = np.column_stack([np.ones(int(m.sum())), t[m]])
-    ce, *_ = np.linalg.lstsq(L, np.log(env[m]), rcond=None)
+    yfit = np.log(env[m])
+    ce, *_ = np.linalg.lstsq(L, yfit, rcond=None)
     lam = float(ce[1])
-    return -1.0 / lam if lam < 0 else None
+    # virial energy balance: dE/dt = -2K/tau with <K> = -E gives |E| ~ e^{+2t/tau},
+    # a ~ 1/|E| ~ e^{-2t/tau} -- the envelope decays at rate 2/tau (measured
+    # factor-2 bias before this)
+    if lam >= 0:
+        return None
+    # SIGNIFICANCE gate (supersedes two magnitude windows, both measured wrong:
+    # 3*span rejected true 34%-decay drag; 10*span readmitted flat-envelope noise
+    # slopes at short windows, which silently amputated the twin's backward
+    # branch). A claimed decay must be statistically significant against the
+    # envelope fit's own scatter: |lam| >= 3 * stderr(lam).
+    resid = yfit - L @ ce
+    n = len(yfit)
+    tbar = L[:, 1].mean()
+    denom = float(np.sum((L[:, 1] - tbar) ** 2))
+    if n <= 2 or denom <= 0:
+        return None
+    se_lam = float(np.sqrt(np.sum(resid ** 2) / (n - 2) / denom))
+    if abs(lam) < 3.0 * se_lam:
+        return None
+    return -2.0 / lam
