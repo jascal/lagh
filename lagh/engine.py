@@ -17,7 +17,8 @@ import sympy as sp
 from .base import (Candidate, admissible, design_matrix, lstsq, snap_all,
                    to_expr, eval_expr)
 from .certify import (Abstain, Certificate, check, coherent, epsilon,
-                      float_pinned, minimal, pinned, sample_box, vacuous)
+                      float_pinned, minimal, pinned, reduce_to_minimal,
+                      sample_box, vacuous)
 from .classes import CURRICULUM, c5_transforms, c6_quasipoly, c7_levy
 from .engine_util import stlsq_supports
 
@@ -34,6 +35,8 @@ class Ctx:
     X_sel: np.ndarray
     y_sel: np.ndarray
     sigma: float = 0.0    # declared noise: prefilters must not out-tighten epsilon
+    deep_supports: bool = True   # CAP-Q sparse-support search (raw target only;
+                                 # transform passes set False)
 
 
 @dataclass
@@ -93,6 +96,44 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
             break
         resid = y_tr - M_tr[:, omp] @ c_o
         sups.add(tuple(sorted(omp)))
+    # CAP-Q (LLMSRBENCH_DEV.md): correlation-pruned exhaustive supports + swap
+    # refinement. In a collinear library every greedy/ranked proposal missed the
+    # true sparse sum (measured PO33: zero candidates); exhaustive size-3/4 over
+    # cluster REPRESENTATIVES is tractable, and swaps recover the case where the
+    # representative is the wrong cluster member. Raw-target pass only.
+    T = len(ctx.terms)
+    if ctx.deep_supports and T >= 30:
+        with np.errstate(all="ignore"):
+            Mn = M_tr - M_tr.mean(0)
+            sd = np.sqrt(np.einsum("ij,ij->j", Mn, Mn))
+            Mn = Mn / np.where(sd > 0, sd, np.inf)
+            Corr = np.abs(Mn.T @ Mn)
+        reps: list[int] = []
+        cluster: dict[int, list[int]] = {}
+        for _, k in singles:                    # best-single order
+            for r in reps:
+                if Corr[k, r] > 0.995:
+                    cluster.setdefault(r, []).append(k)
+                    break
+            else:
+                reps.append(k)
+        reps = reps[:22]
+        scored = []
+        for size in (3, 4):
+            for s in combinations(reps, size):
+                c_s = lstsq(M_tr[:, list(s)], y_tr)
+                if c_s is None:
+                    continue
+                rr = y_tr - M_tr[:, list(s)] @ c_s
+                scored.append((float(rr @ rr), s))
+        scored.sort(key=lambda z: z[0])
+        best = [s for _, s in scored[:12]]
+        for s in best:
+            sups.add(tuple(sorted(s)))
+            sl = list(s)
+            for i, k in enumerate(sl):
+                for alt in cluster.get(k, [])[:6]:
+                    sups.add(tuple(sorted(sl[:i] + [alt] + sl[i + 1:])))
     out = []
     for sup in sups:
         cols = list(sup)
@@ -148,7 +189,8 @@ def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
                 if hasattr(mod2, "terms"):
                     t_terms += mod2.terms(dim, X_fit, ty_fit, X_cert)
             t_terms = admissible(t_terms, X_fit, X_cert)
-            tctx = Ctx(syms, t_terms, X_fit, ty_fit, X_sel, ty_sel, sigma)
+            tctx = Ctx(syms, t_terms, X_fit, ty_fit, X_sel, ty_sel, sigma,
+                       deep_supports=False)
             inner = _linear_candidates(tctx)
             for t2, mod2 in active:
                 if hasattr(mod2, "candidates") and \
@@ -205,6 +247,12 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     eps = epsilon(y_cert, sigma=sigma, se=se_cert, floor_abs=floor_abs)
     bounds = [(float(X_cert[:, j].min()), float(X_cert[:, j].max()))
               for j in range(dim)]
+    # full-data view for the MINIMALITY gate (split-myopia fix, LLMSRBENCH_DEV.md):
+    # a real term material only in a thin region must be visible to the
+    # droppable-term test, so it runs on fit+sel+cert at the full-data epsilon
+    X_all_m = np.vstack([X_fit, X_sel, X_cert])
+    y_all_m = np.concatenate([y_fit, y_sel, y_cert])
+    eps_all = epsilon(y_all_m, sigma=sigma, floor_abs=floor_abs)
 
     # minimum-domain guard: certifying on too few TOTAL valid points is not
     # significant (a constant over 4 overflow-artifact points produced the only
@@ -305,7 +353,9 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                 w = min(classes[0][1], key=lambda z: z.complexity)
                 if pinned(w.expr, syms, X_cert, y_cert, eps, P, yscale, sigma) \
                         and (sigma <= 0
-                             or minimal(w.expr, syms, X_cert, y_cert, eps)):
+                             or check(reduce_to_minimal(w.expr, syms, X_all_m,
+                                                        y_all_m, eps_all),
+                                      syms, X_cert, y_cert, eps)["certified"]):
                     cert = Certificate(True, 0, 0, len(X_cert), bounds,
                                        str(w.expr), notes=["CAP-S cheap pre-pass"])
                     return Result(cert, w.expr, 3, len(pcands))
@@ -335,13 +385,16 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                     if not ok:
                         continue
                     c.expr = gated
-                elif not minimal(c.expr, syms, X_cert, y_cert, eps):
-                    # noise regime, per-CANDIDATE minimality: polynomial overfits
-                    # certify inside the sigma envelope and poison coherence
-                    # ("4 materially different classes", measured PO1). Unlike the
-                    # vetoed float-gate this cannot delete a TRUE rival -- a true
-                    # law has no droppable term -- so the RNOISE ordering lesson
-                    # is respected.
+                elif c.channel in ("linear", "c2-pure", "c2-implicit"):
+                    # SIGNIFICANCE BOUNDARY (measured PO12/PO40): at envelope
+                    # epsilon on a bounded box, the DENSE channels certify
+                    # Taylor-slop approximants of smooth laws whenever the true
+                    # support goes unproposed -- an impostor class no per-
+                    # candidate gate can close (that needs |H|*q^h accounting,
+                    # DIRECTION_SIGNIFICANCE.md). Under declared noise these
+                    # channels are EMPIRICAL-only: their fits reach track B via
+                    # the fit scout; certification stays with the small-class
+                    # closed-form channels.
                     continue
                 certifying.append(c)
         if not certifying:
@@ -359,15 +412,9 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                    notes=["exact rational parameters not pinned within "
                                           f"the noise band (sigma={sigma:g})"])
                 return Result(cert, None, tier, total)
-            if sigma > 0 and not minimal(winner.expr, syms, X_cert, y_cert, eps):
-                # noise-regime winner gate: every term must be load-bearing (a
-                # droppable term = an overfit certified inside epsilon)
-                cert = Certificate(False, 0, 0, len(X_cert), bounds,
-                                   str(winner.expr),
-                                   abstain=Abstain.PARAMETRIC.value,
-                                   notes=["winner is not minimal: a term can be "
-                                          "dropped with certification intact"])
-                return Result(cert, None, tier, total)
+            if sigma > 0:
+                winner.expr = reduce_to_minimal(winner.expr, syms, X_all_m,
+                                                y_all_m, eps_all)
             cert = Certificate(True, 0, 0, len(X_cert), bounds, str(winner.expr))
             return Result(cert, winner.expr, tier, total)
         cert = Certificate(False, 0, 0, len(X_cert), bounds,

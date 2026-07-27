@@ -281,6 +281,32 @@ def minimal(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray) -> bool:
     return True
 
 
+def reduce_to_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
+                      eps: np.ndarray):
+    """Parsimony REPAIR (supersedes minimal-as-veto): simplify identity disguises
+    (sin^2+cos^2 pairs jointly encoding a monomial defeat term-drop testing),
+    then iteratively drop any term whose removal keeps full-data certification.
+    Returns the reduced expr -- the input itself when already minimal. A true
+    law is a fixed point; a vestigial/overfit term is pruned instead of
+    poisoning the candidate."""
+    e = sp.expand(expr)
+    if e.has(sp.sin, sp.cos, sp.tan):
+        try:
+            e = sp.expand(sp.trigsimp(e))
+        except Exception:                                      # noqa: BLE001
+            pass
+    changed = True
+    while changed and e.is_Add:
+        changed = False
+        for t in e.as_ordered_terms():
+            red = sp.expand(e - t)
+            if red != 0 and check(red, syms, X, y, eps)["certified"]:
+                e = red
+                changed = True
+                break
+    return e
+
+
 def coherent(certifying: list, syms, P: np.ndarray, yscale: float,
              tau: float = TAU) -> list:
     """Greedy tau-clustering of certifying laws into functional equivalence classes.

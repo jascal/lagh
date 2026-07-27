@@ -205,6 +205,23 @@ Both are scoped instrument work with RNOISE re-validation required (minimality
 placement has already been through three veto rounds). Registered as the next
 round; not attempted as a patch inside this one.
 
+### Sparse-recovery round registration (2026-07-26, before code)
+
+- **CAP-Q — correlation-pruned exhaustive supports.** Standardize the fit-split
+  design matrix; greedily cluster terms at |corr| > 0.995 (representatives
+  ordered by single-fit residual, capped at 22); exhaustive size-3/4 supports
+  over representatives (~9k lstsq); keep the best 12 by residual and add
+  within-cluster SWAP refinements (the rep may be the wrong cluster member).
+  RAW-target linear pass only (transform passes skip it — the oscillator family
+  is a raw linear combination). Runs at any sigma; the checker still decides.
+- **Full-data minimality:** the droppable-term test runs on fit∪sel∪cert at the
+  full-data epsilon, not the cert split alone (a real term material only in a
+  thin region must be visible to the test).
+- **Predictions:** PO33-class support recovery lands; with both fixes,
+  **≥ 12 of 44 phys_osc certify, zero structural-wrong among them** (CAP-P's
+  prediction renewed at lower confidence); RNOISE profile unchanged
+  (46/38/19, CW 2/2/1) — any regression vetoes the round.
+
 **Read on the SOTA gap:** Transform 27.0% vs LLM-SR's 31.53% — within 4.5 points
 of the best published system, with a claim it cannot make (30 machine-checked
 certificates, zero structurally wrong). The gap is entirely conjecture-side;
