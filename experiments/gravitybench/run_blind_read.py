@@ -29,8 +29,14 @@ from experiments.gravitybench import astronomer as ast  # noqa: E402
 from experiments.gravitybench.driver import obs_to_si, unit_factors  # noqa: E402
 from experiments.gravitybench.twin import Twin, system_id  # noqa: E402
 
-VAL = Path("/home/allans/code/GravityBench/huggingface/validation.jsonl")
 OUT = Path("experiments/results/gravitybench_read.jsonl")
+# CRASH-FIX (logged, registration 5): the repo's validation.jsonl carries
+# placeholder CSV content; the real data is the HF dataset. All 412 first-pass
+# solves crashed on the placeholder (zero scoring information revealed).
+# BOUNDED-RUNTIME AMENDMENT (logged): sims are ~1e6 rows; the FULL variant
+# subsamples uniformly to 2400 rows (uniform cadence preserved -- their own
+# expert baseline used 100 uniform samples).
+FULL_SUBSAMPLE = 2400
 
 # task_prompt -> units detection: instances carry expected_units; the sim table
 # columns are in the scenario's native units. Column names follow Binary.py.
@@ -41,10 +47,10 @@ def _timeout(s, f):
 
 
 def load_instances():
-    rows = []
-    for line in VAL.read_text().splitlines():
-        rows.append(json.loads(line))
-    return rows
+    from datasets import load_dataset
+    ds = load_dataset("GravityBench/GravityBench")
+    split = list(ds.keys())[0]
+    return list(ds[split])
 
 
 def detect_units(inst):
@@ -54,7 +60,7 @@ def detect_units(inst):
     v = v.lower()
     if "cgs" in v:
         return ("s", "cm", "g")
-    if "astronomical" in v or " au" in v or "au," in v:
+    if "yraumsun" in v or "astronomical" in v:
         return ("yr", "AU", "Msun")
     return ("m", "s", "kg")
 
@@ -67,8 +73,10 @@ def solve(df, task, units, variant):
     splines = {c: CubicSpline(t_nat, df[c].to_numpy(float)) for c in cols}
 
     if variant == "full":
-        obs = obs_to_si({c: df[c].to_numpy(float) for c in df.columns}, lf, tf)
-        n_used = len(df)
+        step = max(1, len(df) // FULL_SUBSAMPLE)
+        sub = df.iloc[::step]
+        obs = obs_to_si({c: sub[c].to_numpy(float) for c in sub.columns}, lf, tf)
+        n_used = len(sub)
     else:
         used = {"n": 0}
 
