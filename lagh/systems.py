@@ -133,7 +133,8 @@ def discover_invariants(data, *, sigma=0.0, max_invariants=10, groups=None):
             expr = sum(sp.Float(ci) * sp.sympify(nm)
                        for ci, nm in zip(c, names) if ci != 0.0)
             alpha = significance_log10(expr, M @ c,
-                                       epsilon(M @ c, sigma=sigma), T ** 4)
+                                       epsilon(M @ c, sigma=sigma), T ** 4,
+                                       value_range=float(vscale))
             accepted.append((iset, {"expr": str(expr), "value": mu2,
                                     "alpha_log10": alpha,
                                     "n_terms": len(idx)}))
@@ -171,7 +172,8 @@ def discover_invariants(data, *, sigma=0.0, max_invariants=10, groups=None):
             expr = sum(sp.Float(ci) * sp.sympify(nm)
                        for ci, nm in zip(c, names) if ci != 0.0)
             alpha = significance_log10(expr, M @ c,
-                                       epsilon(M @ c, sigma=sigma), T ** 5)
+                                       epsilon(M @ c, sigma=sigma), T ** 5,
+                                       value_range=float(vscale))
             accepted.append((iset, {"expr": str(expr),
                                     "value": float(np.mean(M @ c)),
                                     "alpha_log10": alpha, "n_terms": 5}))

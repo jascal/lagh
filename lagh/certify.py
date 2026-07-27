@@ -72,7 +72,8 @@ def epsilon(y: np.ndarray, *, sigma: float = 0.0, prop: np.ndarray | None = None
 
 
 def significance_log10(expr, y: np.ndarray, eps: np.ndarray,
-                       n_hypotheses: int) -> float:
+                       n_hypotheses: int, value_range: float | None = None
+                       ) -> float:
     """log10 of the a-priori false-certification bound alpha <= |H| * prod(q_k)
     (DIRECTION_SIGNIFICANCE.md). Under a uniform-in-range null, a point chance-
     matches with q_k = 2*eps_k / range(y); a candidate with dof free numeric
@@ -83,7 +84,10 @@ def significance_log10(expr, y: np.ndarray, eps: np.ndarray,
     the approximant-impostor boundary is unaffected)."""
     y = np.asarray(y, float).ravel()
     eps = np.asarray(eps, float).ravel()
-    R = float(np.max(y) - np.min(y))
+    # value_range override: a ZERO-VALUED identity's own range is its residual
+    # noise, which makes q vacuous; the chance-agreement range is the scale of
+    # the CONSTITUENT terms (measured: color identity got alpha > 1)
+    R = float(value_range) if value_range else float(np.max(y) - np.min(y))
     if R <= 0 or len(y) == 0:
         return 0.0
     dof = sum(1 for a in expr.atoms(sp.Number) if a not in (0, 1, -1)) \

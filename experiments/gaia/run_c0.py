@@ -16,7 +16,11 @@ from lagh.submit import submission  # noqa: E402
 from lagh.systems import discover_invariants  # noqa: E402
 
 OUT = Path("experiments/results/gaia_c0.json")
-SIGMA_MAG = 2e-4          # magnitudes published to ~1e-4; declared envelope
+SIGMA_MAG = 5e-6   # AMENDED (logged): catalog columns carry full float precision;
+                   # the ~1e-4 publication assumption was wrong (measured
+                   # true-law residuals ~1e-6). At the loose 2e-4 floor,
+                   # 14-term approximants certified -- the loose-eps parsimony
+                   # issue, registered in the results doc.
 
 
 def main():
@@ -28,7 +32,8 @@ def main():
                            ("RP", "phot_rp_mean_mag", "phot_rp_mean_flux")):
         lf = np.log10(np.asarray(t[fl], float))
         mag = np.asarray(t[magn], float)
-        r = recover(lf.reshape(-1, 1).tolist(), mag.tolist(), sigma=SIGMA_MAG)
+        r = recover(lf.reshape(-1, 1).tolist(), mag.tolist(), sigma=0.0,
+                    floor_abs=SIGMA_MAG)
         out[f"P1_{band}"] = {"certified": r.get("certified"),
                              "law": r.get("law"),
                              "alpha_log10": r.get("alpha_log10"),

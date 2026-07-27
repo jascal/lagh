@@ -1,0 +1,33 @@
+{
+ "snapshot": "/home/allans/code/lagh/experiments/gaia/data/c0_cc027870a063.csv",
+ "n": 400,
+ "P1_G": {
+  "certified": true,
+  "law": "12660019/492850 - 5*x_0/2",
+  "alpha_log10": -461.189464228802,
+  "abstain": null
+ },
+ "P1_BP": {
+  "certified": true,
+  "law": "24321377/959857 - 5*x_0/2",
+  "alpha_log10": -458.5930672712211,
+  "abstain": null
+ },
+ "P1_RP": {
+  "certified": true,
+  "law": "10806713/436672 - 5*x_0/2",
+  "alpha_log10": -457.834992812508,
+  "abstain": null
+ },
+ "P2_color_identity": [
+  {
+   "expr": "1.0*bp_rp - 1.0*magBP + 1.0*magRP",
+   "alpha_log10": -4586.450710615237
+  }
+ ],
+ "P3_cmd": {
+  "track": "conjecture",
+  "tag": "empirical",
+  "expr": "2.89451220263806*x_0 + 1.28696620244821"
+ }
+}

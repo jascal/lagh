@@ -93,6 +93,7 @@ def _strength(expr, syms, X_cert, y_cert, eps, sigma) -> str:
 # --------------------------------------------------------------------------- recover
 
 def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
+            floor_abs: float = 1e-12,
             max_tier: int = 7, budget: int = 200, box_search: bool = False,
             seed: int = 0, time_budget_s: float | None = 45.0) -> dict:
     """Bounded. Discover an exact law. Two modes:
@@ -167,13 +168,15 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
         # EXHAUSTIVELY on all n points with fit=sel=cert; the selection
         # exposure this permits is exactly what alpha = |H|*q^h quantifies
         # (h is dof-discounted), and the certificate says so.
-        r = discover(X, y, X, y, X, y, sigma=float(sigma), max_tier=max_tier)
+        r = discover(X, y, X, y, X, y, sigma=float(sigma),
+                     floor_abs=float(floor_abs), max_tier=max_tier)
         r.certificate.notes.append(
             "tiny-data mode: exhaustive certification on all points; "
             "selection exposure bounded by the stated alpha")
         c = r.certificate
     else:
-        pr = discover_passive(X, y, sigma=float(sigma), max_tier=max_tier,
+        pr = discover_passive(X, y, sigma=float(sigma),
+                              floor_abs=float(floor_abs), max_tier=max_tier,
                               seed=seed)
         r = pr.result
         c = r.certificate
@@ -187,7 +190,7 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
                 "suggested_box": [(lo / 10).tolist(), (hi * 10).tolist()],
                 "note": ((("; ".join(map(str, c.notes)) + " | ") if c.notes else "")
                          + "see characterization.research for the next move")}
-    eps = epsilon(y, sigma=float(sigma))
+    eps = epsilon(y, sigma=float(sigma), floor_abs=float(floor_abs))
     return {"tag": "proved", "tool": "recover", "certified": True,
             "law": str(r.expr), "strength": _strength(r.expr, syms, X, y, eps, sigma),
             "alpha_log10": c.alpha_log10, "n_hypotheses": c.n_hypotheses,
