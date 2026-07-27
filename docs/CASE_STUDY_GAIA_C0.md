@@ -104,4 +104,6 @@ Post-fix verdicts on the frozen snapshot: floor 2e-4 → **parametric abstain**
 (whales collapse to the line; the slope is honestly unpinnable at a loose
 floor); floor 5e-6 → **certified `25.68735 − (5/2)·log₁₀(flux)`, α ≤ 10⁻⁴⁶¹**
 — the published result, now reached through a sound path. The full C0 study
-re-run reproduces every published number identically.
+re-run reproduces every verdict and law; the BP zeropoint snaps to an
+equivalent rational (Δ ≈ 1.5×10⁻⁷, well inside the floor) with a marginally
+sharper α (10⁻⁴⁶⁶ vs 10⁻⁴⁵⁹).
