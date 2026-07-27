@@ -65,7 +65,7 @@ def detect_units(inst):
     return ("m", "s", "kg")
 
 
-def solve(df, task, units, variant):
+def solve(df, task, units, variant, variant_epoch_fix=False):
     lf, tf = unit_factors(units)
     t_nat = df["time"].to_numpy(float)
     maxtime_nat = float(t_nat.max())
@@ -77,6 +77,24 @@ def solve(df, task, units, variant):
         sub = df.iloc[::step]
         obs = obs_to_si({c: sub[c].to_numpy(float) for c in sub.columns}, lf, tf)
         n_used = len(sub)
+        if variant_epoch_fix:
+            # DEV FIX (post-read; the read numbers stand): synthesize NATIVE-
+            # cadence triplets from the original dense table at phase anchors --
+            # the uniform subsample destroyed the fine cadence and degraded the
+            # twin's epoch, which broke min_* extremes (the read's full-variant
+            # shortfall mechanism).
+            n = len(df)
+            trips, extra_rows = [], []
+            for phase in (0.2, 0.5, 0.8):
+                i = max(1, min(n - 2, int(phase * n)))
+                rows = df.iloc[[i - 1, i, i + 1]]
+                extra_rows.append(rows)
+                trips.append(tuple(rows["time"].to_numpy(float)))
+            extra = pd.concat(extra_rows)
+            eobs = obs_to_si({c: extra[c].to_numpy(float) for c in extra.columns},
+                             lf, tf)
+            obs = ast._merge(obs, eobs)
+            obs["triplets"] = np.asarray(trips) * tf
     else:
         used = {"n": 0}
 
