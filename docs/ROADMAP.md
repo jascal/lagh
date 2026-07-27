@@ -52,11 +52,17 @@ loop, box-search, and the Orca machine composite are exactly what it scores,
 and its baselines are prompt-driven LLM agents. This is the highest
 win-probability blind read available.
 
-**2b. REFUTE (the native fit).** Calibration-scored: abstention and refusal
-ARE the metric. The zero-wrong + characterization ladder competes here without
-a single new capability.
-- Kill criterion for both: registration reveals a scoring regime lagh cannot
-  express (as float32 did) → walk away BEFORE the read, benchmark stays sealed.
+**2b. REFUTE — WALKED AWAY 2026-07-27 (kill criterion fired pre-registration).**
+Metadata reconnaissance shows REFUTE (bgpt.pro/refute) scores LLM critique of
+NATURAL-LANGUAGE paper summaries — recall, prose falsification, overclaim
+resistance, planted-flaw detection in described methods, Brier-scored
+confidence. The abstention it scores is epistemic refusal about text claims,
+not data-driven certified abstention: lagh cannot express a single axis
+without being an LLM entry. STRATEGY.md's "native fit" note was a metadata-
+level misread, now corrected. No registration was written; the benchmark
+stays untouched. H2 concludes with Gravity-Bench (won) as its sole read.
+- Kill criterion (retained for future candidates): registration reveals a
+  scoring regime lagh cannot express → walk away BEFORE the read.
 
 ## Horizon 3 — own the benchmark class (weeks): LawSystemBench + the system discoverer
 
