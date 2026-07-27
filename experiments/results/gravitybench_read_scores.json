@@ -1,0 +1,7018 @@
+{
+ "summary": {
+  "budget": {
+   "n": 206,
+   "correct": 195,
+   "pct": 94.66
+  },
+  "full": {
+   "n": 206,
+   "correct": 131,
+   "pct": 63.59
+  }
+ },
+ "rows": [
+  {
+   "scenario_id": "roche_lobe_radius_3p1_M_0p18_M_Elliptical",
+   "task": "roche_lobe_radius",
+   "variation": "3.1 M, 0.18 M Elliptical",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 521164864047.25635,
+   "twin_validation": 1.043052303400087,
+   "n_obs": 100,
+   "alpha_fit": -2.000755058453589,
+   "secs": 2.0,
+   "correct": true
+  },
+  {
+   "scenario_id": "roche_lobe_radius_3p1_M_0p18_M_Elliptical",
+   "task": "roche_lobe_radius",
+   "variation": "3.1 M, 0.18 M Elliptical",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4148823281057.3,
+   "twin_validation": 16.346805195161593,
+   "n_obs": 2405,
+   "alpha_fit": -1.9962038249317688,
+   "secs": 2.0,
+   "correct": false
+  },
+  {
+   "scenario_id": "modified_gravity_power_law_10p1M_5p6_M_Modified_Gravity_1p97",
+   "task": "modified_gravity_power_law",
+   "variation": "10.1M, 5.6 M, Modified Gravity 1.97",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -0.02924913332111112,
+   "twin_validation": 28.53778811082171,
+   "n_obs": 100,
+   "alpha_fit": -1.9707508666788889,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "modified_gravity_power_law_10p1M_5p6_M_Modified_Gravity_1p97",
+   "task": "modified_gravity_power_law",
+   "variation": "10.1M, 5.6 M, Modified Gravity 1.97",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -0.03134099026320114,
+   "twin_validation": 10.291274309013225,
+   "n_obs": 2500,
+   "alpha_fit": -1.9686590097367989,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "modified_gravity_power_law_10p1M_5p6_M_Modified_Gravity_2p03",
+   "task": "modified_gravity_power_law",
+   "variation": "10.1M, 5.6 M, Modified Gravity 2.03",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.03395621546604222,
+   "twin_validation": 1.293088359646782,
+   "n_obs": 100,
+   "alpha_fit": -2.033956215466042,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "modified_gravity_power_law_10p1M_5p6_M_Modified_Gravity_2p03",
+   "task": "modified_gravity_power_law",
+   "variation": "10.1M, 5.6 M, Modified Gravity 2.03",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.02859537961873615,
+   "twin_validation": 1.3440961431972838,
+   "n_obs": 2500,
+   "alpha_fit": -2.028595379618736,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "modified_gravity_power_law_10p1M_5p6_M_Modified_Gravity_1p97_Proper_Motion",
+   "task": "modified_gravity_power_law",
+   "variation": "10.1M, 5.6 M, Modified Gravity 1.97 Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -0.030805575495018056,
+   "twin_validation": 11.489466082708734,
+   "n_obs": 100,
+   "alpha_fit": -1.969194424504982,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "modified_gravity_power_law_10p1M_5p6_M_Modified_Gravity_1p97_Proper_Motion",
+   "task": "modified_gravity_power_law",
+   "variation": "10.1M, 5.6 M, Modified Gravity 1.97 Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -0.031155183142957066,
+   "twin_validation": 0.45384521371576153,
+   "n_obs": 2500,
+   "alpha_fit": -1.968844816857043,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "linear_drag_7p7_M_4p9_M_Drag_tau_=_1p7e9",
+   "task": "linear_drag",
+   "variation": "7.7 M, 4.9 M, Drag tau = 1.7e9",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": null,
+   "twin_validation": 1.550051774946038,
+   "n_obs": 100,
+   "alpha_fit": -1.9997763609469164,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "linear_drag_7p7_M_4p9_M_Drag_tau_=_1p7e9",
+   "task": "linear_drag",
+   "variation": "7.7 M, 4.9 M, Drag tau = 1.7e9",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": null,
+   "twin_validation": 1.444728192131005,
+   "n_obs": 2439,
+   "alpha_fit": -1.9993758444718726,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "linear_drag_7p7_M_4p9_M_Drag_tau_=_8p3e8",
+   "task": "linear_drag",
+   "variation": "7.7 M, 4.9 M, Drag tau = 8.3e8",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 853042423.3044497,
+   "twin_validation": 1.307475272135943,
+   "n_obs": 100,
+   "alpha_fit": -2.005999661343597,
+   "secs": 1.1,
+   "correct": true
+  },
+  {
+   "scenario_id": "linear_drag_7p7_M_4p9_M_Drag_tau_=_8p3e8",
+   "task": "linear_drag",
+   "variation": "7.7 M, 4.9 M, Drag tau = 8.3e8",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 979844928.3171676,
+   "twin_validation": 0.957302435956436,
+   "n_obs": 2488,
+   "alpha_fit": -1.999340895349458,
+   "secs": 0.9,
+   "correct": false
+  },
+  {
+   "scenario_id": "linear_drag_7p7_M_4p9_M_Drag_tau_=_8p3e8_Proper_Motion",
+   "task": "linear_drag",
+   "variation": "7.7 M, 4.9 M, Drag tau = 8.3e8 Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 853042423.3044707,
+   "twin_validation": 0.5175205402941108,
+   "n_obs": 100,
+   "alpha_fit": -2.0059996613401783,
+   "secs": 1.1,
+   "correct": true
+  },
+  {
+   "scenario_id": "linear_drag_7p7_M_4p9_M_Drag_tau_=_8p3e8_Proper_Motion",
+   "task": "linear_drag",
+   "variation": "7.7 M, 4.9 M, Drag tau = 8.3e8 Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 979844928.3171676,
+   "twin_validation": 0.5897197448192997,
+   "n_obs": 2488,
+   "alpha_fit": -1.9993408953494591,
+   "secs": 1.0,
+   "correct": false
+  },
+  {
+   "scenario_id": "time_fraction_acceleraton_below_mean_21p3_M_3p1_M",
+   "task": "time_fraction_acceleraton_below_mean",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.7423913043478261,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "time_fraction_acceleraton_below_mean_21p3_M_3p1_M",
+   "task": "time_fraction_acceleraton_below_mean",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.7489451476793249,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "time_fraction_acceleraton_below_mean_9p6_M_3p1_M",
+   "task": "time_fraction_acceleraton_below_mean",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.7423673550044462,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "time_fraction_acceleraton_below_mean_9p6_M_3p1_M",
+   "task": "time_fraction_acceleraton_below_mean",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.7493924097962236,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "time_fraction_acceleraton_below_mean_0p18_M_0p63_M",
+   "task": "time_fraction_acceleraton_below_mean",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.7424729322193109,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "time_fraction_acceleraton_below_mean_0p18_M_0p63_M",
+   "task": "time_fraction_acceleraton_below_mean",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.7490496081100108,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "apoastron_21p3_M_3p1_M",
+   "task": "apoastron",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5596523777987.623,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "apoastron_21p3_M_3p1_M",
+   "task": "apoastron",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5840300236484.653,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "apoastron_9p6_M_3p1_M",
+   "task": "apoastron",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7508605169732.239,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "apoastron_9p6_M_3p1_M",
+   "task": "apoastron",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7856149785337.442,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "apoastron_0p18_M_0p63_M",
+   "task": "apoastron",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1276134932907.5688,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "apoastron_0p18_M_0p63_M",
+   "task": "apoastron",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1331433964901.147,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "apoastron_9p6_M_3p1_M_Proper_Motion",
+   "task": "apoastron",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 9974765299358.537,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "apoastron_9p6_M_3p1_M_Proper_Motion",
+   "task": "apoastron",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 12699149266463.709,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "apoastron_9p6_M_3p1_M_Proper_Motion2",
+   "task": "apoastron",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3596192474213.9507,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "apoastron_9p6_M_3p1_M_Proper_Motion2",
+   "task": "apoastron",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 27130700184859.594,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "area_swept_over_time_apo_21p3_M_3p1_M",
+   "task": "area_swept_over_time_apo",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.255225800198083e+16,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "area_swept_over_time_apo_21p3_M_3p1_M",
+   "task": "area_swept_over_time_apo",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.253511865942433e+16,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "area_swept_over_time_apo_9p6_M_3p1_M",
+   "task": "area_swept_over_time_apo",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.5558848116600988e+16,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "area_swept_over_time_apo_9p6_M_3p1_M",
+   "task": "area_swept_over_time_apo",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.554311584669182e+16,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "area_swept_over_time_apo_0p18_M_0p63_M",
+   "task": "area_swept_over_time_apo",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3702295189189315.0,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "area_swept_over_time_apo_0p18_M_0p63_M",
+   "task": "area_swept_over_time_apo",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3700657185982116.5,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "area_swept_over_time_peri_21p3_M_3p1_M",
+   "task": "area_swept_over_time_peri",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.25522580019819e+16,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "area_swept_over_time_peri_21p3_M_3p1_M",
+   "task": "area_swept_over_time_peri",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.253511865942528e+16,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "area_swept_over_time_peri_9p6_M_3p1_M",
+   "task": "area_swept_over_time_peri",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.5558848116601304e+16,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "area_swept_over_time_peri_9p6_M_3p1_M",
+   "task": "area_swept_over_time_peri",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.554311584669179e+16,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "area_swept_over_time_peri_0p18_M_0p63_M",
+   "task": "area_swept_over_time_peri",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3702295189189390.0,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "area_swept_over_time_peri_0p18_M_0p63_M",
+   "task": "area_swept_over_time_peri",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3700657185982130.0,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "avg_distance_COM_star1_21p3_M_3p1_M",
+   "task": "avg_distance_COM_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 524672177696.65674,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "avg_distance_COM_star1_21p3_M_3p1_M",
+   "task": "avg_distance_COM_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 546569823142.5742,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "avg_distance_COM_star1_9p6_M_3p1_M",
+   "task": "avg_distance_COM_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1352429932561.692,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "avg_distance_COM_star1_9p6_M_3p1_M",
+   "task": "avg_distance_COM_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1412415614602.2625,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "avg_distance_COM_star1_0p18_M_0p63_M",
+   "task": "avg_distance_COM_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 732374381678.375,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "avg_distance_COM_star1_0p18_M_0p63_M",
+   "task": "avg_distance_COM_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 762775037942.8225,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "avg_distance_COM_star2_21p3_M_3p1_M",
+   "task": "avg_distance_COM_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3605005608044.478,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "avg_distance_COM_star2_21p3_M_3p1_M",
+   "task": "avg_distance_COM_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3755463623527.818,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "avg_distance_COM_star2_9p6_M_3p1_M",
+   "task": "avg_distance_COM_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4188170113739.518,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "avg_distance_COM_star2_9p6_M_3p1_M",
+   "task": "avg_distance_COM_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4373932225865.128,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "avg_distance_COM_star2_0p18_M_0p63_M",
+   "task": "avg_distance_COM_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 209249823336.69086,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "avg_distance_COM_star2_0p18_M_0p63_M",
+   "task": "avg_distance_COM_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 217935725126.5423,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "eccentricity_21p3_M_3p1_M",
+   "task": "eccentricity",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.5955431101273123,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "eccentricity_21p3_M_3p1_M",
+   "task": "eccentricity",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.6107784927356106,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "eccentricity_9p6_M_3p1_M",
+   "task": "eccentricity",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.595497794682582,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "eccentricity_9p6_M_3p1_M",
+   "task": "eccentricity",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.6117603982226825,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "eccentricity_0p18_M_0p63_M",
+   "task": "eccentricity",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.5957709284785987,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "eccentricity_0p18_M_0p63_M",
+   "task": "eccentricity",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.6110457894325295,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "eccentricity_9p6_M_3p1_M_Proper_Motion",
+   "task": "eccentricity",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.8042346992302218,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "eccentricity_9p6_M_3p1_M_Proper_Motion",
+   "task": "eccentricity",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.837509411072638,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "eccentricity_9p6_M_3p1_M_Proper_Motion2",
+   "task": "eccentricity",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.90220580492371,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "eccentricity_9p6_M_3p1_M_Proper_Motion2",
+   "task": "eccentricity",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.9862942025788322,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "eccentricity_3p1_M_0p18_M_Elliptical",
+   "task": "eccentricity",
+   "variation": "3.1 M, 0.18 M Elliptical",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.9313245888784937,
+   "twin_validation": 1.043052303400087,
+   "n_obs": 100,
+   "alpha_fit": -2.000755058453589,
+   "secs": 1.9,
+   "correct": true
+  },
+  {
+   "scenario_id": "eccentricity_3p1_M_0p18_M_Elliptical",
+   "task": "eccentricity",
+   "variation": "3.1 M, 0.18 M Elliptical",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.9926822582832537,
+   "twin_validation": 16.346805195161593,
+   "n_obs": 2405,
+   "alpha_fit": -1.9962038249317688,
+   "secs": 2.0,
+   "correct": false
+  },
+  {
+   "scenario_id": "kepler_3rd_law_21p3_M_3p1_M",
+   "task": "kepler_3rd_law",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "kepler_3rd_law_21p3_M_3p1_M",
+   "task": "kepler_3rd_law",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "kepler_3rd_law_9p6_M_3p1_M",
+   "task": "kepler_3rd_law",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "kepler_3rd_law_9p6_M_3p1_M",
+   "task": "kepler_3rd_law",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "kepler_3rd_law_0p18_M_0p63_M",
+   "task": "kepler_3rd_law",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "kepler_3rd_law_0p18_M_0p63_M",
+   "task": "kepler_3rd_law",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "kepler_3rd_law_10p1M_5p6_M_Modified_Gravity_1p97",
+   "task": "kepler_3rd_law",
+   "variation": "10.1M, 5.6 M, Modified Gravity 1.97",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 28.53778811082171,
+   "n_obs": 100,
+   "alpha_fit": -1.9707508666788889,
+   "secs": 1.5,
+   "correct": false
+  },
+  {
+   "scenario_id": "kepler_3rd_law_10p1M_5p6_M_Modified_Gravity_1p97",
+   "task": "kepler_3rd_law",
+   "variation": "10.1M, 5.6 M, Modified Gravity 1.97",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 10.291274309013225,
+   "n_obs": 2500,
+   "alpha_fit": -1.9686590097367989,
+   "secs": 1.5,
+   "correct": false
+  },
+  {
+   "scenario_id": "kepler_3rd_law_10p1M_5p6_M_Modified_Gravity_2p03",
+   "task": "kepler_3rd_law",
+   "variation": "10.1M, 5.6 M, Modified Gravity 2.03",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 1.293088359646782,
+   "n_obs": 100,
+   "alpha_fit": -2.033956215466042,
+   "secs": 1.5,
+   "correct": false
+  },
+  {
+   "scenario_id": "kepler_3rd_law_10p1M_5p6_M_Modified_Gravity_2p03",
+   "task": "kepler_3rd_law",
+   "variation": "10.1M, 5.6 M, Modified Gravity 2.03",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 1.3440961431972838,
+   "n_obs": 2500,
+   "alpha_fit": -2.028595379618736,
+   "secs": 1.5,
+   "correct": false
+  },
+  {
+   "scenario_id": "kepler_3rd_law_10p1M_5p6_M_Modified_Gravity_1p97_Proper_Motion",
+   "task": "kepler_3rd_law",
+   "variation": "10.1M, 5.6 M, Modified Gravity 1.97 Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 11.489466082708734,
+   "n_obs": 100,
+   "alpha_fit": -1.969194424504982,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "kepler_3rd_law_10p1M_5p6_M_Modified_Gravity_1p97_Proper_Motion",
+   "task": "kepler_3rd_law",
+   "variation": "10.1M, 5.6 M, Modified Gravity 1.97 Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.45384521371576153,
+   "n_obs": 2500,
+   "alpha_fit": -1.968844816857043,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "mass_largest_star_21p3_M_3p1_M",
+   "task": "mass_largest_star",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.185031710693018e+31,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_largest_star_21p3_M_3p1_M",
+   "task": "mass_largest_star",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.16396842981155e+31,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_largest_star_9p6_M_3p1_M",
+   "task": "mass_largest_star",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.8859799746157717e+31,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_largest_star_9p6_M_3p1_M",
+   "task": "mass_largest_star",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.8763907559501703e+31,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_largest_star_0p18_M_0p63_M",
+   "task": "mass_largest_star",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.2385907172977612e+30,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_largest_star_0p18_M_0p63_M",
+   "task": "mass_largest_star",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.2326776032229402e+30,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star1_21p3_M_3p1_M",
+   "task": "max_acceleration_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.0002019863539114205,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star1_21p3_M_3p1_M",
+   "task": "max_acceleration_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.00020309649397583855,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star1_9p6_M_3p1_M",
+   "task": "max_acceleration_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.00011216695079280467,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star1_9p6_M_3p1_M",
+   "task": "max_acceleration_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.00011292778271899672,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star1_0p18_M_0p63_M",
+   "task": "max_acceleration_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.000791090041670809,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star1_0p18_M_0p63_M",
+   "task": "max_acceleration_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.0007962222782983774,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "max_acceleration_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.00035982469315030735,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "max_acceleration_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.0003142422827527376,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "max_acceleration_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "max_acceleration_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.0123417290927946,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "max_acceleration_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.010825273305407472,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "max_acceleration_star2_21p3_M_3p1_M",
+   "task": "max_acceleration_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.0013878417220364503,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star2_21p3_M_3p1_M",
+   "task": "max_acceleration_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.0013954694586081728,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star2_9p6_M_3p1_M",
+   "task": "max_acceleration_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.00034735571858417636,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star2_9p6_M_3p1_M",
+   "task": "max_acceleration_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.00034971184325883375,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star2_0p18_M_0p63_M",
+   "task": "max_acceleration_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.00022602572619167537,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_acceleration_star2_0p18_M_0p63_M",
+   "task": "max_acceleration_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.00022749207951384607,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star1_21p3_M_3p1_M",
+   "task": "max_angular_velocity_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.2285211730892424e-08,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star1_21p3_M_3p1_M",
+   "task": "max_angular_velocity_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.2715479022480975e-08,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star1_9p6_M_3p1_M",
+   "task": "max_angular_velocity_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.9625004844924887e-08,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star1_9p6_M_3p1_M",
+   "task": "max_angular_velocity_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.985030930480637e-08,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star1_0p18_M_0p63_M",
+   "task": "max_angular_velocity_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7.085880984554677e-08,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star1_0p18_M_0p63_M",
+   "task": "max_angular_velocity_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7.162891982641211e-08,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "max_angular_velocity_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.957267851484555e-08,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "max_angular_velocity_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.5896900559592136e-08,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "max_angular_velocity_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7.212858474364192e-07,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "max_angular_velocity_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.873251388192417e-07,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.9,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star2_21p3_M_3p1_M",
+   "task": "max_angular_velocity_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.2285211730892225e-08,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star2_21p3_M_3p1_M",
+   "task": "max_angular_velocity_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.2715479022480836e-08,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star2_9p6_M_3p1_M",
+   "task": "max_angular_velocity_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.9625004844924897e-08,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star2_9p6_M_3p1_M",
+   "task": "max_angular_velocity_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.9850309304806386e-08,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star2_0p18_M_0p63_M",
+   "task": "max_angular_velocity_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7.085880984554676e-08,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_angular_velocity_star2_0p18_M_0p63_M",
+   "task": "max_angular_velocity_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7.162891982641211e-08,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star1_21p3_M_3p1_M",
+   "task": "max_momentum_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.189636401115082e+35,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star1_21p3_M_3p1_M",
+   "task": "max_momentum_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.1890458545247686e+35,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star1_9p6_M_3p1_M",
+   "task": "max_momentum_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.7198429184279692e+35,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star1_9p6_M_3p1_M",
+   "task": "max_momentum_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.7205117893635973e+35,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star1_0p18_M_0p63_M",
+   "task": "max_momentum_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.304675718407592e+33,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star1_0p18_M_0p63_M",
+   "task": "max_momentum_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.307185882338906e+33,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "max_momentum_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.5611583400382274e+35,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "max_momentum_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.3133107022214128e+35,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "max_momentum_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "max_momentum_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.3721354561646305e+35,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "max_momentum_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5.529296181164614e+35,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "max_momentum_star2_21p3_M_3p1_M",
+   "task": "max_momentum_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.1896364011150815e+35,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star2_21p3_M_3p1_M",
+   "task": "max_momentum_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.1890458545247686e+35,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star2_9p6_M_3p1_M",
+   "task": "max_momentum_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.7198429184279692e+35,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star2_9p6_M_3p1_M",
+   "task": "max_momentum_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.7205117893635973e+35,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star2_0p18_M_0p63_M",
+   "task": "max_momentum_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.304675718407592e+33,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_momentum_star2_0p18_M_0p63_M",
+   "task": "max_momentum_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.307185882338907e+33,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_21p3_M_3p1_M",
+   "task": "max_velocity_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7621.534606214239,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_21p3_M_3p1_M",
+   "task": "max_velocity_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7658.6696279757725,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_9p6_M_3p1_M",
+   "task": "max_velocity_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 9119.09427234693,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_9p6_M_3p1_M",
+   "task": "max_velocity_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 9169.261700462606,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_0p18_M_0p63_M",
+   "task": "max_velocity_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 17815.703530030936,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_0p18_M_0p63_M",
+   "task": "max_velocity_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 17908.292103682772,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "max_velocity_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 13096.216314681089,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "max_velocity_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 12580.983871610417,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "max_velocity_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "max_velocity_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 32550.982311125637,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "max_velocity_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 31408.174692384604,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_9p6_M_3p1_M_yrAUMsun",
+   "task": "max_velocity_star1",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "budget",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 9118.024424507128,
+   "twin_validation": 0.3329443111957768,
+   "n_obs": 100,
+   "alpha_fit": -1.9995825855695475,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_9p6_M_3p1_M_yrAUMsun",
+   "task": "max_velocity_star1",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "full",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 9168.212283663659,
+   "twin_validation": 1.436874824927238,
+   "n_obs": 2442,
+   "alpha_fit": -1.999406317224956,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_9p6_M_3p1_M_cgs",
+   "task": "max_velocity_star1",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "budget",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 9119.094275782989,
+   "twin_validation": 0.33334354970737123,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363803031,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star1_9p6_M_3p1_M_cgs",
+   "task": "max_velocity_star1",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "full",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 9169.26170044962,
+   "twin_validation": 1.4362595844319657,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838284,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star2_21p3_M_3p1_M",
+   "task": "max_velocity_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 52367.31842333876,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star2_21p3_M_3p1_M",
+   "task": "max_velocity_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 52622.471959959876,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star2_9p6_M_3p1_M",
+   "task": "max_velocity_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 28239.775811139454,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star2_9p6_M_3p1_M",
+   "task": "max_velocity_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 28395.13300788456,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star2_0p18_M_0p63_M",
+   "task": "max_velocity_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5090.201008580567,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "max_velocity_star2_0p18_M_0p63_M",
+   "task": "max_velocity_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5116.654886767014,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_acceleration_star1_21p3_M_3p1_M",
+   "task": "min_acceleration_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.2979257916240569e-05,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_acceleration_star1_21p3_M_3p1_M",
+   "task": "min_acceleration_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.1858367259157522e-05,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_acceleration_star1_9p6_M_3p1_M",
+   "task": "min_acceleration_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7.209659053618032e-06,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_acceleration_star1_9p6_M_3p1_M",
+   "task": "min_acceleration_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.552393348946883e-06,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_acceleration_star1_0p18_M_0p63_M",
+   "task": "min_acceleration_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5.076219021096725e-05,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_acceleration_star1_0p18_M_0p63_M",
+   "task": "min_acceleration_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.641047010933911e-05,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_acceleration_star2_21p3_M_3p1_M",
+   "task": "min_acceleration_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 8.918006245674827e-05,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_acceleration_star2_21p3_M_3p1_M",
+   "task": "min_acceleration_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 8.147845890970087e-05,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_acceleration_star2_9p6_M_3p1_M",
+   "task": "min_acceleration_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.2326686101527266e-05,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_acceleration_star2_9p6_M_3p1_M",
+   "task": "min_acceleration_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.0291282628997265e-05,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_acceleration_star2_0p18_M_0p63_M",
+   "task": "min_acceleration_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.450348291741914e-05,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_acceleration_star2_0p18_M_0p63_M",
+   "task": "min_acceleration_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.3260134316957435e-05,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_angular_velocity_star1_21p3_M_3p1_M",
+   "task": "min_angular_velocity_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.717164298229742e-09,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_angular_velocity_star1_21p3_M_3p1_M",
+   "task": "min_angular_velocity_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.4940622950716594e-09,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_angular_velocity_star1_9p6_M_3p1_M",
+   "task": "min_angular_velocity_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.2614183474090754e-09,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_angular_velocity_star1_9p6_M_3p1_M",
+   "task": "min_angular_velocity_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.151770583902839e-09,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_angular_velocity_star1_0p18_M_0p63_M",
+   "task": "min_angular_velocity_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.546820861736091e-09,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_angular_velocity_star1_0p18_M_0p63_M",
+   "task": "min_angular_velocity_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.175126015581592e-09,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_angular_velocity_star2_21p3_M_3p1_M",
+   "task": "min_angular_velocity_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.717164298229748e-09,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_angular_velocity_star2_21p3_M_3p1_M",
+   "task": "min_angular_velocity_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.49406229507166e-09,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_angular_velocity_star2_9p6_M_3p1_M",
+   "task": "min_angular_velocity_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.2614183474090752e-09,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_angular_velocity_star2_9p6_M_3p1_M",
+   "task": "min_angular_velocity_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.1517705839028395e-09,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_angular_velocity_star2_0p18_M_0p63_M",
+   "task": "min_angular_velocity_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.5468208617360916e-09,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_angular_velocity_star2_0p18_M_0p63_M",
+   "task": "min_angular_velocity_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.175126015581593e-09,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_momentum_star1_21p3_M_3p1_M",
+   "task": "min_momentum_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 8.085462629416675e+34,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_momentum_star1_21p3_M_3p1_M",
+   "task": "min_momentum_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7.705871565319184e+34,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_momentum_star1_9p6_M_3p1_M",
+   "task": "min_momentum_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.360270791132993e+34,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_momentum_star1_9p6_M_3p1_M",
+   "task": "min_momentum_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.144355440621209e+34,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_momentum_star1_0p18_M_0p63_M",
+   "task": "min_momentum_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.597054545861641e+33,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_momentum_star1_0p18_M_0p63_M",
+   "task": "min_momentum_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.5227415968236342e+33,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_momentum_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "min_momentum_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.778938932376814e+34,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_momentum_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "min_momentum_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.0456559951078893e+34,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_momentum_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "min_momentum_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.2759733447486904e+34,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_momentum_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "min_momentum_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.4642204571682657e+34,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_momentum_star1_9p6_M_3p1_M_yrAUMsun",
+   "task": "min_momentum_star1",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "budget",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 4.358566909169715e+34,
+   "twin_validation": 0.3329443111957768,
+   "n_obs": 100,
+   "alpha_fit": -1.9995825855695475,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_momentum_star1_9p6_M_3p1_M_yrAUMsun",
+   "task": "min_momentum_star1",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "full",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 4.142518987852051e+34,
+   "twin_validation": 1.436874824927238,
+   "n_obs": 2442,
+   "alpha_fit": -1.999406317224956,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_momentum_star1_9p6_M_3p1_M_cgs",
+   "task": "min_momentum_star1",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "budget",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 4.360270792593241e+34,
+   "twin_validation": 0.33334354970737123,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363803031,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_momentum_star1_9p6_M_3p1_M_cgs",
+   "task": "min_momentum_star1",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "full",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 4.1443554407957588e+34,
+   "twin_validation": 1.4362595844319657,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838284,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_momentum_star2_21p3_M_3p1_M",
+   "task": "min_momentum_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 8.085462629416675e+34,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_momentum_star2_21p3_M_3p1_M",
+   "task": "min_momentum_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7.705871565319184e+34,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_momentum_star2_9p6_M_3p1_M",
+   "task": "min_momentum_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.360270791132992e+34,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_momentum_star2_9p6_M_3p1_M",
+   "task": "min_momentum_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.1443554406212088e+34,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_momentum_star2_0p18_M_0p63_M",
+   "task": "min_momentum_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.597054545861641e+33,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_momentum_star2_0p18_M_0p63_M",
+   "task": "min_momentum_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.5227415968236345e+33,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "min_velocity_star1_21p3_M_3p1_M",
+   "task": "min_velocity_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1931.995547072633,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_velocity_star1_21p3_M_3p1_M",
+   "task": "min_velocity_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1850.6075862990947,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_velocity_star1_9p6_M_3p1_M",
+   "task": "min_velocity_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2311.9390713686157,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_velocity_star1_9p6_M_3p1_M",
+   "task": "min_velocity_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2208.6846396355127,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_velocity_star1_0p18_M_0p63_M",
+   "task": "min_velocity_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4512.944294230194,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_velocity_star1_0p18_M_0p63_M",
+   "task": "min_velocity_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4323.592458358546,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_velocity_star2_21p3_M_3p1_M",
+   "task": "min_velocity_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 13274.679081497985,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_velocity_star2_21p3_M_3p1_M",
+   "task": "min_velocity_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 12715.465028441517,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_velocity_star2_9p6_M_3p1_M",
+   "task": "min_velocity_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7159.553253270697,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_velocity_star2_9p6_M_3p1_M",
+   "task": "min_velocity_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6839.797593710062,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_velocity_star2_0p18_M_0p63_M",
+   "task": "min_velocity_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1289.412655494417,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "min_velocity_star2_0p18_M_0p63_M",
+   "task": "min_velocity_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1235.312130959707,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "multiply_mass_period_21p3_M_3p1_M",
+   "task": "multiply_mass_period",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 161736.61895820653,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "multiply_mass_period_21p3_M_3p1_M",
+   "task": "multiply_mass_period",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 179543.0057964498,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "multiply_mass_period_9p6_M_3p1_M",
+   "task": "multiply_mass_period",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 750598.1837041887,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "multiply_mass_period_9p6_M_3p1_M",
+   "task": "multiply_mass_period",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 838224.100871708,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "multiply_mass_period_0p18_M_0p63_M",
+   "task": "multiply_mass_period",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 57702.38444378805,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "multiply_mass_period_0p18_M_0p63_M",
+   "task": "multiply_mass_period",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 63992.5390750759,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "orbital_area_star1_21p3_M_3p1_M",
+   "task": "orbital_area_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5.0119146677416074e+23,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "orbital_area_star1_21p3_M_3p1_M",
+   "task": "orbital_area_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5.27847630638601e+23,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "orbital_area_star1_9p6_M_3p1_M",
+   "task": "orbital_area_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.330431663758279e+24,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "orbital_area_star1_9p6_M_3p1_M",
+   "task": "orbital_area_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.517907815985134e+24,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "orbital_area_star1_0p18_M_0p63_M",
+   "task": "orbital_area_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 9.761400391096896e+23,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "orbital_area_star1_0p18_M_0p63_M",
+   "task": "orbital_area_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.027513497229512e+24,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "orbital_area_star2_21p3_M_3p1_M",
+   "task": "orbital_area_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.3661348237329074e+25,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "orbital_area_star2_21p3_M_3p1_M",
+   "task": "orbital_area_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.4919791003579823e+25,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "orbital_area_star2_9p6_M_3p1_M",
+   "task": "orbital_area_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.193887431133975e+25,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "orbital_area_star2_9p6_M_3p1_M",
+   "task": "orbital_area_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.3736772562039375e+25,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "orbital_area_star2_0p18_M_0p63_M",
+   "task": "orbital_area_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7.968490115182077e+22,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "orbital_area_star2_0p18_M_0p63_M",
+   "task": "orbital_area_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 8.387865283507894e+22,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "periastron_21p3_M_3p1_M",
+   "task": "periastron",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1418672166847.8167,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "periastron_21p3_M_3p1_M",
+   "task": "periastron",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1411224740814.9614,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "periastron_9p6_M_3p1_M",
+   "task": "periastron",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1903636194382.0203,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "periastron_9p6_M_3p1_M",
+   "task": "periastron",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1892383301839.2395,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "periastron_0p18_M_0p63_M",
+   "task": "periastron",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 323261208647.9494,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "periastron_0p18_M_0p63_M",
+   "task": "periastron",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 321447627458.9656,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "periastron_3p1_M_0p18_M_Elliptical_Single_Orbit",
+   "task": "periastron",
+   "variation": "3.1 M, 0.18 M, Elliptical, Single Orbit",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": null,
+   "error": "SVD did not converge",
+   "secs": 1.5,
+   "correct": false
+  },
+  {
+   "scenario_id": "periastron_3p1_M_0p18_M_Elliptical_Single_Orbit",
+   "task": "periastron",
+   "variation": "3.1 M, 0.18 M, Elliptical, Single Orbit",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 59149822021.290764,
+   "twin_validation": 0.016474723702178503,
+   "n_obs": 2458,
+   "alpha_fit": -1.9999572896773787,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "period_21p3_M_3p1_M",
+   "task": "period",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 729688022.0043973,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "period_21p3_M_3p1_M",
+   "task": "period",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 768806918.6984905,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "period_9p6_M_3p1_M",
+   "task": "period",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1571942991.677551,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "period_9p6_M_3p1_M",
+   "task": "period",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1661166288.5945766,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "period_0p18_M_0p63_M",
+   "task": "period",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 435842841.37046176,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "period_0p18_M_0p63_M",
+   "task": "period",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 458984171.1015757,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "period_9p6_M_3p1_M_Proper_Motion",
+   "task": "period",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1965530542.9448972,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "period_9p6_M_3p1_M_Proper_Motion",
+   "task": "period",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2833153016.658429,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "period_9p6_M_3p1_M_Proper_Motion2",
+   "task": "period",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 392850494.01772773,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "period_9p6_M_3p1_M_Proper_Motion2",
+   "task": "period",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": null,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "period_9p6_M_3p1_M_yrAUMsun",
+   "task": "period",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "budget",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 1572130392.8082848,
+   "twin_validation": 0.3329443111957768,
+   "n_obs": 100,
+   "alpha_fit": -1.9995825855695475,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "period_9p6_M_3p1_M_yrAUMsun",
+   "task": "period",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "full",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 1661458083.3179555,
+   "twin_validation": 1.436874824927238,
+   "n_obs": 2442,
+   "alpha_fit": -1.999406317224956,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "period_9p6_M_3p1_M_cgs",
+   "task": "period",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "budget",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 1571942991.183013,
+   "twin_validation": 0.33334354970737123,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363803031,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "period_9p6_M_3p1_M_cgs",
+   "task": "period",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "full",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 1661166288.4927542,
+   "twin_validation": 1.4362595844319657,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838284,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "reduced_mass_21p3_M_3p1_M",
+   "task": "reduced_mass",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5.317048484897244e+30,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "reduced_mass_21p3_M_3p1_M",
+   "task": "reduced_mass",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5.290287759187041e+30,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "reduced_mass_9p6_M_3p1_M",
+   "task": "reduced_mass",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.6035731663848835e+30,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "reduced_mass_9p6_M_3p1_M",
+   "task": "reduced_mass",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.580166412161788e+30,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "reduced_mass_0p18_M_0p63_M",
+   "task": "reduced_mass",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.7524238162173728e+29,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "reduced_mass_0p18_M_0p63_M",
+   "task": "reduced_mass",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.7392835627178555e+29,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "reduced_mass_9p6_M_3p1_M_Proper_Motion",
+   "task": "reduced_mass",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.7736278873294344e+30,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "reduced_mass_9p6_M_3p1_M_Proper_Motion",
+   "task": "reduced_mass",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.4882530463680984e+30,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "reduced_mass_9p6_M_3p1_M_Proper_Motion2",
+   "task": "reduced_mass",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.7783600752066197e+30,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "reduced_mass_9p6_M_3p1_M_Proper_Motion2",
+   "task": "reduced_mass",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.2971956651556103e+30,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "reduced_mass_9p6_M_3p1_M_yrAUMsun",
+   "task": "reduced_mass",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "budget",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 4.602389176710432e+30,
+   "twin_validation": 0.3329443111957768,
+   "n_obs": 100,
+   "alpha_fit": -1.9995825855695475,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "reduced_mass_9p6_M_3p1_M_yrAUMsun",
+   "task": "reduced_mass",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "full",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 4.5789558451905326e+30,
+   "twin_validation": 1.436874824927238,
+   "n_obs": 2442,
+   "alpha_fit": -1.999406317224956,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "reduced_mass_9p6_M_3p1_M_cgs",
+   "task": "reduced_mass",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "budget",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 4.603573167777958e+30,
+   "twin_validation": 0.33334354970737123,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363803031,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "reduced_mass_9p6_M_3p1_M_cgs",
+   "task": "reduced_mass",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "full",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 4.58016641216282e+30,
+   "twin_validation": 1.4362595844319657,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838284,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_21p3_M_3p1_M",
+   "task": "semi_major_axis",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3507597972417.7197,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_21p3_M_3p1_M",
+   "task": "semi_major_axis",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3625762488649.8076,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_9p6_M_3p1_M",
+   "task": "semi_major_axis",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4706120682057.13,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_9p6_M_3p1_M",
+   "task": "semi_major_axis",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4874266543588.341,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_0p18_M_0p63_M",
+   "task": "semi_major_axis",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 799698070777.7592,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_0p18_M_0p63_M",
+   "task": "semi_major_axis",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 826440796180.0563,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_9p6_M_3p1_M_Proper_Motion",
+   "task": "semi_major_axis",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5528529799152.116,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_9p6_M_3p1_M_Proper_Motion",
+   "task": "semi_major_axis",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6911066245397.152,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "semi_major_axis_9p6_M_3p1_M_Proper_Motion2",
+   "task": "semi_major_axis",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1890538061079.1375,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_9p6_M_3p1_M_Proper_Motion2",
+   "task": "semi_major_axis",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 13658953517376.955,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "semi_major_axis_9p6_M_3p1_M_yrAUMsun",
+   "task": "semi_major_axis",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "budget",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 4706091185144.055,
+   "twin_validation": 0.3329443111957768,
+   "n_obs": 100,
+   "alpha_fit": -1.9995825855695475,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_9p6_M_3p1_M_yrAUMsun",
+   "task": "semi_major_axis",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "full",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 4874407821790.412,
+   "twin_validation": 1.436874824927238,
+   "n_obs": 2442,
+   "alpha_fit": -1.999406317224956,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_9p6_M_3p1_M_cgs",
+   "task": "semi_major_axis",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "budget",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 4706120681553.604,
+   "twin_validation": 0.33334354970737123,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363803031,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_9p6_M_3p1_M_cgs",
+   "task": "semi_major_axis",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "full",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 4874266543390.568,
+   "twin_validation": 1.4362595844319657,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838284,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_21p3_M_3p1_M",
+   "task": "semi_major_axis_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 445637447315.39777,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_21p3_M_3p1_M",
+   "task": "semi_major_axis_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 460650152246.5122,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_9p6_M_3p1_M",
+   "task": "semi_major_axis_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1148738119242.274,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_9p6_M_3p1_M",
+   "task": "semi_major_axis_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1189781597253.8357,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_0p18_M_0p63_M",
+   "task": "semi_major_axis_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 621987388382.6934,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_0p18_M_0p63_M",
+   "task": "semi_major_axis_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 642787285917.8074,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "semi_major_axis_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1349483651761.6357,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "semi_major_axis_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1686953178009.78,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "semi_major_axis_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 461469920420.6134,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "semi_major_axis_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3334075268018.713,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_9p6_M_3p1_M_yrAUMsun",
+   "task": "semi_major_axis_star1",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "budget",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 1148730919208.3882,
+   "twin_validation": 0.3329443111957768,
+   "n_obs": 100,
+   "alpha_fit": -1.9995825855695475,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_9p6_M_3p1_M_yrAUMsun",
+   "task": "semi_major_axis_star1",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "full",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 1189816082484.2708,
+   "twin_validation": 1.436874824927238,
+   "n_obs": 2442,
+   "alpha_fit": -1.999406317224956,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_9p6_M_3p1_M_cgs",
+   "task": "semi_major_axis_star1",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "budget",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 1148738119119.38,
+   "twin_validation": 0.33334354970737123,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363803031,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star1_9p6_M_3p1_M_cgs",
+   "task": "semi_major_axis_star1",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "full",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 1189781597205.5688,
+   "twin_validation": 1.4362595844319657,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838284,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star2_21p3_M_3p1_M",
+   "task": "semi_major_axis_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3061960525102.3223,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star2_21p3_M_3p1_M",
+   "task": "semi_major_axis_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3165112336403.295,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star2_9p6_M_3p1_M",
+   "task": "semi_major_axis_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3557382562814.856,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star2_9p6_M_3p1_M",
+   "task": "semi_major_axis_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3684484946334.505,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star2_0p18_M_0p63_M",
+   "task": "semi_major_axis_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 177710682395.06577,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_major_axis_star2_0p18_M_0p63_M",
+   "task": "semi_major_axis_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 183653510262.24887,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_21p3_M_3p1_M",
+   "task": "semi_minor_axis",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2817735352181.4336,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_21p3_M_3p1_M",
+   "task": "semi_minor_axis",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2870884217016.5303,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_9p6_M_3p1_M",
+   "task": "semi_minor_axis",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3780694720607.08,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_9p6_M_3p1_M",
+   "task": "semi_minor_axis",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3855755006548.0693,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_0p18_M_0p63_M",
+   "task": "semi_minor_axis",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 642281029464.1829,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_0p18_M_0p63_M",
+   "task": "semi_minor_axis",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 654206610434.1635,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_9p6_M_3p1_M_Proper_Motion",
+   "task": "semi_minor_axis",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3285670649474.3345,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_9p6_M_3p1_M_Proper_Motion",
+   "task": "semi_minor_axis",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3776364864457.4766,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "semi_minor_axis_9p6_M_3p1_M_Proper_Motion2",
+   "task": "semi_minor_axis",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 815400014313.5883,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_9p6_M_3p1_M_Proper_Motion2",
+   "task": "semi_minor_axis",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2253675424065.035,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "semi_minor_axis_star1_21p3_M_3p1_M",
+   "task": "semi_minor_axis_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 357990966875.535,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_star1_21p3_M_3p1_M",
+   "task": "semi_minor_axis_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 364743486588.1814,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_star1_9p6_M_3p1_M",
+   "task": "semi_minor_axis_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 922846742825.336,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_star1_9p6_M_3p1_M",
+   "task": "semi_minor_axis_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 941168544905.4254,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_star1_0p18_M_0p63_M",
+   "task": "semi_minor_axis_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 499551911805.46893,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_star1_0p18_M_0p63_M",
+   "task": "semi_minor_axis_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 508827363671.0048,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_star2_21p3_M_3p1_M",
+   "task": "semi_minor_axis_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2459744385305.8994,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_star2_21p3_M_3p1_M",
+   "task": "semi_minor_axis_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2506140730428.348,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_star2_9p6_M_3p1_M",
+   "task": "semi_minor_axis_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2857847977781.743,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_star2_9p6_M_3p1_M",
+   "task": "semi_minor_axis_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2914586461642.643,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_star2_0p18_M_0p63_M",
+   "task": "semi_minor_axis_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 142729117658.71387,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "semi_minor_axis_star2_0p18_M_0p63_M",
+   "task": "semi_minor_axis_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 145379246763.15866,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "specific_angular_momentum_21p3_M_3p1_M",
+   "task": "specific_angular_momentum",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 8.510451600396534e+16,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "specific_angular_momentum_21p3_M_3p1_M",
+   "task": "specific_angular_momentum",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 8.507023731885046e+16,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "specific_angular_momentum_9p6_M_3p1_M",
+   "task": "specific_angular_momentum",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7.111769623320371e+16,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "specific_angular_momentum_9p6_M_3p1_M",
+   "task": "specific_angular_momentum",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7.108623169338296e+16,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "specific_angular_momentum_0p18_M_0p63_M",
+   "task": "specific_angular_momentum",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7404590378378722.0,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "specific_angular_momentum_0p18_M_0p63_M",
+   "task": "specific_angular_momentum",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 7401314371964142.0,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "K+U_10p1_M_5p6_M_Unbound",
+   "task": "K+U",
+   "variation": "10.1 M, 5.6 M, Unbound",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.3771770249892806e+40,
+   "twin_validation": 2.2711593427898257e-06,
+   "n_obs": 100,
+   "alpha_fit": -2.0000012408548202,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "K+U_10p1_M_5p6_M_Unbound",
+   "task": "K+U",
+   "variation": "10.1 M, 5.6 M, Unbound",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.3771796548673055e+40,
+   "twin_validation": 2.417950322681645e-06,
+   "n_obs": 3256,
+   "alpha_fit": -2.0000013372256302,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "K+U_21p3_M_3p1_M",
+   "task": "K+U",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -2.425188756666118e+39,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "K+U_21p3_M_3p1_M",
+   "task": "K+U",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -2.322594193180417e+39,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "K+U_9p6_M_3p1_M",
+   "task": "K+U",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -8.144741760852317e+38,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "K+U_9p6_M_3p1_M",
+   "task": "K+U",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -7.784012030419656e+38,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "K+U_0p18_M_0p63_M",
+   "task": "K+U",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -1.829099397178975e+37,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "K+U_0p18_M_0p63_M",
+   "task": "K+U",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -1.753052663057557e+37,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "K+U_9p6_M_3p1_M_Proper_Motion",
+   "task": "K+U",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -7.454830043366666e+38,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "K+U_9p6_M_3p1_M_Proper_Motion",
+   "task": "K+U",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -5.271806719076208e+38,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "K+U_9p6_M_3p1_M_Proper_Motion2",
+   "task": "K+U",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -2.1843524277231448e+39,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "K+U_9p6_M_3p1_M_Proper_Motion2",
+   "task": "K+U",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": -1.06534565808505e+38,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "total_mass_21p3_M_3p1_M",
+   "task": "total_mass",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.794120832906605e+31,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "total_mass_21p3_M_3p1_M",
+   "task": "total_mass",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.769992004103403e+31,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "total_mass_9p6_M_3p1_M",
+   "task": "total_mass",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.494994341418769e+31,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "total_mass_9p6_M_3p1_M",
+   "task": "total_mass",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 2.4823086042257385e+31,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "total_mass_0p18_M_0p63_M",
+   "task": "total_mass",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.5924737793828567e+30,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "total_mass_0p18_M_0p63_M",
+   "task": "total_mass",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.584871204143815e+30,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_ratio_21p3_M_3p1_M",
+   "task": "mass_ratio",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.870967741934928,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_ratio_21p3_M_3p1_M",
+   "task": "mass_ratio",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.870967741935132,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_ratio_9p6_M_3p1_M",
+   "task": "mass_ratio",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.0967741935484496,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_ratio_9p6_M_3p1_M",
+   "task": "mass_ratio",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.0967741935484265,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_ratio_0p18_M_0p63_M",
+   "task": "mass_ratio",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.2857142857143026,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_ratio_0p18_M_0p63_M",
+   "task": "mass_ratio",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 0.285714285714314,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "virial_theorem_21p3_M_3p1_M",
+   "task": "virial_theorem",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "virial_theorem_21p3_M_3p1_M",
+   "task": "virial_theorem",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "virial_theorem_9p6_M_3p1_M",
+   "task": "virial_theorem",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "virial_theorem_9p6_M_3p1_M",
+   "task": "virial_theorem",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "virial_theorem_0p18_M_0p63_M",
+   "task": "virial_theorem",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "virial_theorem_0p18_M_0p63_M",
+   "task": "virial_theorem",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "virial_theorem_7p7_M_4p9_M_Drag_tau_=_1p7e9",
+   "task": "virial_theorem",
+   "variation": "7.7 M, 4.9 M, Drag tau = 1.7e9",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 1.550051774946038,
+   "n_obs": 100,
+   "alpha_fit": -1.9997763609469164,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "virial_theorem_7p7_M_4p9_M_Drag_tau_=_1p7e9",
+   "task": "virial_theorem",
+   "variation": "7.7 M, 4.9 M, Drag tau = 1.7e9",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 1.444728192131005,
+   "n_obs": 2439,
+   "alpha_fit": -1.9993758444718726,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "virial_theorem_7p7_M_4p9_M_Drag_tau_=_8p3e8",
+   "task": "virial_theorem",
+   "variation": "7.7 M, 4.9 M, Drag tau = 8.3e8",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": false,
+   "twin_validation": 1.307475272135943,
+   "n_obs": 100,
+   "alpha_fit": -2.005999661343597,
+   "secs": 1.1,
+   "correct": true
+  },
+  {
+   "scenario_id": "virial_theorem_7p7_M_4p9_M_Drag_tau_=_8p3e8",
+   "task": "virial_theorem",
+   "variation": "7.7 M, 4.9 M, Drag tau = 8.3e8",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": false,
+   "twin_validation": 0.957302435956436,
+   "n_obs": 2488,
+   "alpha_fit": -1.999340895349458,
+   "secs": 1.0,
+   "correct": true
+  },
+  {
+   "scenario_id": "virial_theorem_7p7_M_4p9_M_Drag_tau_=_8p3e8_Proper_Motion",
+   "task": "virial_theorem",
+   "variation": "7.7 M, 4.9 M, Drag tau = 8.3e8 Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": false,
+   "twin_validation": 0.5175205402941108,
+   "n_obs": 100,
+   "alpha_fit": -2.0059996613401783,
+   "secs": 1.1,
+   "correct": true
+  },
+  {
+   "scenario_id": "virial_theorem_7p7_M_4p9_M_Drag_tau_=_8p3e8_Proper_Motion",
+   "task": "virial_theorem",
+   "variation": "7.7 M, 4.9 M, Drag tau = 8.3e8 Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": false,
+   "twin_validation": 0.5897197448192997,
+   "n_obs": 2488,
+   "alpha_fit": -1.9993408953494591,
+   "secs": 1.0,
+   "correct": true
+  },
+  {
+   "scenario_id": "travel_time_orbital_20per_path_21p3_M_3p1_M",
+   "task": "travel_time_orbital_20per_path",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 29708090.89200306,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "travel_time_orbital_20per_path_21p3_M_3p1_M",
+   "task": "travel_time_orbital_20per_path",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 9191191.24888897,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "travel_time_orbital_20per_path_9p6_M_3p1_M",
+   "task": "travel_time_orbital_20per_path",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 63991483.0656929,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "travel_time_orbital_20per_path_9p6_M_3p1_M",
+   "task": "travel_time_orbital_20per_path",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 18866414.729703903,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "travel_time_orbital_20per_path_0p18_M_0p63_M",
+   "task": "travel_time_orbital_20per_path",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 17733819.302576303,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "travel_time_orbital_20per_path_0p18_M_0p63_M",
+   "task": "travel_time_orbital_20per_path",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5234760.985773087,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "travel_time_orbital_70per_path_21p3_M_3p1_M",
+   "task": "travel_time_orbital_70per_path",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 147098314.12545204,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "travel_time_orbital_70per_path_21p3_M_3p1_M",
+   "task": "travel_time_orbital_70per_path",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 34097517.33901405,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "travel_time_orbital_70per_path_9p6_M_3p1_M",
+   "task": "travel_time_orbital_70per_path",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 316851032.6553726,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "travel_time_orbital_70per_path_9p6_M_3p1_M",
+   "task": "travel_time_orbital_70per_path",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 69487412.27607536,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "travel_time_orbital_70per_path_0p18_M_0p63_M",
+   "task": "travel_time_orbital_70per_path",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 87850281.04083014,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": false
+  },
+  {
+   "scenario_id": "travel_time_orbital_70per_path_0p18_M_0p63_M",
+   "task": "travel_time_orbital_70per_path",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 19301834.745895386,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": false
+  },
+  {
+   "scenario_id": "is_bound_21p3_M_3p1_M",
+   "task": "is_bound",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_21p3_M_3p1_M",
+   "task": "is_bound",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_9p6_M_3p1_M",
+   "task": "is_bound",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_9p6_M_3p1_M",
+   "task": "is_bound",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_0p18_M_0p63_M",
+   "task": "is_bound",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_0p18_M_0p63_M",
+   "task": "is_bound",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_9p6_M_3p1_M_Proper_Motion",
+   "task": "is_bound",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_9p6_M_3p1_M_Proper_Motion",
+   "task": "is_bound",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_9p6_M_3p1_M_Proper_Motion2",
+   "task": "is_bound",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_9p6_M_3p1_M_Proper_Motion2",
+   "task": "is_bound",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": true,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_9p6_M_3p1_M_yrAUMsun",
+   "task": "is_bound",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "budget",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": true,
+   "twin_validation": 0.3329443111957768,
+   "n_obs": 100,
+   "alpha_fit": -1.9995825855695475,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_9p6_M_3p1_M_yrAUMsun",
+   "task": "is_bound",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "full",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": true,
+   "twin_validation": 1.436874824927238,
+   "n_obs": 2442,
+   "alpha_fit": -1.999406317224956,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_9p6_M_3p1_M_cgs",
+   "task": "is_bound",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "budget",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": true,
+   "twin_validation": 0.33334354970737123,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363803031,
+   "secs": 1.5,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_9p6_M_3p1_M_cgs",
+   "task": "is_bound",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "full",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": true,
+   "twin_validation": 1.4362595844319657,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838284,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_10p1_M_5p6_M_Unbound",
+   "task": "is_bound",
+   "variation": "10.1 M, 5.6 M, Unbound",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": false,
+   "twin_validation": 2.2711593427898257e-06,
+   "n_obs": 100,
+   "alpha_fit": -2.0000012408548202,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "is_bound_10p1_M_5p6_M_Unbound",
+   "task": "is_bound",
+   "variation": "10.1 M, 5.6 M, Unbound",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": false,
+   "twin_validation": 2.417950322681645e-06,
+   "n_obs": 3256,
+   "alpha_fit": -2.0000013372256302,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_21p3_M_3p1_M",
+   "task": "mass_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.185031710693018e+31,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_21p3_M_3p1_M",
+   "task": "mass_star1",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 4.16396842981155e+31,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_9p6_M_3p1_M",
+   "task": "mass_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.8859799746157717e+31,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_9p6_M_3p1_M",
+   "task": "mass_star1",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.8763907559501703e+31,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_0p18_M_0p63_M",
+   "task": "mass_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.5388306208509544e+29,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_0p18_M_0p63_M",
+   "task": "mass_star1",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 3.521936009208749e+29,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "mass_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.9556475538412754e+31,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_9p6_M_3p1_M_Proper_Motion",
+   "task": "mass_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.838735925448174e+31,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "mass_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.957586224360022e+31,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_9p6_M_3p1_M_Proper_Motion2",
+   "task": "mass_star1",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.7604640305650353e+31,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  },
+  {
+   "scenario_id": "mass_star1_9p6_M_3p1_M_yrAUMsun",
+   "task": "mass_star1",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "budget",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 1.8854949207813752e+31,
+   "twin_validation": 0.3329443111957768,
+   "n_obs": 100,
+   "alpha_fit": -1.9995825855695475,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_9p6_M_3p1_M_yrAUMsun",
+   "task": "mass_star1",
+   "variation": "9.6 M, 3.1 M, yrAUMsun",
+   "variant": "full",
+   "units": [
+    "yr",
+    "AU",
+    "Msun"
+   ],
+   "answer": 1.8758948139974166e+31,
+   "twin_validation": 1.436874824927238,
+   "n_obs": 2442,
+   "alpha_fit": -1.999406317224956,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_9p6_M_3p1_M_cgs",
+   "task": "mass_star1",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "budget",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 1.8859799751864597e+31,
+   "twin_validation": 0.33334354970737123,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363803031,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star1_9p6_M_3p1_M_cgs",
+   "task": "mass_star1",
+   "variation": "9.6 M, 3.1 M, cgs",
+   "variant": "full",
+   "units": [
+    "s",
+    "cm",
+    "g"
+   ],
+   "answer": 1.8763907559505792e+31,
+   "twin_validation": 1.4362595844319657,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838284,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star2_21p3_M_3p1_M",
+   "task": "mass_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.090891222135872e+30,
+   "twin_validation": 0.23013057447927085,
+   "n_obs": 100,
+   "alpha_fit": -1.999582363798071,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star2_21p3_M_3p1_M",
+   "task": "mass_star2",
+   "variation": "21.3 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.060235742918528e+30,
+   "twin_validation": 0.6522561065758078,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362837675,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star2_9p6_M_3p1_M",
+   "task": "mass_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.090143668029972e+30,
+   "twin_validation": 0.3333435605799249,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637923777,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star2_9p6_M_3p1_M",
+   "task": "mass_star2",
+   "variation": "9.6 M, 3.1 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.059178482755681e+30,
+   "twin_validation": 1.436259584832869,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838226,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star2_0p18_M_0p63_M",
+   "task": "mass_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.2385907172977612e+30,
+   "twin_validation": 0.5375596600987209,
+   "n_obs": 100,
+   "alpha_fit": -1.9995823637992167,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star2_0p18_M_0p63_M",
+   "task": "mass_star2",
+   "variation": "0.18 M, 0.63 M",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 1.2326776032229402e+30,
+   "twin_validation": 1.3273660584692606,
+   "n_obs": 2442,
+   "alpha_fit": -1.9994063362838703,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star2_9p6_M_3p1_M_Proper_Motion",
+   "task": "mass_star2",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.31511189261304e+30,
+   "twin_validation": 0.1945134910212721,
+   "n_obs": 100,
+   "alpha_fit": -2.000801960473407,
+   "secs": 1.6,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star2_9p6_M_3p1_M_Proper_Motion",
+   "task": "mass_star2",
+   "variation": "9.6 M, 3.1 M, Proper Motion",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5.937584759257173e+30,
+   "twin_validation": 0.4320520982185589,
+   "n_obs": 2412,
+   "alpha_fit": -1.9987235628624926,
+   "secs": 1.7,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star2_9p6_M_3p1_M_Proper_Motion2",
+   "task": "mass_star2",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "budget",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 6.321372182824193e+30,
+   "twin_validation": 0.33317335306300666,
+   "n_obs": 100,
+   "alpha_fit": -2.0008646127774563,
+   "secs": 1.8,
+   "correct": true
+  },
+  {
+   "scenario_id": "mass_star2_9p6_M_3p1_M_Proper_Motion2",
+   "task": "mass_star2",
+   "variation": "9.6 M, 3.1 M, Proper Motion2",
+   "variant": "full",
+   "units": [
+    "m",
+    "s",
+    "kg"
+   ],
+   "answer": 5.684831765360769e+30,
+   "twin_validation": 4.088482719561271,
+   "n_obs": 2407,
+   "alpha_fit": -1.9971473176396184,
+   "secs": 1.8,
+   "correct": false
+  }
+ ]
+}
