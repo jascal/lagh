@@ -16,9 +16,10 @@ import sympy as sp
 
 from .base import (Candidate, admissible, design_matrix, lstsq, snap_all,
                    to_expr, eval_expr)
-from .certify import (Abstain, Certificate, check, coherent, epsilon,
-                      float_pinned, minimal, pinned, reduce_to_minimal,
-                      sample_box, significance_log10, vacuous)
+from .certify import (MACHINE_REL, Abstain, Certificate, check, coherent,
+                      epsilon, float_pinned, minimal, pinned,
+                      reduce_to_minimal, refit_minimal, sample_box,
+                      significance_log10, vacuous)
 from .classes import CURRICULUM, c5_transforms, c6_quasipoly, c7_levy
 from .engine_util import stlsq_supports
 
@@ -272,6 +273,16 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     X_all_m = np.vstack([X_fit, X_sel, X_cert])
     y_all_m = np.concatenate([y_fit, y_sel, y_cert])
     eps_all = epsilon(y_all_m, sigma=sigma, floor_abs=floor_abs)
+    # LOOSE-FLOOR REGIME (CASE_STUDY_GAIA_C0.md registered issue): when a
+    # declared absolute floor dominates the machine term, the per-candidate
+    # float_pinned gate INVERTS -- the true law's coefficients are honestly
+    # unpinned at loose epsilon (rejected) while delicately-canceling multi-term
+    # approximants are hyper-sensitive to perturbation (accepted). Measured on
+    # Gaia C0 at floor 2e-4: the 2-term truth gated out, a 14-term whale
+    # certified alone. Same lesson as the noise-gate move at PO12: coherence
+    # must see the full certifying set; the gate moves to the winner.
+    med_y = float(np.median(np.abs(y_cert)))
+    floor_dom = sigma <= 0 and floor_abs > max(1e-9, 100 * MACHINE_REL * med_y)
 
     # minimum-domain guard: certifying on too few TOTAL valid points is not
     # significant (a constant over 4 overflow-artifact points produced the only
@@ -337,7 +348,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     # applies the FULL verdict machinery (certification, coefficient gate,
     # coherence on the extended probe, pinned); a unique certifying class returns,
     # anything else falls through to the untouched escalation loop.
-    if dim >= 3 and max_tier >= 3:
+    if dim >= 3 and max_tier >= 3 and not floor_dom:
         from .classes import c3_powerlaw, c8_angular, c9_genmonomial
         pctx = Ctx(syms, [], X_fit, y_fit, X_sel, y_sel, sigma)
         pcands = (c3_powerlaw.candidates(pctx) + c9_genmonomial.candidates(pctx)
@@ -405,11 +416,20 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                 # certifying set under noise; the winner still cannot carry
                 # unpinned coefficients.
                 if sigma <= 0:
-                    ok, gated = float_pinned(c.expr, syms, X_cert, y_cert, eps,
-                                             sigma)
-                    if not ok:
-                        continue
-                    c.expr = gated
+                    if not floor_dom:
+                        ok, gated = float_pinned(c.expr, syms, X_cert, y_cert,
+                                                 eps, sigma)
+                        if not ok:
+                            continue
+                        c.expr = gated
+                    # floor-dominated: keep the candidate ungated so coherence
+                    # sees the true rival; the winner is gated below. First
+                    # collapse unsupported basis terms (refit parsimony) so a
+                    # full-basis fit whose sub-support suffices rejoins the
+                    # class of the law it actually is
+                    else:
+                        c.expr = refit_minimal(c.expr, syms, X_all_m, y_all_m,
+                                               eps_all)
                 elif c.channel in ("linear", "c2-pure", "c2-implicit"):
                     # SIGNIFICANCE BOUNDARY (measured PO12/PO40): at envelope
                     # epsilon on a bounded box, the DENSE channels certify
@@ -440,6 +460,20 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             if sigma > 0:
                 winner.expr = reduce_to_minimal(winner.expr, syms, X_all_m,
                                                 y_all_m, eps_all)
+            elif floor_dom:
+                winner.expr = reduce_to_minimal(winner.expr, syms, X_all_m,
+                                                y_all_m, eps_all)
+                ok, gated = float_pinned(winner.expr, syms, X_cert, y_cert,
+                                         eps, sigma)
+                if not ok:
+                    cert = Certificate(False, 0, 0, len(X_cert), bounds,
+                                       str(winner.expr),
+                                       abstain=Abstain.PARAMETRIC.value,
+                                       notes=["loose-floor winner gate: "
+                                              "coefficients not pinned at the "
+                                              "declared floor"])
+                    return Result(cert, None, tier, total)
+                winner.expr = gated
             cert = Certificate(True, 0, 0, len(X_cert), bounds, str(winner.expr),
                                alpha_log10=significance_log10(
                                    winner.expr, y_cert, eps, total),

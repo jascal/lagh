@@ -341,6 +341,63 @@ def reduce_to_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
     return e
 
 
+def refit_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
+                  eps: np.ndarray):
+    """Refit-based parsimony collapse (the loose-floor lesson, Gaia C0): a
+    multi-term lstsq fit whose OWN basis admits a sub-support already fitting
+    within epsilon is carrying unsupported terms -- delicately canceling
+    coefficients that term-by-term dropping (reduce_to_minimal) cannot prune.
+    Greedy forward selection over the expr's basis functions, REFITTING at each
+    step, stopped at the first support whose refit certifies. Returns the
+    refit expr (float coefficients -- the winner gate pins them), or the input
+    when it is not a plain linear combination or no smaller support certifies."""
+    e = sp.expand(expr)
+    if not e.is_Add or len(e.args) < 3:
+        return expr
+    basis = []
+    for t in e.as_ordered_terms():
+        coeff, g = t.as_independent(*syms)
+        if g.free_symbols - set(syms):
+            return expr
+        if g not in basis:
+            basis.append(g)
+    if len(basis) < 3:
+        return expr
+    try:
+        fns = [sp.lambdify(syms, g, "numpy") for g in basis]
+        cols = []
+        for f in fns:
+            v = np.broadcast_to(np.asarray(f(*[X[:, j] for j in range(X.shape[1])]),
+                                           float), (len(X),)).astype(float)
+            cols.append(v)
+        A = np.column_stack(cols)
+    except Exception:                                          # noqa: BLE001
+        return expr
+    if not np.all(np.isfinite(A)):
+        return expr
+    sel: list[int] = []
+    for _ in range(len(basis) - 1):          # strictly smaller supports only
+        best = None
+        for j in range(len(basis)):
+            if j in sel:
+                continue
+            Aj = A[:, sel + [j]]
+            w, *_ = np.linalg.lstsq(Aj, y, rcond=None)
+            r = float(np.max(np.abs(y - Aj @ w) - eps))
+            if best is None or r < best[0]:
+                best = (r, j, w)
+        if best is None:
+            break
+        sel.append(best[1])
+        if best[0] <= 0:
+            reduced = sum((sp.Float(c) * basis[k]
+                           for c, k in zip(best[2], sel)), sp.S.Zero)
+            if check(reduced, syms, X, y, eps)["certified"]:
+                return reduced
+            break
+    return expr
+
+
 def coherent(certifying: list, syms, P: np.ndarray, yscale: float,
              tau: float = TAU) -> list:
     """Greedy tau-clustering of certifying laws into functional equivalence classes.

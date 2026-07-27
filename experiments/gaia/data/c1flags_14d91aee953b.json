@@ -1,0 +1,9 @@
+{
+ "adql": "\nSELECT TOP 500 g.source_id, g.random_index, ap.flags_flame\nFROM gaiadr3.gaia_source AS g\nJOIN gaiadr3.astrophysical_parameters AS ap ON g.source_id = ap.source_id\nWHERE g.random_index < 2000000\n  AND g.ruwe < 1.4 AND g.parallax_over_error > 20\n  AND ap.teff_gspphot IS NOT NULL AND ap.lum_flame IS NOT NULL\n  AND ap.radius_flame IS NOT NULL AND ap.mass_flame IS NOT NULL\nORDER BY g.random_index\n",
+ "n_rows": 500,
+ "columns": [
+  "source_id",
+  "random_index",
+  "flags_flame"
+ ]
+}

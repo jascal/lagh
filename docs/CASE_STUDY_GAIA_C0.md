@@ -60,3 +60,48 @@ one known relation end-to-end under full discipline — plus two instrument
 hardenings (absolute-precision declaration in `recover`; term-scale invariant
 α) and one registered issue (loose-ε parsimony at σ=0) that Gaia forced on
 day one, exactly as the proposal's methodological goals predicted.
+
+## Issue closure (2026-07-27): the loose-ε parsimony fix
+
+Diagnosis on the frozen C0 snapshot, engine internals exposed. Three
+compounding mechanisms, none of them the assumed one:
+
+1. **The exact-coefficient gate INVERTS at a floor-dominated ε.** At floor
+   2e-4, 28 tier-1 candidates certify, including the 2-term truth. But
+   `float_pinned` (perturb each coefficient ±1e-5/±1e-4 relative; cert must
+   break) REJECTS the truth — its slope is honestly not identified to 1e-5 at
+   that ε — while PASSING the multi-term whales, whose large mutually
+   canceling coefficients are hyper-sensitive to any perturbation. The gate
+   built to block dyadic garbage removed the true rival and admitted the
+   approximants; coherence then saw a whale-only class.
+2. **No floor separates a superset fit from the truth.** The whale bases
+   CONTAIN {1, x}: lstsq spreads catalog-rounding noise over junk terms that
+   mutually cancel, so whale residuals ≈ truth residuals (~1e-6). Even at the
+   amended 5e-6 floor all 28 candidates certify; term-by-term dropping
+   (`reduce_to_minimal`) cannot prune delicately canceling terms.
+3. **Re-splits dissolved genuine ambiguity.** The amended-floor "clean" result
+   was itself split luck: split 0 sees 3 rival classes (honest structural
+   abstain), a later re-split's coherence collapses to one class, and the
+   full-data gate — which checks only fit, not rivalry — passes it.
+
+Fix (validated against the full suite, this snapshot at both floors, and the
+NewtonBench-default 1e-12 floor which must not trip it):
+
+- **Floor-dominated regime flag** (`sigma = 0` and
+  `floor_abs > max(1e-9, 100·MACHINE_REL·median|y|)`): the per-candidate
+  coefficient gate stands down (same lesson as the σ>0 PO12 move — coherence
+  must see the full certifying set) and moves to the winner; the CAP-S cheap
+  pre-pass stands down.
+- **Refit-parsimony collapse** (`certify.refit_minimal`): each certifying
+  candidate is greedily forward-selected over its OWN basis with refitting;
+  a candidate whose sub-support already certifies collapses to it. Every C0
+  whale collapses to the 2-term line, so coherence sees the one class that is
+  actually there.
+- **Sticky re-split ambiguity** (`passive`): a split that witnesses materially
+  different rival classes vetoes certification by any other split.
+
+Post-fix verdicts on the frozen snapshot: floor 2e-4 → **parametric abstain**
+(whales collapse to the line; the slope is honestly unpinnable at a loose
+floor); floor 5e-6 → **certified `25.68735 − (5/2)·log₁₀(flux)`, α ≤ 10⁻⁴⁶¹**
+— the published result, now reached through a sound path. The full C0 study
+re-run reproduces every published number identically.

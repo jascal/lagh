@@ -60,6 +60,8 @@ def discover_passive(X, y, *, sigma: float = 0.0, floor_abs: float = 1e-12,
     last: Result | None = None
     reasons: list = []
     full_ok: bool | None = None
+    ambiguity_seen = False
+    accepted: tuple | None = None
     for k in range(n_resplits):
         idx = np.random.default_rng(seed + k).permutation(len(X))
         a, b = int(0.6 * len(X)), int(0.8 * len(X))
@@ -69,13 +71,35 @@ def discover_passive(X, y, *, sigma: float = 0.0, floor_abs: float = 1e-12,
         last = r
         if not r.certificate.certified:
             reasons.append(r.certificate.abstain)
+            # STICKY AMBIGUITY: a split that sees materially-different rival
+            # classes has witnessed genuine under-determination at this epsilon;
+            # re-splitting exists for reach/placement variance, not to dissolve
+            # rivalry (measured: a 14-term approximant certified on a later
+            # split after split 0 correctly abstained with 2 classes)
+            if any("materially different" in str(nt)
+                   for nt in r.certificate.notes):
+                ambiguity_seen = True
             continue
         if check(r.expr, syms, X, y, eps_full)["certified"]:
-            return PassiveResult(r, k + 1, True, reasons)
-        # certified on the split but not on all points: a split artifact the gate
-        # exists to catch -- demote and keep trying
-        full_ok = False
-        reasons.append("full-data-gate")
+            if accepted is None:
+                accepted = (r, k + 1)
+        else:
+            # certified on the split but not on all points: a split artifact
+            # the full-data gate exists to catch
+            full_ok = False
+            reasons.append("full-data-gate")
+    if accepted is not None and not ambiguity_seen:
+        return PassiveResult(accepted[0], accepted[1], True, reasons)
+    if accepted is not None and ambiguity_seen:
+        r0 = accepted[0]
+        cert = r0.certificate
+        cert.certified = False
+        cert.abstain = cert.abstain or "structural"
+        cert.notes.append("passive: certification rejected -- another re-split "
+                          "witnessed materially different rival classes at "
+                          "this epsilon (sticky ambiguity)")
+        return PassiveResult(Result(cert, None, r0.tier, r0.n_candidates),
+                             n_resplits, False, reasons)
     if last is not None and last.certificate.certified and full_ok is False:
         # never return a certification that failed the gate
         cert = last.certificate

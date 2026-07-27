@@ -1,0 +1,48 @@
+{
+ "c1_snapshot": "/home/allans/code/lagh/experiments/gaia/data/c1_85a589d51938.csv",
+ "c1_n": 500,
+ "c1_floor_measured": {
+  "r_L": 3.4695362148552733e-10,
+  "r_R": 4.125416576772595e-10,
+  "r_T": 9.096881074535031e-17,
+  "floor_abs": 1.0180186645708644e-09
+ },
+ "P1_stefan_boltzmann": {
+  "certified": false,
+  "law": null,
+  "alpha_log10": null,
+  "abstain": "structural"
+ },
+ "P1_const_expected_m4log10Tsun": -15.045305289685826,
+ "P2_loose_floor": {
+  "certified": false,
+  "law": "",
+  "abstain": "structural",
+  "n_terms_if_certified": null
+ },
+ "P3_mass_luminosity": {
+  "track": "conjecture",
+  "tag": "empirical",
+  "expr": "5.11556921183005*x_0 + 0.083453136414292",
+  "slope": 5.11556921183005,
+  "n": 462
+ },
+ "c2_snapshot": "/home/allans/code/lagh/experiments/gaia/data/c2_5c940494e92b.csv",
+ "c2_n": 3000,
+ "P4_U_to_V": {
+  "certified": false,
+  "abstain": "structural"
+ },
+ "P4_U_to_W": {
+  "certified": false,
+  "abstain": "structural"
+ },
+ "P5_stromberg": {
+  "n_bins": 8,
+  "slope": -0.009183661277014189,
+  "corr": -0.7012682268987737,
+  "k_kms": 108.8890334514953,
+  "binned_recover_certified": false,
+  "binned_recover_abstain": "structural"
+ }
+}

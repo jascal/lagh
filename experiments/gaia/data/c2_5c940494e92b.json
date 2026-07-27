@@ -1,0 +1,15 @@
+{
+ "adql": "\nSELECT TOP 3000 source_id, random_index, ra, dec, parallax,\n       pmra, pmdec, radial_velocity, bp_rp\nFROM gaiadr3.gaia_source\nWHERE radial_velocity IS NOT NULL AND parallax > 5\n  AND ruwe < 1.4 AND parallax_over_error > 20\n  AND bp_rp IS NOT NULL\nORDER BY random_index\n",
+ "n_rows": 3000,
+ "columns": [
+  "source_id",
+  "random_index",
+  "ra",
+  "dec",
+  "parallax",
+  "pmra",
+  "pmdec",
+  "radial_velocity",
+  "bp_rp"
+ ]
+}
