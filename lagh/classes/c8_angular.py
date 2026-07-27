@@ -105,7 +105,10 @@ def candidates(ctx) -> list[Candidate]:
                     if any(mixed[j] and e.denominator != 1
                            for j, e in zip(others_j, exps[:-1])):
                         continue          # fractional power of a signed column
-                    C = snap(float(np.exp(c[0])))
+                    C0 = float(np.exp(c[0]))
+                    if not np.isfinite(C0):
+                        continue
+                    C = snap(C0)
                     base = sp.Rational(C.numerator, C.denominator)
                     others = [j for j in range(dim) if j != k]
                     for j, e in zip(others, exps[:-1]):
@@ -151,7 +154,10 @@ def candidates(ctx) -> list[Candidate]:
                         continue
                     exps = [Fraction(float(a)).limit_denominator(_EXP_CAP)
                             for a in c[1:]]
-                    C = snap(float(np.exp(c[0])))
+                    C0 = float(np.exp(c[0]))
+                    if not np.isfinite(C0):
+                        continue
+                    C = snap(C0)
                     inner = sp.Rational(C.numerator, C.denominator)
                     others = [j for j in range(dim) if j != k]
                     for j, e in zip(others, exps[:-1]):

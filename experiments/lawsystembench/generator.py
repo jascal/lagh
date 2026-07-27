@@ -18,7 +18,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 OUT = Path("experiments/results/lawsystembench_v1.jsonl")
 N_DRAWS = 8
-N_SAMPLES = 400
+N_SAMPLES = 120
+N_TRAJ = 5
 SIGMA_REP = 1e-6          # the noisy tier: float32-ish representation noise
 
 
@@ -117,23 +118,40 @@ def main():
         for draw in range(N_DRAWS):
             rng = np.random.default_rng(rng_master.integers(2 ** 32))
             names, deriv, x0, t_end, gt_eqs, inv, shared = make_family(fam, rng)
-            X, D = _traj(deriv, x0, t_end)
-            idx = np.sort(rng.choice(len(X), N_SAMPLES, replace=False))
-            cols = {}
-            for j, nm in enumerate(names):
-                cols[nm] = X[idx, j]
-                cols[f"d{nm}_dt"] = D[idx, j]
+            # v1.2: MULTIPLE trajectories per problem (same parameters, varied
+            # ICs). Single-trajectory data lies on a curve: the vector field
+            # off-curve is unidentifiable (the instrument's structural abstains
+            # detected exactly this) and invariant level sets are degenerate.
+            cols = {nm: [] for nm in names}
+            cols.update({f"d{nm}_dt": [] for nm in names})
+            traj_col = []
+            for tj in range(N_TRAJ):
+                x0j = list(np.asarray(x0, float) *
+                           rng.uniform(0.6, 1.5, len(x0))) if tj else x0
+                X, D = _traj(deriv, x0j, t_end)
+                idx = np.sort(rng.choice(len(X), N_SAMPLES, replace=False))
+                for j, nm in enumerate(names):
+                    cols[nm].append(X[idx, j])
+                    cols[f"d{nm}_dt"].append(D[idx, j])
+                traj_col += [tj] * N_SAMPLES
+            cols = {k: np.concatenate(v) for k, v in cols.items()}
             for tier, sig in (("clean", 0.0), ("noisy", SIGMA_REP)):
                 data = {k: (v * (1 + sig * rng.standard_normal(len(v)))
                             if sig else v).tolist() for k, v in cols.items()}
-                # neutral renaming: shuffle and mask the column names
-                orig = sorted(data)
-                perm = rng.permutation(len(orig))
-                mapping = {orig[p]: f"c{i}" for i, p in enumerate(perm)}
+                # neutral renaming (amended): states -> c*, rates -> r*,
+                # assignments shuffled so rate<->state pairing stays hidden
+                states = [k for k in sorted(data) if not k.startswith("d")]
+                rates = [k for k in sorted(data) if k.startswith("d")]
+                ps = rng.permutation(len(states))
+                pr = rng.permutation(len(rates))
+                mapping = {states[p_]: f"c{i}" for i, p_ in enumerate(ps)}
+                mapping.update({rates[p_]: f"r{i}" for i, p_ in enumerate(pr)})
+                data["traj"] = list(map(int, traj_col))
+                mapping["traj"] = "traj"          # run id: known provenance
                 rows.append({
                     "id": f"{fam}_d{draw}_{tier}", "family": fam, "tier": tier,
                     "sigma": sig,
-                    "columns": {mapping[k]: data[k] for k in orig},
+                    "columns": {mapping[k]: data[k] for k in sorted(data)},
                     "mapping": mapping,           # gt-only: scorer uses it
                     "gt_equations": gt_eqs, "gt_invariants": inv,
                     "gt_shared": shared})

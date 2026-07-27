@@ -60,7 +60,10 @@ def candidates(ctx) -> list[Candidate]:
         if resid > _FIT_TOL:
             continue
         exps = [Fraction(float(a)).limit_denominator(_EXP_CAP) for a in c[1:]]
-        C = snap(float(np.exp(c[0])))
+        C0 = float(np.exp(c[0]))
+        if not np.isfinite(C0):
+            continue
+        C = snap(C0)
         expr: sp.Expr = sign * sp.Rational(C.numerator, C.denominator)
         for j, (a, e) in enumerate(zip(assign, exps)):
             if e == 0:

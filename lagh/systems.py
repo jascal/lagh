@@ -50,7 +50,7 @@ def _library(cols, data, n):
     return names, np.column_stack(mats)
 
 
-def discover_invariants(data, *, sigma=0.0, max_invariants=10):
+def discover_invariants(data, *, sigma=0.0, max_invariants=10, groups=None):
     """Exhaustive SMALL-SUBSET scan (supersedes global nullspace: the null
     space of a closed system is high-dimensional and an arbitrary basis vector
     is a many-term mixture, not the physical invariant -- measured 29-term
@@ -58,11 +58,19 @@ def discover_invariants(data, *, sigma=0.0, max_invariants=10):
     the minimum-variance combination is checked for constancy and certified.
     Minimality is by construction (smallest subset first); each accepted
     invariant's span is excluded from later, larger candidates."""
-    cols = sorted(data.keys())
+    cols = sorted(k for k in data.keys() if k != "traj")
     n = len(data[cols[0]])
-    names, M = _library(cols, data, n)
+    names, M = _library(cols, {c: np.asarray(data[c], float) for c in cols}, n)
     scale = np.sqrt(np.mean(M ** 2, axis=0)) + 1e-300
-    Mn = (M - M.mean(0)) / scale
+    if groups is not None:
+        groups = np.asarray(groups)
+        Mc = M.copy()
+        for g in np.unique(groups):
+            m = groups == g
+            Mc[m] -= Mc[m].mean(0)          # within-group centering
+        Mn = Mc / scale
+    else:
+        Mn = (M - M.mean(0)) / scale
     T = M.shape[1]
     from itertools import combinations as _comb
 
@@ -94,9 +102,17 @@ def discover_invariants(data, *, sigma=0.0, max_invariants=10):
             c = np.zeros(T)
             c[list(idx)] = v / scale[list(idx)]
             vals = M @ c
-            mu = float(np.mean(vals))
-            spread = float(np.max(np.abs(vals - mu)))
-            vscale = float(np.mean(np.abs(vals))) + abs(mu) + 1e-300
+            vscale = float(np.mean(np.abs(vals))) + 1e-300
+            if groups is None:
+                mu = float(np.mean(vals))
+                spread = float(np.max(np.abs(vals - mu)))
+            else:
+                # per-trajectory constancy: constant WITHIN each run; level may
+                # (and should) differ across runs -- the identifiability fix
+                spread = 0.0
+                for g in np.unique(groups):
+                    gv = vals[groups == g]
+                    spread = max(spread, float(np.max(np.abs(gv - gv.mean()))))
             if spread > max(1e-7 * vscale, 4 * sigma * vscale):
                 continue
             lead = c[list(idx)[0]]
@@ -129,10 +145,16 @@ def discover_invariants(data, *, sigma=0.0, max_invariants=10):
             c = np.zeros(T)
             c[list(ids)] = v / scale[list(ids)]
             vals = M @ c
-            mu = float(np.mean(vals))
-            vscale = float(np.mean(np.abs(vals))) + abs(mu) + 1e-300
-            if float(np.max(np.abs(vals - mu))) > max(1e-7 * vscale,
-                                                      4 * sigma * vscale):
+            vscale = float(np.mean(np.abs(vals))) + 1e-300
+            if groups is None:
+                mu5 = float(np.mean(vals))
+                spread5 = float(np.max(np.abs(vals - mu5)))
+            else:
+                spread5 = 0.0
+                for g in np.unique(groups):
+                    gv = vals[groups == g]
+                    spread5 = max(spread5, float(np.max(np.abs(gv - gv.mean()))))
+            if spread5 > max(1e-7 * vscale, 4 * sigma * vscale):
                 continue
             c = c / c[ids[0]]
             expr = sum(sp.Float(ci) * sp.sympify(nm)
@@ -158,8 +180,8 @@ def _numeric_constants(expr_str):
 
 
 def discover_system(data: dict, *, sigma: float = 0.0, seed: int = 0,
-                    per_target_s: float = 60.0, max_tier: int = 4
-                    ) -> SystemCertificate:
+                    per_target_s: float = 60.0, max_tier: int = 4,
+                    targets: list | None = None) -> SystemCertificate:
     """data: {column_name: 1-D array}, roles UNLABELED. Per-target wall-clock
     budget: an abstaining column must not starve the rest of the system pass
     (a system problem runs |columns| discoveries)."""
@@ -171,13 +193,18 @@ def discover_system(data: dict, *, sigma: float = 0.0, seed: int = 0,
     def _h(s_, f_):
         raise _TO()
 
-    cols = sorted(data.keys())
+    groups = np.asarray(data["traj"]) if "traj" in data else None
+    cols = sorted(k for k in data.keys() if k != "traj")
     n = len(data[cols[0]])
     cert = SystemCertificate()
     prev = _sig.getsignal(_sig.SIGALRM)
+    tgt_list = targets if targets is not None else cols
+    input_cols = ([c for c in cols if c not in set(tgt_list)]
+                  if targets is not None else None)
     # 1. per-column certified discovery
-    for target in cols:
-        others = [c for c in cols if c != target]
+    for target in tgt_list:
+        others = input_cols if input_cols is not None \
+            else [c for c in cols if c != target]
         X = np.column_stack([data[c] for c in others])
         try:
             _sig.signal(_sig.SIGALRM, _h)
@@ -201,8 +228,10 @@ def discover_system(data: dict, *, sigma: float = 0.0, seed: int = 0,
             cert.roles[target] = "dependent"
         else:
             cert.roles[target] = "free"
-    # 2. invariants (system-level)
-    cert.invariants = discover_invariants(data, sigma=sigma)
+    # 2. invariants (system-level, per-trajectory constancy when runs exist)
+    cert.invariants = discover_invariants(
+        {k: v for k, v in data.items() if k != "traj"}, sigma=sigma,
+        groups=groups)
     # 3. cross-equation shared-constant coherence
     consts = {t: _numeric_constants(e["expr"]) for t, e in cert.equations.items()}
     targets = list(consts)

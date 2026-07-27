@@ -153,9 +153,23 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
         if vr > max(PREFILTER_REL, min(3.0 * ctx.sigma, 3e-4)) * yscale:
             continue
         sub = [ctx.terms[i] for i in cols]
-        expr = to_expr(sub, snap_all(c))
+        snapped = snap_all(c)
+        expr = to_expr(sub, snapped)
         out.append(Candidate(expr=expr, complexity=sum(t.complexity for t in sub),
                              channel="linear", val_residual=vr))
+        # ZERO-CROSSING targets: epsilon at the crossings is the ABSOLUTE floor
+        # while snap error scales with the TERM (measured: a 1e-13-relative snap
+        # missed certification on Lotka-Volterra rates). When snapping loses
+        # precision, also emit the raw-float variant -- the clean-data
+        # coefficient gate pins and decimal-snaps float winners soundly.
+        if any(abs(float(s_) - ci) > 1e-13 * (abs(ci) + 1e-300)
+               for s_, ci in zip(snapped, c)):
+            expr_f = sp.Integer(0)
+            for t_, ci in zip(sub, c):
+                expr_f = expr_f + sp.Float(ci) * t_.sympy()
+            out.append(Candidate(expr=expr_f,
+                                 complexity=sum(t.complexity for t in sub),
+                                 channel="linear", val_residual=vr))
     return out
 
 

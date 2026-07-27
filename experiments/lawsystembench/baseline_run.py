@@ -28,31 +28,54 @@ def _h(s, f):
     raise TimeoutError()
 
 
+import re as _re
+
+
+def _sympify_safe(s):
+    """Bind every identifier to a Symbol so names like I/E/S never parse as
+    sympy singletons (the judge lesson, third occurrence)."""
+    names = set(_re.findall(r"[A-Za-z_]\w*", s))
+    keep = {"sqrt", "exp", "log", "sin", "cos", "tan", "Abs"}
+    return sp.sympify(s, locals={n: sp.Symbol(n) for n in names if n not in keep})
+
+
 def eq_match(pred, gt):
     try:
-        return sig(strip_consts(canon(pred))) == sig(strip_consts(canon(gt)))
+        return sig(strip_consts(canon(_sympify_safe(pred)))) == \
+            sig(strip_consts(canon(_sympify_safe(gt))))
     except Exception:                                          # noqa: BLE001
         return False
 
 
-def inv_match(found_exprs, gt_inv, columns):
-    """A gt invariant counts as recovered when some found invariant is
-    affinely equivalent to it on the data (same conserved level sets)."""
-    gt_e = sp.sympify(gt_inv)
+def inv_match(found_exprs, gt_inv, columns, groups):
+    """v1.2 LEVEL-SET scoring: a gt invariant is recovered when some found
+    invariant's PER-TRAJECTORY LEVELS map affinely onto the gt levels. On one
+    trajectory every conserved quantity is constant and any pair is trivially
+    affine-related (the ill-posedness the multi-trajectory redesign fixes);
+    across >=3 distinct levels the match is meaningful."""
+    groups = np.asarray(groups)
+    ug = np.unique(groups)
+    gt_e = _sympify_safe(gt_inv)
     syms = sorted(gt_e.free_symbols, key=str)
     vals_gt = np.asarray(sp.lambdify(syms, gt_e, "numpy")(
         *[np.asarray(columns[str(s)]) for s in syms]), float)
+    lv_gt = np.array([vals_gt[groups == g].mean() for g in ug])
+    if len(ug) < 3 or np.std(lv_gt) < 1e-10 * (np.abs(lv_gt).mean() + 1e-12):
+        return None                       # gt levels degenerate: unscorable
     for f in found_exprs:
         try:
-            fe = sp.sympify(f)
+            fe = _sympify_safe(f)
             fs = sorted(fe.free_symbols, key=str)
             vals_f = np.asarray(sp.lambdify(fs, fe, "numpy")(
                 *[np.asarray(columns[str(s)]) for s in fs]), float)
-            A = np.column_stack([np.ones(len(vals_gt)), vals_f])
-            c, *_ = np.linalg.lstsq(A, vals_gt, rcond=None)
+            lv_f = np.array([vals_f[groups == g].mean() for g in ug])
+            if np.std(lv_f) < 1e-12 * (np.abs(lv_f).mean() + 1e-12):
+                continue
+            A = np.column_stack([np.ones(len(ug)), lv_f])
+            c, *_ = np.linalg.lstsq(A, lv_gt, rcond=None)
             pred = A @ c
-            scale = float(np.std(vals_gt)) + float(np.abs(vals_gt).mean()) + 1e-12
-            if np.max(np.abs(pred - vals_gt)) < 1e-4 * scale and abs(c[1]) > 1e-8:
+            scale = float(np.std(lv_gt)) + 1e-12
+            if np.max(np.abs(pred - lv_gt)) < 1e-3 * scale and abs(c[1]) > 1e-10:
                 return True
         except Exception:                                      # noqa: BLE001
             continue
@@ -66,7 +89,8 @@ def solve_one(p):
     rec = {"id": p["id"], "family": p["family"], "tier": p["tier"]}
     try:
         signal.alarm(600)
-        cert = discover_system(data, sigma=p["sigma"])
+        cert = discover_system(data, sigma=p["sigma"],
+                               targets=[c for c in data if c.startswith("r")])
         inv_map = {v: k for k, v in p["mapping"].items()}       # c_i -> name
         sub = {sp.Symbol(c): sp.Symbol(orig) for c, orig in inv_map.items()}
 
@@ -80,13 +104,18 @@ def solve_one(p):
         wrong = [t for t in eqs if t in gt and not eq_ok[t]]
         extra = [t for t in eqs if t not in gt]
         cols_named = {inv_map[c]: np.asarray(v, float)
-                      for c, v in p["columns"].items()}
-        inv_ok = [inv_match(invs, gi, cols_named) for gi in p["gt_invariants"]]
+                      for c, v in p["columns"].items() if c != "traj"}
+        groups = np.asarray(p["columns"]["traj"], int)
+        inv_res = [inv_match(invs, gi, cols_named, groups)
+                   for gi in p["gt_invariants"]]
+        inv_ok = [r_ for r_ in inv_res if r_ is not None]
         rec.update(
             all_eqs_ok=all(eq_ok.values()), eq_ok=sum(eq_ok.values()),
             eq_total=len(gt), eq_wrong=len(wrong), eq_extra=len(extra),
             inv_found=len(invs), inv_recovered=sum(inv_ok),
-            inv_total=len(p["gt_invariants"]),
+            inv_total=len(inv_ok) if inv_ok else len([r_ for r_ in inv_res
+                                                      if r_ is not None]),
+            inv_unscorable=sum(1 for r_ in inv_res if r_ is None),
             shared_verdicts=len(cert.shared),
             alpha=cert.alpha_log10_total)
     except TimeoutError:
