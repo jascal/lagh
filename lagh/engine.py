@@ -18,7 +18,7 @@ from .base import (Candidate, admissible, design_matrix, lstsq, snap_all,
                    to_expr, eval_expr)
 from .certify import (Abstain, Certificate, check, coherent, epsilon,
                       float_pinned, minimal, pinned, reduce_to_minimal,
-                      sample_box, vacuous)
+                      sample_box, significance_log10, vacuous)
 from .classes import CURRICULUM, c5_transforms, c6_quasipoly, c7_levy
 from .engine_util import stlsq_supports
 
@@ -300,7 +300,10 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             if len(classes) == 1:
                 w = min(classes[0][1], key=lambda z: z.complexity)
                 cert = Certificate(True, 0, 0, len(X_cert), bounds, str(w.expr),
-                                   notes=["Lévy exponent (C7)"])
+                                   notes=["Lévy exponent (C7)"],
+                                   alpha_log10=significance_log10(
+                                       w.expr, y_cert, eps, len(lc)),
+                                   n_hypotheses=len(lc))
                 return Result(cert, w.expr, 7, len(lc))
             cert = Certificate(False, 0, 0, len(X_cert), bounds, "",
                                abstain=Abstain.STRUCTURAL.value,
@@ -357,7 +360,10 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                                         y_all_m, eps_all),
                                       syms, X_cert, y_cert, eps)["certified"]):
                     cert = Certificate(True, 0, 0, len(X_cert), bounds,
-                                       str(w.expr), notes=["CAP-S cheap pre-pass"])
+                                       str(w.expr), notes=["CAP-S cheap pre-pass"],
+                                       alpha_log10=significance_log10(
+                                           w.expr, y_cert, eps, len(pcands)),
+                                       n_hypotheses=len(pcands))
                     return Result(cert, w.expr, 3, len(pcands))
             # ambiguity or unpinned -> the full loop decides (conservative)
 
@@ -415,7 +421,10 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             if sigma > 0:
                 winner.expr = reduce_to_minimal(winner.expr, syms, X_all_m,
                                                 y_all_m, eps_all)
-            cert = Certificate(True, 0, 0, len(X_cert), bounds, str(winner.expr))
+            cert = Certificate(True, 0, 0, len(X_cert), bounds, str(winner.expr),
+                               alpha_log10=significance_log10(
+                                   winner.expr, y_cert, eps, total),
+                               n_hypotheses=total)
             return Result(cert, winner.expr, tier, total)
         cert = Certificate(False, 0, 0, len(X_cert), bounds,
                            str(min(certifying, key=lambda z: z.complexity).expr),
@@ -435,7 +444,11 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
         qr = c6_quasipoly.recover_integer(X_all[:, 0], y_all)
         if qr.certified:
             cert = Certificate(True, 0, 0, qr.domain_size, bounds, str(qr.quasipoly),
-                               notes=[qr.note])
+                               notes=[qr.note],
+                               alpha_log10=significance_log10(
+                                   qr.quasipoly, y_all, np.full(len(y_all), 0.5),
+                                   max(total, 1)),
+                               n_hypotheses=max(total, 1))
             return Result(cert, qr.quasipoly, 6, total)
         cert = Certificate(False, 0, 0, qr.domain_size, bounds, "",
                            abstain=qr.abstain, notes=[qr.note])

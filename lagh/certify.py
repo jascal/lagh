@@ -50,6 +50,8 @@ class Certificate:
     law: str
     abstain: str | None = None
     notes: list = field(default_factory=list)
+    alpha_log10: float | None = None   # log10 of the significance bound |H|*q^h
+    n_hypotheses: int | None = None    # |H|: candidates actually checked this run
 
     def one_line(self) -> str:
         if not self.certified:
@@ -67,6 +69,33 @@ def epsilon(y: np.ndarray, *, sigma: float = 0.0, prop: np.ndarray | None = None
     if se is not None:
         eps = eps + LAM_B * np.asarray(se, float).ravel()
     return eps
+
+
+def significance_log10(expr, y: np.ndarray, eps: np.ndarray,
+                       n_hypotheses: int) -> float:
+    """log10 of the a-priori false-certification bound alpha <= |H| * prod(q_k)
+    (DIRECTION_SIGNIFICANCE.md). Under a uniform-in-range null, a point chance-
+    matches with q_k = 2*eps_k / range(y); a candidate with dof free numeric
+    parameters is pinned by dof points, so only the h = n - dof held-out points
+    count -- conservatively the h points with the LARGEST q_k. This bounds
+    CHANCE agreement only: it says the target is not class-null-random, NOT that
+    the certified form is unique (structure uniqueness is coherence's job, and
+    the approximant-impostor boundary is unaffected)."""
+    y = np.asarray(y, float).ravel()
+    eps = np.asarray(eps, float).ravel()
+    R = float(np.max(y) - np.min(y))
+    if R <= 0 or len(y) == 0:
+        return 0.0
+    dof = sum(1 for a in expr.atoms(sp.Number) if a not in (0, 1, -1)) \
+        if expr is not None else 0
+    h = max(0, len(y) - dof)
+    if h == 0:
+        return 0.0
+    q = np.minimum(1.0, 2.0 * eps / R)
+    q = np.sort(q)[-h:]                       # largest-q points: upper bound
+    with np.errstate(divide="ignore"):
+        log_q = np.log10(np.maximum(q, 1e-300))
+    return float(np.log10(max(n_hypotheses, 1)) + np.sum(log_q))
 
 
 def check(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray) -> dict:

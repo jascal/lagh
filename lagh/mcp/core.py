@@ -177,6 +177,7 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
     eps = epsilon(y, sigma=float(sigma))
     return {"tag": "proved", "tool": "recover", "certified": True,
             "law": str(r.expr), "strength": _strength(r.expr, syms, X, y, eps, sigma),
+            "alpha_log10": c.alpha_log10, "n_hypotheses": c.n_hypotheses,
             "domain_size": c.domain_size, "tier": r.tier,
             "bounds": [[float(X[:, j].min()), float(X[:, j].max())] for j in range(dim)],
             "note": "certified over the stated finite domain, not proved for the world"}

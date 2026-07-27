@@ -20,9 +20,13 @@ def submission(X, y, *, sigma: float = 0.0, seed: int = 0) -> dict:
     {track: 'certified'|'conjecture'|'abstain', expr, tag, detail}."""
     r = discover_passive(X, y, sigma=sigma, seed=seed)
     if r.certified:
+        c = r.result.certificate
         return {"track": "certified", "expr": str(r.result.expr), "tag": "proved",
+                "alpha_log10": c.alpha_log10,
                 "detail": "machine-checked exact certificate over the dataset's "
-                          "finite domain"}
+                          "finite domain"
+                          + (f"; chance-fit significance alpha <= 1e{c.alpha_log10:.0f}"
+                             if c.alpha_log10 is not None else "")}
     # Track B, in the pre-registered order: fit scout, then the engine's best
     # non-certifying candidate, then nothing.
     abstain = r.result.certificate.abstain or "structural"

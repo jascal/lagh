@@ -25,9 +25,13 @@ count. This converts this week's discovered boundary ("only small classes may
 certify under noise") from a restriction into a THEOREM-SHAPED guarantee, and
 re-admits dense channels to track A with explicit α. Validation: RNOISE and
 the dev sweeps, which now exist as regression harnesses.
-- Deliverable: α on every certificate; dense channels certified at α ≤ 1e-9.
-- Kill criterion: if honest α bounds for dense channels are vacuous (α ~ 1),
-  the boundary stands as-is and that IS the published finding.
+- Deliverable: α on every certificate + null-calibration validation of the
+  bound + the certified-randomness abstention product.
+- SCOPE CORRECTION (2026-07-26, at implementation start): α is an anti-CHANCE
+  guarantee relative to a random null; an approximant impostor is a genuinely
+  significant fit of the WRONG form, so α does NOT re-admit dense channels
+  under noise — that boundary stands (structure uniqueness remains coherence's
+  job). The H1a kill criterion is thus partially pre-triggered, honestly.
 
 **1b. Freeze the LLM-SRBench dev campaign and write the instrument report.**
 Declare the plateau (recipe plateaus; achievability open): autonomous SA ~12%,
