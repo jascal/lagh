@@ -5,8 +5,9 @@ it proposes ONE sympy form in x_0.. for lagh to `verify` -- or NONE. A wrong gue
 refuted by the sound checker, so the proposer is told to give its single best structural
 guess. This is the ONLY place the composite calls a model.
 
-Reads the SAME LLM_* env as deploy/hermes (LLM_MODEL / LLM_BASE_URL / LLM_API_KEY /
-LLM_API_MODE); loads machine/.env if present. Supports the OpenAI chat dialect
+Reads LLM_* env vars (LLM_MODEL / LLM_BASE_URL / LLM_API_KEY / LLM_API_MODE);
+loads deploy/hermes/.env (optional legacy local credential file, untracked) then
+machine/.env if present. Supports the OpenAI chat dialect
 (Grok/GPT, LLM_API_MODE empty) and the Anthropic messages dialect (MiniMax /anthropic,
 LLM_API_MODE=anthropic_messages). If nothing is configured, returns None -> the machine
 routes NO_FORM and the loop runs on lagh alone (never worse than the tool).
@@ -20,8 +21,9 @@ import numpy as np
 
 
 def _load_env() -> None:
-    """deploy/hermes/.env is the authoritative credential store (the docker dir);
-    machine/.env is the local fallback. First file loaded wins per var."""
+    """Credential files, first loaded wins per var: deploy/hermes/.env (legacy
+    local location, untracked -- the tracked harness was removed 2026-07-27,
+    its lessons live in docs/DIRECTION_MACHINE.md) then machine/.env."""
     try:
         from dotenv import load_dotenv
         for p in (Path(__file__).parent.parent / "deploy" / "hermes" / ".env",
