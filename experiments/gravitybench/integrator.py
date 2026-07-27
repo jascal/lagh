@@ -49,7 +49,10 @@ class TwoBody:
         T = np.empty(n_steps + 1)
         R1 = np.empty((n_steps + 1, 3))
         R2 = np.empty((n_steps + 1, 3))
+        V1 = np.empty((n_steps + 1, 3))
+        V2 = np.empty((n_steps + 1, 3))
         T[0], R1[0], R2[0] = t, r1, r2
+        V1[0], V2[0] = v1, v2
         for i in range(1, n_steps + 1):
             v1h = v1 + 0.5 * dt * a1
             v2h = v2 + 0.5 * dt * a2
@@ -61,7 +64,9 @@ class TwoBody:
             a1, a2 = a1n, a2n
             t += dt
             T[i], R1[i], R2[i] = t, r1, r2
+            V1[i], V2[i] = v1, v2
         self._T, self._R1, self._R2 = T, R1, R2
+        self._V1, self._V2 = V1, V2
         return T, R1, R2
 
     def observe(self, times):
