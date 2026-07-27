@@ -4,19 +4,19 @@
  "P1_G": {
   "certified": true,
   "law": "12660019/492850 - 5*x_0/2",
-  "alpha_log10": -461.189464228802,
+  "alpha_log10": -461.13147228182436,
   "abstain": null
  },
  "P1_BP": {
   "certified": true,
   "law": "23102948/911771 - 5*x_0/2",
-  "alpha_log10": -466.3323982411181,
+  "alpha_log10": -466.26181716683243,
   "abstain": null
  },
  "P1_RP": {
   "certified": true,
   "law": "10806713/436672 - 5*x_0/2",
-  "alpha_log10": -457.834992812508,
+  "alpha_log10": -457.7749948828327,
   "abstain": null
  },
  "P2_color_identity": [

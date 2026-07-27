@@ -7,7 +7,8 @@ reproduces it. Certificates are exhaustive per-point checks under the
 declared error model — every point within ε, or no certificate. Everything
 not listed here that the case studies examined ended as a labeled conjecture
 or an explicit abstention (the doctrine: certified / conjectured / abstained,
-never guessed). Engine as of commit `ace1315` (loose-ε parsimony closure).
+never guessed). Engine as of the loose-ε parsimony and CAP-T reach closures
+(2026-07-27; exact commits in git history).
 
 Conventions: `x_0, x_1` are the stated inputs in order; α ≤ 10^(value shown);
 rationals are exact (the coefficient gate demands the data pin them).
@@ -49,7 +50,7 @@ Reproduce: `.venv/bin/python experiments/macro/run_case_study.py`
 
 | Law | Inputs | α ≤ | Note |
 |---|---|---|---|
-| `C + I + G + NX − Y = 0` | national-accounts columns, invariant | 10⁻⁵⁶⁸ | the GDP accounting identity, recovered blind from raw columns; five scaled variants certify alongside (α to 10⁻⁶³⁵) |
+| `C + I + G + NX − Y = 0` | national-accounts columns, invariant | 10⁻⁸⁵⁷ | the GDP accounting identity, recovered blind from raw columns; five scaled variants certify alongside (α from 10⁻³⁸⁸); bound re-baselined under term-scale α (logged in the case study) |
 
 ## Gaia DR3 Phase 2 (`docs/CASE_STUDY_GAIA_P2.md`)
 
@@ -57,12 +58,10 @@ Reproduce: `.venv/bin/python experiments/gaia/run_p2.py`
 (snapshot `c4rr_bf9b07ed638a.csv`, 800 RRab stars; floor 4.2×10⁻⁷ dex by the
 v2 propagated-quantization procedure)
 
-| Law | Inputs | Provenance | Note |
+| Law | Inputs | α ≤ | Note |
 |---|---|---|---|
-| `[Fe/H] = 3.0336834 − 20.127524·x_0 + 1.3684267·x_1 + 6.27·x_0·x_1 − 0.72·x_1²` | x_0 = pf (d), x_1 = φ31_G | **verify, pinned** (declared form from a logged calibration scout; exhaustive check, no rival within the noise) | the DR3 RRab photometric-metallicity pipeline formula; 6.27 and −0.72 are EXACTLY the Nemec et al. (2013) coefficients; linear-term provenance left open (consistent with a φ-offset composition to ~10⁻⁶ only) |
+| `[Fe/H] ≈ 3.03368 − 20.12750·x_0 + 1.36843·x_1 + 6.2700001·x_0·x_1 − 0.7200000·x_1²` (exact rationals in the certificate) | x_0 = pf (d), x_1 = φ31_G | 10⁻¹⁰⁰⁹ | the DR3 RRab photometric-metallicity pipeline formula, recovered OUTRIGHT after the CAP-T reach closure; the cross/quadratic coefficients match Nemec et al. (2013) exactly (6.27, −0.72); linear-term provenance left open (a φ-offset composition matches only to ~10⁻⁶). First certified via the verify track (pinned), then re-earned by `recover` — both surfaces agree to 8×10⁻⁸ on the snapshot |
 
 What did NOT certify, correctly: any cross-catalog Kepler law over the
 astrometric binaries (mass-dependent family — structural abstain); the
-Leavitt law (labeled conjecture, slope −2.21 mag/dex); `recover` itself on
-the metallicity relation (a registered reach gap, reported as such — the
-certificate above is verify-provenance, the weaker claim, and says so).
+Leavitt law (labeled conjecture, slope −2.21 mag/dex).

@@ -50,6 +50,11 @@ data snapshots committed under `experiments/macro/data/`)
   emerged from the subset scan alone (instrument fixes it drove: term-scale
   constancy normalization for zero-valued invariants; sigma-scaled eigen gate;
   exhaustive size-5 for small libraries).
+  *(Re-validation note, 2026-07-27: under the term-scale α accounting the
+  Gaia C0 study later introduced, the re-run strengthens the headline bound
+  to α ≤ 10⁻⁸⁵⁷ and re-baselines the scaled variants to 10⁻³⁸⁸…10⁻⁵⁹².
+  Verdicts and laws unchanged; `macro_case_study.json` carries the current
+  numbers.)*
 - **P2 MET — the refusal that proves the certification means something.** The
   same scan on CHAINED-dollar components certifies NO linear relation: the
   chain-weighting residual is real and the instrument declines the textbook

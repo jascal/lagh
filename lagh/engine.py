@@ -77,6 +77,31 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
     sups |= {tuple(sorted(t)) for t in combinations(top, 3)}
     sups |= {tuple(sorted(t)) for t in combinations(top[:8], 4)}
     sups |= {tuple(sorted(t)) for t in combinations(top[:6], 5)}
+    # CAP-T (dim-2 quadratic reach closure, CASE_STUDY_GAIA_P2.md): the COMPLETE
+    # low-degree polynomial supports, proposed unconditionally. The Gaia RRab
+    # pipeline formula {1, x0, x1, x0*x1, x1**2} was unreachable: size-5
+    # supports came only from top-6 singles (fragile under collinearity), OMP's
+    # single greedy path missed it, and CAP-Q's exhaustive stops at size 4. A
+    # complete quadric/cubic support is one lstsq; refit_minimal / the
+    # minimality repair prunes the terms the data does not need.
+    name_idx = {t.name: i for i, t in enumerate(ctx.terms)}
+    dim_ = ctx.X_fit.shape[1]
+    if dim_ <= 4:
+        quad = (["1"] + [f"x_{j}" for j in range(dim_)]
+                + [f"x_{j}**2" for j in range(dim_)]
+                + [f"x_{j}*x_{k}" for j, k in combinations(range(dim_), 2)])
+        sup = tuple(sorted(name_idx[n] for n in quad if n in name_idx))
+        if len(sup) >= 3:
+            sups.add(sup)
+    if dim_ <= 2:
+        cub = (["1"] + [f"x_{j}" for j in range(dim_)]
+               + [f"x_{j}**{p}" for j in range(dim_) for p in (2, 3)]
+               + [f"x_{j}*x_{k}" for j, k in combinations(range(dim_), 2)]
+               + [f"x_{j}**2*x_{k}" for j in range(dim_)
+                  for k in range(dim_) if j != k])
+        sup = tuple(sorted(name_idx[n] for n in cub if n in name_idx))
+        if len(sup) >= 3:
+            sups.add(sup)
     # Orthogonal matching pursuit: greedy forward selection against the residual,
     # every prefix emitted as a support. Top-N single rankings miss collinear
     # members of a sparse sum (measured: a 4-term oscillator support was never

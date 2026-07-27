@@ -94,3 +94,28 @@ relation the data could not pin — including its own reach gap, which it
 reported as such — and the one certificate it granted decodes the DR3
 pipeline's metallicity formula from the archive, exact published coefficients
 and all, with the parts it could not pin explicitly left open.
+
+## Issue closure (2026-07-27): the dim-2 quadratic reach gap
+
+Diagnosis: the term library was never the problem — every quadratic monomial
+exists at dim 2. The 5-term support {1, x₀, x₁, x₀x₁, x₁²} was unreachable by
+PROPOSAL: size-5 supports were drawn only from the top-6 single-term fits
+(fragile in a collinear library — P and φ31 correlate at 0.60, and smooth
+transcendental features outrank the cross term as singles), OMP's one greedy
+path missed it, and CAP-Q's exhaustive cluster search stops at size 4.
+
+Fix (CAP-T, `engine._linear_candidates`): the COMPLETE low-degree polynomial
+supports are proposed unconditionally — the full quadric at dim ≤ 4, the full
+cubic at dim ≤ 2. One lstsq each; `refit_minimal` and the minimality repair
+prune what the data does not need, the coefficient gate pins what remains.
+
+Validation (same discipline as the loose-ε closure): full suite green;
+`recover` on the frozen RRab snapshot now certifies OUTRIGHT —
+`[Fe/H] = (5178136/825859)·P·φ31 − (15295147/759912)·P −
+(18000001/25000000)·φ31² + (1029763/752516)·φ31 + 1354664/446541`,
+**α ≤ 10⁻¹⁰⁰⁹** — the same surface as the verify-track form (max difference
+8×10⁻⁸ on the snapshot, both within the floor), with the cross and quadratic
+coefficients again 6.2700001 and −0.7200000. Under declared noise the linear
+channel remains certification-excluded (the significance boundary), so the
+new supports add no impostor surface there; the NewtonBench-clean machine-
+dominated regime gates unpinned full-poly fits per candidate as before.
