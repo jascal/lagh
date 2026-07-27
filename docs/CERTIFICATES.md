@@ -65,3 +65,25 @@ v2 propagated-quantization procedure)
 What did NOT certify, correctly: any cross-catalog Kepler law over the
 astrometric binaries (mass-dependent family — structural abstain); the
 Leavitt law (labeled conjecture, slope −2.21 mag/dex).
+
+## Gaia DR3 Phase 3 (`docs/CASE_STUDY_GAIA_P3.md`)
+
+Reproduce: `.venv/bin/python experiments/gaia/run_p3.py`
+(snapshot `c6_9fe3e2b6bd35.csv`, 400 sources; open-discovery sweep, 134
+cells, certificates only where the pipeline defines the column)
+
+| Law | Inputs | α ≤ | Note |
+|---|---|---|---|
+| `mag_G = 25.687367… − (978839/901544)·ln(flux_G)` | x_0 = raw flux_G | 10⁻⁴⁶⁰ | the C0 anchor re-found blind by the open sweep; 978839/901544 = 5/(2 ln 10) to 7 digits |
+| `parallax_over_error = C·parallax/parallax_error`, C = 1 to ~10⁻⁸ | ratio triple | 10⁻⁶²¹ | σ_rep = 3×10⁻⁸ declared (two float32 roundings compose) |
+| `flux_over_error_G = C·flux_G/flux_error_G`, C = 1 to 5×10⁻¹⁰ | ratio triple | 10⁻⁵⁵⁰ | same declaration |
+
+What did NOT certify, correctly: the IAU galactic-frame rotation row — a
+structural abstain that decodes into the unit-sphere constraint on the
+direction-cosine inputs (every rival class equals the IAU row modulo the
+constraint; registered open issue: constrained-input coherence); all
+kinematics (Oort A = 15.8 in band, B = −14.9 an honest band miss, both
+conjectures); 131 of 134 open-sweep cells (heavy abstention as designed).
+The phase also converted a caught vacuous certificate (a 35-term
+interpolation of 12 points with α ≤ 1) into an engine-wide significance
+gate: certification now requires α ≤ 10⁻⁶.

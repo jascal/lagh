@@ -88,6 +88,28 @@ WHERE v.pf IS NOT NULL AND v.int_average_g IS NOT NULL
   AND g.parallax_over_error > 10 AND g.parallax > 0
 """
 
+C5_ADQL = """
+SELECT TOP 3000 source_id, random_index, ra, dec, l, b, parallax, pmra, pmdec
+FROM gaiadr3.gaia_source
+WHERE ABS(b) < 15 AND parallax BETWEEN 0.5 AND 2
+  AND ruwe < 1.4 AND parallax_over_error > 10
+  AND random_index < 2000000
+ORDER BY random_index
+"""
+
+C6_ADQL = """
+SELECT TOP 400 source_id, random_index,
+       parallax, parallax_error, parallax_over_error, pmra, pmdec,
+       phot_g_mean_flux, phot_g_mean_flux_error,
+       phot_g_mean_flux_over_error, phot_g_mean_mag, ruwe,
+       astrometric_sigma5d_max, bp_rp
+FROM gaiadr3.gaia_source
+WHERE ruwe < 1.4 AND parallax_over_error > 20
+  AND phot_g_mean_flux_over_error > 100
+  AND phot_bp_mean_flux IS NOT NULL AND phot_rp_mean_flux IS NOT NULL
+ORDER BY random_index
+"""
+
 C0_ADQL = """
 SELECT TOP 400 source_id, random_index,
        phot_g_mean_mag, phot_g_mean_flux, phot_g_mean_flux_error,

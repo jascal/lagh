@@ -1,0 +1,68 @@
+{
+ "c5_snapshot": "/home/allans/code/lagh/experiments/gaia/data/c5_0bcca3c2f8bd.csv",
+ "c5_n": 3000,
+ "P1_floor_abs": 1.2212453270876722e-14,
+ "P1_scout_coeffs": [
+  0.45598377617506625,
+  -0.8676661490190037,
+  -0.19807637343120144
+ ],
+ "P1_iau_expected": [
+  0.45598377617506697,
+  -0.8676661490190047,
+  -0.1980763734312013
+ ],
+ "P1_frame_rotation": {
+  "certified": false,
+  "law": "",
+  "alpha_log10": null,
+  "abstain": "structural"
+ },
+ "P2_per_star": {
+  "certified": false,
+  "abstain": "structural"
+ },
+ "P2_oort": {
+  "A_kms_kpc": 15.8102797566425,
+  "B_kms_kpc": -14.860599946464873,
+  "n_bins": 12,
+  "binned_certified": false,
+  "binned_law": "",
+  "binned_alpha_log10": null,
+  "binned_abstain": "noise"
+ },
+ "c6_snapshot": "/home/allans/code/lagh/experiments/gaia/data/c6_9fe3e2b6bd35.csv",
+ "P4_P5_census": {
+  "certified": 3,
+  "conjectured": 131,
+  "abstained": 0
+ },
+ "P4_P5_certified_list": [
+  "phot_g_mean_flux->phot_g_mean_mag",
+  "(parallax,parallax_error)->parallax_over_error",
+  "(phot_g_mean_flux,phot_g_mean_flux_error)->phot_g_mean_flux_over_error"
+ ],
+ "P4_P5_details": [
+  {
+   "pair": "phot_g_mean_flux->phot_g_mean_mag",
+   "certified": true,
+   "law": "12660019/492850 - 978839*log(x_0)/901544",
+   "alpha_log10": -460.6872322534993,
+   "abstain": null
+  },
+  {
+   "pair": "(parallax,parallax_error)->parallax_over_error",
+   "certified": true,
+   "law": "1.00000001450126*x_0/x_1",
+   "alpha_log10": -621.5252056178992,
+   "abstain": null
+  },
+  {
+   "pair": "(phot_g_mean_flux,phot_g_mean_flux_error)->phot_g_mean_flux_over_error",
+   "certified": true,
+   "law": "0.999999999490707*x_0/x_1",
+   "alpha_log10": -550.8972546274706,
+   "abstain": null
+  }
+ ]
+}

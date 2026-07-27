@@ -52,6 +52,28 @@ class Result:
         return not self.certificate.certified
 
 
+
+ALPHA_CERT_MAX_LOG10 = -6.0
+
+
+def _significance_gate(cert: Certificate) -> Certificate:
+    """Significance is part of certification (H1a closure; measured: a 35-term
+    interpolation of 12 binned points 'certified' with its own alpha bound at
+    1 -- dof >= points, zero held-out evidence). A certificate whose chance-fit
+    bound alpha is not small is NO certificate: demote to a NOISE abstain with
+    the bound in the note. Threshold registered at 1e-6; every legitimate
+    certificate the program has produced sits at 1e-14 or below."""
+    if cert.certified and cert.alpha_log10 is not None \
+            and cert.alpha_log10 > ALPHA_CERT_MAX_LOG10:
+        cert.certified = False
+        cert.abstain = Abstain.NOISE.value
+        cert.notes.append(
+            f"significance gate: alpha_log10 {cert.alpha_log10:.3f} > "
+            f"{ALPHA_CERT_MAX_LOG10:g} -- the domain carries too little "
+            f"evidence for this form's dof")
+    return cert
+
+
 def _linear_candidates(ctx: Ctx) -> list[Candidate]:
     M_tr = design_matrix(ctx.terms, ctx.X_fit)
     M_va = design_matrix(ctx.terms, ctx.X_sel)
@@ -359,7 +381,9 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                    alpha_log10=significance_log10(
                                        w.expr, y_cert, eps, len(lc)),
                                    n_hypotheses=len(lc))
-                return Result(cert, w.expr, 7, len(lc))
+                cert = _significance_gate(cert)
+                return Result(cert, w.expr if cert.certified else None,
+                              7, len(lc))
             cert = Certificate(False, 0, 0, len(X_cert), bounds, "",
                                abstain=Abstain.STRUCTURAL.value,
                                notes=[f"{len(classes)} Lévy exponents certify"])
@@ -419,7 +443,9 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                        alpha_log10=significance_log10(
                                            w.expr, y_cert, eps, len(pcands)),
                                        n_hypotheses=len(pcands))
-                    return Result(cert, w.expr, 3, len(pcands))
+                    cert = _significance_gate(cert)
+                    return Result(cert, w.expr if cert.certified else None,
+                                  3, len(pcands))
             # ambiguity or unpinned -> the full loop decides (conservative)
 
     total = 0
@@ -503,7 +529,9 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                alpha_log10=significance_log10(
                                    winner.expr, y_cert, eps, total),
                                n_hypotheses=total)
-            return Result(cert, winner.expr, tier, total)
+            cert = _significance_gate(cert)
+            return Result(cert, winner.expr if cert.certified else None,
+                          tier, total)
         cert = Certificate(False, 0, 0, len(X_cert), bounds,
                            str(min(certifying, key=lambda z: z.complexity).expr),
                            abstain=Abstain.STRUCTURAL.value,
@@ -527,7 +555,9 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                    qr.quasipoly, y_all, np.full(len(y_all), 0.5),
                                    max(total, 1)),
                                n_hypotheses=max(total, 1))
-            return Result(cert, qr.quasipoly, 6, total)
+            cert = _significance_gate(cert)
+            return Result(cert, qr.quasipoly if cert.certified else None,
+                          6, total)
         cert = Certificate(False, 0, 0, qr.domain_size, bounds, "",
                            abstain=qr.abstain, notes=[qr.note])
         return Result(cert, None, 6, total)

@@ -1,0 +1,20 @@
+{
+ "adql": "\nSELECT TOP 400 source_id, random_index,\n       parallax, parallax_error, parallax_over_error, pmra, pmdec,\n       phot_g_mean_flux, phot_g_mean_flux_error,\n       phot_g_mean_flux_over_error, phot_g_mean_mag, ruwe,\n       astrometric_sigma5d_max, bp_rp\nFROM gaiadr3.gaia_source\nWHERE ruwe < 1.4 AND parallax_over_error > 20\n  AND phot_g_mean_flux_over_error > 100\n  AND phot_bp_mean_flux IS NOT NULL AND phot_rp_mean_flux IS NOT NULL\nORDER BY random_index\n",
+ "n_rows": 400,
+ "columns": [
+  "source_id",
+  "random_index",
+  "parallax",
+  "parallax_error",
+  "parallax_over_error",
+  "pmra",
+  "pmdec",
+  "phot_g_mean_flux",
+  "phot_g_mean_flux_error",
+  "phot_g_mean_flux_over_error",
+  "phot_g_mean_mag",
+  "ruwe",
+  "astrometric_sigma5d_max",
+  "bp_rp"
+ ]
+}
