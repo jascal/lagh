@@ -10,6 +10,15 @@ DATA = Path(__file__).parent / "data"
 API = "https://api.catalysis-hub.org/graphql"
 
 
+def _key() -> str:
+    env = Path(__file__).parent.parent.parent / "machine" / ".env"
+    for line in env.read_text().splitlines():
+        if line.startswith("CATALYSIS_HUB_API_KEY="):
+            return line.split("=", 1)[1].strip()
+    raise RuntimeError("CATALYSIS_HUB_API_KEY not found in machine/.env "
+                       "(obtain at https://api.catalysis-hub.org/auth/login)")
+
+
 def fetch_reactions(pub_id: str, tag: str, page_size: int = 500):
     """Fetch all reactions for a publication via cursor pagination; snapshot
     to a frozen artifact. Idempotent by (pub_id, page_size)."""
@@ -35,7 +44,7 @@ def fetch_reactions(pub_id: str, tag: str, page_size: int = 500):
     while True:
         r = requests.post(API, json={"query": q, "variables": {
             "pubId": pub_id, "first": page_size, "after": after}},
-            timeout=180)
+            headers={"X-API-Key": _key()}, timeout=180)
         r.raise_for_status()
         j = r.json()
         if "errors" in j:
