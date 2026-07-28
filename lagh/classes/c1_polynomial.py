@@ -22,6 +22,14 @@ def terms(dim: int, X_fit=None, y_fit=None, X_cert=None) -> list[Term]:
             nm = f"x_{j}" if p == 1 else f"x_{j}**{p}"
             out.append(Term(nm, (lambda j, p: lambda X: X[:, j] ** p)(j, p),
                             ALWAYS, 1 + (p > 1)))
+    # NEGATIVE INTEGER powers (reach-audit closure, REACH_ENVELOPE.md): the
+    # library had x**(-1/2) and x**(-3/2) but never plain 1/x or 1/x**2 --
+    # 3/x in a sparse sum was unreachable at any dim. Guarded positive.
+    for j in range(dim):
+        for p in (-1, -2):
+            fn = (lambda j, p: lambda X: X[:, j] ** float(p))(j, p)
+            guard = (lambda j: lambda X: bool(np.all(np.abs(X[:, j]) > 1e-9)))(j)
+            out.append(Term(f"x_{j}**({p})", fn, guard, 2 - p))
     for j, k in combinations(range(dim), 2):
         out.append(Term(f"x_{j}*x_{k}",
                         (lambda j, k: lambda X: X[:, j] * X[:, k])(j, k), ALWAYS, 3))

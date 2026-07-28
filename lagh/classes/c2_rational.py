@@ -97,12 +97,37 @@ def candidates(ctx) -> list[Candidate]:
     attempts = 0
     MAX_ATTEMPTS = 40000
     p_pool3 = stlsq_supports(M_tr, y_tr)
+    # PRIORITIZED enumeration (reach-audit closure, REACH_ENVELOPE.md): the
+    # exhaustive C(n,2) numerator pairs over a dim-3 library (~25k per
+    # denominator) exhausted the attempt budget inside the SECOND denominator
+    # -- (x0+x1)/(x2+2) was unreachable because x2 was never tried as a
+    # denominator (measured: zero c2 candidates at dim 3). Denominators are
+    # ordered simple-first; pairs come from the top singles by fit to y (the
+    # linear channel's own pattern) plus exhaustive singles and STLSQ triples.
+    denom_idx = sorted(denom_idx, key=lambda i: terms[i].complexity)
+    singles_rank = []
+    for k in range(len(terms)):
+        c1_ = lstsq(M_tr[:, [k]], y_tr)
+        if c1_ is None:
+            continue
+        rr = y_tr - M_tr[:, [k]] @ c1_
+        singles_rank.append((float(rr @ rr), k))
+    singles_rank.sort()
+    top14 = [k for _, k in singles_rank[:14]]
+    # top-singles ranking favors composite features (x0*sqrt(x1) outranks x0
+    # on rational targets -- measured: {x0, x1} never entered the pool); the
+    # low-complexity CORE pairs are cheap and cover plain-coordinate
+    # numerators unconditionally
+    core = sorted((i for i, t in enumerate(terms) if t.complexity <= 2),
+                  key=lambda i: terms[i].complexity)[:16]
+    pair_pool = sorted(set(combinations(top14, 2))
+                       | set(combinations(core, 2)))
     for q_size in (1, 2):
         for q_sup in combinations(denom_idx, q_size):
             Tq_tr = M_tr[:, list(q_sup)] * y_tr[:, None]
             Tq_va = M_va[:, list(q_sup)] * y_va[:, None]
             p_iter = list(combinations(range(len(terms)), 1)) + \
-                     list(combinations(range(len(terms)), 2)) + \
+                     pair_pool + \
                      [s_ for s_ in p_pool3 if len(s_) == 3]
             for p_sup in p_iter:
                     p_size = len(p_sup)

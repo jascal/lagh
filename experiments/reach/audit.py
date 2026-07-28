@@ -22,11 +22,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from lagh.passive import discover_passive  # noqa: E402
 
 OUT = Path("experiments/results/reach_audit.json")
-RNG = np.random.default_rng(7)
 
 
-def X(dim, n=400):
-    return RNG.uniform(0.5, 3.0, (n, dim))
+def X(dim, n=400, seed=0):
+    """Per-cell seeding: every cell is standalone-reproducible (the shared
+    stream made filtered re-runs draw different data than the full run)."""
+    return np.random.default_rng(seed).uniform(0.5, 3.0, (n, dim))
 
 
 CELLS = []
@@ -116,7 +117,8 @@ def main(only=None):
     for name, dim, fn in CELLS:
         if only and only not in name:
             continue
-        x = X(dim)
+        import zlib
+        x = X(dim, seed=zlib.crc32(name.encode()))
         y = fn(x)
         t0 = time.time()
         try:
