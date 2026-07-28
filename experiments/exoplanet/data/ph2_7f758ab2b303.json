@@ -1,0 +1,23 @@
+{
+ "adql": "\nSELECT hostname, pl_name, sy_pnum, pl_orbper, pl_orbsmax,\n       pl_rade, pl_radeerr1, pl_radeerr2,\n       pl_bmasse, pl_bmasseerr1, pl_bmasseerr2, pl_bmassprov,\n       pl_dens, pl_insol, st_mass, st_teff, discoverymethod\nFROM pscomppars\nWHERE pl_orbper IS NOT NULL\n",
+ "n_rows": 5981,
+ "columns": [
+  "hostname",
+  "pl_name",
+  "sy_pnum",
+  "pl_orbper",
+  "pl_orbsmax",
+  "pl_rade",
+  "pl_radeerr1",
+  "pl_radeerr2",
+  "pl_bmasse",
+  "pl_bmasseerr1",
+  "pl_bmasseerr2",
+  "pl_bmassprov",
+  "pl_dens",
+  "pl_insol",
+  "st_mass",
+  "st_teff",
+  "discoverymethod"
+ ]
+}

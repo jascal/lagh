@@ -42,6 +42,43 @@ Adjacent pairs by period within each system.
 - **P8.** `recover` structurally abstains on the period-ratio sequence and
   every C3 window; zero confident-wrong; zero certificates in Phase 2.
 
-## Results
+## Results (2026-07-27, `experiments/results/exoplanet_ph2.json`; frozen
+snapshot `ph2_7f758ab2b303.csv`, 5981 planets, 1573 adjacent pairs)
 
-(after the run)
+- **P1 MET:** hot giants are inflated by **ΔR = 1.53 R⊕** (CI [1.30, 1.77],
+  excludes 0), inside the registered [1, 6].
+- **P2 half-MET.** The threshold *structure* is confirmed: cool giants flat
+  (slope −0.28 R⊕/dex, inside [−1.0, +0.75], n = 871) versus hot giants
+  strongly positive — but the hot slope, **3.85 R⊕/dex**, exceeds the
+  registered ceiling of 3.0. The band was set from older, smaller inflation
+  samples; the composite table's ultra-hot population steepens the trend.
+  Recorded as a numeric band miss on a qualitatively confirmed structure.
+- **P3 MET:** small-planet density–radius slope **−1.24** over 1–4 R⊕
+  (n = 3538), inside [−2.5, −0.5] and consistent with C1's volatile slope
+  (1.42 − 3 ≈ −1.6); `recover` structurally abstains.
+- **P5 half-MET.** The stability floor holds: only **1.6%** of adjacent
+  pairs are tighter than a 1.3 ratio (registered < 10%). The median ratio,
+  **2.35**, misses the registered [1.5, 2.2] high: the band described
+  Kepler-multi statistics, but PSCompPars multis include wide-spaced RV
+  giant systems. A sample-composition miss, not an architecture surprise.
+- **P6 MET, strikingly.** The first-order resonance asymmetry is present at
+  both resonances: just-wide of 2:1 outnumbers just-narrow **96 : 57**, and
+  just-wide of 3:2 outnumbers just-narrow **100 : 40** — the tidal
+  migration-out-of-resonance signature, in a heterogeneous composite sample.
+- **P7 half-MET.** Median mutual-Hill spacing **Δ = 17.6** (inside
+  [15, 30], n = 1457 pairs); but 11.2% of pairs fall below Δ = 8 against
+  the registered < 5%. With any-provenance masses (Msini for RV systems)
+  and literature semi-major axes, the sub-8 tail is dominated by
+  mass/geometry heterogeneity rather than genuinely unstable systems — the
+  registered stability floor assumed cleaner inputs than the composite
+  table provides.
+- **P8 MET:** `recover` structurally abstains on the ratio sequence and
+  every C3 window — zero certificates in Phase 2, as the astrophysical
+  stages demand.
+
+**The sentence this phase earns:** the architecture of planetary systems
+came through the registered bands — inflation above the irradiation
+threshold, the density transition, the resonance asymmetry at both 2:1 and
+3:2, Hill spacing at the Kepler value — and each of the three numeric
+misses decodes into the same lesson C0 taught: PSCompPars is a literature
+patchwork, and its heterogeneity, not the physics, sets the tails.

@@ -1,0 +1,45 @@
+{
+ "snapshot": "/home/allans/code/lagh/experiments/exoplanet/data/ph2_7f758ab2b303.csv",
+ "n_total": 5981,
+ "P1_inflation_offset": {
+  "n_hot": 501,
+  "n_cool": 966,
+  "delta_re": 1.5290476386488496,
+  "ci95": [
+   1.2982471066739696,
+   1.7664675561323642
+  ]
+ },
+ "P2_threshold": {
+  "cool_slope_re_per_dex": -0.2820693377386976,
+  "n_cool": 871,
+  "hot_slope_re_per_dex": 3.845763998742195,
+  "n_hot": 501
+ },
+ "P3_density_radius": {
+  "n": 3538,
+  "slope": -1.2411723929533882,
+  "recover_certified": false,
+  "recover_abstain": "structural"
+ },
+ "P5_period_ratios": {
+  "n_pairs": 1573,
+  "median": 2.348894610092309,
+  "frac_below_1.3": 0.01589319771137953
+ },
+ "P6_resonance_asymmetry": {
+  "wide_2to1": 96,
+  "narrow_2to1": 57,
+  "wide_3to2": 100,
+  "narrow_3to2": 40
+ },
+ "P7_hill_spacing": {
+  "n_pairs": 1457,
+  "median_delta": 17.64744272229104,
+  "frac_below_8": 0.11187371310912834
+ },
+ "P8_ratio_sequence_recover": {
+  "certified": false,
+  "abstain": "structural"
+ }
+}
