@@ -65,6 +65,49 @@ def main():
         "max_rel": float(np.max(rel)),
         "frac_within_1e-4": float(np.mean(rel < 1e-4))}
 
+    # P1 decode (registered clause): solve the PIPELINE's mass table from
+    # rho*V/u = sum n_el * m_el (linear, overdetermined), snap to short
+    # decimals, report disagreements with IUPAC 2021, re-certify with the
+    # decoded table
+    if not r.get("certified"):
+        els = sorted({el for d in docs for el in (d.get("composition") or {})
+                      if el in MASSES})
+        idx = {el: i for i, el in enumerate(els)}
+        A = np.zeros((len(Mcell), len(els)))
+        row = 0
+        for d in docs:
+            comp = d.get("composition") or {}
+            if any(el not in MASSES for el in comp):
+                continue
+            nsites = float(d.get("nsites") or 0)
+            tot = sum(float(n) for n in comp.values())
+            sc = nsites / tot if tot > 0 and nsites > 0 else 1.0
+            for el, n in comp.items():
+                A[row, idx[el]] = float(n) * sc
+            row += 1
+        bvec = rho * V / U_AMU
+        m_fit, *_ = np.linalg.lstsq(A, bvec, rcond=None)
+        m_snap = np.round(m_fit, 6)
+        out["P1_mass_table_decode"] = {
+            "post_fit_max_rel": float(np.max(np.abs(bvec - A @ m_fit) / bvec)),
+            "elements_disagreeing_with_iupac2021": {
+                el: {"pipeline": float(m_snap[idx[el]]),
+                     "iupac2021": MASSES[el]}
+                for el in els
+                if abs(m_snap[idx[el]] - MASSES[el]) > 1e-3
+                and (A[:, idx[el]] > 0).sum() >= 3},
+            "note": "the decoded values are the ~2005-vintage IUPAC standard "
+                    "atomic weights (the table pymatgen ships)"}
+        M2 = A @ m_snap
+        sig2 = half_step_rel(rho) + half_step_rel(M2) + half_step_rel(V)
+        r2 = recover(np.column_stack([M2, V]).tolist(), rho.tolist(),
+                     sigma=float(max(sig2, 1e-12)))
+        out["P1_with_decoded_table"] = {
+            "certified": r2.get("certified"),
+            "law": (r2.get("law") or "")[:120],
+            "alpha_log10": r2.get("alpha_log10"),
+            "abstain": r2.get("abstain")}
+
     # P2: band gaps must NOT certify
     for xn, x in (("formation_energy", fe), ("density", rho)):
         ok = np.isfinite(x) & np.isfinite(gap)

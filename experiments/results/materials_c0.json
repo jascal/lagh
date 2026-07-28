@@ -1,0 +1,78 @@
+{
+ "snapshot": "/home/allans/code/lagh/experiments/materials/data/c0_aec1e4a889cb.json",
+ "n": 500,
+ "n_skipped_unknown_element": 0,
+ "P1_density_identity": {
+  "n": 500,
+  "sigma_rep": 1.2985334813129076e-08,
+  "certified": false,
+  "law": "",
+  "alpha_log10": null,
+  "abstain": "structural"
+ },
+ "P1_expected_u": 1.6605390666,
+ "P3_homogeneity": {
+  "median_rel": 4.297140893879664e-08,
+  "q99_rel": 0.00023635578819000027,
+  "max_rel": 0.0004433654595665651,
+  "frac_within_1e-4": 0.95
+ },
+ "P1_mass_table_decode": {
+  "post_fit_max_rel": 2.9785082998614035e-14,
+  "elements_disagreeing_with_iupac2021": {
+   "Cd": {
+    "pipeline": 112.411,
+    "iupac2021": 112.414
+   },
+   "Ge": {
+    "pipeline": 72.64,
+    "iupac2021": 72.63
+   },
+   "Hg": {
+    "pipeline": 200.59,
+    "iupac2021": 200.592
+   },
+   "Mo": {
+    "pipeline": 95.94,
+    "iupac2021": 95.95
+   },
+   "S": {
+    "pipeline": 32.065,
+    "iupac2021": 32.06
+   },
+   "Se": {
+    "pipeline": 78.96,
+    "iupac2021": 78.971
+   },
+   "Tl": {
+    "pipeline": 204.3833,
+    "iupac2021": 204.38
+   },
+   "Yb": {
+    "pipeline": 173.04,
+    "iupac2021": 173.045
+   },
+   "Zn": {
+    "pipeline": 65.409,
+    "iupac2021": 65.38
+   }
+  },
+  "note": "the decoded values are the ~2005-vintage IUPAC standard atomic weights (the table pymatgen ships)"
+ },
+ "P1_with_decoded_table": {
+  "certified": true,
+  "law": "1.66053906887583*x_0/x_1",
+  "alpha_log10": -715.9131440650499,
+  "abstain": null
+ },
+ "P2_gap_vs_formation_energy": {
+  "certified": false,
+  "abstain": "structural",
+  "track": "conjecture"
+ },
+ "P2_gap_vs_density": {
+  "certified": false,
+  "abstain": "structural",
+  "track": "conjecture"
+ }
+}

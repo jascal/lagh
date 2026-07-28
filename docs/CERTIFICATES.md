@@ -84,6 +84,20 @@ composite-table analogue of the FLAME finding); the population mass–radius
 relation (conjecture, log-log slope 2.35). Registered-but-unfulfillable:
 Kepler III on calculated semi-major axes — PSCompPars has none.
 
+## Materials Project (`docs/CASE_STUDY_MATERIALS_C0.md`)
+
+Reproduce: `.venv/bin/python experiments/materials/run_c0.py`
+(snapshot `c0_aec1e4a889cb.json`, 500 stable materials; σ_rep from measured
+column precision; mass table decoded from the data, matching the
+~2005-vintage IUPAC standard weights pymatgen ships)
+
+| Law | Inputs | α ≤ | Note |
+|---|---|---|---|
+| `ρ = 1.66053907·M_cell/V` (exponents exactly 1, −1) | x_0 = cell mass (amu, decoded table), x_1 = volume (Å³) | 10⁻⁷¹⁵ | the pinned constant is the atomic mass constant u to 9 significant figures; the initial abstain against IUPAC-2021 masses decoded the pipeline's own table element-by-element (post-fit residual 3×10⁻¹⁴) |
+
+What did NOT certify, correctly: band gap vs formation energy / density
+(structural abstains — the registered confident-wrong bait).
+
 ## Gaia DR3 Phase 3 (`docs/CASE_STUDY_GAIA_P3.md`)
 
 Reproduce: `.venv/bin/python experiments/gaia/run_p3.py`

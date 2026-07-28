@@ -1,0 +1,6458 @@
+{
+ "request": {
+  "params": {
+   "_fields": "material_id,composition,nsites,volume,density,formation_energy_per_atom,energy_per_atom,band_gap",
+   "_limit": 500,
+   "_sort_fields": "material_id",
+   "energy_above_hull_max": 0.0
+  },
+  "path": "/materials/summary/"
+ },
+ "n": 500,
+ "data": [
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -22.96045361,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Pd": 1.0
+   },
+   "volume": 15.02799459406926,
+   "density": 11.759025238417777,
+   "material_id": "mp-aaaaaaac"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.47002121,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Fe": 2.0
+   },
+   "volume": 23.468168469356993,
+   "density": 7.902858241785766,
+   "material_id": "mp-aaaaaaan"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -31.22643415,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Tb": 2.0
+   },
+   "volume": 65.42556819799493,
+   "density": 8.067236096999546,
+   "material_id": "mp-aaaaaaas"
+  },
+  {
+   "band_gap": 0.1844999999999999,
+   "energy_per_atom": -25.417224309999998,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 3,
+   "composition": {
+    "Te": 3.0
+   },
+   "volume": 108.19281571621227,
+   "density": 5.8751993038972685,
+   "material_id": "mp-aaaaaaat"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -11.98171716,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Ni": 1.0
+   },
+   "volume": 10.492020341068946,
+   "density": 9.289219866096774,
+   "material_id": "mp-aaaaaaax"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -29.744780205,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 4,
+   "composition": {
+    "La": 4.0
+   },
+   "volume": 150.28863578550227,
+   "density": 6.139065901187602,
+   "material_id": "mp-aaaaaaba"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -30.84062876,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Ce": 1.0
+   },
+   "volume": 25.50164500404376,
+   "density": 9.123650342709297,
+   "material_id": "mp-aaaaaabc"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -10.846796,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Cu": 1.0
+   },
+   "volume": 11.445998564977856,
+   "density": 9.218996060025667,
+   "material_id": "mp-aaaaaabe"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -13.87197758,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Ge": 2.0
+   },
+   "volume": 45.68820923290832,
+   "density": 5.280205111627243,
+   "material_id": "mp-aaaaaabg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.424535295,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Ru": 2.0
+   },
+   "volume": 27.10235367049707,
+   "density": 12.384952667667424,
+   "material_id": "mp-aaaaaabh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -14.683334675517242,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 29,
+   "composition": {
+    "Mn": 29.0
+   },
+   "volume": 377.65780883545983,
+   "density": 7.005220786623814,
+   "material_id": "mp-aaaaaabj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -73.47526215,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Th": 1.0
+   },
+   "volume": 32.144276686139456,
+   "density": 11.986838835062263,
+   "material_id": "mp-aaaaaabl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -79.942036625,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "U": 2.0
+   },
+   "volume": 39.302152148225844,
+   "density": 20.113723192396975,
+   "material_id": "mp-aaaaaabs"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.0382937,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Ca": 1.0
+   },
+   "volume": 43.36096382607296,
+   "density": 1.5348156252043126,
+   "material_id": "mp-aaaaaabt"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -52.98522885,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Os": 2.0
+   },
+   "volume": 28.254800538527018,
+   "density": 22.35969400314296,
+   "material_id": "mp-aaaaaabx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -76.85601818,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Pa": 1.0
+   },
+   "volume": 24.46037090317387,
+   "density": 15.68431266152766,
+   "material_id": "mp-aaaaaack"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -11.398487355,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Sc": 2.0
+   },
+   "volume": 50.02447391787033,
+   "density": 2.9845810423710106,
+   "material_id": "mp-aaaaaacp"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -29.73292432,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 4,
+   "composition": {
+    "Sm": 4.0
+   },
+   "volume": 135.20776948932632,
+   "density": 7.3865179596065,
+   "material_id": "mp-aaaaaacr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.937757013333332,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 3,
+   "composition": {
+    "Ti": 3.0
+   },
+   "volume": 51.05915967771039,
+   "density": 4.670172253933062,
+   "material_id": "mp-aaaaaacu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.13622863,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Rh": 1.0
+   },
+   "volume": 13.782780337825384,
+   "density": 12.397977691611958,
+   "material_id": "mp-aaaaaacw"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.73407465,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Nb": 1.0
+   },
+   "volume": 18.258066615716924,
+   "density": 8.449671971791625,
+   "material_id": "mp-aaaaaacx"
+  },
+  {
+   "band_gap": 2.5807,
+   "energy_per_atom": -8.0340372271875,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 32,
+   "composition": {
+    "S": 32.0
+   },
+   "volume": 887.5956414230244,
+   "density": 1.9196195297959862,
+   "material_id": "mp-aaaaaacz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.910602605,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Zn": 2.0
+   },
+   "volume": 28.845108913918352,
+   "density": 7.530857330656824,
+   "material_id": "mp-aaaaaadb"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -50.58496015,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Au": 1.0
+   },
+   "volume": 18.14473805188449,
+   "density": 18.02564920807207,
+   "material_id": "mp-aaaaaadd"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -53.17930458,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Tl": 2.0
+   },
+   "volume": 59.81227665924512,
+   "density": 11.348387777255368,
+   "material_id": "mp-aaaaaade"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -22.57859038,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "In": 1.0
+   },
+   "volume": 26.392514730548744,
+   "density": 7.224009411826607,
+   "material_id": "mp-aaaaaadh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.739412865,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 4,
+   "composition": {
+    "Be": 4.0
+   },
+   "volume": 31.796370288803224,
+   "density": 1.8826149238156762,
+   "material_id": "mp-aaaaaadj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -31.981803225,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Dy": 2.0
+   },
+   "volume": 64.00862348033375,
+   "density": 8.431288911638784,
+   "material_id": "mp-aaaaaadk"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -15.07334239,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Cr": 2.0
+   },
+   "volume": 26.16895772559837,
+   "density": 6.5987767940037,
+   "material_id": "mp-aaaaaadm"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -51.36779438,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "W": 1.0
+   },
+   "volume": 15.932263521447117,
+   "density": 19.160711346464403,
+   "material_id": "mp-aaaaaadn"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -20.10498769,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Cd": 2.0
+   },
+   "volume": 44.61503857901331,
+   "density": 8.367710226038955,
+   "material_id": "mp-aaaaaadq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -52.35935345,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Ir": 1.0
+   },
+   "volume": 14.310382775109328,
+   "density": 22.304353644946936,
+   "material_id": "mp-aaaaaadx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -13.23423113,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Co": 1.0
+   },
+   "volume": 10.841542632772713,
+   "density": 9.026471238323484,
+   "material_id": "mp-aaaaaady"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -45.15141539,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Hf": 2.0
+   },
+   "volume": 44.52724349481806,
+   "density": 13.312731494192928,
+   "material_id": "mp-aaaaaadz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.70631573,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Sb": 2.0
+   },
+   "volume": 62.881010949113254,
+   "density": 6.4307883725126525,
+   "material_id": "mp-aaaaaaea"
+  },
+  {
+   "band_gap": 11.60493241596011,
+   "energy_per_atom": -1.91282416,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Ne": 1.0
+   },
+   "volume": 18.456187514358387,
+   "density": 1.8156068377077186,
+   "material_id": "mp-aaaaaaeh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -20.31360096,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Y": 2.0
+   },
+   "volume": 67.55562608311241,
+   "density": 4.370668912132135,
+   "material_id": "mp-aaaaaaei"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.96466205,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Tc": 2.0
+   },
+   "volume": 28.503381002021815,
+   "density": 11.418493037202635,
+   "material_id": "mp-aaaaaaej"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.74618378,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Sn": 2.0
+   },
+   "volume": 70.8975063415447,
+   "density": 5.560776479834602,
+   "material_id": "mp-aaaaaaen"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -1.91897494,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Ba": 2.0
+   },
+   "volume": 129.9981809751681,
+   "density": 3.5083083010390084,
+   "material_id": "mp-aaaaaaes"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -29.4180089825,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 4,
+   "composition": {
+    "Nd": 4.0
+   },
+   "volume": 141.84503754978965,
+   "density": 6.75439847643831,
+   "material_id": "mp-aaaaaaet"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -51.4877169,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Pt": 1.0
+   },
+   "volume": 15.327454053856243,
+   "density": 21.134925773252462,
+   "material_id": "mp-aaaaaaew"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -26.07197944,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Mo": 1.0
+   },
+   "volume": 15.89162790660502,
+   "density": 10.02490866313136,
+   "material_id": "mp-aaaaaaez"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -22.749791905,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Zr": 2.0
+   },
+   "volume": 46.99931887465835,
+   "density": 6.446094098816202,
+   "material_id": "mp-aaaaaafb"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.73209833,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "Al": 1.0
+   },
+   "volume": 16.471717630914863,
+   "density": 2.7200502090190675,
+   "material_id": "mp-aaaaaafe"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -15.14566107,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Sr": 2.0
+   },
+   "volume": 112.86603919480832,
+   "density": 2.5782145675838155,
+   "material_id": "mp-aaaaaafj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -11.44277595,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 4,
+   "composition": {
+    "Ga": 4.0
+   },
+   "volume": 76.70242103705301,
+   "density": 6.037763290229381,
+   "material_id": "mp-aaaaaafm"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -35.12104829,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Tm": 2.0
+   },
+   "volume": 60.39799572484888,
+   "density": 9.289111415553933,
+   "material_id": "mp-aaaaaafn"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -32.881343915,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Ho": 2.0
+   },
+   "volume": 62.7292955117729,
+   "density": 8.731908680787836,
+   "material_id": "mp-aaaaaafo"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -14.08957573,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 1,
+   "composition": {
+    "V": 1.0
+   },
+   "volume": 13.263780153478194,
+   "density": 6.37754471203338,
+   "material_id": "mp-aaaaaafq"
+  },
+  {
+   "band_gap": 0.6102999999999996,
+   "energy_per_atom": -8.773764595,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Si": 2.0
+   },
+   "volume": 40.32952684741405,
+   "density": 2.3128002565764314,
+   "material_id": "mp-aaaaaaft"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.169303585,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Mg": 2.0
+   },
+   "volume": 44.79899633535127,
+   "density": 1.8017993871104938,
+   "material_id": "mp-aaaaaafx"
+  },
+  {
+   "band_gap": 7.3768,
+   "energy_per_atom": -9.12875067125,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 8,
+   "composition": {
+    "N": 8.0
+   },
+   "volume": 196.64003730440479,
+   "density": 0.9462436193759106,
+   "material_id": "mp-aaaaaafy"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -43.3970053,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 2,
+   "composition": {
+    "Gd": 2.0
+   },
+   "volume": 67.79110270704972,
+   "density": 7.7036589806206415,
+   "material_id": "mp-aaaaaafz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -14.7075309875,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 4,
+   "composition": {
+    "As": 4.0
+   },
+   "volume": 98.54977227954305,
+   "density": 5.049641050538346,
+   "material_id": "mp-aaaaaagc"
+  },
+  {
+   "band_gap": 1.4332000000000003,
+   "energy_per_atom": -7.346354197499999,
+   "formation_energy_per_atom": 0.0,
+   "nsites": 12,
+   "composition": {
+    "B": 12.0
+   },
+   "volume": 86.74916330018324,
+   "density": 2.483309882121645,
+   "material_id": "mp-aaaaaage"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.070865744999999,
+   "formation_energy_per_atom": -0.29202091749999504,
+   "nsites": 2,
+   "composition": {
+    "Ho": 1.0,
+    "Cd": 1.0
+   },
+   "volume": 50.855520576165205,
+   "density": 9.055773927161137,
+   "material_id": "mp-aaaaaago"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.72460083,
+   "formation_energy_per_atom": -0.21591902750000003,
+   "nsites": 4,
+   "composition": {
+    "V": 1.0,
+    "Ni": 3.0
+   },
+   "volume": 43.40330284322307,
+   "density": 8.685477317344212,
+   "material_id": "mp-aaaaaagp"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -23.448706360555555,
+   "formation_energy_per_atom": -0.9400446680555521,
+   "nsites": 36,
+   "composition": {
+    "Nd": 20.0,
+    "Ge": 16.0
+   },
+   "volume": 970.3972209074326,
+   "density": 6.925343880066421,
+   "material_id": "mp-aaaaaagq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.693050521428573,
+   "formation_energy_per_atom": -0.17369762541872039,
+   "nsites": 14,
+   "composition": {
+    "Mn": 2.0,
+    "Al": 12.0
+   },
+   "volume": 208.61263913913808,
+   "density": 3.451853784963442,
+   "material_id": "mp-aaaaaagr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -53.40049456,
+   "formation_energy_per_atom": -0.5763183824999984,
+   "nsites": 2,
+   "composition": {
+    "U": 1.0,
+    "Sb": 1.0
+   },
+   "volume": 52.88127010655021,
+   "density": 11.29782889887772,
+   "material_id": "mp-aaaaaagv"
+  },
+  {
+   "band_gap": 0.22519999999999962,
+   "energy_per_atom": -2.726530472500001,
+   "formation_energy_per_atom": -0.17261602493750092,
+   "nsites": 12,
+   "composition": {
+    "K": 3.0,
+    "Ga": 9.0
+   },
+   "volume": 285.75435797216085,
+   "density": 4.32809725924228,
+   "material_id": "mp-aaaaaagz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -13.269138696666666,
+   "formation_energy_per_atom": -0.5920677066666661,
+   "nsites": 3,
+   "composition": {
+    "Sr": 1.0,
+    "Ga": 2.0
+   },
+   "volume": 77.15142617857975,
+   "density": 4.887167780290145,
+   "material_id": "mp-aaaaaaha"
+  },
+  {
+   "band_gap": 0.22989999999999888,
+   "energy_per_atom": -17.7536825925,
+   "formation_energy_per_atom": -0.6545326474999982,
+   "nsites": 8,
+   "composition": {
+    "Si": 4.0,
+    "Ru": 4.0
+   },
+   "volume": 104.39365818349003,
+   "density": 8.217654499239124,
+   "material_id": "mp-aaaaaahh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.95748831,
+   "formation_energy_per_atom": -2.134489004375001,
+   "nsites": 16,
+   "composition": {
+    "Re": 4.0,
+    "O": 12.0
+   },
+   "volume": 213.50498898765895,
+   "density": 7.286141398160995,
+   "material_id": "mp-aaaaaahi"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.767392945000001,
+   "formation_energy_per_atom": -0.8306932600000003,
+   "nsites": 2,
+   "composition": {
+    "Y": 1.0,
+    "Rh": 1.0
+   },
+   "volume": 39.926285926991035,
+   "density": 7.977457285150792,
+   "material_id": "mp-aaaaaahj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.19899144,
+   "formation_energy_per_atom": -0.1341221300000003,
+   "nsites": 3,
+   "composition": {
+    "Zr": 2.0,
+    "Cu": 1.0
+   },
+   "volume": 58.009996856272245,
+   "density": 7.041590585360286,
+   "material_id": "mp-aaaaaahl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -47.961447995,
+   "formation_energy_per_atom": -1.1253243412499998,
+   "nsites": 4,
+   "composition": {
+    "Ho": 1.0,
+    "Pt": 3.0
+   },
+   "volume": 68.14112604530499,
+   "density": 18.28128068128507,
+   "material_id": "mp-aaaaaahn"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -9.017944408928571,
+   "formation_energy_per_atom": -0.42809385035714137,
+   "nsites": 28,
+   "composition": {
+    "Al": 20.0,
+    "Co": 8.0
+   },
+   "volume": 376.3307399553464,
+   "density": 4.4614079677012946,
+   "material_id": "mp-aaaaaaho"
+  },
+  {
+   "band_gap": 0.8670999999999998,
+   "energy_per_atom": -12.10971631125,
+   "formation_energy_per_atom": -0.5148020126041661,
+   "nsites": 32,
+   "composition": {
+    "La": 4.0,
+    "P": 28.0
+   },
+   "volume": 658.729887501915,
+   "density": 3.586841674658252,
+   "material_id": "mp-aaaaaahs"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -33.4430609525,
+   "formation_energy_per_atom": -0.9723308131249979,
+   "nsites": 16,
+   "composition": {
+    "Yb": 10.0,
+    "Sb": 6.0
+   },
+   "volume": 412.10560113328546,
+   "density": 9.91619676076103,
+   "material_id": "mp-aaaaaaht"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.706008638333333,
+   "formation_energy_per_atom": -0.08034454166666431,
+   "nsites": 6,
+   "composition": {
+    "Ce": 2.0,
+    "Fe": 4.0
+   },
+   "volume": 99.28577125121703,
+   "density": 8.42283230555746,
+   "material_id": "mp-aaaaaahw"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -23.575856598125,
+   "formation_energy_per_atom": -0.7691735312500008,
+   "nsites": 16,
+   "composition": {
+    "Tb": 10.0,
+    "Si": 6.0
+   },
+   "volume": 398.686794438765,
+   "density": 7.32113525705722,
+   "material_id": "mp-aaaaaahy"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -33.47785856375,
+   "formation_energy_per_atom": -0.3621930487499938,
+   "nsites": 8,
+   "composition": {
+    "Ge": 4.0,
+    "Ir": 4.0
+   },
+   "volume": 125.36730444152096,
+   "density": 14.032538966556363,
+   "material_id": "mp-aaaaaaia"
+  },
+  {
+   "band_gap": 1.3288,
+   "energy_per_atom": -24.3309633985,
+   "formation_energy_per_atom": -2.1738531932708325,
+   "nsites": 20,
+   "composition": {
+    "Er": 8.0,
+    "Se": 12.0
+   },
+   "volume": 559.6653396140929,
+   "density": 6.781400495924921,
+   "material_id": "mp-aaaaaaib"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -1.911672084666667,
+   "formation_energy_per_atom": -0.00073880333333373,
+   "nsites": 30,
+   "composition": {
+    "Ba": 6.0,
+    "Li": 24.0
+   },
+   "volume": 907.5286575632158,
+   "density": 1.8124389999748907,
+   "material_id": "mp-aaaaaaic"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.82603288,
+   "formation_energy_per_atom": -0.738869280000003,
+   "nsites": 2,
+   "composition": {
+    "Zr": 1.0,
+    "Ru": 1.0
+   },
+   "volume": 34.709931399737066,
+   "density": 9.199433327641817,
+   "material_id": "mp-aaaaaaig"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.39631323,
+   "formation_energy_per_atom": -1.3863548849999994,
+   "nsites": 2,
+   "composition": {
+    "Y": 1.0,
+    "Sb": 1.0
+   },
+   "volume": 59.91639570647841,
+   "density": 5.838449898187324,
+   "material_id": "mp-aaaaaaih"
+  },
+  {
+   "band_gap": 3.814,
+   "energy_per_atom": -9.470496885749998,
+   "formation_energy_per_atom": -3.9687326407499994,
+   "nsites": 40,
+   "composition": {
+    "Sc": 16.0,
+    "O": 24.0
+   },
+   "volume": 479.72910891946253,
+   "density": 3.8189049376387185,
+   "material_id": "mp-aaaaaaii"
+  },
+  {
+   "band_gap": 3.7823,
+   "energy_per_atom": -8.718163524249999,
+   "formation_energy_per_atom": -3.86195246725,
+   "nsites": 40,
+   "composition": {
+    "Sm": 16.0,
+    "O": 24.0
+   },
+   "volume": 654.3533566824561,
+   "density": 7.079480091053787,
+   "material_id": "mp-aaaaaaik"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -18.233029745,
+   "formation_energy_per_atom": -0.6960018689880947,
+   "nsites": 2,
+   "composition": {
+    "Mo": 1.0,
+    "P": 1.0
+   },
+   "volume": 28.837101489257634,
+   "density": 7.308129087214989,
+   "material_id": "mp-aaaaaail"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.758335966666659,
+   "formation_energy_per_atom": -0.43362542999999104,
+   "nsites": 3,
+   "composition": {
+    "Th": 1.0,
+    "Ni": 2.0
+   },
+   "volume": 54.24818441294058,
+   "density": 10.695908774847217,
+   "material_id": "mp-aaaaaaim"
+  },
+  {
+   "band_gap": 1.5656999999999996,
+   "energy_per_atom": -23.362202953333334,
+   "formation_energy_per_atom": -0.883580008541666,
+   "nsites": 6,
+   "composition": {
+    "W": 2.0,
+    "S": 4.0
+   },
+   "volume": 113.96060830514946,
+   "density": 7.226424622401496,
+   "material_id": "mp-aaaaaaiq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -14.174952155,
+   "formation_energy_per_atom": -0.1804681016666668,
+   "nsites": 6,
+   "composition": {
+    "Sm": 1.0,
+    "Cu": 5.0
+   },
+   "volume": 89.02730132207014,
+   "density": 8.730824378904003,
+   "material_id": "mp-aaaaaait"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.430065799999998,
+   "formation_energy_per_atom": -0.4398400500000008,
+   "nsites": 3,
+   "composition": {
+    "Te": 2.0,
+    "Rh": 1.0
+   },
+   "volume": 74.02122568300025,
+   "density": 8.033481856835802,
+   "material_id": "mp-aaaaaaiu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.5328032075,
+   "formation_energy_per_atom": -0.7431837587499999,
+   "nsites": 4,
+   "composition": {
+    "Zr": 1.0,
+    "Rh": 3.0
+   },
+   "volume": 60.888936762657835,
+   "density": 10.907019580290827,
+   "material_id": "mp-aaaaaaiv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.869968145000001,
+   "formation_energy_per_atom": -0.8786264458333317,
+   "nsites": 2,
+   "composition": {
+    "Dy": 1.0,
+    "Rh": 1.0
+   },
+   "volume": 39.400007107247255,
+   "density": 11.185688384690199,
+   "material_id": "mp-aaaaaaiy"
+  },
+  {
+   "band_gap": 1.3912999999999998,
+   "energy_per_atom": -5.01708457,
+   "formation_energy_per_atom": -1.4342925506249986,
+   "nsites": 8,
+   "composition": {
+    "Ba": 2.0,
+    "S": 6.0
+   },
+   "volume": 203.75848204461352,
+   "density": 3.806196439640066,
+   "material_id": "mp-aaaaaajf"
+  },
+  {
+   "band_gap": 2.8987,
+   "energy_per_atom": -4.062663836666666,
+   "formation_energy_per_atom": -2.4662756033333326,
+   "nsites": 3,
+   "composition": {
+    "Cd": 1.0,
+    "F": 2.0
+   },
+   "volume": 39.38870067731385,
+   "density": 6.340854978788501,
+   "material_id": "mp-aaaaaajh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.979554121428572,
+   "formation_energy_per_atom": -0.519013227857144,
+   "nsites": 7,
+   "composition": {
+    "Sr": 1.0,
+    "B": 6.0
+   },
+   "volume": 73.57091183690322,
+   "density": 3.4416993638010784,
+   "material_id": "mp-aaaaaaji"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.078806645,
+   "formation_energy_per_atom": -3.669000699583334,
+   "nsites": 8,
+   "composition": {
+    "Ti": 2.0,
+    "F": 6.0
+   },
+   "volume": 120.44610881666335,
+   "density": 2.891381010226339,
+   "material_id": "mp-aaaaaajm"
+  },
+  {
+   "band_gap": 2.0172,
+   "energy_per_atom": -4.0117213199999995,
+   "formation_energy_per_atom": -0.5703619408333322,
+   "nsites": 2,
+   "composition": {
+    "Be": 1.0,
+    "Te": 1.0
+   },
+   "volume": 45.4005098428141,
+   "density": 4.996636960395607,
+   "material_id": "mp-aaaaaajs"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.894902195,
+   "formation_energy_per_atom": -0.2725856566666683,
+   "nsites": 6,
+   "composition": {
+    "Sc": 2.0,
+    "Co": 4.0
+   },
+   "volume": 81.95896944523425,
+   "density": 6.597759722763635,
+   "material_id": "mp-aaaaaajt"
+  },
+  {
+   "band_gap": 7.6235,
+   "energy_per_atom": -7.112197036250001,
+   "formation_energy_per_atom": -4.484227236875001,
+   "nsites": 24,
+   "composition": {
+    "Nd": 6.0,
+    "F": 18.0
+   },
+   "volume": 306.0975333537723,
+   "density": 6.5501131943138144,
+   "material_id": "mp-aaaaaaju"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -26.736930545,
+   "formation_energy_per_atom": -0.27093699875000254,
+   "nsites": 8,
+   "composition": {
+    "Na": 4.0,
+    "Hg": 4.0
+   },
+   "volume": 199.71708096347228,
+   "density": 7.435777453155597,
+   "material_id": "mp-aaaaaajv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -21.01215574,
+   "formation_energy_per_atom": -1.5753903018750002,
+   "nsites": 2,
+   "composition": {
+    "La": 1.0,
+    "N": 1.0
+   },
+   "volume": 37.23191777369967,
+   "density": 6.819864449144797,
+   "material_id": "mp-aaaaaajw"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -27.873652035,
+   "formation_energy_per_atom": -0.5934552324999984,
+   "nsites": 2,
+   "composition": {
+    "Dy": 1.0,
+    "In": 1.0
+   },
+   "volume": 52.43315489947375,
+   "density": 8.782560851004185,
+   "material_id": "mp-aaaaaajx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -21.49534551625,
+   "formation_energy_per_atom": -0.2583363537500034,
+   "nsites": 8,
+   "composition": {
+    "Al": 2.0,
+    "Mo": 6.0
+   },
+   "volume": 121.37371239503442,
+   "density": 8.613730988141276,
+   "material_id": "mp-aaaaaajz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.952842160434783,
+   "formation_energy_per_atom": -0.09981495782608733,
+   "nsites": 23,
+   "composition": {
+    "Na": 3.0,
+    "B": 20.0
+   },
+   "volume": 218.14518711469344,
+   "density": 2.1708844186307283,
+   "material_id": "mp-aaaaaakc"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -52.17511517,
+   "formation_energy_per_atom": -0.7576419043333331,
+   "nsites": 4,
+   "composition": {
+    "Ta": 1.0,
+    "Ir": 3.0
+   },
+   "volume": 59.56154573157762,
+   "density": 21.121388361535946,
+   "material_id": "mp-aaaaaakf"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -23.323229453333337,
+   "formation_energy_per_atom": -0.5032169800000048,
+   "nsites": 3,
+   "composition": {
+    "Zr": 2.0,
+    "Pd": 1.0
+   },
+   "volume": 60.14498900576465,
+   "density": 7.975337724557691,
+   "material_id": "mp-aaaaaakg"
+  },
+  {
+   "band_gap": 0.28470000000000084,
+   "energy_per_atom": -25.825780068333334,
+   "formation_energy_per_atom": -0.40611876333333896,
+   "nsites": 6,
+   "composition": {
+    "Te": 4.0,
+    "Ru": 2.0
+   },
+   "volume": 138.68892091453327,
+   "density": 8.53132680221372,
+   "material_id": "mp-aaaaaakh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.52666749,
+   "formation_energy_per_atom": -0.36048569333333247,
+   "nsites": 9,
+   "composition": {
+    "Nb": 5.0,
+    "Sb": 4.0
+   },
+   "volume": 194.3417736385304,
+   "density": 8.130636492879873,
+   "material_id": "mp-aaaaaako"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.830618751666665,
+   "formation_energy_per_atom": -0.43123975722222,
+   "nsites": 6,
+   "composition": {
+    "Tb": 2.0,
+    "Ni": 4.0
+   },
+   "volume": 89.8065061528644,
+   "density": 10.218126502133137,
+   "material_id": "mp-aaaaaakq"
+  },
+  {
+   "band_gap": 0.9704999999999995,
+   "energy_per_atom": -16.818722965357143,
+   "formation_energy_per_atom": -1.8523831939285722,
+   "nsites": 28,
+   "composition": {
+    "Zr": 12.0,
+    "N": 16.0
+   },
+   "volume": 348.3795536060767,
+   "density": 6.285991617006213,
+   "material_id": "mp-aaaaaakr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -27.65712311,
+   "formation_energy_per_atom": -0.2840931783333325,
+   "nsites": 2,
+   "composition": {
+    "Li": 1.0,
+    "Ir": 1.0
+   },
+   "volume": 26.54845246772127,
+   "density": 12.456833041024145,
+   "material_id": "mp-aaaaaakt"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -21.22139474,
+   "formation_energy_per_atom": -0.22211439166666716,
+   "nsites": 6,
+   "composition": {
+    "Yb": 2.0,
+    "Co": 4.0
+   },
+   "volume": 88.13082935989016,
+   "density": 10.96237104545683,
+   "material_id": "mp-aaaaaakv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -10.53962086,
+   "formation_energy_per_atom": -0.556456129999999,
+   "nsites": 2,
+   "composition": {
+    "Al": 1.0,
+    "Co": 1.0
+   },
+   "volume": 22.411533274498698,
+   "density": 6.365685470569169,
+   "material_id": "mp-aaaaaaky"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.753221595333334,
+   "formation_energy_per_atom": -3.9632777893333326,
+   "nsites": 30,
+   "composition": {
+    "U": 6.0,
+    "F": 24.0
+   },
+   "volume": 467.79417665217767,
+   "density": 6.68815509455907,
+   "material_id": "mp-aaaaaalb"
+  },
+  {
+   "band_gap": 0.38480000000000025,
+   "energy_per_atom": -30.2943338075,
+   "formation_energy_per_atom": -0.5334567439062461,
+   "nsites": 4,
+   "composition": {
+    "Pt": 2.0,
+    "S": 2.0
+   },
+   "volume": 74.68767194538908,
+   "density": 10.1004564512844,
+   "material_id": "mp-aaaaaalc"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -33.79079237,
+   "formation_energy_per_atom": -0.8292994383333294,
+   "nsites": 2,
+   "composition": {
+    "Ti": 1.0,
+    "Os": 1.0
+   },
+   "volume": 29.350172182931075,
+   "density": 13.470768356261184,
+   "material_id": "mp-aaaaaalf"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -14.75890879,
+   "formation_energy_per_atom": -0.5148442456249995,
+   "nsites": 8,
+   "composition": {
+    "V": 6.0,
+    "As": 2.0
+   },
+   "volume": 104.54406881851067,
+   "density": 7.234868531866439,
+   "material_id": "mp-aaaaaalg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.593056935,
+   "formation_energy_per_atom": -1.7986194837499987,
+   "nsites": 2,
+   "composition": {
+    "Ho": 1.0,
+    "As": 1.0
+   },
+   "volume": 48.243069679295765,
+   "density": 8.255765782798095,
+   "material_id": "mp-aaaaaalj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -48.932286105,
+   "formation_energy_per_atom": -1.1841537337500014,
+   "nsites": 4,
+   "composition": {
+    "Yb": 1.0,
+    "Pt": 3.0
+   },
+   "volume": 66.73387757961264,
+   "density": 18.868579757669657,
+   "material_id": "mp-aaaaaalo"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -1.5907225766666653,
+   "formation_energy_per_atom": -0.22110707833333207,
+   "nsites": 12,
+   "composition": {
+    "Ba": 2.0,
+    "Zn": 10.0
+   },
+   "volume": 237.42994368149056,
+   "density": 6.495455767339523,
+   "material_id": "mp-aaaaaalr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.603586765,
+   "formation_energy_per_atom": -0.4208301516666655,
+   "nsites": 2,
+   "composition": {
+    "Ti": 1.0,
+    "Fe": 1.0
+   },
+   "volume": 25.377989104011977,
+   "density": 6.786110089731469,
+   "material_id": "mp-aaaaaalt"
+  },
+  {
+   "band_gap": 6.305000000000001,
+   "energy_per_atom": -8.438589621333334,
+   "formation_energy_per_atom": -2.798056310000001,
+   "nsites": 15,
+   "composition": {
+    "B": 6.0,
+    "O": 9.0
+   },
+   "volume": 135.3764045815366,
+   "density": 2.561902772718296,
+   "material_id": "mp-aaaaaalu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.532437593333332,
+   "formation_energy_per_atom": -0.16585972444444033,
+   "nsites": 3,
+   "composition": {
+    "Th": 1.0,
+    "Ag": 2.0
+   },
+   "volume": 68.75221912025505,
+   "density": 10.814879787283834,
+   "material_id": "mp-aaaaaalx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -36.57713613333333,
+   "formation_energy_per_atom": -0.07957820291666924,
+   "nsites": 6,
+   "composition": {
+    "Np": 2.0,
+    "Co": 4.0
+   },
+   "volume": 90.13177019719194,
+   "density": 13.075733529972547,
+   "material_id": "mp-aaaaaaly"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -56.355722308333334,
+   "formation_energy_per_atom": -0.47705074166666844,
+   "nsites": 6,
+   "composition": {
+    "Th": 1.0,
+    "Ir": 5.0
+   },
+   "volume": 106.18295948911614,
+   "density": 18.658619656974796,
+   "material_id": "mp-aaaaaama"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -50.388677599,
+   "formation_energy_per_atom": -0.7547292769999956,
+   "nsites": 10,
+   "composition": {
+    "Th": 6.0,
+    "Ge": 4.0
+   },
+   "volume": 266.099587400078,
+   "density": 10.501090376748905,
+   "material_id": "mp-aaaaaamc"
+  },
+  {
+   "band_gap": 4.393700000000001,
+   "energy_per_atom": -5.194276343333333,
+   "formation_energy_per_atom": -2.680342483333332,
+   "nsites": 3,
+   "composition": {
+    "Pb": 1.0,
+    "F": 2.0
+   },
+   "volume": 51.760896642451605,
+   "density": 7.8661480579469485,
+   "material_id": "mp-aaaaaamd"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -14.58459444,
+   "formation_energy_per_atom": -0.19813923724137794,
+   "nsites": 2,
+   "composition": {
+    "Mn": 1.0,
+    "V": 1.0
+   },
+   "volume": 23.289978270600127,
+   "density": 7.549046161795445,
+   "material_id": "mp-aaaaaame"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.149839663750001,
+   "formation_energy_per_atom": -0.46289980124999985,
+   "nsites": 8,
+   "composition": {
+    "Sn": 4.0,
+    "Rh": 4.0
+   },
+   "volume": 137.44621856023807,
+   "density": 10.70967829840899,
+   "material_id": "mp-aaaaaamf"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -40.28486048166666,
+   "formation_energy_per_atom": -0.33007115833333006,
+   "nsites": 6,
+   "composition": {
+    "Sr": 2.0,
+    "Ir": 4.0
+   },
+   "volume": 114.6245203259923,
+   "density": 13.677075505496573,
+   "material_id": "mp-aaaaaamg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.948244281666668,
+   "formation_energy_per_atom": -0.323064968333334,
+   "nsites": 6,
+   "composition": {
+    "Zr": 4.0,
+    "Ni": 2.0
+   },
+   "volume": 109.70680953087205,
+   "density": 7.299906314774083,
+   "material_id": "mp-aaaaaamq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -9.531470605,
+   "formation_energy_per_atom": -0.466177762500001,
+   "nsites": 2,
+   "composition": {
+    "Sc": 1.0,
+    "Al": 1.0
+   },
+   "volume": 38.28464388341792,
+   "density": 3.120179140324759,
+   "material_id": "mp-aaaaaamt"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -9.31186941,
+   "formation_energy_per_atom": -0.3461255933333322,
+   "nsites": 6,
+   "composition": {
+    "Hf": 2.0,
+    "Fe": 4.0
+   },
+   "volume": 86.44357371147333,
+   "density": 11.14843374309155,
+   "material_id": "mp-aaaaaamv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.2573213080000003,
+   "formation_energy_per_atom": -0.4510495020000004,
+   "nsites": 5,
+   "composition": {
+    "Ba": 1.0,
+    "Ga": 4.0
+   },
+   "volume": 112.73660125980902,
+   "density": 6.130643491141061,
+   "material_id": "mp-aaaaaamx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.407215430000001,
+   "formation_energy_per_atom": -0.07874223833333478,
+   "nsites": 6,
+   "composition": {
+    "Sm": 2.0,
+    "Co": 4.0
+   },
+   "volume": 95.223913347754,
+   "density": 9.35480142018083,
+   "material_id": "mp-aaaaaamy"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.6067448725,
+   "formation_energy_per_atom": -0.08172346348214228,
+   "nsites": 28,
+   "composition": {
+    "Pu": 2.0,
+    "Be": 26.0
+   },
+   "volume": 268.817688636426,
+   "density": 4.461890732357439,
+   "material_id": "mp-aaaaaamz"
+  },
+  {
+   "band_gap": 1.9294,
+   "energy_per_atom": -4.470785061999999,
+   "formation_energy_per_atom": -2.196593843999998,
+   "nsites": 5,
+   "composition": {
+    "Pb": 1.0,
+    "F": 4.0
+   },
+   "volume": 72.5019564660598,
+   "density": 6.4860878387901435,
+   "material_id": "mp-aaaaaand"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -29.1894504,
+   "formation_energy_per_atom": -1.614376085,
+   "nsites": 2,
+   "composition": {
+    "Sm": 1.0,
+    "Te": 1.0
+   },
+   "volume": 61.99665346893921,
+   "density": 7.4449734585795,
+   "material_id": "mp-aaaaaane"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -20.812147345,
+   "formation_energy_per_atom": -1.5457938252083316,
+   "nsites": 2,
+   "composition": {
+    "Pr": 1.0,
+    "N": 1.0
+   },
+   "volume": 35.421421550657314,
+   "density": 7.262309620845053,
+   "material_id": "mp-aaaaaanf"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -30.02380967,
+   "formation_energy_per_atom": -0.9830587200000025,
+   "nsites": 2,
+   "composition": {
+    "Tm": 1.0,
+    "Pd": 1.0
+   },
+   "volume": 40.6888988834754,
+   "density": 11.237375206589707,
+   "material_id": "mp-aaaaaank"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -19.84961307,
+   "formation_energy_per_atom": -0.6674931537500015,
+   "nsites": 8,
+   "composition": {
+    "Yb": 3.0,
+    "Si": 5.0
+   },
+   "volume": 147.8097549423269,
+   "density": 7.409554206932049,
+   "material_id": "mp-aaaaaanl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.900644826666664,
+   "formation_energy_per_atom": -0.9653274083333341,
+   "nsites": 9,
+   "composition": {
+    "Zr": 5.0,
+    "Te": 4.0
+   },
+   "volume": 229.1678743391644,
+   "density": 7.003356057303515,
+   "material_id": "mp-aaaaaanm"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -10.84839634625,
+   "formation_energy_per_atom": -0.4706554687500013,
+   "nsites": 8,
+   "composition": {
+    "Si": 4.0,
+    "Ni": 4.0
+   },
+   "volume": 95.11263185898753,
+   "density": 6.060173122810512,
+   "material_id": "mp-aaaaaann"
+  },
+  {
+   "band_gap": 4.0161999999999995,
+   "energy_per_atom": -10.637514720833332,
+   "formation_energy_per_atom": -4.019811040833332,
+   "nsites": 12,
+   "composition": {
+    "Hf": 4.0,
+    "O": 8.0
+   },
+   "volume": 136.51657937039403,
+   "density": 10.241243300471636,
+   "material_id": "mp-aaaaaano"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.8602459783333316,
+   "formation_energy_per_atom": -0.3156338577777748,
+   "nsites": 6,
+   "composition": {
+    "Ag": 4.0,
+    "O": 2.0
+   },
+   "volume": 107.44222318884995,
+   "density": 7.163037735938534,
+   "material_id": "mp-aaaaaanp"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -21.00953647972222,
+   "formation_energy_per_atom": -0.7667472249999984,
+   "nsites": 36,
+   "composition": {
+    "Nd": 20.0,
+    "Si": 16.0
+   },
+   "volume": 946.2080395681933,
+   "density": 5.851337566770475,
+   "material_id": "mp-aaaaaanr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -14.957392309473684,
+   "formation_energy_per_atom": -0.01960561605263042,
+   "nsites": 19,
+   "composition": {
+    "Nd": 2.0,
+    "Co": 17.0
+   },
+   "volume": 245.04862216473472,
+   "density": 8.743872014641122,
+   "material_id": "mp-aaaaaans"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.50744682,
+   "formation_energy_per_atom": -0.8538755325000018,
+   "nsites": 4,
+   "composition": {
+    "Sm": 1.0,
+    "Pd": 3.0
+   },
+   "volume": 70.98995444435569,
+   "density": 10.984967713389098,
+   "material_id": "mp-aaaaaant"
+  },
+  {
+   "band_gap": 0.5126999999999997,
+   "energy_per_atom": -5.02663022,
+   "formation_energy_per_atom": -0.6445054383333334,
+   "nsites": 6,
+   "composition": {
+    "Cu": 4.0,
+    "O": 2.0
+   },
+   "volume": 76.5869082712687,
+   "density": 6.204947176738228,
+   "material_id": "mp-aaaaaanx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.694491946,
+   "formation_energy_per_atom": -0.5714508529999996,
+   "nsites": 5,
+   "composition": {
+    "Ni": 3.0,
+    "S": 2.0
+   },
+   "volume": 65.48921551075674,
+   "density": 6.090749732489471,
+   "material_id": "mp-aaaaaany"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.792479485555557,
+   "formation_energy_per_atom": -0.3433592355555572,
+   "nsites": 9,
+   "composition": {
+    "Nb": 3.0,
+    "Ge": 6.0
+   },
+   "volume": 146.23141575498374,
+   "density": 8.114216517003369,
+   "material_id": "mp-aaaaaanz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -16.61165009,
+   "formation_energy_per_atom": -1.1774866100000008,
+   "nsites": 2,
+   "composition": {
+    "Al": 1.0,
+    "Rh": 1.0
+   },
+   "volume": 26.39232346092043,
+   "density": 8.172168034428076,
+   "material_id": "mp-aaaaaaoa"
+  },
+  {
+   "band_gap": 0.36409999999999965,
+   "energy_per_atom": -6.8837363985,
+   "formation_energy_per_atom": -0.17279232350000057,
+   "nsites": 20,
+   "composition": {
+    "Mg": 4.0,
+    "B": 16.0
+   },
+   "volume": 177.51255307952263,
+   "density": 2.5275452720513303,
+   "material_id": "mp-aaaaaaob"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.5329620525,
+   "formation_energy_per_atom": -0.23808869458333692,
+   "nsites": 4,
+   "composition": {
+    "La": 3.0,
+    "Tl": 1.0
+   },
+   "volume": 131.9057164974625,
+   "density": 7.818920677101376,
+   "material_id": "mp-aaaaaaoh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.278877522500004,
+   "formation_energy_per_atom": -0.4545510150000034,
+   "nsites": 4,
+   "composition": {
+    "V": 1.0,
+    "Pt": 3.0
+   },
+   "volume": 59.37280079436702,
+   "density": 17.793065983223478,
+   "material_id": "mp-aaaaaaoi"
+  },
+  {
+   "band_gap": 1.6341999999999999,
+   "energy_per_atom": -10.14600257,
+   "formation_energy_per_atom": -3.6121793137499987,
+   "nsites": 4,
+   "composition": {
+    "U": 1.0,
+    "O": 3.0
+   },
+   "volume": 70.7225129067815,
+   "density": 6.715813273650447,
+   "material_id": "mp-aaaaaaol"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.70991059,
+   "formation_energy_per_atom": -0.5038638341666655,
+   "nsites": 4,
+   "composition": {
+    "Pr": 1.0,
+    "Sn": 3.0
+   },
+   "volume": 109.37217067682852,
+   "density": 7.546256341459286,
+   "material_id": "mp-aaaaaaom"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -32.210870755,
+   "formation_energy_per_atom": -1.1028163483333344,
+   "nsites": 2,
+   "composition": {
+    "Lu": 1.0,
+    "Rh": 1.0
+   },
+   "volume": 36.76448423795266,
+   "density": 12.550649138500415,
+   "material_id": "mp-aaaaaaon"
+  },
+  {
+   "band_gap": 0.2713000000000001,
+   "energy_per_atom": -41.451593682857144,
+   "formation_energy_per_atom": -1.5578921971428485,
+   "nsites": 14,
+   "composition": {
+    "Th": 6.0,
+    "As": 8.0
+   },
+   "volume": 352.8888532663167,
+   "density": 9.371595348721822,
+   "material_id": "mp-aaaaaaos"
+  },
+  {
+   "band_gap": 0.7289000000000003,
+   "energy_per_atom": -4.956805909000001,
+   "formation_energy_per_atom": -0.2983330857142853,
+   "nsites": 10,
+   "composition": {
+    "Mg": 2.0,
+    "P": 8.0
+   },
+   "volume": 196.77075407030418,
+   "density": 2.5013063641753708,
+   "material_id": "mp-aaaaaaou"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -29.68067139,
+   "formation_energy_per_atom": -1.4071991449999999,
+   "nsites": 2,
+   "composition": {
+    "Ce": 1.0,
+    "Sb": 1.0
+   },
+   "volume": 68.22248207830967,
+   "density": 6.374076638157814,
+   "material_id": "mp-aaaaaaox"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.165103692499997,
+   "formation_energy_per_atom": -0.2386886874999945,
+   "nsites": 4,
+   "composition": {
+    "Er": 1.0,
+    "Pb": 3.0
+   },
+   "volume": 113.18373765392546,
+   "density": 11.573492946261,
+   "material_id": "mp-aaaaaaoy"
+  },
+  {
+   "band_gap": 2.0629999999999997,
+   "energy_per_atom": -9.438526794166666,
+   "formation_energy_per_atom": -3.5080554519444447,
+   "nsites": 6,
+   "composition": {
+    "Ti": 2.0,
+    "O": 4.0
+   },
+   "volume": 68.78397225482972,
+   "density": 3.8561390633045,
+   "material_id": "mp-aaaaaapa"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -16.029799836666665,
+   "formation_energy_per_atom": -0.5812863116666662,
+   "nsites": 6,
+   "composition": {
+    "Ho": 2.0,
+    "Al": 4.0
+   },
+   "volume": 118.77279083012866,
+   "density": 6.120611218087513,
+   "material_id": "mp-aaaaaapb"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -18.724277752173915,
+   "formation_energy_per_atom": -0.30664651955163186,
+   "nsites": 23,
+   "composition": {
+    "Pd": 16.0,
+    "S": 7.0
+   },
+   "volume": 363.5804573482684,
+   "density": 8.801763998774344,
+   "material_id": "mp-aaaaaapd"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -11.26735057,
+   "formation_energy_per_atom": -0.5308288462499995,
+   "nsites": 8,
+   "composition": {
+    "Zr": 2.0,
+    "Al": 6.0
+   },
+   "volume": 137.62349945585115,
+   "density": 4.154707794935703,
+   "material_id": "mp-aaaaaapf"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -19.178108688214284,
+   "formation_energy_per_atom": -0.07931555205356793,
+   "nsites": 28,
+   "composition": {
+    "K": 2.0,
+    "Cd": 26.0
+   },
+   "volume": 666.4354605589323,
+   "density": 7.477217365298914,
+   "material_id": "mp-aaaaaaph"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -34.54987891,
+   "formation_energy_per_atom": -0.44249040333333295,
+   "nsites": 3,
+   "composition": {
+    "Te": 2.0,
+    "Pt": 1.0
+   },
+   "volume": 77.70456549010493,
+   "density": 9.622525644323803,
+   "material_id": "mp-aaaaaapj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -14.852245808333334,
+   "formation_energy_per_atom": -0.5581772608333324,
+   "nsites": 6,
+   "composition": {
+    "Nd": 2.0,
+    "Al": 4.0
+   },
+   "volume": 128.84364335413255,
+   "density": 5.10894081820216,
+   "material_id": "mp-aaaaaapk"
+  },
+  {
+   "band_gap": 1.0349999999999997,
+   "energy_per_atom": -11.551451251,
+   "formation_energy_per_atom": -2.1716339726874994,
+   "nsites": 20,
+   "composition": {
+    "Sc": 8.0,
+    "S": 12.0
+   },
+   "volume": 428.62771743663023,
+   "density": 2.883972638006616,
+   "material_id": "mp-aaaaaapl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -20.237021358214285,
+   "formation_energy_per_atom": -0.5673327939285693,
+   "nsites": 28,
+   "composition": {
+    "Ga": 8.0,
+    "Pd": 20.0
+   },
+   "volume": 411.99560269591376,
+   "density": 10.82660457810765,
+   "material_id": "mp-aaaaaapp"
+  },
+  {
+   "band_gap": 0.5867,
+   "energy_per_atom": -23.321846005,
+   "formation_energy_per_atom": -0.5607400050000031,
+   "nsites": 2,
+   "composition": {
+    "Cd": 1.0,
+    "Te": 1.0
+   },
+   "volume": 70.71162283069633,
+   "density": 5.6362395107915155,
+   "material_id": "mp-aaaaaapq"
+  },
+  {
+   "band_gap": 0.16890000000000027,
+   "energy_per_atom": -7.747424976666667,
+   "formation_energy_per_atom": -0.34389672666666726,
+   "nsites": 3,
+   "composition": {
+    "Mg": 2.0,
+    "Ge": 1.0
+   },
+   "volume": 64.57586863742208,
+   "density": 3.117888560462539,
+   "material_id": "mp-aaaaaaps"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.679145199166665,
+   "formation_energy_per_atom": -0.187152956666664,
+   "nsites": 12,
+   "composition": {
+    "Er": 3.0,
+    "Co": 9.0
+   },
+   "volume": 171.0885062014703,
+   "density": 10.01802052763944,
+   "material_id": "mp-aaaaaapv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -19.9055442,
+   "formation_energy_per_atom": -0.49576254724138025,
+   "nsites": 2,
+   "composition": {
+    "Mn": 1.0,
+    "Rh": 1.0
+   },
+   "volume": 27.74904245111638,
+   "density": 9.445564606817172,
+   "material_id": "mp-aaaaaaqb"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -11.896876915714286,
+   "formation_energy_per_atom": -0.3815192057142858,
+   "nsites": 7,
+   "composition": {
+    "Yb": 1.0,
+    "B": 6.0
+   },
+   "volume": 67.1729830647171,
+   "density": 5.881117522350802,
+   "material_id": "mp-aaaaaaqd"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.838355935,
+   "formation_energy_per_atom": -0.4454729722222209,
+   "nsites": 6,
+   "composition": {
+    "Dy": 2.0,
+    "Ni": 4.0
+   },
+   "volume": 88.97201505458179,
+   "density": 10.447396655900832,
+   "material_id": "mp-aaaaaaqf"
+  },
+  {
+   "band_gap": 3.1433,
+   "energy_per_atom": -5.24613759,
+   "formation_energy_per_atom": -1.3077323012499997,
+   "nsites": 2,
+   "composition": {
+    "Be": 1.0,
+    "S": 1.0
+   },
+   "volume": 28.880721048437856,
+   "density": 2.361792333291721,
+   "material_id": "mp-aaaaaaqg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.533065351111111,
+   "formation_energy_per_atom": -0.5388015261111102,
+   "nsites": 9,
+   "composition": {
+    "Ge": 3.0,
+    "Pd": 6.0
+   },
+   "volume": 135.70718138909376,
+   "density": 10.479563908326352,
+   "material_id": "mp-aaaaaaqh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.7677790725,
+   "formation_energy_per_atom": -0.19770720125000008,
+   "nsites": 8,
+   "composition": {
+    "Fe": 4.0,
+    "As": 4.0
+   },
+   "volume": 114.06618720487754,
+   "density": 7.614633346859122,
+   "material_id": "mp-aaaaaaql"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -2.521510952499998,
+   "formation_energy_per_atom": -0.09979057666666424,
+   "nsites": 4,
+   "composition": {
+    "Pr": 1.0,
+    "Mg": 3.0
+   },
+   "volume": 101.93307960952517,
+   "density": 3.4832741785604617,
+   "material_id": "mp-aaaaaaqm"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.77491068,
+   "formation_energy_per_atom": -0.254970535,
+   "nsites": 4,
+   "composition": {
+    "Zn": 2.0,
+    "Ni": 2.0
+   },
+   "volume": 46.27525794900231,
+   "density": 8.906568774780016,
+   "material_id": "mp-aaaaaaqn"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -19.83922699375,
+   "formation_energy_per_atom": -0.48227621624999983,
+   "nsites": 16,
+   "composition": {
+    "Dy": 8.0,
+    "Al": 8.0
+   },
+   "volume": 370.29907459658006,
+   "density": 6.797564871630471,
+   "material_id": "mp-aaaaaaqr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -39.56341806166667,
+   "formation_energy_per_atom": -0.7915576049999989,
+   "nsites": 6,
+   "composition": {
+    "Sr": 2.0,
+    "Au": 4.0
+   },
+   "volume": 148.801359180082,
+   "density": 10.74772171190034,
+   "material_id": "mp-aaaaaaqs"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.769744284999998,
+   "formation_energy_per_atom": -0.728297282499998,
+   "nsites": 2,
+   "composition": {
+    "Sm": 1.0,
+    "Rh": 1.0
+   },
+   "volume": 42.18690066515078,
+   "density": 9.968906246458792,
+   "material_id": "mp-aaaaaaqu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.0441659749999985,
+   "formation_energy_per_atom": -0.5919899674999982,
+   "nsites": 2,
+   "composition": {
+    "Mg": 1.0,
+    "Au": 1.0
+   },
+   "volume": 35.07943275065701,
+   "density": 10.474231090833296,
+   "material_id": "mp-aaaaaaqv"
+  },
+  {
+   "band_gap": 0.7604000000000002,
+   "energy_per_atom": -18.964208261,
+   "formation_energy_per_atom": -2.3765823316874988,
+   "nsites": 20,
+   "composition": {
+    "Nd": 8.0,
+    "S": 12.0
+   },
+   "volume": 477.1530517042118,
+   "density": 5.354881468003723,
+   "material_id": "mp-aaaaaaqw"
+  },
+  {
+   "band_gap": 1.8837,
+   "energy_per_atom": -2.839231656666667,
+   "formation_energy_per_atom": -1.1377736438888888,
+   "nsites": 3,
+   "composition": {
+    "Rb": 2.0,
+    "Te": 1.0
+   },
+   "volume": 156.9269235634012,
+   "density": 3.1589864632960185,
+   "material_id": "mp-aaaaaaqz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -40.34737328666667,
+   "formation_energy_per_atom": -0.13669191666666336,
+   "nsites": 6,
+   "composition": {
+    "Rh": 3.0,
+    "Pb": 3.0
+   },
+   "volume": 126.28423369225003,
+   "density": 12.23293557353801,
+   "material_id": "mp-aaaaaara"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -36.844115535,
+   "formation_energy_per_atom": -0.7747108683333342,
+   "nsites": 6,
+   "composition": {
+    "Ca": 2.0,
+    "Au": 4.0
+   },
+   "volume": 134.7077235438066,
+   "density": 10.700091012391907,
+   "material_id": "mp-aaaaaarb"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -13.847503869999999,
+   "formation_energy_per_atom": -0.7052428549999993,
+   "nsites": 3,
+   "composition": {
+    "Nb": 1.0,
+    "B": 2.0
+   },
+   "volume": 28.040111705987048,
+   "density": 6.782385586912958,
+   "material_id": "mp-aaaaaari"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -14.634240028125,
+   "formation_energy_per_atom": -0.29503400499999977,
+   "nsites": 16,
+   "composition": {
+    "Co": 4.0,
+    "As": 12.0
+   },
+   "volume": 275.5006481481551,
+   "density": 6.839789418113212,
+   "material_id": "mp-aaaaaark"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -2.8295890799999994,
+   "formation_energy_per_atom": -0.13876810627586167,
+   "nsites": 5,
+   "composition": {
+    "Na": 1.0,
+    "Ga": 4.0
+   },
+   "volume": 97.82731658601685,
+   "density": 5.124197305804316,
+   "material_id": "mp-aaaaaarm"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.047456868214286,
+   "formation_energy_per_atom": -0.15107707428571462,
+   "nsites": 28,
+   "composition": {
+    "Ce": 2.0,
+    "Be": 26.0
+   },
+   "volume": 273.98222706724846,
+   "density": 3.118553643041701,
+   "material_id": "mp-aaaaaarp"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -9.430413044000002,
+   "formation_energy_per_atom": -3.3034396343333343,
+   "nsites": 10,
+   "composition": {
+    "Ti": 4.0,
+    "O": 6.0
+   },
+   "volume": 103.7211155286214,
+   "density": 4.602205295332797,
+   "material_id": "mp-aaaaaarq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.326621750000001,
+   "formation_energy_per_atom": -0.299014215833334,
+   "nsites": 2,
+   "composition": {
+    "Pr": 1.0,
+    "Zn": 1.0
+   },
+   "volume": 50.77213755321223,
+   "density": 6.747733587829179,
+   "material_id": "mp-aaaaaars"
+  },
+  {
+   "band_gap": 5.949400000000001,
+   "energy_per_atom": -4.44685948,
+   "formation_energy_per_atom": -2.9238859911249993,
+   "nsites": 2,
+   "composition": {
+    "K": 1.0,
+    "F": 1.0
+   },
+   "volume": 37.40551869412881,
+   "density": 2.57908054231024,
+   "material_id": "mp-aaaaaarv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.557916765,
+   "formation_energy_per_atom": -1.9614646920312495,
+   "nsites": 2,
+   "composition": {
+    "Ho": 1.0,
+    "Se": 1.0
+   },
+   "volume": 46.491635367256656,
+   "density": 8.711016545067126,
+   "material_id": "mp-aaaaaarw"
+  },
+  {
+   "band_gap": 0.1513,
+   "energy_per_atom": -7.253244753809524,
+   "formation_energy_per_atom": -2.9996024173809523,
+   "nsites": 21,
+   "composition": {
+    "Nb": 6.0,
+    "F": 15.0
+   },
+   "volume": 280.3857585884136,
+   "density": 4.989061894243413,
+   "material_id": "mp-aaaaaary"
+  },
+  {
+   "band_gap": 1.4434999999999993,
+   "energy_per_atom": -38.59032202428572,
+   "formation_energy_per_atom": -1.884495004999995,
+   "nsites": 7,
+   "composition": {
+    "Th": 3.0,
+    "N": 4.0
+   },
+   "volume": 119.0612702798796,
+   "density": 10.490056755566469,
+   "material_id": "mp-aaaaaarz"
+  },
+  {
+   "band_gap": 7.5923,
+   "energy_per_atom": -6.24037293625,
+   "formation_energy_per_atom": -3.8680460375,
+   "nsites": 8,
+   "composition": {
+    "Al": 2.0,
+    "F": 6.0
+   },
+   "volume": 85.43418366311855,
+   "density": 3.2644233323939535,
+   "material_id": "mp-aaaaaasa"
+  },
+  {
+   "band_gap": 1.2428,
+   "energy_per_atom": -6.996305618333334,
+   "formation_energy_per_atom": -2.1566556633333342,
+   "nsites": 6,
+   "composition": {
+    "Ge": 2.0,
+    "O": 4.0
+   },
+   "volume": 56.00426327829353,
+   "density": 6.205128158243331,
+   "material_id": "mp-aaaaaasc"
+  },
+  {
+   "band_gap": 0.13319999999999999,
+   "energy_per_atom": -3.494649408333333,
+   "formation_energy_per_atom": -0.06123098999999973,
+   "nsites": 6,
+   "composition": {
+    "Cd": 2.0,
+    "As": 4.0
+   },
+   "volume": 152.66478634811008,
+   "density": 5.705092254809294,
+   "material_id": "mp-aaaaaasd"
+  },
+  {
+   "band_gap": 1.8326000000000002,
+   "energy_per_atom": -8.13539176482143,
+   "formation_energy_per_atom": -0.2985788260884346,
+   "nsites": 56,
+   "composition": {
+    "Na": 12.0,
+    "P": 44.0
+   },
+   "volume": 1275.9125150296695,
+   "density": 2.132719236618186,
+   "material_id": "mp-aaaaaasf"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.290129898333333,
+   "formation_energy_per_atom": -0.12087615499999889,
+   "nsites": 6,
+   "composition": {
+    "Er": 2.0,
+    "Fe": 4.0
+   },
+   "volume": 95.57562874712528,
+   "density": 9.692967104861388,
+   "material_id": "mp-aaaaaasg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -18.345717343333334,
+   "formation_energy_per_atom": -0.8062252700000011,
+   "nsites": 3,
+   "composition": {
+    "Sm": 1.0,
+    "Ga": 2.0
+   },
+   "volume": 65.24899471400578,
+   "density": 7.375350187642538,
+   "material_id": "mp-aaaaaasj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.176433737499998,
+   "formation_energy_per_atom": -1.039966471249997,
+   "nsites": 4,
+   "composition": {
+    "Sc": 1.0,
+    "Pt": 3.0
+   },
+   "volume": 63.24632898569905,
+   "density": 16.54617550459131,
+   "material_id": "mp-aaaaaasn"
+  },
+  {
+   "band_gap": 0.43260000000000076,
+   "energy_per_atom": -21.134855715,
+   "formation_energy_per_atom": -0.0015087340000007998,
+   "nsites": 10,
+   "composition": {
+    "Te": 6.0,
+    "As": 4.0
+   },
+   "volume": 306.52088344633444,
+   "density": 5.77105764181593,
+   "material_id": "mp-aaaaaasq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.930483191249998,
+   "formation_energy_per_atom": -0.458455523749997,
+   "nsites": 8,
+   "composition": {
+    "Zr": 2.0,
+    "Ni": 6.0
+   },
+   "volume": 102.46839176816518,
+   "density": 8.66353145056984,
+   "material_id": "mp-aaaaaasr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.975921125,
+   "formation_energy_per_atom": -1.9426672827083333,
+   "nsites": 2,
+   "composition": {
+    "Ti": 1.0,
+    "N": 1.0
+   },
+   "volume": 19.073073170918466,
+   "density": 5.386845385005554,
+   "material_id": "mp-aaaaaasy"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -23.17692391625,
+   "formation_energy_per_atom": -0.15494494125000458,
+   "nsites": 8,
+   "composition": {
+    "Ge": 2.0,
+    "Mo": 6.0
+   },
+   "volume": 120.55118869576428,
+   "density": 9.93035272830842,
+   "material_id": "mp-aaaaaata"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -18.6156986125,
+   "formation_energy_per_atom": -0.5136466041666665,
+   "nsites": 4,
+   "composition": {
+    "Lu": 1.0,
+    "Ga": 3.0
+   },
+   "volume": 72.90460607992519,
+   "density": 8.749417493311109,
+   "material_id": "mp-aaaaaatb"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -11.305448913333334,
+   "formation_energy_per_atom": -0.4077188266666691,
+   "nsites": 12,
+   "composition": {
+    "Sr": 4.0,
+    "Si": 8.0
+   },
+   "volume": 280.16467761877396,
+   "density": 3.409003237502706,
+   "material_id": "mp-aaaaaatc"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -42.782134165,
+   "formation_energy_per_atom": -2.0274844764062507,
+   "nsites": 2,
+   "composition": {
+    "Th": 1.0,
+    "S": 1.0
+   },
+   "volume": 46.85251605286708,
+   "density": 9.360296656351844,
+   "material_id": "mp-aaaaaatj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.131929000000001,
+   "formation_energy_per_atom": -0.7267530875000006,
+   "nsites": 2,
+   "composition": {
+    "Mg": 1.0,
+    "Pd": 1.0
+   },
+   "volume": 31.416415216673595,
+   "density": 6.9095715818448795,
+   "material_id": "mp-aaaaaatm"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -21.269040113333332,
+   "formation_energy_per_atom": -0.27816657999999944,
+   "nsites": 6,
+   "composition": {
+    "Hf": 2.0,
+    "Zn": 4.0
+   },
+   "volume": 96.55307721263708,
+   "density": 10.639081283724922,
+   "material_id": "mp-aaaaaatu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -44.537599135,
+   "formation_energy_per_atom": -0.3874227000000019,
+   "nsites": 2,
+   "composition": {
+    "Tm": 1.0,
+    "Tl": 1.0
+   },
+   "volume": 51.32053210666957,
+   "density": 12.079148150265766,
+   "material_id": "mp-aaaaaatv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -33.12631348,
+   "formation_energy_per_atom": -1.2332155233333317,
+   "nsites": 2,
+   "composition": {
+    "Lu": 1.0,
+    "Sb": 1.0
+   },
+   "volume": 56.151832004356145,
+   "density": 8.774901169123032,
+   "material_id": "mp-aaaaaatw"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -45.867062598275865,
+   "formation_energy_per_atom": -0.26211301045976865,
+   "nsites": 29,
+   "composition": {
+    "Ti": 5.0,
+    "Re": 24.0
+   },
+   "volume": 444.7049721936768,
+   "density": 17.580916717090865,
+   "material_id": "mp-aaaaaaty"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.73468183,
+   "formation_energy_per_atom": -0.04813749499999975,
+   "nsites": 4,
+   "composition": {
+    "Cu": 2.0,
+    "Au": 2.0
+   },
+   "volume": 58.21191880115012,
+   "density": 14.862636644805812,
+   "material_id": "mp-aaaaaauc"
+  },
+  {
+   "band_gap": 1.1763,
+   "energy_per_atom": -4.631867536176471,
+   "formation_energy_per_atom": -0.44724163764706093,
+   "nsites": 34,
+   "composition": {
+    "Ba": 6.0,
+    "As": 28.0
+   },
+   "volume": 993.3231783751853,
+   "density": 4.884319652753377,
+   "material_id": "mp-aaaaaaue"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -17.681153715833332,
+   "formation_energy_per_atom": -0.7639648801302078,
+   "nsites": 24,
+   "composition": {
+    "Nb": 6.0,
+    "Se": 18.0
+   },
+   "volume": 545.0726270999688,
+   "density": 6.028075612249674,
+   "material_id": "mp-aaaaaauf"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -41.92368676,
+   "formation_energy_per_atom": -0.2796349000000049,
+   "nsites": 4,
+   "composition": {
+    "Ca": 1.0,
+    "Tl": 3.0
+   },
+   "volume": 112.33892368468898,
+   "density": 9.655695579771743,
+   "material_id": "mp-aaaaaaug"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -1.7487043900000003,
+   "formation_energy_per_atom": -0.30921182499999933,
+   "nsites": 2,
+   "composition": {
+    "Ba": 1.0,
+    "Cd": 1.0
+   },
+   "volume": 76.8726082726064,
+   "density": 5.394635557614107,
+   "material_id": "mp-aaaaaauh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -22.148500328,
+   "formation_energy_per_atom": -0.3249658140000008,
+   "nsites": 5,
+   "composition": {
+    "Th": 1.0,
+    "Zn": 4.0
+   },
+   "volume": 92.55321684414398,
+   "density": 8.857229298931973,
+   "material_id": "mp-aaaaaauq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.505107469999996,
+   "formation_energy_per_atom": -0.22692338666666245,
+   "nsites": 6,
+   "composition": {
+    "Er": 2.0,
+    "Co": 4.0
+   },
+   "volume": 89.31411052725267,
+   "density": 10.602173538784399,
+   "material_id": "mp-aaaaaaur"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -14.5031721925,
+   "formation_energy_per_atom": -0.3060867699999985,
+   "nsites": 4,
+   "composition": {
+    "Ca": 2.0,
+    "Ag": 2.0
+   },
+   "volume": 107.31784738314396,
+   "density": 4.5783707219017264,
+   "material_id": "mp-aaaaaaus"
+  },
+  {
+   "band_gap": 1.7106,
+   "energy_per_atom": -10.195047055,
+   "formation_energy_per_atom": -0.7975143386875004,
+   "nsites": 10,
+   "composition": {
+    "Ga": 4.0,
+    "S": 6.0
+   },
+   "volume": 219.106108358102,
+   "density": 3.5717040448718156,
+   "material_id": "mp-aaaaaaut"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.031446761666666,
+   "formation_energy_per_atom": -0.2739429199999985,
+   "nsites": 6,
+   "composition": {
+    "Sc": 2.0,
+    "Fe": 4.0
+   },
+   "volume": 87.13754688944184,
+   "density": 5.970254296753026,
+   "material_id": "mp-aaaaaauu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -43.01808050625,
+   "formation_energy_per_atom": -0.1476270392500041,
+   "nsites": 8,
+   "composition": {
+    "Ta": 6.0,
+    "Sb": 2.0
+   },
+   "volume": 146.78834858673545,
+   "density": 15.036620006857543,
+   "material_id": "mp-aaaaaauv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -1.5268444000000017,
+   "formation_energy_per_atom": -0.525794336250005,
+   "nsites": 2,
+   "composition": {
+    "Sr": 1.0,
+    "Hg": 1.0
+   },
+   "volume": 62.24023270066357,
+   "density": 7.689302309570747,
+   "material_id": "mp-aaaaaauw"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.7075107275,
+   "formation_energy_per_atom": -0.57628317,
+   "nsites": 8,
+   "composition": {
+    "Ti": 6.0,
+    "Ir": 2.0
+   },
+   "volume": 124.97952086848798,
+   "density": 8.923684539219225,
+   "material_id": "mp-aaaaaauy"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.189119971666668,
+   "formation_energy_per_atom": -0.7470215699999988,
+   "nsites": 6,
+   "composition": {
+    "Ho": 2.0,
+    "Rh": 4.0
+   },
+   "volume": 104.27224930067057,
+   "density": 11.808135922105068,
+   "material_id": "mp-aaaaaava"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -19.65639181,
+   "formation_energy_per_atom": -1.1039902674999986,
+   "nsites": 2,
+   "composition": {
+    "Sc": 1.0,
+    "Sb": 1.0
+   },
+   "volume": 51.116165623039805,
+   "density": 5.415865644700237,
+   "material_id": "mp-aaaaaavd"
+  },
+  {
+   "band_gap": 0.03819999999999979,
+   "energy_per_atom": -47.282154392857144,
+   "formation_energy_per_atom": -1.1034330542857123,
+   "nsites": 14,
+   "composition": {
+    "Th": 6.0,
+    "Sb": 8.0
+   },
+   "volume": 423.7364204982512,
+   "density": 9.27309358084368,
+   "material_id": "mp-aaaaaavg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.619652365,
+   "formation_energy_per_atom": -0.4557337100000005,
+   "nsites": 4,
+   "composition": {
+    "Zr": 2.0,
+    "Ni": 2.0
+   },
+   "volume": 66.13570976945574,
+   "density": 7.528268787881969,
+   "material_id": "mp-aaaaaavk"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -23.1804173275,
+   "formation_energy_per_atom": -0.8816768800000006,
+   "nsites": 4,
+   "composition": {
+    "Y": 1.0,
+    "Pd": 3.0
+   },
+   "volume": 68.91705443209393,
+   "density": 9.834653354080489,
+   "material_id": "mp-aaaaaavn"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -46.40391204333333,
+   "formation_energy_per_atom": -0.9735891799999953,
+   "nsites": 3,
+   "composition": {
+    "Tm": 1.0,
+    "Au": 2.0
+   },
+   "volume": 60.18050728042947,
+   "density": 15.530996068511692,
+   "material_id": "mp-aaaaaavo"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -19.77621285142857,
+   "formation_energy_per_atom": -0.9978607266071435,
+   "nsites": 14,
+   "composition": {
+    "Nb": 6.0,
+    "Se": 8.0
+   },
+   "volume": 311.81062341108566,
+   "density": 6.332617342878992,
+   "material_id": "mp-aaaaaavp"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -34.84192026666667,
+   "formation_energy_per_atom": -0.5418041466666637,
+   "nsites": 12,
+   "composition": {
+    "Sb": 8.0,
+    "Pt": 4.0
+   },
+   "volume": 274.59646576081724,
+   "density": 10.60930009811529,
+   "material_id": "mp-aaaaaavq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.542545665,
+   "formation_energy_per_atom": -0.35370670500000045,
+   "nsites": 4,
+   "composition": {
+    "Te": 2.0,
+    "Pd": 2.0
+   },
+   "volume": 86.90821278938311,
+   "density": 8.942753289620757,
+   "material_id": "mp-aaaaaavs"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -13.279467675,
+   "formation_energy_per_atom": -0.6376326216468229,
+   "nsites": 12,
+   "composition": {
+    "Ce": 2.0,
+    "P": 10.0
+   },
+   "volume": 257.05575903325644,
+   "density": 3.8111093374069953,
+   "material_id": "mp-aaaaaavu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -21.85910008666667,
+   "formation_energy_per_atom": -0.408970595555554,
+   "nsites": 6,
+   "composition": {
+    "Ti": 2.0,
+    "Sb": 4.0
+   },
+   "volume": 130.2037676005016,
+   "density": 7.4323424981064505,
+   "material_id": "mp-aaaaaavw"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -29.07946697,
+   "formation_energy_per_atom": -1.6618503237499986,
+   "nsites": 2,
+   "composition": {
+    "Nd": 1.0,
+    "Te": 1.0
+   },
+   "volume": 64.45385308880192,
+   "density": 7.003526398203438,
+   "material_id": "mp-aaaaaavy"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.1401928199999993,
+   "formation_energy_per_atom": -0.3008946574999989,
+   "nsites": 2,
+   "composition": {
+    "Sm": 1.0,
+    "Cd": 1.0
+   },
+   "volume": 54.841131626168696,
+   "density": 7.956464404373577,
+   "material_id": "mp-aaaaaawa"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -10.523885839999997,
+   "formation_energy_per_atom": -0.23479523822221773,
+   "nsites": 6,
+   "composition": {
+    "Ta": 4.0,
+    "Co": 2.0
+   },
+   "volume": 91.90798294494512,
+   "density": 15.206577246480855,
+   "material_id": "mp-aaaaaawc"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.788035258666667,
+   "formation_energy_per_atom": -0.09489692883333399,
+   "nsites": 15,
+   "composition": {
+    "B": 13.0,
+    "C": 2.0
+   },
+   "volume": 111.33818748474974,
+   "density": 2.454374565697041,
+   "material_id": "mp-aaaaaawe"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -18.071834344444444,
+   "formation_energy_per_atom": -0.02032426444444329,
+   "nsites": 9,
+   "composition": {
+    "Ga": 3.0,
+    "Ag": 6.0
+   },
+   "volume": 150.81671620268,
+   "density": 9.428990994342545,
+   "material_id": "mp-aaaaaawg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.665997406666662,
+   "formation_energy_per_atom": -0.7947246633333277,
+   "nsites": 6,
+   "composition": {
+    "Ce": 2.0,
+    "Ir": 4.0
+   },
+   "volume": 109.50631603909083,
+   "density": 15.90841149821987,
+   "material_id": "mp-aaaaaawk"
+  },
+  {
+   "band_gap": 4.7139999999999995,
+   "energy_per_atom": -5.12007781,
+   "formation_energy_per_atom": -2.927120863125,
+   "nsites": 8,
+   "composition": {
+    "Ga": 2.0,
+    "F": 6.0
+   },
+   "volume": 91.53311636032313,
+   "density": 4.59769198627666,
+   "material_id": "mp-aaaaaawq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.248872448333334,
+   "formation_energy_per_atom": -0.056237100555556196,
+   "nsites": 6,
+   "composition": {
+    "Tb": 2.0,
+    "Fe": 4.0
+   },
+   "volume": 98.54853445254176,
+   "density": 9.119716773482061,
+   "material_id": "mp-aaaaaawr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -20.02088589,
+   "formation_energy_per_atom": -0.8397397358333336,
+   "nsites": 2,
+   "composition": {
+    "Ti": 1.0,
+    "Ru": 1.0
+   },
+   "volume": 28.922286864517297,
+   "density": 8.551042608292226,
+   "material_id": "mp-aaaaaawu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -9.813837480384615,
+   "formation_energy_per_atom": -0.2331023019230772,
+   "nsites": 52,
+   "composition": {
+    "Al": 16.0,
+    "Cu": 36.0
+   },
+   "volume": 639.9981685880424,
+   "density": 7.055652296583131,
+   "material_id": "mp-aaaaaawv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -27.38361606,
+   "formation_energy_per_atom": -1.765161173750002,
+   "nsites": 2,
+   "composition": {
+    "Yb": 1.0,
+    "As": 1.0
+   },
+   "volume": 46.3544279660955,
+   "density": 8.882644926458266,
+   "material_id": "mp-aaaaaaxc"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -20.945962575,
+   "formation_energy_per_atom": -1.742946234821428,
+   "nsites": 2,
+   "composition": {
+    "Pr": 1.0,
+    "P": 1.0
+   },
+   "volume": 53.006947639477595,
+   "density": 5.3844979301273295,
+   "material_id": "mp-aaaaaaxd"
+  },
+  {
+   "band_gap": 0.9651000000000005,
+   "energy_per_atom": -25.942847786666665,
+   "formation_energy_per_atom": -0.30737176666666716,
+   "nsites": 6,
+   "composition": {
+    "Te": 4.0,
+    "Mo": 2.0
+   },
+   "volume": 161.280150965677,
+   "density": 7.2306689343893,
+   "material_id": "mp-aaaaaaxe"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.556306336666665,
+   "formation_energy_per_atom": -0.583654094166666,
+   "nsites": 12,
+   "composition": {
+    "Zr": 2.0,
+    "Te": 10.0
+   },
+   "volume": 428.62815700419884,
+   "density": 5.650141840692262,
+   "material_id": "mp-aaaaaaxh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -43.75802496428572,
+   "formation_energy_per_atom": -1.092848703571438,
+   "nsites": 14,
+   "composition": {
+    "U": 6.0,
+    "As": 8.0
+   },
+   "volume": 317.78333977886564,
+   "density": 10.59470197876163,
+   "material_id": "mp-aaaaaaxi"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.44402269833333,
+   "formation_energy_per_atom": -0.2821043816666619,
+   "nsites": 6,
+   "composition": {
+    "Ce": 2.0,
+    "Ru": 4.0
+   },
+   "volume": 106.68372817777177,
+   "density": 10.654473166240518,
+   "material_id": "mp-aaaaaaxj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.28081579,
+   "formation_energy_per_atom": -0.33765390000000084,
+   "nsites": 10,
+   "composition": {
+    "Te": 4.0,
+    "Pd": 6.0
+   },
+   "volume": 198.60777019598018,
+   "density": 9.606001543549782,
+   "material_id": "mp-aaaaaaxp"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.144158240000001,
+   "formation_energy_per_atom": -0.07437748250000098,
+   "nsites": 2,
+   "composition": {
+    "Y": 1.0,
+    "Mg": 1.0
+   },
+   "volume": 55.24437794000597,
+   "density": 3.402899018155211,
+   "material_id": "mp-aaaaaaxr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -22.3775180405,
+   "formation_energy_per_atom": -0.5120273574999998,
+   "nsites": 20,
+   "composition": {
+    "U": 4.0,
+    "B": 16.0
+   },
+   "volume": 193.7057414376141,
+   "density": 9.644828338436094,
+   "material_id": "mp-aaaaaaxv"
+  },
+  {
+   "band_gap": 2.6463,
+   "energy_per_atom": -8.607139822857143,
+   "formation_energy_per_atom": -0.20918894107142855,
+   "nsites": 14,
+   "composition": {
+    "B": 12.0,
+    "As": 2.0
+   },
+   "volume": 129.317419464123,
+   "density": 3.5899691180422915,
+   "material_id": "mp-aaaaaaya"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.813212151499999,
+   "formation_energy_per_atom": -0.1251691264999991,
+   "nsites": 20,
+   "composition": {
+    "Mg": 12.0,
+    "Ru": 8.0
+   },
+   "volume": 329.27423095861525,
+   "density": 5.5484399404361,
+   "material_id": "mp-aaaaaayb"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.6819377635714305,
+   "formation_energy_per_atom": -0.7052303307142884,
+   "nsites": 14,
+   "composition": {
+    "La": 8.0,
+    "Rh": 6.0
+   },
+   "volume": 362.72527013765176,
+   "density": 7.913800150799234,
+   "material_id": "mp-aaaaaayc"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -9.521623964999996,
+   "formation_energy_per_atom": -1.2997783855468725,
+   "nsites": 2,
+   "composition": {
+    "Np": 1.0,
+    "Se": 1.0
+   },
+   "volume": 50.0254233301506,
+   "density": 10.487945714189392,
+   "material_id": "mp-aaaaaayd"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.407847815,
+   "formation_energy_per_atom": -0.9653517133333338,
+   "nsites": 2,
+   "composition": {
+    "Ti": 1.0,
+    "C": 1.0
+   },
+   "volume": 20.315907256971823,
+   "density": 4.894158008766744,
+   "material_id": "mp-aaaaaayh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.494736151666667,
+   "formation_energy_per_atom": -0.24495784500000303,
+   "nsites": 6,
+   "composition": {
+    "Tm": 2.0,
+    "Co": 4.0
+   },
+   "volume": 88.68243182605184,
+   "density": 10.7404271958585,
+   "material_id": "mp-aaaaaayi"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -26.562739705,
+   "formation_energy_per_atom": -0.5669068187499988,
+   "nsites": 4,
+   "composition": {
+    "La": 1.0,
+    "Sn": 3.0
+   },
+   "volume": 110.85831165488231,
+   "density": 7.4151024507324035,
+   "material_id": "mp-aaaaaayj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.7131895625,
+   "formation_energy_per_atom": -0.6068413837499991,
+   "nsites": 4,
+   "composition": {
+    "Sc": 1.0,
+    "Rh": 3.0
+   },
+   "volume": 59.481841178569276,
+   "density": 9.873380616482399,
+   "material_id": "mp-aaaaaayl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -10.5992859035,
+   "formation_energy_per_atom": -0.6594823535000003,
+   "nsites": 20,
+   "composition": {
+    "Y": 4.0,
+    "B": 16.0
+   },
+   "volume": 202.83094577640173,
+   "density": 4.327544557600703,
+   "material_id": "mp-aaaaaayn"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.950997009642857,
+   "formation_energy_per_atom": -0.007521177499999762,
+   "nsites": 28,
+   "composition": {
+    "Ba": 2.0,
+    "Cu": 26.0
+   },
+   "volume": 390.8895328498262,
+   "density": 8.185457619244419,
+   "material_id": "mp-aaaaaays"
+  },
+  {
+   "band_gap": 4.417999999999999,
+   "energy_per_atom": -10.137716926666664,
+   "formation_energy_per_atom": -4.36779017333333,
+   "nsites": 3,
+   "composition": {
+    "Th": 1.0,
+    "O": 2.0
+   },
+   "volume": 43.92656473586823,
+   "density": 9.981284088599562,
+   "material_id": "mp-aaaaaayt"
+  },
+  {
+   "band_gap": 0.1613,
+   "energy_per_atom": -14.46687823,
+   "formation_energy_per_atom": -1.174004153593751,
+   "nsites": 16,
+   "composition": {
+    "K": 10.0,
+    "Te": 6.0
+   },
+   "volume": 609.8372538320665,
+   "density": 3.1492849049159104,
+   "material_id": "mp-aaaaaayu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -21.97189446,
+   "formation_energy_per_atom": -1.8576392289880985,
+   "nsites": 2,
+   "composition": {
+    "Tb": 1.0,
+    "P": 1.0
+   },
+   "volume": 46.21334658297021,
+   "density": 6.823459410433972,
+   "material_id": "mp-aaaaaayv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.11611969,
+   "formation_energy_per_atom": -0.3616476608333308,
+   "nsites": 2,
+   "composition": {
+    "Pr": 1.0,
+    "Cd": 1.0
+   },
+   "volume": 58.18235085773751,
+   "density": 7.229778601411235,
+   "material_id": "mp-aaaaaayw"
+  },
+  {
+   "band_gap": 2.4395,
+   "energy_per_atom": -6.323377323333333,
+   "formation_energy_per_atom": -1.2692445342708336,
+   "nsites": 3,
+   "composition": {
+    "Na": 2.0,
+    "S": 1.0
+   },
+   "volume": 68.60267970013784,
+   "density": 1.889080805023612,
+   "material_id": "mp-aaaaaayy"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.844540965,
+   "formation_energy_per_atom": -0.17368567249999955,
+   "nsites": 4,
+   "composition": {
+    "Fe": 1.0,
+    "Pt": 3.0
+   },
+   "volume": 58.90889908037827,
+   "density": 18.07140571435322,
+   "material_id": "mp-aaaaaayz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.294832965,
+   "formation_energy_per_atom": -0.3153419424999999,
+   "nsites": 6,
+   "composition": {
+    "Be": 5.0,
+    "Pd": 1.0
+   },
+   "volume": 53.35012297158457,
+   "density": 4.714890149072945,
+   "material_id": "mp-aaaaaaza"
+  },
+  {
+   "band_gap": 0.06400000000000006,
+   "energy_per_atom": -6.902991813333333,
+   "formation_energy_per_atom": -0.5529736389583336,
+   "nsites": 24,
+   "composition": {
+    "Na": 18.0,
+    "As": 6.0
+   },
+   "volume": 588.9212956640016,
+   "density": 2.4343131337570916,
+   "material_id": "mp-aaaaaazf"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.165473425,
+   "formation_energy_per_atom": -2.1085147197395777,
+   "nsites": 2,
+   "composition": {
+    "Lu": 1.0,
+    "S": 1.0
+   },
+   "volume": 38.334779356057005,
+   "density": 8.967958868982675,
+   "material_id": "mp-aaaaaazg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -18.565001095,
+   "formation_energy_per_atom": -0.4481397633333349,
+   "nsites": 6,
+   "composition": {
+    "Yb": 2.0,
+    "Zn": 4.0
+   },
+   "volume": 111.97454209855283,
+   "density": 9.012192788603764,
+   "material_id": "mp-aaaaaazh"
+  },
+  {
+   "band_gap": 4.0536,
+   "energy_per_atom": -9.6100966725,
+   "formation_energy_per_atom": -1.6796721718749996,
+   "nsites": 4,
+   "composition": {
+    "Al": 2.0,
+    "N": 2.0
+   },
+   "volume": 42.52728307818043,
+   "density": 3.2008897176145172,
+   "material_id": "mp-aaaaaazl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -22.592231705,
+   "formation_energy_per_atom": -0.9472384237499973,
+   "nsites": 4,
+   "composition": {
+    "Nd": 2.0,
+    "Ge": 2.0
+   },
+   "volume": 100.71512763331036,
+   "density": 7.151677067952101,
+   "material_id": "mp-aaaaaazn"
+  },
+  {
+   "band_gap": 0.6878000000000002,
+   "energy_per_atom": -18.21366485,
+   "formation_energy_per_atom": -0.4238967693750008,
+   "nsites": 3,
+   "composition": {
+    "Sn": 1.0,
+    "Se": 2.0
+   },
+   "volume": 82.9070527059618,
+   "density": 5.5406012835179155,
+   "material_id": "mp-aaaaaazp"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -44.670650376666664,
+   "formation_energy_per_atom": -1.0784886283333321,
+   "nsites": 6,
+   "composition": {
+    "U": 2.0,
+    "Te": 4.0
+   },
+   "volume": 188.41462237164745,
+   "density": 8.693867436257674,
+   "material_id": "mp-aaaaaazq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -18.237719600000002,
+   "formation_energy_per_atom": -0.8078835105555555,
+   "nsites": 3,
+   "composition": {
+    "Pr": 1.0,
+    "Ga": 2.0
+   },
+   "volume": 68.76339834337921,
+   "density": 6.770145166685864,
+   "material_id": "mp-aaaaaazs"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -29.489100493333336,
+   "formation_energy_per_atom": -0.5092808899999994,
+   "nsites": 3,
+   "composition": {
+    "Th": 1.0,
+    "Al": 2.0
+   },
+   "volume": 70.28603732258881,
+   "density": 6.756904787453689,
+   "material_id": "mp-aaaaaazt"
+  },
+  {
+   "band_gap": 1.1162,
+   "energy_per_atom": -14.8461208475,
+   "formation_energy_per_atom": -0.776608388906249,
+   "nsites": 4,
+   "composition": {
+    "Cd": 2.0,
+    "S": 2.0
+   },
+   "volume": 102.03892478274858,
+   "density": 4.7022848002774404,
+   "material_id": "mp-aaaaaazw"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.845314123333336,
+   "formation_energy_per_atom": -0.45932984833333396,
+   "nsites": 6,
+   "composition": {
+    "Ho": 2.0,
+    "Ni": 4.0
+   },
+   "volume": 88.18805716042701,
+   "density": 10.631793525786884,
+   "material_id": "mp-aaaaaazx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.48138876,
+   "formation_energy_per_atom": -0.8248535012500042,
+   "nsites": 4,
+   "composition": {
+    "La": 1.0,
+    "Pd": 3.0
+   },
+   "volume": 74.2289639351511,
+   "density": 10.249390839265327,
+   "material_id": "mp-aaaaaazy"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -41.96806132,
+   "formation_energy_per_atom": -0.13960109833333453,
+   "nsites": 6,
+   "composition": {
+    "Zr": 2.0,
+    "W": 4.0
+   },
+   "volume": 111.42178719732917,
+   "density": 13.678258804700446,
+   "material_id": "mp-aaaaaazz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -1.5244794950000014,
+   "formation_energy_per_atom": -0.32033000500000003,
+   "nsites": 6,
+   "composition": {
+    "Sr": 2.0,
+    "Cd": 4.0
+   },
+   "volume": 174.14698493999006,
+   "density": 5.958439624438923,
+   "material_id": "mp-aaaaabab"
+  },
+  {
+   "band_gap": 3.9684999999999997,
+   "energy_per_atom": -8.852958224,
+   "formation_energy_per_atom": -4.0570940969999985,
+   "nsites": 40,
+   "composition": {
+    "Er": 16.0,
+    "O": 24.0
+   },
+   "volume": 571.3227771258436,
+   "density": 8.89420999863139,
+   "material_id": "mp-aaaaabad"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.569242478333334,
+   "formation_energy_per_atom": -0.3000427666666692,
+   "nsites": 6,
+   "composition": {
+    "Eu": 2.0,
+    "Zn": 4.0
+   },
+   "volume": 130.44179055572303,
+   "density": 7.1996950821790655,
+   "material_id": "mp-aaaaabaf"
+  },
+  {
+   "band_gap": 6.0951,
+   "energy_per_atom": -4.555515685,
+   "formation_energy_per_atom": -2.927366668189655,
+   "nsites": 2,
+   "composition": {
+    "Na": 1.0,
+    "F": 1.0
+   },
+   "volume": 23.889026260060266,
+   "density": 2.918620460983815,
+   "material_id": "mp-aaaaabag"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -18.0135241835,
+   "formation_energy_per_atom": -0.2836005221666653,
+   "nsites": 20,
+   "composition": {
+    "Pr": 8.0,
+    "C": 12.0
+   },
+   "volume": 328.77347709479074,
+   "density": 6.421418544081279,
+   "material_id": "mp-aaaaabah"
+  },
+  {
+   "band_gap": 1.5981999999999998,
+   "energy_per_atom": -5.150796840000001,
+   "formation_energy_per_atom": -1.7528733849999998,
+   "nsites": 6,
+   "composition": {
+    "Ba": 2.0,
+    "S": 4.0
+   },
+   "volume": 181.1360806348224,
+   "density": 3.693656371883596,
+   "material_id": "mp-aaaaabai"
+  },
+  {
+   "band_gap": 0.6071999999999997,
+   "energy_per_atom": -19.98241831375,
+   "formation_energy_per_atom": -0.45354630828125053,
+   "nsites": 8,
+   "composition": {
+    "Sn": 4.0,
+    "Se": 4.0
+   },
+   "volume": 226.25694595101302,
+   "density": 5.802938007029996,
+   "material_id": "mp-aaaaabap"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.550679526666666,
+   "formation_energy_per_atom": -0.41731169666666784,
+   "nsites": 3,
+   "composition": {
+    "Tb": 2.0,
+    "C": 1.0
+   },
+   "volume": 69.89501605397595,
+   "density": 7.836721027514366,
+   "material_id": "mp-aaaaabaq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -15.070957743333333,
+   "formation_energy_per_atom": -0.8333923460416676,
+   "nsites": 3,
+   "composition": {
+    "V": 1.0,
+    "Se": 2.0
+   },
+   "volume": 64.55613548875348,
+   "density": 5.372420113401234,
+   "material_id": "mp-aaaaabas"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -30.82775437125,
+   "formation_energy_per_atom": -0.6970136237499993,
+   "nsites": 8,
+   "composition": {
+    "Si": 4.0,
+    "Pt": 4.0
+   },
+   "volume": 120.74430185067973,
+   "density": 12.276576801102458,
+   "material_id": "mp-aaaaabau"
+  },
+  {
+   "band_gap": 0.9017000000000004,
+   "energy_per_atom": -4.511172757499999,
+   "formation_energy_per_atom": -0.4517030911718738,
+   "nsites": 8,
+   "composition": {
+    "Ge": 4.0,
+    "Se": 4.0
+   },
+   "volume": 198.83584123189982,
+   "density": 5.064232309197681,
+   "material_id": "mp-aaaaabay"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -40.572162385,
+   "formation_energy_per_atom": -0.46794474374999595,
+   "nsites": 2,
+   "composition": {
+    "Ce": 1.0,
+    "Hg": 1.0
+   },
+   "volume": 56.690310345655405,
+   "density": 9.979758808267231,
+   "material_id": "mp-aaaaabba"
+  },
+  {
+   "band_gap": 1.7704,
+   "energy_per_atom": -2.5271860824999983,
+   "formation_energy_per_atom": -1.4150614362500016,
+   "nsites": 4,
+   "composition": {
+    "Hg": 2.0,
+    "F": 2.0
+   },
+   "volume": 73.9382192262809,
+   "density": 9.863237887280631,
+   "material_id": "mp-aaaaabbe"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.073730955,
+   "formation_energy_per_atom": -1.847575358749996,
+   "nsites": 2,
+   "composition": {
+    "La": 1.0,
+    "As": 1.0
+   },
+   "volume": 59.52923349055362,
+   "density": 5.9646023123082115,
+   "material_id": "mp-aaaaabbg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -21.17663514,
+   "formation_energy_per_atom": -1.8091348239880922,
+   "nsites": 2,
+   "composition": {
+    "Sm": 1.0,
+    "P": 1.0
+   },
+   "volume": 49.21952618164396,
+   "density": 6.117730495900997,
+   "material_id": "mp-aaaaabbi"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -14.580503984285714,
+   "formation_energy_per_atom": -0.3666062042857143,
+   "nsites": 14,
+   "composition": {
+    "Ce": 2.0,
+    "Ga": 12.0
+   },
+   "volume": 275.6616404254434,
+   "density": 6.728064766381307,
+   "material_id": "mp-aaaaabbj"
+  },
+  {
+   "band_gap": 0.6728000000000001,
+   "energy_per_atom": -3.338292345,
+   "formation_energy_per_atom": -0.43754621737500043,
+   "nsites": 16,
+   "composition": {
+    "K": 8.0,
+    "As": 8.0
+   },
+   "volume": 503.7965661137013,
+   "density": 3.0065230502840827,
+   "material_id": "mp-aaaaabbl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -23.89979332,
+   "formation_energy_per_atom": -0.49290716750000385,
+   "nsites": 4,
+   "composition": {
+    "Sn": 1.0,
+    "Pd": 3.0
+   },
+   "volume": 64.3382463048615,
+   "density": 11.303794209260857,
+   "material_id": "mp-aaaaabbq"
+  },
+  {
+   "band_gap": 3.1998999999999995,
+   "energy_per_atom": -4.103869473749999,
+   "formation_energy_per_atom": -1.960844787916669,
+   "nsites": 8,
+   "composition": {
+    "Tl": 4.0,
+    "F": 4.0
+   },
+   "volume": 172.12074263317166,
+   "density": 8.620321752527788,
+   "material_id": "mp-aaaaabbs"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.0987586349999994,
+   "formation_energy_per_atom": -0.2998217283333311,
+   "nsites": 2,
+   "composition": {
+    "Tb": 1.0,
+    "Cd": 1.0
+   },
+   "volume": 52.37602565819626,
+   "density": 8.602497122128298,
+   "material_id": "mp-aaaaabbt"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -9.636492019999997,
+   "formation_energy_per_atom": -0.07076830689654877,
+   "nsites": 29,
+   "composition": {
+    "Cr": 23.0,
+    "C": 6.0
+   },
+   "volume": 288.3076403147121,
+   "density": 7.303036413970673,
+   "material_id": "mp-aaaaabbv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.972364688333332,
+   "formation_energy_per_atom": -1.2189547283333322,
+   "nsites": 6,
+   "composition": {
+    "Rh": 2.0,
+    "O": 4.0
+   },
+   "volume": 62.21966740434897,
+   "density": 7.200741182349888,
+   "material_id": "mp-aaaaabbx"
+  },
+  {
+   "band_gap": 3.2874,
+   "energy_per_atom": -5.61808807,
+   "formation_energy_per_atom": -1.1541435741145836,
+   "nsites": 24,
+   "composition": {
+    "Se": 8.0,
+    "O": 16.0
+   },
+   "volume": 356.22925606998524,
+   "density": 4.137816741346638,
+   "material_id": "mp-aaaaabby"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -9.604289373333334,
+   "formation_energy_per_atom": -0.3596672277777782,
+   "nsites": 3,
+   "composition": {
+    "Li": 2.0,
+    "Pd": 1.0
+   },
+   "volume": 41.039217170862244,
+   "density": 4.867689611073949,
+   "material_id": "mp-aaaaabca"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -13.64078025,
+   "formation_energy_per_atom": -0.14233230875000125,
+   "nsites": 8,
+   "composition": {
+    "Cr": 6.0,
+    "Si": 2.0
+   },
+   "volume": 89.99001129850284,
+   "density": 6.793236983839594,
+   "material_id": "mp-aaaaabcb"
+  },
+  {
+   "band_gap": 1.0185999999999993,
+   "energy_per_atom": -23.953549356666667,
+   "formation_energy_per_atom": -0.7895928486507936,
+   "nsites": 12,
+   "composition": {
+    "P": 8.0,
+    "Pt": 4.0
+   },
+   "volume": 187.40592135098834,
+   "density": 9.109869836966016,
+   "material_id": "mp-aaaaabcc"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -40.13555846,
+   "formation_energy_per_atom": -0.5792650962499977,
+   "nsites": 2,
+   "composition": {
+    "La": 1.0,
+    "Hg": 1.0
+   },
+   "volume": 59.22486586779323,
+   "density": 9.518729732791599,
+   "material_id": "mp-aaaaabcg"
+  },
+  {
+   "band_gap": 0.6996000000000002,
+   "energy_per_atom": -4.849909675,
+   "formation_energy_per_atom": -0.8093607869940476,
+   "nsites": 8,
+   "composition": {
+    "Li": 6.0,
+    "P": 2.0
+   },
+   "volume": 116.35462957137251,
+   "density": 1.4784207085080618,
+   "material_id": "mp-aaaaabci"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -32.018163434444446,
+   "formation_energy_per_atom": -0.7687204044444419,
+   "nsites": 36,
+   "composition": {
+    "Hf": 20.0,
+    "Ge": 16.0
+   },
+   "volume": 665.8365731881431,
+   "density": 11.801300217060714,
+   "material_id": "mp-aaaaabcj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -34.06817197583333,
+   "formation_energy_per_atom": -0.06897477249999895,
+   "nsites": 12,
+   "composition": {
+    "Sb": 8.0,
+    "Au": 4.0
+   },
+   "volume": 305.5951268253675,
+   "density": 9.574042161699913,
+   "material_id": "mp-aaaaabck"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.25797755125,
+   "formation_energy_per_atom": -1.2880608885714295,
+   "nsites": 8,
+   "composition": {
+    "Ti": 4.0,
+    "P": 4.0
+   },
+   "volume": 123.86980704741684,
+   "density": 4.227605375192304,
+   "material_id": "mp-aaaaabcl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -27.5614851275,
+   "formation_energy_per_atom": -1.1440646493750002,
+   "nsites": 8,
+   "composition": {
+    "Nd": 2.0,
+    "Te": 6.0
+   },
+   "volume": 259.15350485258625,
+   "density": 6.754096051755561,
+   "material_id": "mp-aaaaabcm"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.353803213333334,
+   "formation_energy_per_atom": -0.11303320444444627,
+   "nsites": 3,
+   "composition": {
+    "Ti": 2.0,
+    "Cu": 1.0
+   },
+   "volume": 45.65947584503995,
+   "density": 5.792678474786072,
+   "material_id": "mp-aaaaabco"
+  },
+  {
+   "band_gap": 4.1608,
+   "energy_per_atom": -6.90979613625,
+   "formation_energy_per_atom": -0.41095430937500055,
+   "nsites": 8,
+   "composition": {
+    "Rb": 2.0,
+    "N": 6.0
+   },
+   "volume": 149.35040345180363,
+   "density": 2.834925569288905,
+   "material_id": "mp-aaaaabcp"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -22.79333953,
+   "formation_energy_per_atom": -1.8516294164880946,
+   "nsites": 2,
+   "composition": {
+    "Ho": 1.0,
+    "P": 1.0
+   },
+   "volume": 44.70164312444869,
+   "density": 7.277280188924135,
+   "material_id": "mp-aaaaabcq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.413245540000001,
+   "formation_energy_per_atom": -0.7261650133333332,
+   "nsites": 6,
+   "composition": {
+    "Ba": 2.0,
+    "Pt": 4.0
+   },
+   "volume": 129.43530836983658,
+   "density": 13.53457672704212,
+   "material_id": "mp-aaaaabct"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -21.19831042,
+   "formation_energy_per_atom": -1.7674729243749994,
+   "nsites": 2,
+   "composition": {
+    "Sm": 1.0,
+    "N": 1.0
+   },
+   "volume": 32.39152312891051,
+   "density": 8.426196134501849,
+   "material_id": "mp-aaaaabcv"
+  },
+  {
+   "band_gap": 0.028200000000000003,
+   "energy_per_atom": -17.3699069225,
+   "formation_energy_per_atom": -0.06144775499999966,
+   "nsites": 16,
+   "composition": {
+    "Zn": 8.0,
+    "Sb": 8.0
+   },
+   "volume": 391.75922728067167,
+   "density": 6.346784766716259,
+   "material_id": "mp-aaaaabcz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -15.487594976666665,
+   "formation_energy_per_atom": -0.5907180399999987,
+   "nsites": 6,
+   "composition": {
+    "Tb": 2.0,
+    "Al": 4.0
+   },
+   "volume": 120.97831450337064,
+   "density": 5.844180457261732,
+   "material_id": "mp-aaaaabdc"
+  },
+  {
+   "band_gap": 0.6364999999999998,
+   "energy_per_atom": -6.30814512625,
+   "formation_energy_per_atom": -0.8412325693750002,
+   "nsites": 8,
+   "composition": {
+    "Li": 6.0,
+    "As": 2.0
+   },
+   "volume": 126.43290177520575,
+   "density": 2.51497271209979,
+   "material_id": "mp-aaaaabdd"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -29.477834456666667,
+   "formation_energy_per_atom": -1.079209076666667,
+   "nsites": 6,
+   "composition": {
+    "La": 4.0,
+    "Sb": 2.0
+   },
+   "volume": 198.1822019805642,
+   "density": 6.695890448731204,
+   "material_id": "mp-aaaaabdf"
+  },
+  {
+   "band_gap": 0.3741000000000003,
+   "energy_per_atom": -5.823665014999999,
+   "formation_energy_per_atom": -0.6697169598958315,
+   "nsites": 6,
+   "composition": {
+    "Fe": 2.0,
+    "Se": 4.0
+   },
+   "volume": 98.51988481308271,
+   "density": 7.205959177502955,
+   "material_id": "mp-aaaaabdg"
+  },
+  {
+   "band_gap": 1.4394999999999998,
+   "energy_per_atom": -22.95865211,
+   "formation_energy_per_atom": -0.4400549918749969,
+   "nsites": 3,
+   "composition": {
+    "Pt": 1.0,
+    "S": 2.0
+   },
+   "volume": 61.04357903464705,
+   "density": 7.051273549454283,
+   "material_id": "mp-aaaaabdi"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.463241986666667,
+   "formation_energy_per_atom": -0.1759046600000005,
+   "nsites": 3,
+   "composition": {
+    "Mg": 1.0,
+    "B": 2.0
+   },
+   "volume": 28.60271013548789,
+   "density": 2.666306005865761,
+   "material_id": "mp-aaaaabdj"
+  },
+  {
+   "band_gap": 0.45560000000000045,
+   "energy_per_atom": -18.736602063333333,
+   "formation_energy_per_atom": -0.4567363066666677,
+   "nsites": 6,
+   "composition": {
+    "As": 4.0,
+    "Ru": 2.0
+   },
+   "volume": 101.2371077110571,
+   "density": 8.231194685982341,
+   "material_id": "mp-aaaaabdm"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -23.0545261725,
+   "formation_energy_per_atom": -0.6860231406250037,
+   "nsites": 8,
+   "composition": {
+    "Yb": 3.0,
+    "Ge": 5.0
+   },
+   "volume": 162.59474994750184,
+   "density": 9.010911064241313,
+   "material_id": "mp-aaaaabdn"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.0829519750000003,
+   "formation_energy_per_atom": -0.29375911583333014,
+   "nsites": 2,
+   "composition": {
+    "Dy": 1.0,
+    "Cd": 1.0
+   },
+   "volume": 51.6021064818571,
+   "density": 8.846546916381563,
+   "material_id": "mp-aaaaabdq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.726081305,
+   "formation_energy_per_atom": -0.27228574396551775,
+   "nsites": 4,
+   "composition": {
+    "Mn": 2.0,
+    "Al": 2.0
+   },
+   "volume": 53.64082528951334,
+   "density": 5.0719081350171455,
+   "material_id": "mp-aaaaabdr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.2540101650000004,
+   "formation_energy_per_atom": -0.3060015175000004,
+   "nsites": 2,
+   "composition": {
+    "La": 1.0,
+    "Cd": 1.0
+   },
+   "volume": 60.80426068838528,
+   "density": 6.863348264964217,
+   "material_id": "mp-aaaaabdw"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.942760543333335,
+   "formation_energy_per_atom": -0.34445980000000515,
+   "nsites": 3,
+   "composition": {
+    "Te": 2.0,
+    "Pd": 1.0
+   },
+   "volume": 75.0751094935122,
+   "density": 7.998445052614176,
+   "material_id": "mp-aaaaabec"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.799418165,
+   "formation_energy_per_atom": -0.09541117919642923,
+   "nsites": 28,
+   "composition": {
+    "K": 2.0,
+    "Zn": 26.0
+   },
+   "volume": 450.28092375259934,
+   "density": 6.559944142588947,
+   "material_id": "mp-aaaaabee"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -20.4984129525,
+   "formation_energy_per_atom": -0.3035877497413786,
+   "nsites": 4,
+   "composition": {
+    "Mn": 2.0,
+    "Sb": 2.0
+   },
+   "volume": 86.47909364925499,
+   "density": 6.785778960966526,
+   "material_id": "mp-aaaaabeg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -40.617200512857146,
+   "formation_energy_per_atom": -1.2122840667006796,
+   "nsites": 14,
+   "composition": {
+    "U": 6.0,
+    "P": 8.0
+   },
+   "volume": 284.89120673895843,
+   "density": 9.768651671211865,
+   "material_id": "mp-aaaaabeh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -49.320240915,
+   "formation_energy_per_atom": -1.184483194166667,
+   "nsites": 4,
+   "composition": {
+    "Lu": 1.0,
+    "Pt": 3.0
+   },
+   "volume": 66.22294623114654,
+   "density": 19.062476411560844,
+   "material_id": "mp-aaaaabek"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.24334057875,
+   "formation_energy_per_atom": -0.5542452931250015,
+   "nsites": 16,
+   "composition": {
+    "Ca": 10.0,
+    "Si": 6.0
+   },
+   "volume": 432.7852623823539,
+   "density": 2.184300969397376,
+   "material_id": "mp-aaaaaben"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -26.1423224125,
+   "formation_energy_per_atom": -0.9265313987500008,
+   "nsites": 4,
+   "composition": {
+    "Dy": 1.0,
+    "Pd": 3.0
+   },
+   "volume": 68.36945438942746,
+   "density": 11.700858358270104,
+   "material_id": "mp-aaaaaber"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -17.339121289999998,
+   "formation_energy_per_atom": -0.7345357283333342,
+   "nsites": 3,
+   "composition": {
+    "Tm": 1.0,
+    "B": 2.0
+   },
+   "volume": 34.57820089143092,
+   "density": 9.151026466756974,
+   "material_id": "mp-aaaaabeu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -15.735537066666666,
+   "formation_energy_per_atom": -0.5868704383333329,
+   "nsites": 6,
+   "composition": {
+    "Dy": 2.0,
+    "Al": 4.0
+   },
+   "volume": 119.81463682079938,
+   "density": 6.000024808435551,
+   "material_id": "mp-aaaaabex"
+  },
+  {
+   "band_gap": 1.7375999999999996,
+   "energy_per_atom": -10.9558127175,
+   "formation_energy_per_atom": -0.670049406875,
+   "nsites": 4,
+   "composition": {
+    "Ga": 2.0,
+    "N": 2.0
+   },
+   "volume": 45.72832358928343,
+   "density": 6.080976828616325,
+   "material_id": "mp-aaaaabey"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -19.098241545,
+   "formation_energy_per_atom": -0.2542250999999993,
+   "nsites": 4,
+   "composition": {
+    "Ni": 2.0,
+    "Sb": 2.0
+   },
+   "volume": 68.4209699060164,
+   "density": 8.759008275709911,
+   "material_id": "mp-aaaaabfe"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.852315711666667,
+   "formation_energy_per_atom": -0.4732087883333331,
+   "nsites": 6,
+   "composition": {
+    "Ba": 1.0,
+    "Pt": 5.0
+   },
+   "volume": 116.96599274124222,
+   "density": 15.7974110595652,
+   "material_id": "mp-aaaaabff"
+  },
+  {
+   "band_gap": 3.9489,
+   "energy_per_atom": -8.83540783375,
+   "formation_energy_per_atom": -4.027559444749998,
+   "nsites": 40,
+   "composition": {
+    "Ho": 16.0,
+    "O": 24.0
+   },
+   "volume": 582.7960001301811,
+   "density": 8.612953640267063,
+   "material_id": "mp-aaaaabfg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.818359861666666,
+   "formation_energy_per_atom": -0.5307985233333335,
+   "nsites": 6,
+   "composition": {
+    "Sc": 2.0,
+    "Al": 4.0
+   },
+   "volume": 107.81919267480609,
+   "density": 3.0469314813012427,
+   "material_id": "mp-aaaaabfh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.145107485,
+   "formation_energy_per_atom": -1.9984257570312494,
+   "nsites": 2,
+   "composition": {
+    "Dy": 1.0,
+    "Se": 1.0
+   },
+   "volume": 47.26804982808357,
+   "density": 8.482553543878229,
+   "material_id": "mp-aaaaabfi"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.1259486825,
+   "formation_energy_per_atom": -0.27896682500000125,
+   "nsites": 4,
+   "composition": {
+    "Ga": 1.0,
+    "Ni": 3.0
+   },
+   "volume": 44.231853930116735,
+   "density": 9.227870428185764,
+   "material_id": "mp-aaaaabfj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -48.894968215,
+   "formation_energy_per_atom": -0.2302277074999992,
+   "nsites": 4,
+   "composition": {
+    "Tm": 1.0,
+    "Tl": 3.0
+   },
+   "volume": 103.50307211552236,
+   "density": 12.547272204510374,
+   "material_id": "mp-aaaaabfl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -17.29586623125,
+   "formation_energy_per_atom": -0.8408696187499984,
+   "nsites": 8,
+   "composition": {
+    "Si": 4.0,
+    "Rh": 4.0
+   },
+   "volume": 109.45495626207786,
+   "density": 7.949047922730235,
+   "material_id": "mp-aaaaabfm"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -13.493100065,
+   "formation_energy_per_atom": -0.4071059933333352,
+   "nsites": 2,
+   "composition": {
+    "Ti": 1.0,
+    "Co": 1.0
+   },
+   "volume": 26.626730192135117,
+   "density": 6.660445916042594,
+   "material_id": "mp-aaaaabfr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.847770081666667,
+   "formation_energy_per_atom": -1.4576618983333336,
+   "nsites": 6,
+   "composition": {
+    "Ru": 2.0,
+    "O": 4.0
+   },
+   "volume": 62.515586451455455,
+   "density": 7.069147193424663,
+   "material_id": "mp-aaaaabft"
+  },
+  {
+   "band_gap": 4.1465,
+   "energy_per_atom": -8.57224132125,
+   "formation_energy_per_atom": -0.2211123337500016,
+   "nsites": 8,
+   "composition": {
+    "K": 2.0,
+    "N": 6.0
+   },
+   "volume": 130.91489535524025,
+   "density": 2.057829585285435,
+   "material_id": "mp-aaaaabfv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -11.6134307,
+   "formation_energy_per_atom": -0.4337016812500014,
+   "nsites": 4,
+   "composition": {
+    "Si": 1.0,
+    "Ni": 3.0
+   },
+   "volume": 41.55620475515073,
+   "density": 8.158231084405731,
+   "material_id": "mp-aaaaabfw"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -18.367691333333333,
+   "formation_energy_per_atom": -0.714624360000002,
+   "nsites": 6,
+   "composition": {
+    "Ca": 2.0,
+    "Pd": 4.0
+   },
+   "volume": 113.21431935749467,
+   "density": 7.419206733150866,
+   "material_id": "mp-aaaaabgb"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -43.073329845,
+   "formation_energy_per_atom": -1.7713234343749988,
+   "nsites": 2,
+   "composition": {
+    "Th": 1.0,
+    "N": 1.0
+   },
+   "volume": 34.540798749152934,
+   "density": 11.828531808143675,
+   "material_id": "mp-aaaaabgc"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -20.453721725,
+   "formation_energy_per_atom": -0.38520334750000274,
+   "nsites": 2,
+   "composition": {
+    "Tb": 1.0,
+    "Zn": 1.0
+   },
+   "volume": 45.21563019583022,
+   "density": 8.238654444544858,
+   "material_id": "mp-aaaaabge"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -23.301828265,
+   "formation_energy_per_atom": -0.0884064300000027,
+   "nsites": 8,
+   "composition": {
+    "V": 6.0,
+    "Au": 2.0
+   },
+   "volume": 114.30945360774247,
+   "density": 10.16261941076148,
+   "material_id": "mp-aaaaabgh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.173196269999996,
+   "formation_energy_per_atom": -0.6907956449999956,
+   "nsites": 6,
+   "composition": {
+    "Sm": 2.0,
+    "Rh": 4.0
+   },
+   "volume": 108.18678735682263,
+   "density": 10.933606130028172,
+   "material_id": "mp-aaaaabgi"
+  },
+  {
+   "band_gap": 1.9742999999999997,
+   "energy_per_atom": -5.0786121725,
+   "formation_energy_per_atom": -1.6501702366666664,
+   "nsites": 8,
+   "composition": {
+    "Li": 4.0,
+    "O": 4.0
+   },
+   "volume": 63.107895451231315,
+   "density": 2.414495377117451,
+   "material_id": "mp-aaaaabgj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -37.69737922666666,
+   "formation_energy_per_atom": -1.026136726666664,
+   "nsites": 6,
+   "composition": {
+    "Ca": 2.0,
+    "Pt": 4.0
+   },
+   "volume": 112.40641076415325,
+   "density": 12.711735698875126,
+   "material_id": "mp-aaaaabgk"
+  },
+  {
+   "band_gap": 1.1111,
+   "energy_per_atom": -8.834197172749999,
+   "formation_energy_per_atom": -0.95972068425,
+   "nsites": 40,
+   "composition": {
+    "Ca": 24.0,
+    "N": 16.0
+   },
+   "volume": 747.4059775130344,
+   "density": 2.634933163204654,
+   "material_id": "mp-aaaaabgm"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.485169296666666,
+   "formation_energy_per_atom": -0.5209218083333328,
+   "nsites": 6,
+   "composition": {
+    "Sc": 2.0,
+    "Ni": 4.0
+   },
+   "volume": 80.50237736607001,
+   "density": 6.6973529143015895,
+   "material_id": "mp-aaaaabgs"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -29.40327156,
+   "formation_energy_per_atom": -0.9603271716666697,
+   "nsites": 2,
+   "composition": {
+    "Er": 1.0,
+    "Pd": 1.0
+   },
+   "volume": 41.17308240020961,
+   "density": 11.037664545626608,
+   "material_id": "mp-aaaaabgt"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.914515475000001,
+   "formation_energy_per_atom": -0.33644844000000046,
+   "nsites": 6,
+   "composition": {
+    "Er": 1.0,
+    "Ni": 5.0
+   },
+   "volume": 78.10290260239792,
+   "density": 9.795455707477727,
+   "material_id": "mp-aaaaabgv"
+  },
+  {
+   "band_gap": 0.6607000000000003,
+   "energy_per_atom": -6.742646626666667,
+   "formation_energy_per_atom": -2.107482005,
+   "nsites": 6,
+   "composition": {
+    "Sn": 2.0,
+    "O": 4.0
+   },
+   "volume": 72.82143907393863,
+   "density": 6.873191565905563,
+   "material_id": "mp-aaaaabgy"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -16.765680733333333,
+   "formation_energy_per_atom": -0.5705990833333345,
+   "nsites": 6,
+   "composition": {
+    "Tm": 2.0,
+    "Al": 4.0
+   },
+   "volume": 116.43357138052764,
+   "density": 6.357782370897579,
+   "material_id": "mp-aaaaabha"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -37.70797737666667,
+   "formation_energy_per_atom": -0.09970723958333376,
+   "nsites": 6,
+   "composition": {
+    "Pu": 2.0,
+    "Co": 4.0
+   },
+   "volume": 90.40728705421698,
+   "density": 13.293027540217805,
+   "material_id": "mp-aaaaabhf"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.777311744285714,
+   "formation_energy_per_atom": -0.4749661892857152,
+   "nsites": 7,
+   "composition": {
+    "Ca": 1.0,
+    "B": 6.0
+   },
+   "volume": 70.87785491906128,
+   "density": 2.458646812149439,
+   "material_id": "mp-aaaaabhh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.0624666649999988,
+   "formation_energy_per_atom": -0.2986021649999966,
+   "nsites": 2,
+   "composition": {
+    "Er": 1.0,
+    "Cd": 1.0
+   },
+   "volume": 50.07728266350968,
+   "density": 9.273725264315459,
+   "material_id": "mp-aaaaabhj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -17.57065844,
+   "formation_energy_per_atom": -0.37362651433333127,
+   "nsites": 4,
+   "composition": {
+    "Ta": 1.0,
+    "Al": 3.0
+   },
+   "volume": 62.4987398075825,
+   "density": 6.958263838147115,
+   "material_id": "mp-aaaaabhl"
+  },
+  {
+   "band_gap": 0.18020000000000103,
+   "energy_per_atom": -7.42364898625,
+   "formation_energy_per_atom": -0.4759793662499998,
+   "nsites": 8,
+   "composition": {
+    "Fe": 4.0,
+    "Si": 4.0
+   },
+   "volume": 85.31240907185911,
+   "density": 6.534565174761294,
+   "material_id": "mp-aaaaabhn"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.6669172625,
+   "formation_energy_per_atom": -0.7026438649999998,
+   "nsites": 4,
+   "composition": {
+    "Ba": 2.0,
+    "Sn": 2.0
+   },
+   "volume": 160.9946524643309,
+   "density": 5.281659174155067,
+   "material_id": "mp-aaaaabho"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -30.602589138333332,
+   "formation_energy_per_atom": -0.4594355672222245,
+   "nsites": 6,
+   "composition": {
+    "Er": 4.0,
+    "In": 2.0
+   },
+   "volume": 162.17337655041777,
+   "density": 9.201756773440193,
+   "material_id": "mp-aaaaabht"
+  },
+  {
+   "band_gap": 1.4626000000000001,
+   "energy_per_atom": -20.349370451333336,
+   "formation_energy_per_atom": -2.376410549020833,
+   "nsites": 30,
+   "composition": {
+    "Ho": 12.0,
+    "S": 18.0
+   },
+   "volume": 702.0518684032684,
+   "density": 6.0464082578069025,
+   "material_id": "mp-aaaaabhu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.756916062142856,
+   "formation_energy_per_atom": -1.8453096495238082,
+   "nsites": 14,
+   "composition": {
+    "La": 6.0,
+    "Te": 8.0
+   },
+   "volume": 457.14039768080295,
+   "density": 6.735405700534099,
+   "material_id": "mp-aaaaabhv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -39.63593062,
+   "formation_energy_per_atom": -0.3202399021875024,
+   "nsites": 4,
+   "composition": {
+    "Np": 1.0,
+    "Sn": 3.0
+   },
+   "volume": 103.71117705266597,
+   "density": 9.496715454770758,
+   "material_id": "mp-aaaaabhx"
+  },
+  {
+   "band_gap": 0.07779999999999987,
+   "energy_per_atom": -23.06471171,
+   "formation_energy_per_atom": -2.0596644168749982,
+   "nsites": 2,
+   "composition": {
+    "Ho": 1.0,
+    "N": 1.0
+   },
+   "volume": 28.612982912956948,
+   "density": 10.384513683526778,
+   "material_id": "mp-aaaaabhz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -16.292447868333333,
+   "formation_energy_per_atom": -0.6372684774999987,
+   "nsites": 6,
+   "composition": {
+    "Nd": 2.0,
+    "Si": 4.0
+   },
+   "volume": 125.14787425951897,
+   "density": 5.318406219658996,
+   "material_id": "mp-aaaaabia"
+  },
+  {
+   "band_gap": 2.0151,
+   "energy_per_atom": -6.449011680999999,
+   "formation_energy_per_atom": -2.268996668999999,
+   "nsites": 10,
+   "composition": {
+    "Ga": 4.0,
+    "O": 6.0
+   },
+   "volume": 105.73376293730534,
+   "density": 5.887588007758966,
+   "material_id": "mp-aaaaabic"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.147422446666667,
+   "formation_energy_per_atom": -1.2745101029166672,
+   "nsites": 12,
+   "composition": {
+    "Ca": 6.0,
+    "As": 6.0
+   },
+   "volume": 319.00147729783487,
+   "density": 3.591732495932271,
+   "material_id": "mp-aaaaabie"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -45.512934465,
+   "formation_energy_per_atom": -0.8006958375000011,
+   "nsites": 6,
+   "composition": {
+    "Nd": 2.0,
+    "Ir": 4.0
+   },
+   "volume": 112.26555552582576,
+   "density": 15.639474613358129,
+   "material_id": "mp-aaaaabig"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.429184150000001,
+   "formation_energy_per_atom": -1.2273829374999998,
+   "nsites": 2,
+   "composition": {
+    "Sc": 1.0,
+    "Pt": 1.0
+   },
+   "volume": 35.5928755096481,
+   "density": 11.198748240165985,
+   "material_id": "mp-aaaaabii"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.230722105,
+   "formation_energy_per_atom": -0.5652836399999992,
+   "nsites": 4,
+   "composition": {
+    "Zn": 2.0,
+    "Pt": 2.0
+   },
+   "volume": 56.803590526447756,
+   "density": 15.229981051242811,
+   "material_id": "mp-aaaaabik"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -23.857012905,
+   "formation_energy_per_atom": -0.4996034000000016,
+   "nsites": 2,
+   "composition": {
+    "In": 1.0,
+    "Rh": 1.0
+   },
+   "volume": 33.06612633674988,
+   "density": 10.93379896665391,
+   "material_id": "mp-aaaaabip"
+  },
+  {
+   "band_gap": 6.0244,
+   "energy_per_atom": -7.159802168333333,
+   "formation_energy_per_atom": -4.489867450833334,
+   "nsites": 24,
+   "composition": {
+    "La": 6.0,
+    "F": 18.0
+   },
+   "volume": 326.1652750807279,
+   "density": 5.9840962289428,
+   "material_id": "mp-aaaaabiv"
+  },
+  {
+   "band_gap": 1.4421,
+   "energy_per_atom": -14.6094313875,
+   "formation_energy_per_atom": -0.13948285393749985,
+   "nsites": 20,
+   "composition": {
+    "As": 8.0,
+    "Se": 12.0
+   },
+   "volume": 561.681862836406,
+   "density": 4.5731865310010855,
+   "material_id": "mp-aaaaabiz"
+  },
+  {
+   "band_gap": 1.4556,
+   "energy_per_atom": -12.884366167083334,
+   "formation_energy_per_atom": -0.181319395734126,
+   "nsites": 24,
+   "composition": {
+    "Cd": 8.0,
+    "P": 16.0
+   },
+   "volume": 560.7532228378684,
+   "density": 4.130574795607549,
+   "material_id": "mp-aaaaabjd"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.050420840000001,
+   "formation_energy_per_atom": -0.3158699949999999,
+   "nsites": 2,
+   "composition": {
+    "Y": 1.0,
+    "Cd": 1.0
+   },
+   "volume": 52.18277029328712,
+   "density": 6.406223601737591,
+   "material_id": "mp-aaaaabjf"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -30.600971695,
+   "formation_energy_per_atom": -1.4516875825,
+   "nsites": 2,
+   "composition": {
+    "Ho": 1.0,
+    "Te": 1.0
+   },
+   "volume": 57.06508336741869,
+   "density": 8.51235110051575,
+   "material_id": "mp-aaaaabjj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.7966541750000005,
+   "formation_energy_per_atom": -0.717418428333333,
+   "nsites": 6,
+   "composition": {
+    "Y": 2.0,
+    "Rh": 4.0
+   },
+   "volume": 105.76360852053199,
+   "density": 9.254390059866948,
+   "material_id": "mp-aaaaabjl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.384230594999998,
+   "formation_energy_per_atom": -0.047526424999997374,
+   "nsites": 4,
+   "composition": {
+    "Co": 1.0,
+    "Pt": 3.0
+   },
+   "volume": 58.13583289379899,
+   "density": 18.399920164065392,
+   "material_id": "mp-aaaaabjm"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -49.22023474,
+   "formation_energy_per_atom": -1.541022508363092,
+   "nsites": 2,
+   "composition": {
+    "Pu": 1.0,
+    "P": 1.0
+   },
+   "volume": 46.380777714813355,
+   "density": 9.844696385569158,
+   "material_id": "mp-aaaaabjq"
+  },
+  {
+   "band_gap": 0.8371000000000004,
+   "energy_per_atom": -9.773293335833333,
+   "formation_energy_per_atom": -0.15631046115079408,
+   "nsites": 12,
+   "composition": {
+    "Cu": 4.0,
+    "P": 8.0
+   },
+   "volume": 190.93693187864682,
+   "density": 4.365565057490155,
+   "material_id": "mp-aaaaabjr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.255559955000004,
+   "formation_energy_per_atom": -0.8307106800000028,
+   "nsites": 6,
+   "composition": {
+    "Ho": 2.0,
+    "Ir": 4.0
+   },
+   "volume": 106.36084608881144,
+   "density": 17.153698000276275,
+   "material_id": "mp-aaaaabjs"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -42.969682825,
+   "formation_energy_per_atom": -1.731013593988088,
+   "nsites": 2,
+   "composition": {
+    "Th": 1.0,
+    "P": 1.0
+   },
+   "volume": 50.499133000314536,
+   "density": 8.648493153656961,
+   "material_id": "mp-aaaaabjv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -11.9457371675,
+   "formation_energy_per_atom": -0.5140333662500005,
+   "nsites": 4,
+   "composition": {
+    "Sc": 1.0,
+    "Ga": 3.0
+   },
+   "volume": 68.00508346868223,
+   "density": 6.205188248260726,
+   "material_id": "mp-aaaaabjw"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -19.32868352,
+   "formation_energy_per_atom": -1.8181175462500008,
+   "nsites": 2,
+   "composition": {
+    "Y": 1.0,
+    "As": 1.0
+   },
+   "volume": 49.43376863412401,
+   "density": 5.503158848762099,
+   "material_id": "mp-aaaaabjx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -28.03860526,
+   "formation_energy_per_atom": -0.2555997633333327,
+   "nsites": 2,
+   "composition": {
+    "Li": 1.0,
+    "Tl": 1.0
+   },
+   "volume": 40.69982827781539,
+   "density": 8.62195913866903,
+   "material_id": "mp-aaaaabjy"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -49.914852237999995,
+   "formation_energy_per_atom": -0.12306363999999803,
+   "nsites": 5,
+   "composition": {
+    "Hg": 4.0,
+    "Pt": 1.0
+   },
+   "volume": 125.25907216442648,
+   "density": 13.22295225758687,
+   "material_id": "mp-aaaaabka"
+  },
+  {
+   "band_gap": 0.5648999999999997,
+   "energy_per_atom": -19.68006894,
+   "formation_energy_per_atom": -0.035467995000001196,
+   "nsites": 2,
+   "composition": {
+    "Ge": 1.0,
+    "Te": 1.0
+   },
+   "volume": 55.908968810771796,
+   "density": 5.947280914551188,
+   "material_id": "mp-aaaaabkc"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -28.07805977,
+   "formation_energy_per_atom": -1.815181784375003,
+   "nsites": 2,
+   "composition": {
+    "Gd": 1.0,
+    "N": 1.0
+   },
+   "volume": 30.819001933465334,
+   "density": 9.227373481407733,
+   "material_id": "mp-aaaaabke"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.97277163142857,
+   "formation_energy_per_atom": -0.21225052071428405,
+   "nsites": 42,
+   "composition": {
+    "Ni": 30.0,
+    "As": 12.0
+   },
+   "volume": 490.247499693355,
+   "density": 9.009333945134038,
+   "material_id": "mp-aaaaabkf"
+  },
+  {
+   "band_gap": 1.9103,
+   "energy_per_atom": -3.5727058141666674,
+   "formation_energy_per_atom": -1.3183023729166674,
+   "nsites": 24,
+   "composition": {
+    "Au": 6.0,
+    "F": 18.0
+   },
+   "volume": 365.9296798512416,
+   "density": 6.914663859173382,
+   "material_id": "mp-aaaaabkg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -10.774880811428572,
+   "formation_energy_per_atom": -0.5121890544642866,
+   "nsites": 14,
+   "composition": {
+    "Co": 6.0,
+    "S": 8.0
+   },
+   "volume": 212.52255835244327,
+   "density": 4.767149079778596,
+   "material_id": "mp-aaaaabkh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.020750925,
+   "formation_energy_per_atom": -0.0951159249999991,
+   "nsites": 4,
+   "composition": {
+    "Ni": 2.0,
+    "Pt": 2.0
+   },
+   "volume": 52.55674452311622,
+   "density": 16.036278172579323,
+   "material_id": "mp-aaaaabkj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -45.466443055000006,
+   "formation_energy_per_atom": -0.7588886322222285,
+   "nsites": 6,
+   "composition": {
+    "Pr": 2.0,
+    "Ir": 4.0
+   },
+   "volume": 113.51220378275163,
+   "density": 15.370159424011668,
+   "material_id": "mp-aaaaabkk"
+  },
+  {
+   "band_gap": 1.9091,
+   "energy_per_atom": -36.51966100166667,
+   "formation_energy_per_atom": -0.11834182593750124,
+   "nsites": 6,
+   "composition": {
+    "Au": 4.0,
+    "S": 2.0
+   },
+   "volume": 146.69522383506134,
+   "density": 9.644302424345222,
+   "material_id": "mp-aaaaabkl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.675432985,
+   "formation_energy_per_atom": -0.07315796499999916,
+   "nsites": 4,
+   "composition": {
+    "Co": 2.0,
+    "Pt": 2.0
+   },
+   "volume": 53.42636459425499,
+   "density": 15.790162017511753,
+   "material_id": "mp-aaaaabkn"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.609705636071428,
+   "formation_energy_per_atom": -0.08099031928571472,
+   "nsites": 28,
+   "composition": {
+    "Na": 2.0,
+    "Zn": 26.0
+   },
+   "volume": 439.787859584771,
+   "density": 6.594816013843237,
+   "material_id": "mp-aaaaabko"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -27.133601690000003,
+   "formation_energy_per_atom": -0.762573016666669,
+   "nsites": 6,
+   "composition": {
+    "Ce": 2.0,
+    "Rh": 4.0
+   },
+   "volume": 108.40344170778317,
+   "density": 10.597916255144987,
+   "material_id": "mp-aaaaabkp"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -43.41308569333333,
+   "formation_energy_per_atom": -0.3972812799999967,
+   "nsites": 3,
+   "composition": {
+    "Mo": 1.0,
+    "Pt": 2.0
+   },
+   "volume": 45.43505903363901,
+   "density": 17.76604549180691,
+   "material_id": "mp-aaaaabkq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.633968082500001,
+   "formation_energy_per_atom": -0.1638341150000011,
+   "nsites": 4,
+   "composition": {
+    "Nb": 1.0,
+    "Zn": 3.0
+   },
+   "volume": 59.7757128663261,
+   "density": 8.031979052973545,
+   "material_id": "mp-aaaaabkr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.4093045885714295,
+   "formation_energy_per_atom": -0.40997236500000056,
+   "nsites": 7,
+   "composition": {
+    "Ba": 1.0,
+    "B": 6.0
+   },
+   "volume": 78.2054570963525,
+   "density": 4.293170686905949,
+   "material_id": "mp-aaaaabks"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.97462224625,
+   "formation_energy_per_atom": -0.4893534474999992,
+   "nsites": 8,
+   "composition": {
+    "La": 2.0,
+    "Al": 6.0
+   },
+   "volume": 179.41201336621177,
+   "density": 4.069623320386491,
+   "material_id": "mp-aaaaabkx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -2.7910240833333333,
+   "formation_energy_per_atom": -0.37833296500000024,
+   "nsites": 6,
+   "composition": {
+    "Sm": 2.0,
+    "Zn": 4.0
+   },
+   "volume": 123.25551968025502,
+   "density": 7.576245762169855,
+   "material_id": "mp-aaaaabla"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -17.2323624,
+   "formation_energy_per_atom": -0.567837251666667,
+   "nsites": 6,
+   "composition": {
+    "Yb": 2.0,
+    "Al": 4.0
+   },
+   "volume": 115.45478390643666,
+   "density": 6.529785353219093,
+   "material_id": "mp-aaaaablh"
+  },
+  {
+   "band_gap": 1.7052,
+   "energy_per_atom": -3.6374448533333332,
+   "formation_energy_per_atom": -1.2338780364999995,
+   "nsites": 6,
+   "composition": {
+    "K": 4.0,
+    "O": 2.0
+   },
+   "volume": 129.6009765025592,
+   "density": 2.4138111047782043,
+   "material_id": "mp-aaaaablj"
+  },
+  {
+   "band_gap": 5.9181,
+   "energy_per_atom": -4.343640074761906,
+   "formation_energy_per_atom": -2.111517040119048,
+   "nsites": 21,
+   "composition": {
+    "S": 3.0,
+    "F": 18.0
+   },
+   "volume": 259.5865349336243,
+   "density": 2.802888792414862,
+   "material_id": "mp-aaaaabln"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -26.8843346525,
+   "formation_energy_per_atom": -0.43042182166666976,
+   "nsites": 4,
+   "composition": {
+    "Lu": 1.0,
+    "In": 3.0
+   },
+   "volume": 95.68967898457427,
+   "density": 9.013708404816974,
+   "material_id": "mp-aaaaablp"
+  },
+  {
+   "band_gap": 0.15239999999999965,
+   "energy_per_atom": -19.073301815,
+   "formation_energy_per_atom": -0.7274665083333337,
+   "nsites": 12,
+   "composition": {
+    "Sr": 8.0,
+    "Sn": 4.0
+   },
+   "volume": 459.45344941543595,
+   "density": 4.2495313501732515,
+   "material_id": "mp-aaaaablq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -25.352334917916664,
+   "formation_energy_per_atom": -0.6315271295833327,
+   "nsites": 24,
+   "composition": {
+    "Zr": 8.0,
+    "Sb": 16.0
+   },
+   "volume": 595.1689652261662,
+   "density": 7.4715655225783415,
+   "material_id": "mp-aaaaablr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -32.88462731333333,
+   "formation_energy_per_atom": -0.38810537500000447,
+   "nsites": 3,
+   "composition": {
+    "U": 1.0,
+    "Si": 2.0
+   },
+   "volume": 54.92730507478963,
+   "density": 8.89412731905487,
+   "material_id": "mp-aaaaabls"
+  },
+  {
+   "band_gap": 6.7537,
+   "energy_per_atom": -6.070042246666667,
+   "formation_energy_per_atom": -4.229514713333333,
+   "nsites": 3,
+   "composition": {
+    "Sr": 1.0,
+    "F": 2.0
+   },
+   "volume": 48.74194526371349,
+   "density": 4.279509437130494,
+   "material_id": "mp-aaaaablt"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -26.9543678175,
+   "formation_energy_per_atom": -0.9537655375000043,
+   "nsites": 4,
+   "composition": {
+    "Tm": 1.0,
+    "Pd": 3.0
+   },
+   "volume": 66.8746317872399,
+   "density": 12.122168560189586,
+   "material_id": "mp-aaaaablu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -23.284754295,
+   "formation_energy_per_atom": -0.3008321500000015,
+   "nsites": 2,
+   "composition": {
+    "Tm": 1.0,
+    "Cu": 1.0
+   },
+   "volume": 38.76845424714784,
+   "density": 9.957644145281517,
+   "material_id": "mp-aaaaablx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -2.7702301699999996,
+   "formation_energy_per_atom": -0.09075502999999951,
+   "nsites": 2,
+   "composition": {
+    "Zn": 1.0,
+    "Cu": 1.0
+   },
+   "volume": 24.911259518441693,
+   "density": 8.59590481461026,
+   "material_id": "mp-aaaaablz"
+  },
+  {
+   "band_gap": 4.2503,
+   "energy_per_atom": -10.297557244285715,
+   "formation_energy_per_atom": -1.3209434628571444,
+   "nsites": 14,
+   "composition": {
+    "Si": 6.0,
+    "N": 8.0
+   },
+   "volume": 145.49663109055865,
+   "density": 3.2020796443326165,
+   "material_id": "mp-aaaaabma"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -45.643552426666666,
+   "formation_energy_per_atom": -0.9597976883333293,
+   "nsites": 3,
+   "composition": {
+    "Ho": 1.0,
+    "Au": 2.0
+   },
+   "volume": 61.51758989999091,
+   "density": 15.085353761572971,
+   "material_id": "mp-aaaaabmc"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -16.514991695,
+   "formation_energy_per_atom": -1.8571530589880947,
+   "nsites": 2,
+   "composition": {
+    "Y": 1.0,
+    "P": 1.0
+   },
+   "volume": 45.84680800002108,
+   "density": 4.3419550450029,
+   "material_id": "mp-aaaaabmg"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -48.338703798333334,
+   "formation_energy_per_atom": -0.5921739266666654,
+   "nsites": 6,
+   "composition": {
+    "Eu": 2.0,
+    "Ir": 4.0
+   },
+   "volume": 111.22940512520225,
+   "density": 16.015725958220266,
+   "material_id": "mp-aaaaabmh"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.384497349999998,
+   "formation_energy_per_atom": -1.3434008699999989,
+   "nsites": 6,
+   "composition": {
+    "Os": 2.0,
+    "O": 4.0
+   },
+   "volume": 64.3569258510722,
+   "density": 11.467906515396766,
+   "material_id": "mp-aaaaabmi"
+  },
+  {
+   "band_gap": 1.5920999999999998,
+   "energy_per_atom": -4.534715075000001,
+   "formation_energy_per_atom": -2.003574658333334,
+   "nsites": 2,
+   "composition": {
+    "Ba": 1.0,
+    "Te": 1.0
+   },
+   "volume": 89.09415786940792,
+   "density": 4.937715832687877,
+   "material_id": "mp-aaaaabmm"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.950213711666667,
+   "formation_energy_per_atom": -0.7517035683333345,
+   "nsites": 6,
+   "composition": {
+    "Ba": 2.0,
+    "N": 4.0
+   },
+   "volume": 112.76116763626705,
+   "density": 4.869658582402905,
+   "material_id": "mp-aaaaabmn"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.540084815,
+   "formation_energy_per_atom": -0.5973374473214275,
+   "nsites": 8,
+   "composition": {
+    "Fe": 4.0,
+    "P": 4.0
+   },
+   "volume": 90.58386212379064,
+   "density": 6.366076377677599,
+   "material_id": "mp-aaaaabmr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.588250850000001,
+   "formation_energy_per_atom": -1.2145624658333318,
+   "nsites": 2,
+   "composition": {
+    "Dy": 1.0,
+    "Sb": 1.0
+   },
+   "volume": 59.30777979977452,
+   "density": 7.958902479991227,
+   "material_id": "mp-aaaaabmt"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -30.88891147,
+   "formation_energy_per_atom": -0.6387818193333352,
+   "nsites": 4,
+   "composition": {
+    "Ta": 1.0,
+    "Rh": 3.0
+   },
+   "volume": 57.9508764968834,
+   "density": 14.03096696375624,
+   "material_id": "mp-aaaaabng"
+  },
+  {
+   "band_gap": 2.3215000000000003,
+   "energy_per_atom": -7.938075023333333,
+   "formation_energy_per_atom": -1.2478866567708333,
+   "nsites": 3,
+   "composition": {
+    "K": 2.0,
+    "S": 1.0
+   },
+   "volume": 101.87707708492104,
+   "density": 1.7972020776470565,
+   "material_id": "mp-aaaaabni"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.945004616578947,
+   "formation_energy_per_atom": -0.07850760763157819,
+   "nsites": 38,
+   "composition": {
+    "Ho": 4.0,
+    "Co": 34.0
+   },
+   "volume": 479.82039138961045,
+   "density": 9.21753788090929,
+   "material_id": "mp-aaaaabnj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.373086493333328,
+   "formation_energy_per_atom": -0.7192124099999925,
+   "nsites": 3,
+   "composition": {
+    "Th": 1.0,
+    "Au": 2.0
+   },
+   "volume": 68.26731275135513,
+   "density": 15.226168841354065,
+   "material_id": "mp-aaaaabnl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -30.1944009725,
+   "formation_energy_per_atom": -0.8043756524999992,
+   "nsites": 4,
+   "composition": {
+    "Hf": 1.0,
+    "Rh": 3.0
+   },
+   "volume": 59.97007563474106,
+   "density": 13.490485368224181,
+   "material_id": "mp-aaaaabnn"
+  },
+  {
+   "band_gap": 6.6029,
+   "energy_per_atom": -6.077961740000002,
+   "formation_energy_per_atom": -4.161918590000002,
+   "nsites": 3,
+   "composition": {
+    "Ba": 1.0,
+    "F": 2.0
+   },
+   "volume": 60.32690236247557,
+   "density": 4.825907163104328,
+   "material_id": "mp-aaaaabnp"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -32.10776625,
+   "formation_energy_per_atom": -0.3567697549999984,
+   "nsites": 2,
+   "composition": {
+    "Gd": 1.0,
+    "Cd": 1.0
+   },
+   "volume": 53.139850412643,
+   "density": 8.42649390969117,
+   "material_id": "mp-aaaaabnr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.228056025,
+   "formation_energy_per_atom": -0.46828125249999974,
+   "nsites": 2,
+   "composition": {
+    "Be": 1.0,
+    "Ni": 1.0
+   },
+   "volume": 17.313667771141436,
+   "density": 6.493584466392626,
+   "material_id": "mp-aaaaabnt"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.551708148333328,
+   "formation_energy_per_atom": -0.6931851386111051,
+   "nsites": 6,
+   "composition": {
+    "Pr": 1.0,
+    "Pt": 5.0
+   },
+   "volume": 111.2949633704902,
+   "density": 16.655791245196284,
+   "material_id": "mp-aaaaabnx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -8.74505382,
+   "formation_energy_per_atom": -0.12408862500000122,
+   "nsites": 6,
+   "composition": {
+    "Mg": 2.0,
+    "Cu": 4.0
+   },
+   "volume": 84.37330902132675,
+   "density": 5.959245556049852,
+   "material_id": "mp-aaaaabny"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -0.9725754371428569,
+   "formation_energy_per_atom": -0.011099255535712211,
+   "nsites": 28,
+   "composition": {
+    "Rb": 2.0,
+    "Cd": 26.0
+   },
+   "volume": 671.4261437977223,
+   "density": 7.6509971777363885,
+   "material_id": "mp-aaaaaboa"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -27.81785230375,
+   "formation_energy_per_atom": -0.8552623112500015,
+   "nsites": 8,
+   "composition": {
+    "Hf": 4.0,
+    "Si": 4.0
+   },
+   "volume": 135.0734256466118,
+   "density": 10.158228734914383,
+   "material_id": "mp-aaaaaboc"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -10.112259965,
+   "formation_energy_per_atom": -0.6605818274999979,
+   "nsites": 4,
+   "composition": {
+    "U": 1.0,
+    "Ir": 3.0
+   },
+   "volume": 65.65502583228033,
+   "density": 20.604786946167035,
+   "material_id": "mp-aaaaaboe"
+  },
+  {
+   "band_gap": 3.708,
+   "energy_per_atom": -8.657582917499997,
+   "formation_energy_per_atom": -3.781547341499998,
+   "nsites": 40,
+   "composition": {
+    "Nd": 16.0,
+    "O": 24.0
+   },
+   "volume": 689.0489404160858,
+   "density": 6.48710773732564,
+   "material_id": "mp-aaaaabof"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -24.859304491666666,
+   "formation_energy_per_atom": -0.11715708833333356,
+   "nsites": 12,
+   "composition": {
+    "Nb": 4.0,
+    "Sn": 8.0
+   },
+   "volume": 271.8116328862548,
+   "density": 8.072058633553088,
+   "material_id": "mp-aaaaabog"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.233669375,
+   "formation_energy_per_atom": -0.3958550266666663,
+   "nsites": 4,
+   "composition": {
+    "Ti": 2.0,
+    "Ni": 2.0
+   },
+   "volume": 53.41171910495046,
+   "density": 6.62580086786019,
+   "material_id": "mp-aaaaaboi"
+  },
+  {
+   "band_gap": 0.018100000000000005,
+   "energy_per_atom": -16.194839610833334,
+   "formation_energy_per_atom": -1.2682435820833362,
+   "nsites": 12,
+   "composition": {
+    "Sr": 6.0,
+    "As": 6.0
+   },
+   "volume": 373.04960044513166,
+   "density": 4.3410851018637935,
+   "material_id": "mp-aaaaaboj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.499950077142857,
+   "formation_energy_per_atom": -0.6585213785714268,
+   "nsites": 14,
+   "composition": {
+    "Ni": 6.0,
+    "S": 8.0
+   },
+   "volume": 206.8054233418708,
+   "density": 4.887384326546402,
+   "material_id": "mp-aaaaabok"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.913488341666668,
+   "formation_energy_per_atom": -0.4364561291666682,
+   "nsites": 12,
+   "composition": {
+    "Er": 3.0,
+    "Ni": 9.0
+   },
+   "volume": 165.2912233444948,
+   "density": 10.347702871739793,
+   "material_id": "mp-aaaaabol"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -35.31671809666667,
+   "formation_energy_per_atom": -0.4053511399999981,
+   "nsites": 6,
+   "composition": {
+    "Na": 2.0,
+    "Au": 4.0
+   },
+   "volume": 120.57542777793867,
+   "density": 11.483546673227258,
+   "material_id": "mp-aaaaabom"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.328680079999998,
+   "formation_energy_per_atom": -0.31473455874999745,
+   "nsites": 2,
+   "composition": {
+    "Nd": 1.0,
+    "Zn": 1.0
+   },
+   "volume": 49.46180644034957,
+   "density": 7.038434327262035,
+   "material_id": "mp-aaaaabon"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.772665025,
+   "formation_energy_per_atom": -0.303069561666669,
+   "nsites": 4,
+   "composition": {
+    "Er": 2.0,
+    "Tl": 2.0
+   },
+   "volume": 104.38203543369954,
+   "density": 11.824382543397865,
+   "material_id": "mp-aaaaaboo"
+  },
+  {
+   "band_gap": 3.9006,
+   "energy_per_atom": -8.80610312575,
+   "formation_energy_per_atom": -3.9821810734166667,
+   "nsites": 40,
+   "composition": {
+    "Tb": 16.0,
+    "O": 24.0
+   },
+   "volume": 606.4592869538722,
+   "density": 8.013812697274941,
+   "material_id": "mp-aaaaaboq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -9.47616249,
+   "formation_energy_per_atom": -0.6442166279999995,
+   "nsites": 5,
+   "composition": {
+    "Al": 3.0,
+    "Ni": 2.0
+   },
+   "volume": 67.43506090961826,
+   "density": 4.883766101605819,
+   "material_id": "mp-aaaaabor"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.163966105,
+   "formation_energy_per_atom": -0.29988729374999856,
+   "nsites": 2,
+   "composition": {
+    "Nd": 1.0,
+    "Cd": 1.0
+   },
+   "volume": 56.82716838225028,
+   "density": 7.49962290552279,
+   "material_id": "mp-aaaaabot"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.663636326666672,
+   "formation_energy_per_atom": -1.0177236272222256,
+   "nsites": 6,
+   "composition": {
+    "Pr": 2.0,
+    "Pt": 4.0
+   },
+   "volume": 118.22006058547582,
+   "density": 14.919157730247818,
+   "material_id": "mp-aaaaabov"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -29.25578373,
+   "formation_energy_per_atom": -1.530235762500002,
+   "nsites": 2,
+   "composition": {
+    "La": 1.0,
+    "Sb": 1.0
+   },
+   "volume": 70.65190105448532,
+   "density": 6.126447985024389,
+   "material_id": "mp-aaaaaboz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -4.76788116,
+   "formation_energy_per_atom": -0.20847878833333322,
+   "nsites": 4,
+   "composition": {
+    "Li": 2.0,
+    "Al": 2.0
+   },
+   "volume": 63.31241035359482,
+   "density": 1.7794205069006157,
+   "material_id": "mp-aaaaabpb"
+  },
+  {
+   "band_gap": 0.5589,
+   "energy_per_atom": -3.065567027500002,
+   "formation_energy_per_atom": -0.8376061936718759,
+   "nsites": 4,
+   "composition": {
+    "Cd": 2.0,
+    "Se": 2.0
+   },
+   "volume": 115.97478237665474,
+   "density": 5.480140003647152,
+   "material_id": "mp-aaaaabpe"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -1.8183465450000007,
+   "formation_energy_per_atom": -0.33554150999999965,
+   "nsites": 2,
+   "composition": {
+    "Ca": 1.0,
+    "Cd": 1.0
+   },
+   "volume": 55.2741350113933,
+   "density": 4.581056619490264,
+   "material_id": "mp-aaaaabph"
+  },
+  {
+   "band_gap": 1.3487999999999998,
+   "energy_per_atom": -3.2085393756249996,
+   "formation_energy_per_atom": -0.0056133243749996176,
+   "nsites": 64,
+   "composition": {
+    "Rb": 32.0,
+    "Si": 32.0
+   },
+   "volume": 2247.7077668818056,
+   "density": 2.684472689314099,
+   "material_id": "mp-aaaaabpi"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.901758661666666,
+   "formation_energy_per_atom": -0.2985470724999999,
+   "nsites": 6,
+   "composition": {
+    "Sm": 1.0,
+    "Ni": 5.0
+   },
+   "volume": 80.96129866285959,
+   "density": 9.103016941595161,
+   "material_id": "mp-aaaaabpj"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.236950171428572,
+   "formation_energy_per_atom": -0.08032315410714322,
+   "nsites": 7,
+   "composition": {
+    "K": 1.0,
+    "B": 6.0
+   },
+   "volume": 74.74561388982117,
+   "density": 2.30965769011403,
+   "material_id": "mp-aaaaabpk"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -13.680752830000001,
+   "formation_energy_per_atom": -0.3083382666666689,
+   "nsites": 6,
+   "composition": {
+    "B": 4.0,
+    "Ru": 2.0
+   },
+   "volume": 53.876750875671036,
+   "density": 7.562997253270985,
+   "material_id": "mp-aaaaabpl"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -7.614397454285708,
+   "formation_energy_per_atom": -1.3570675885714212,
+   "nsites": 7,
+   "composition": {
+    "V": 3.0,
+    "S": 4.0
+   },
+   "volume": 109.40678090429881,
+   "density": 4.266205349064466,
+   "material_id": "mp-aaaaabpp"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -33.153207943333335,
+   "formation_energy_per_atom": -0.5809013012499994,
+   "nsites": 3,
+   "composition": {
+    "Np": 1.0,
+    "B": 2.0
+   },
+   "volume": 34.73219998222324,
+   "density": 12.364662627245949,
+   "material_id": "mp-aaaaabpr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -29.928994555,
+   "formation_energy_per_atom": -0.6594606036666661,
+   "nsites": 2,
+   "composition": {
+    "Ta": 1.0,
+    "C": 1.0
+   },
+   "volume": 22.295634443676896,
+   "density": 14.37121072211497,
+   "material_id": "mp-aaaaabpu"
+  },
+  {
+   "band_gap": 2.4968000000000004,
+   "energy_per_atom": -14.01483945,
+   "formation_energy_per_atom": -2.4249903014062504,
+   "nsites": 2,
+   "composition": {
+    "Sr": 1.0,
+    "S": 1.0
+   },
+   "volume": 55.30731406084619,
+   "density": 3.593405715653541,
+   "material_id": "mp-aaaaabpv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -9.335620634999998,
+   "formation_energy_per_atom": -0.7329219958333315,
+   "nsites": 4,
+   "composition": {
+    "Ti": 1.0,
+    "Ir": 3.0
+   },
+   "volume": 57.40889299638269,
+   "density": 18.064039979121763,
+   "material_id": "mp-aaaaabpx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -3.90215849214286,
+   "formation_energy_per_atom": -0.42189018714285964,
+   "nsites": 56,
+   "composition": {
+    "Sm": 8.0,
+    "Au": 48.0
+   },
+   "volume": 1082.834766788607,
+   "density": 16.343049342880384,
+   "material_id": "mp-aaaaabpz"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -41.69768095,
+   "formation_energy_per_atom": -0.5731057312500027,
+   "nsites": 2,
+   "composition": {
+    "Ho": 1.0,
+    "Hg": 1.0
+   },
+   "volume": 49.6800565510513,
+   "density": 12.2173929335291,
+   "material_id": "mp-aaaaabqa"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -44.588055385,
+   "formation_energy_per_atom": -0.9144355199999907,
+   "nsites": 2,
+   "composition": {
+    "Th": 1.0,
+    "Ge": 1.0
+   },
+   "volume": 56.52797605790869,
+   "density": 8.950078480688296,
+   "material_id": "mp-aaaaabqb"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -21.679100745,
+   "formation_energy_per_atom": -2.2417677514062504,
+   "nsites": 2,
+   "composition": {
+    "Ce": 1.0,
+    "S": 1.0
+   },
+   "volume": 45.890565097968484,
+   "density": 6.230328103725432,
+   "material_id": "mp-aaaaabqe"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -28.83291462,
+   "formation_energy_per_atom": -0.8638211649166685,
+   "nsites": 4,
+   "composition": {
+    "Ta": 2.0,
+    "B": 2.0
+   },
+   "volume": 45.03501537912535,
+   "density": 14.141134820170953,
+   "material_id": "mp-aaaaabqf"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -13.1925999,
+   "formation_energy_per_atom": -0.26575252999999854,
+   "nsites": 8,
+   "composition": {
+    "Ni": 4.0,
+    "Ge": 4.0
+   },
+   "volume": 106.13642059004104,
+   "density": 8.219016263850188,
+   "material_id": "mp-aaaaabqh"
+  },
+  {
+   "band_gap": 1.0375,
+   "energy_per_atom": -19.184964166666667,
+   "formation_energy_per_atom": -0.37701444500000036,
+   "nsites": 3,
+   "composition": {
+    "Yb": 1.0,
+    "C": 2.0
+   },
+   "volume": 38.54972148581464,
+   "density": 8.488469982759371,
+   "material_id": "mp-aaaaabqi"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -26.689826365,
+   "formation_energy_per_atom": -1.7755367262499995,
+   "nsites": 2,
+   "composition": {
+    "Tm": 1.0,
+    "As": 1.0
+   },
+   "volume": 46.93508961852644,
+   "density": 8.627491775967455,
+   "material_id": "mp-aaaaabqj"
+  },
+  {
+   "band_gap": 0.23309999999999986,
+   "energy_per_atom": -25.82002131,
+   "formation_energy_per_atom": -2.2157058827083347,
+   "nsites": 2,
+   "composition": {
+    "Lu": 1.0,
+    "N": 1.0
+   },
+   "volume": 26.354606210014218,
+   "density": 11.906769137348382,
+   "material_id": "mp-aaaaabqk"
+  },
+  {
+   "band_gap": 2.2352,
+   "energy_per_atom": -6.108491646666668,
+   "formation_energy_per_atom": -2.1701926633333346,
+   "nsites": 3,
+   "composition": {
+    "Ba": 1.0,
+    "O": 2.0
+   },
+   "volume": 50.806471622351985,
+   "density": 5.534178959840111,
+   "material_id": "mp-aaaaabqn"
+  },
+  {
+   "band_gap": 0.3433999999999999,
+   "energy_per_atom": -13.454768614999999,
+   "formation_energy_per_atom": -0.4330730366666676,
+   "nsites": 12,
+   "composition": {
+    "Sr": 8.0,
+    "Si": 4.0
+   },
+   "volume": 400.7831001280795,
+   "density": 3.3697023287638217,
+   "material_id": "mp-aaaaabqo"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -59.2890794725,
+   "formation_energy_per_atom": -0.6155273784999963,
+   "nsites": 20,
+   "composition": {
+    "Th": 14.0,
+    "Rh": 6.0
+   },
+   "volume": 547.403091449115,
+   "density": 11.727349400668976,
+   "material_id": "mp-aaaaabqp"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -21.757446299999998,
+   "formation_energy_per_atom": -0.6625992641111106,
+   "nsites": 3,
+   "composition": {
+    "Ta": 1.0,
+    "B": 2.0
+   },
+   "volume": 27.406671714876058,
+   "density": 12.273478641474552,
+   "material_id": "mp-aaaaabqq"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -10.020813629285714,
+   "formation_energy_per_atom": -0.2838714635714276,
+   "nsites": 14,
+   "composition": {
+    "Sr": 5.0,
+    "Al": 9.0
+   },
+   "volume": 352.3971577842533,
+   "density": 3.208644655556398,
+   "material_id": "mp-aaaaabqr"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.929454580625,
+   "formation_energy_per_atom": -0.4622086853017251,
+   "nsites": 16,
+   "composition": {
+    "Mn": 10.0,
+    "Si": 6.0
+   },
+   "volume": 202.23712316563683,
+   "density": 5.894516804762977,
+   "material_id": "mp-aaaaabqt"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -6.968789153333333,
+   "formation_energy_per_atom": -0.23419471666666544,
+   "nsites": 6,
+   "composition": {
+    "Ce": 2.0,
+    "Co": 4.0
+   },
+   "volume": 85.59964569676278,
+   "density": 10.009149785641162,
+   "material_id": "mp-aaaaabqu"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -36.939664115,
+   "formation_energy_per_atom": -0.24568312916666457,
+   "nsites": 6,
+   "composition": {
+    "B": 2.0,
+    "W": 4.0
+   },
+   "volume": 73.85531153337861,
+   "density": 17.01973980437553,
+   "material_id": "mp-aaaaabqv"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -12.40732963,
+   "formation_energy_per_atom": -0.8615036089880945,
+   "nsites": 4,
+   "composition": {
+    "V": 2.0,
+    "P": 2.0
+   },
+   "volume": 53.22871920488173,
+   "density": 5.110906101957938,
+   "material_id": "mp-aaaaabqw"
+  },
+  {
+   "band_gap": 0.6107,
+   "energy_per_atom": -27.16752858,
+   "formation_energy_per_atom": -0.4639161260416671,
+   "nsites": 3,
+   "composition": {
+    "Pt": 1.0,
+    "Se": 2.0
+   },
+   "volume": 69.64917003734249,
+   "density": 8.416136662802387,
+   "material_id": "mp-aaaaabqx"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -5.3642454684210525,
+   "formation_energy_per_atom": -0.03953583236842094,
+   "nsites": 38,
+   "composition": {
+    "Sr": 4.0,
+    "Mg": 34.0
+   },
+   "volume": 974.3541970627707,
+   "density": 2.0056416949293503,
+   "material_id": "mp-aaaaabqy"
+  },
+  {
+   "band_gap": 0.0,
+   "energy_per_atom": -11.4363607225,
+   "formation_energy_per_atom": -0.523961084166667,
+   "nsites": 12,
+   "composition": {
+    "Si": 4.0,
+    "Ni": 8.0
+   },
+   "volume": 127.59978623566468,
+   "density": 7.572502892740211,
+   "material_id": "mp-aaaaabra"
+  }
+ ]
+}
