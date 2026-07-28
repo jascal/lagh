@@ -1,0 +1,7 @@
+{
+ "source_repo": "ulissigroup/uncertainty_benchmarking",
+ "source_file": "preprocessing/pull_data/catalysis-hub/cathub.pkl",
+ "source_sha256": "861a45696c328bb5c03e4e45c824d4c5f3022bbb3ecad17d4fa30b6c88426bcc",
+ "n_rows": 30420,
+ "underlying": "Catalysis-Hub MamunHighT2019 (CC-BY, Mamun et al. Sci Data 6:76, 2019)"
+}
