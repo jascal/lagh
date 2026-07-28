@@ -341,6 +341,40 @@ def reduce_to_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
     return e
 
 
+ARBITRATION_MARGIN_LOG10 = 30.0
+
+
+def arbitrate_significance(classes: list, y: np.ndarray, eps: np.ndarray,
+                           n_hypotheses: int):
+    """Significance arbitration at the Müntz boundary (MUNTZ_ARBITRATION.md,
+    registered). Rival classes all certify — they agree everywhere the
+    certificate's domain claim applies — and their per-representative
+    chance-fit bounds differ by q^(dof gap). If exactly one class's bound is
+    at least MARGIN orders of magnitude smaller than EVERY rival's, the
+    rivals are, in the program's own accounting, overwhelmingly artifacts of
+    their richer families: return (winning class, note). Otherwise None —
+    the structural abstain stands.
+    """
+    if len(classes) < 2:
+        return None
+    scored = []
+    for cl in classes:
+        rep = min(cl[1], key=lambda z: z.complexity)
+        a = significance_log10(rep.expr, y, eps, n_hypotheses)
+        scored.append((a, cl))
+    scored.sort(key=lambda t: t[0])
+    best, second = scored[0][0], scored[1][0]
+    if second - best < ARBITRATION_MARGIN_LOG10:
+        return None
+    note = (f"significance arbitration: {len(classes)} rival classes "
+            f"certify; winner alpha <= 1e{best:.0f} vs nearest rival "
+            f"1e{second:.0f} (margin {second - best:.0f} >= "
+            f"{ARBITRATION_MARGIN_LOG10:.0f} orders) -- rivals are "
+            "approximant-class artifacts at this margin; the certificate "
+            "remains a domain claim")
+    return scored[0][1], note
+
+
 def refit_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
                   eps: np.ndarray):
     """Refit-based parsimony collapse (the loose-floor lesson, Gaia C0): a

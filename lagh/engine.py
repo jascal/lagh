@@ -16,9 +16,10 @@ import sympy as sp
 
 from .base import (Candidate, admissible, design_matrix, lstsq, snap_all,
                    to_expr, eval_expr)
-from .certify import (MACHINE_REL, Abstain, Certificate, check, coherent,
-                      epsilon, float_pinned, input_constraints, minimal,
-                      pinned, reduce_mod_constraints, reduce_to_minimal,
+from .certify import (MACHINE_REL, Abstain, Certificate,
+                      arbitrate_significance, check, coherent, epsilon,
+                      float_pinned, input_constraints, minimal, pinned,
+                      reduce_mod_constraints, reduce_to_minimal,
                       refit_minimal, sample_box, significance_log10, vacuous)
 from .classes import CURRICULUM, c5_transforms, c6_quasipoly, c7_levy
 from .engine_util import stlsq_supports
@@ -518,6 +519,15 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                         + " (machine-exact); rivals coincide on the "
                         "constraint variety and the representative is "
                         "canonicalized modulo it")
+        arb_note = None
+        if len(classes) > 1:
+            # MUNTZ_ARBITRATION.md (registered): the program's own alpha
+            # currency arbitrates when one class's chance-fit bound beats
+            # every rival's by >= 30 orders of magnitude
+            arb = arbitrate_significance(classes, y_cert, eps, total)
+            if arb is not None:
+                classes = [arb[0]]
+                arb_note = arb[1]
         if len(classes) == 1:
             winner = min(classes[0][1], key=lambda z: z.complexity)
             if constraint_note:
@@ -561,6 +571,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                n_hypotheses=total)
             if constraint_note:
                 cert.notes.append(constraint_note)
+            if arb_note:
+                cert.notes.append(arb_note)
             cert = _significance_gate(cert)
             return Result(cert, winner.expr if cert.certified else None,
                           tier, total)
