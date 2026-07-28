@@ -137,10 +137,12 @@ cells, certificates only where the pipeline defines the column)
 | `parallax_over_error = C·parallax/parallax_error`, C = 1 to ~10⁻⁸ | ratio triple | 10⁻⁶²¹ | σ_rep = 3×10⁻⁸ declared (two float32 roundings compose) |
 | `flux_over_error_G = C·flux_G/flux_error_G`, C = 1 to 5×10⁻¹⁰ | ratio triple | 10⁻⁵⁵⁰ | same declaration |
 
-What did NOT certify, correctly: the IAU galactic-frame rotation row — a
-structural abstain that decodes into the unit-sphere constraint on the
-direction-cosine inputs (every rival class equals the IAU row modulo the
-constraint; registered open issue: constrained-input coherence); all
+| `sin b = 0.4559838·x₀ − 0.8676661·x₁ − 0.1980764·x₂` (the IAU galactic rotation row) | direction cosines (sin δ, cos δ cos α, cos δ sin α) | 10⁻⁷⁶⁸⁰ | certified after the constrained-input coherence closure (2026-07-28): domain-restricted to the unit-sphere variety the inputs satisfy, named in the certificate; the program's strongest bound |
+
+What did NOT certify at the time of the phase run (upgraded above after
+the closure): the IAU galactic-frame rotation row — a structural abstain
+that decoded into the unit-sphere constraint on the direction-cosine
+inputs (then a registered open issue, since closed); all
 kinematics (Oort A = 15.8 in band, B = −14.9 an honest band miss, both
 conjectures); 131 of 134 open-sweep cells (heavy abstention as designed).
 The phase also converted a caught vacuous certificate (a 35-term

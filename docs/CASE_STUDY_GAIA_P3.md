@@ -95,11 +95,20 @@ changed):**
   the coherence probe's box. The instrument correctly refused to pick among
   forms the data cannot distinguish. The scout coefficients match the IAU
   values (sin δ_G, cos δ_G cos α_G, cos δ_G sin α_G) to 7×10⁻¹⁶.
-  **Registered instrument issue (open): constrained-input coherence** — the
-  probe box leaves the data manifold, so identities on constrained features
-  can never certify; a manifold-aware probe (or constraint-quotient
-  coherence) is future work, to be closed with the same discipline as the
-  loose-ε and CAP-T closures.
+  **Registered instrument issue: constrained-input coherence — CLOSED
+  2026-07-28.** The closure (`certify.input_constraints` /
+  `reduce_mod_constraints`, engine manifold-coherence branch): machine-exact
+  polynomial constraints on the inputs are detected by SVD null-space
+  (tolerance 10⁻¹⁰ relative — the sphere triggers; the RRab ρ=0.6
+  statistical ridge provably does not); on multi-class ambiguity with a
+  detected constraint, coherence re-runs with the DATA as the probe; a
+  single on-manifold class certifies, with the winner canonicalized modulo
+  the constraint ideal and the certificate carrying a domain-restriction
+  note naming the constraint. Validated: suite 76 passed (4 new
+  constrained-coherence tests); on this frozen snapshot P1 now
+  **CERTIFIES**: `sin b = 0.4559838·x₀ − 0.8676661·x₁ − 0.1980764·x₂` —
+  the IAU galactic rotation row to full precision — at **α ≤ 10⁻⁷⁶⁸⁰**,
+  the program's strongest bound.
 - **P2 half-MET.** Per-star recovery structurally abstains (as registered);
   the binned 12-point fit is where the phase's most important event
   happened: on the FIRST run it "certified" a 35-term interpolation whose

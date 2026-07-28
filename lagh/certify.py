@@ -398,6 +398,65 @@ def refit_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
     return expr
 
 
+def input_constraints(X: np.ndarray, syms, tol_rel: float = 1e-10,
+                      max_constraints: int = 2) -> list:
+    """Detect MACHINE-EXACT low-degree polynomial constraints the input data
+    satisfies (the constrained-input coherence closure, CASE_STUDY_GAIA_P3.md):
+    an SVD null direction of the quadratic feature matrix with singular value
+    <= tol_rel * sigma_max is a constraint g(x) = 0 holding on the data
+    manifold. Machine tolerance ONLY: statistical correlations (e.g. the RRab
+    P-phi31 ridge at rho 0.6) must never trigger. Returns sympy exprs with
+    rationalized coefficients."""
+    n, d = X.shape
+    if n < 3 * (1 + d + d * (d + 1) // 2):
+        return []
+    feats = [np.ones(n)]
+    terms = [sp.S.One]
+    for i in range(d):
+        feats.append(X[:, i])
+        terms.append(syms[i])
+    for i in range(d):
+        for j in range(i, d):
+            feats.append(X[:, i] * X[:, j])
+            terms.append(syms[i] * syms[j])
+    M = np.column_stack(feats)
+    scale = np.sqrt(np.mean(M ** 2, axis=0))
+    scale[scale == 0] = 1.0
+    _, s, vt = np.linalg.svd(M / scale, full_matrices=False)
+    out = []
+    from fractions import Fraction
+    for k in range(len(s) - 1, -1, -1):
+        if s[k] > tol_rel * s[0] or len(out) >= max_constraints:
+            break
+        coef = vt[k] / scale
+        coef = coef / np.max(np.abs(coef))
+        expr = sp.S.Zero
+        for c, t in zip(coef, terms):
+            if abs(c) < 1e-9:
+                continue
+            fr = Fraction(float(c)).limit_denominator(10 ** 6)
+            if abs(float(fr) - float(c)) > 1e-9 * max(1.0, abs(float(c))):
+                expr = None
+                break
+            expr = expr + sp.Rational(fr.numerator, fr.denominator) * t
+        if expr is not None and expr != 0:
+            out.append(sp.expand(expr))
+    return out
+
+
+def reduce_mod_constraints(expr, syms, constraints: list):
+    """Canonical form of a POLYNOMIAL expr modulo the constraint ideal
+    (sympy.reduced remainder). Non-polynomial exprs are returned unchanged."""
+    try:
+        if not expr.is_polynomial(*syms):
+            return expr
+        _, r = sp.reduced(sp.expand(expr), [sp.expand(g) for g in constraints],
+                          *syms)
+        return sp.expand(r)
+    except Exception:                                          # noqa: BLE001
+        return expr
+
+
 def coherent(certifying: list, syms, P: np.ndarray, yscale: float,
              tau: float = TAU) -> list:
     """Greedy tau-clustering of certifying laws into functional equivalence classes.

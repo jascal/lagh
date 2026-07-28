@@ -17,9 +17,9 @@ import sympy as sp
 from .base import (Candidate, admissible, design_matrix, lstsq, snap_all,
                    to_expr, eval_expr)
 from .certify import (MACHINE_REL, Abstain, Certificate, check, coherent,
-                      epsilon, float_pinned, minimal, pinned,
-                      reduce_to_minimal, refit_minimal, sample_box,
-                      significance_log10, vacuous)
+                      epsilon, float_pinned, input_constraints, minimal,
+                      pinned, reduce_mod_constraints, reduce_to_minimal,
+                      refit_minimal, sample_box, significance_log10, vacuous)
 from .classes import CURRICULUM, c5_transforms, c6_quasipoly, c7_levy
 from .engine_util import stlsq_supports
 
@@ -496,8 +496,38 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
         if not certifying:
             continue                              # escalate: reach, not ambiguity
         classes = coherent(certifying, syms, P, yscale)
+        constraint_note = None
+        constraints = []
+        if len(classes) > 1:
+            # CONSTRAINED-INPUT COHERENCE (closure of the GAIA_P3 registered
+            # issue): when the inputs satisfy machine-exact polynomial
+            # constraints, the probe box leaves the data manifold and rivals
+            # differing only by multiples of the constraint LOOK materially
+            # different while being identical everywhere the certificate's
+            # domain claim applies. Detect the constraint; re-run coherence
+            # with the DATA as the probe; a single on-manifold class is a
+            # verdict, with the winner canonicalized modulo the constraint.
+            constraints = input_constraints(X_all_m, syms)
+            if constraints:
+                mclasses = coherent(certifying, syms, X_all_m, yscale)
+                if len(mclasses) == 1:
+                    classes = mclasses
+                    constraint_note = (
+                        "domain-restricted certificate: inputs satisfy "
+                        + "; ".join(f"{sp.sstr(g)} = 0" for g in constraints)
+                        + " (machine-exact); rivals coincide on the "
+                        "constraint variety and the representative is "
+                        "canonicalized modulo it")
         if len(classes) == 1:
             winner = min(classes[0][1], key=lambda z: z.complexity)
+            if constraint_note:
+                red = reduce_mod_constraints(winner.expr, syms, constraints)
+                if red != 0 and check(red, syms, X_cert, y_cert,
+                                      eps)["certified"]:
+                    # the ideal reduction leaves float dust (~1e-14 residue
+                    # terms); the minimality repair sweeps them
+                    winner.expr = reduce_to_minimal(red, syms, X_all_m,
+                                                    y_all_m, eps_all)
             # parametric-uncertainty gate: under declared noise, abstain if the winner's
             # exact rational params are not pinned (a neighbour-rational within the noise
             # band also certifies). No-op on clean data -- preserves the deterministic
@@ -529,6 +559,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                alpha_log10=significance_log10(
                                    winner.expr, y_cert, eps, total),
                                n_hypotheses=total)
+            if constraint_note:
+                cert.notes.append(constraint_note)
             cert = _significance_gate(cert)
             return Result(cert, winner.expr if cert.certified else None,
                           tier, total)

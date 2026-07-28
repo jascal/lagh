@@ -69,12 +69,11 @@ speculative. The ledger, in the order the field taught it:
 | a 35-term interpolation of 12 binned points "certified" while its own α bound said 1 | **significance is part of certification**: α ≤ 10⁻⁶ or the certificate demotes to an abstain |
 | a certified-looking result at an amended floor was split luck — one re-split dissolved a genuine 3-class ambiguity | structural ambiguity is sticky across re-splits |
 | a constant over 4 overflow-artifact points was the program's only confident-wrong | the minimum-domain guard (evidence floors under \|H\|·q^h) |
+| the IAU frame rotation abstained: rival classes equal the true law modulo the unit-sphere constraint the inputs satisfy — the probe box asked an off-manifold question the domain claim never made | constrained-input coherence: machine-exact constraint detection (SVD null-space, 10⁻¹⁰ tolerance), manifold-probe coherence, and winner canonicalization modulo the constraint ideal — the frame rotation now certifies at α ≤ 10⁻⁷⁶⁸⁰ with the constraint named in the certificate |
 
-Two registered open issues, honestly held: constrained-input coherence (the
-IAU frame rotation cannot certify while the probe box leaves the data
-manifold — every rival class equals the true law modulo the constraint) and
-the approximant-impostor boundary under declared noise (dense channels are
-empirical-only by design).
+One registered open boundary, honestly held: the approximant-impostor class
+under declared noise (dense channels are empirical-only by design —
+|H|·q^h accounting is the eventual road through).
 
 ## Error-model repertoire (hard-won, both directions)
 
