@@ -1,0 +1,38 @@
+{
+ "snapshot": "/home/allans/code/lagh/experiments/exoplanet/data/c1_d2e83168c0d1.csv",
+ "P1_giant_metallicity": {
+  "n_giant": 750,
+  "n_small": 411,
+  "delta_feh_dex": 0.12430646034063259,
+  "ci95": [
+   0.10204812644768857,
+   0.1465383366909975
+  ]
+ },
+ "P2_valley_vs_mstar": {
+  "n_bins": 4,
+  "dlogRv_dlogMstar": -0.44350531189076864,
+  "valley_re_per_bin": [
+   1.8823733303793808,
+   1.7068699467220911,
+   1.4034268239452394,
+   1.4034268239452394
+  ],
+  "edge_pinned": false
+ },
+ "P3_volatile_slope_by_met": {
+  "low_z": {
+   "n": 122,
+   "slope": 1.1427273705278118,
+   "recover_certified": false,
+   "recover_abstain": "structural"
+  },
+  "high_z": {
+   "n": 144,
+   "slope": 1.2964299629720182,
+   "recover_certified": false,
+   "recover_abstain": "structural"
+  }
+ },
+ "P3_abs_delta_slope": 0.15370259244420637
+}
