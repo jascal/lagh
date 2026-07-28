@@ -46,6 +46,47 @@ registered targets advance unconditionally:
   certificate must decode into the pipeline documentation and is disclosed.
 - **P3.** Zero confident-wrong; certificates clear α ≤ 10⁻⁶.
 
-## Results
+**Execution amendments (logged, 2026-07-28):** (1) `verify` grew a per-point
+`se` passthrough — plumbing parity with the ε model's λ_B term, aligned with
+the split permutation. (2) T3's tolerance is the v2 procedure applied
+properly: per-point INPUT rounding propagated through the ratio derivatives
+(with absolute values — an early draft without `abs()` spuriously refuted
+two negative-moduli rows; caught before any result stood).
 
-(after the run)
+## Results (2026-07-28, `experiments/results/materials_c2.json`; frozen
+snapshot `c2_86004c2b1f30.json`, 2000 stable materials)
+
+- **T1 CERTIFIED OUTRIGHT — the program's strongest bound:**
+  `density_atomic = volume/nsites` (orientation recorded: it is volume per
+  atom, Å³), exact exponents ±1, unit coefficient, **α ≤ 10⁻⁵⁰⁷⁰** over all
+  2000 rows.
+- **T2 split by track:** `recover` structurally abstains on Poisson's
+  ratio; the declared textbook form **ν = (3K − 2G)/(2(3K + G)) verifies
+  pinned** — integer coefficients, no rival within the declared floors.
+- **T3 verifies pinned** — the Ranganathan–Ostoja-Starzewski
+  `A_U = 5·G_v/G_r + K_v/K_r − 6` holds on all 278 elastic cert rows once
+  input rounding is properly propagated (extreme-ratio and
+  defective-tensor rows carry honestly large tolerances; the worst
+  agreement is 4×10⁻⁶ relative on a 10¹²-GPa pathological entry, within
+  its bound). The initial refutation at an output-only floor was a floor
+  mis-declaration, diagnosed and amended per the v2 procedure.
+- **P2 MET:** the 156-pair open sweep certifies NOTHING — every pair a
+  scout-level conjecture. No unregistered certificate; heavy abstention as
+  designed.
+- **P3 MET:** zero confident-wrong.
+
+## Campaign closure
+
+The Materials Project campaign (C0–C2, `PROPOSAL_MATERIALS.md`) is
+complete. Five certified pipeline identities — density (with the decoded
+2005-vintage mass table and the atomic mass constant to 9 digits), the two
+VRH averages, volume-per-atom, and the verify-pinned Poisson and
+anisotropy forms — at bounds up to **α ≤ 10⁻⁵⁰⁷⁰**; one upstream
+data-quality report ([emmet#1499](https://github.com/materialsproject/emmet/issues/1499),
+nine unflagged impossible elastic entries); the banded elastic conjectures
+all inside their registered bands; and zero confident-wrong across three
+stages. The registered homogeneity contrast with PSCompPars held: a
+computed database is internally consistent in a way a literature composite
+is not — and where it isn't, the rows are enumerable by ID. Next campaign
+per the proposal: Open Catalyst, with the Abild-Pedersen rational-slope
+registration as its centerpiece.

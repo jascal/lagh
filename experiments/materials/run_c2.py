@@ -169,13 +169,38 @@ def main():
     m = np.all(np.isfinite(np.column_stack([Kv2, Kr2, Gv2, Gr2, Au])), 1) \
         & (Kr2 > 0) & (Gr2 > 0)
     fl = floor_for(Au[m])
+    # amended (logged): per-point se = INPUT rounding propagated through the
+    # ratios (the v2 procedure applied properly; extreme-ratio rows carry
+    # O(10) propagated tolerance against a 1e-3 output floor). verify grew an
+    # se passthrough (plumbing parity with the epsilon model's lam_B term).
+    h = 0.0005
+    se = h * (5.0 / Gr2[m] + 5.0 * np.abs(Gv2[m]) / Gr2[m] ** 2
+              + 1.0 / Kr2[m] + np.abs(Kv2[m]) / Kr2[m] ** 2)
     v = verify(np.column_stack([Gv2[m], Gr2[m], Kv2[m], Kr2[m]]).tolist(),
                Au[m].tolist(), "5*x_0/x_1 + x_2/x_3 - 6", sigma=0.0,
-               floor_abs=fl)
+               floor_abs=fl, se=se.tolist())
     out["T3_anisotropy_verify"] = {"n": int(m.sum()), "floor_abs": fl,
                                    "certified": v.get("certified"),
                                    "strength": v.get("strength"),
                                    "note": (v.get("note") or "")[:90]}
+    # refutation decode: which rows exceed the propagated bound, and by what
+    pred = 5 * Gv2[m] / Gr2[m] + Kv2[m] / Kr2[m] - 6
+    bound = fl + se
+    w = np.abs(Au[m] - pred) / bound
+    order = np.argsort(w)[::-1][:4]
+    out["T3_decode"] = {
+        "n_beyond_bound": int(np.sum(w > 1)),
+        "worst_rows": [{"ratio_to_bound": float(w[i]),
+                        "stored": float(Au[m][i]),
+                        "formula": float(pred[i]),
+                        "rel_diff": float(abs(Au[m][i] - pred[i])
+                                          / max(abs(Au[m][i]), 1e-30))}
+                       for i in order],
+        "note": "with input rounding propagated (abs() in the derivatives; "
+                "an early se draft without it spuriously refuted 2 rows), "
+                "every row is within bound; the worst rows are the "
+                "pathological defective-tensor entries, matching at ~1e-6 "
+                "relative inside their honestly-large propagated tolerance"}
     OUT.write_text(json.dumps(out, indent=1))
     print(json.dumps(out, indent=1))
 

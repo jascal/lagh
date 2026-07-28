@@ -1,0 +1,67 @@
+{
+ "snapshot": "/home/allans/code/lagh/experiments/materials/data/c2_86004c2b1f30.json",
+ "P2_census": {
+  "certified": 0,
+  "conjectured": 156,
+  "abstained": 0
+ },
+ "P2_certified_list": [],
+ "P2_details": [],
+ "T1_density_atomic": {
+  "n": 2000,
+  "certified": true,
+  "law": "x_1/x_0",
+  "alpha_log10": -5070.209966128217,
+  "abstain": null
+ },
+ "T2_poisson": {
+  "n": 1393,
+  "floor_abs": 0.001,
+  "certified": false,
+  "law": "",
+  "alpha_log10": null,
+  "abstain": "structural"
+ },
+ "T2_verify": {
+  "certified": true,
+  "strength": "pinned",
+  "note": "pinned: this exact form, no rival within the noise"
+ },
+ "T3_anisotropy_verify": {
+  "n": 1386,
+  "floor_abs": 0.001,
+  "certified": true,
+  "strength": "pinned",
+  "note": "pinned: this exact form, no rival within the noise"
+ },
+ "T3_decode": {
+  "n_beyond_bound": 0,
+  "worst_rows": [
+   {
+    "ratio_to_bound": 0.995863767127599,
+    "stored": -181719461991.677,
+    "formula": -181720182683.28662,
+    "rel_diff": 3.965957205245024e-06
+   },
+   {
+    "ratio_to_bound": 0.9578712519147184,
+    "stored": 19671.539,
+    "formula": 19671.611878407057,
+    "rel_diff": 3.7047638751662108e-06
+   },
+   {
+    "ratio_to_bound": 0.9443502400210092,
+    "stored": 40666917443.834,
+    "formula": 40667014997.38331,
+    "rel_diff": 2.3988429770589393e-06
+   },
+   {
+    "ratio_to_bound": 0.8951806133269069,
+    "stored": 7893834920.082,
+    "formula": 7893812664.862241,
+    "rel_diff": 2.819316591276809e-06
+   }
+  ],
+  "note": "with input rounding propagated (abs() in the derivatives; an early se draft without it spuriously refuted 2 rows), every row is within bound; the worst rows are the pathological defective-tensor entries, matching at ~1e-6 relative inside their honestly-large propagated tolerance"
+ }
+}

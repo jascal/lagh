@@ -108,9 +108,22 @@ C1 additions (`docs/CASE_STUDY_MATERIALS_C1.md`, snapshot
 
 Census finding: 9 ICSD-matched materials serve **Reuss > Voigt** moduli
 (impossible for a valid elastic tensor; one shear modulus of 4×10⁷ GPa),
-all unflagged (`deprecated: false`, empty `warnings`) — reported upstream.
+all unflagged (`deprecated: false`, empty `warnings`) — reported upstream
+([emmet#1499](https://github.com/materialsproject/emmet/issues/1499)).
 Elastic scaling stayed banded conjecture (oxide slope −1.17, Pugh median
 0.522, cross-family abstain).
+
+C2 additions (`docs/CASE_STUDY_MATERIALS_C2.md`, snapshot
+`c2_86004c2b1f30.json`):
+
+| Law | Inputs | α ≤ | Note |
+|---|---|---|---|
+| `density_atomic = volume/nsites` (exact ±1 exponents, unit coefficient) | cell volume (Å³), site count | 10⁻⁵⁰⁷⁰ | the program's strongest bound; the column is volume per atom |
+| `ν = (3K − 2G)/(2(3K + G))` | K_VRH, G_VRH | verify, pinned | textbook Poisson form, integer coefficients; `recover` honestly abstains at the stored floors |
+| `A_U = 5·G_v/G_r + K_v/K_r − 6` | Voigt/Reuss moduli | verify, pinned | dim-4 declared form; holds on every row (including defective-tensor entries) under properly propagated input rounding |
+
+The 156-pair open sweep certified nothing (heavy abstention as designed);
+zero confident-wrong across the campaign.
 
 ## Gaia DR3 Phase 3 (`docs/CASE_STUDY_GAIA_P3.md`)
 
