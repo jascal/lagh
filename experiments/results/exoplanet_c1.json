@@ -1,0 +1,46 @@
+{
+ "snapshot": "/home/allans/code/lagh/experiments/exoplanet/data/c1_d2e83168c0d1.csv",
+ "n_total": 5934,
+ "n_mass_radius_window": 1325,
+ "P1_rocky": {
+  "n": 94,
+  "slope": 1.6140586932420613,
+  "scatter_dex": 0.530889270573503,
+  "recover_certified": false,
+  "recover_abstain": "structural"
+ },
+ "P2_volatile": {
+  "n": 266,
+  "slope": 1.4240676766961142,
+  "scatter_dex": 0.3888335681679048,
+  "recover_certified": false,
+  "recover_abstain": "structural"
+ },
+ "P3_giant_plateau": {
+  "n": 750,
+  "slope_dlogR_dlogM": -0.006905201083176362,
+  "recover_certified": false,
+  "recover_abstain": "structural"
+ },
+ "P4_n_fulton_sample": 1647,
+ "P4_valley": {
+  "location_re": 1.8970989645293244,
+  "valley_count": 61,
+  "flank_maxima": [
+   76,
+   141
+  ],
+  "contrast": 1.2459016393442623
+ },
+ "P4_valley_period_slope": {
+  "n_bins": 5,
+  "dlogRv_dlogP": -0.1267039410785257,
+  "valley_re_per_bin": [
+   2.111864618295854,
+   1.8583217358374549,
+   1.4128483463690267,
+   1.4,
+   1.4
+  ]
+ }
+}

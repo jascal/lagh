@@ -1,0 +1,20 @@
+{
+ "adql": "\nSELECT pl_name, pl_rade, pl_radeerr1, pl_radeerr2,\n       pl_bmasse, pl_bmasseerr1, pl_bmasseerr2, pl_bmassprov,\n       pl_orbper, pl_dens, discoverymethod,\n       st_teff, st_mass, st_met\nFROM pscomppars\nWHERE pl_rade IS NOT NULL AND pl_orbper IS NOT NULL\n",
+ "n_rows": 5934,
+ "columns": [
+  "pl_name",
+  "pl_rade",
+  "pl_radeerr1",
+  "pl_radeerr2",
+  "pl_bmasse",
+  "pl_bmasseerr1",
+  "pl_bmasseerr2",
+  "pl_bmassprov",
+  "pl_orbper",
+  "pl_dens",
+  "discoverymethod",
+  "st_teff",
+  "st_mass",
+  "st_met"
+ ]
+}
