@@ -66,6 +66,24 @@ What did NOT certify, correctly: any cross-catalog Kepler law over the
 astrometric binaries (mass-dependent family — structural abstain); the
 Leavitt law (labeled conjecture, slope −2.21 mag/dex).
 
+## NASA Exoplanet Archive (`docs/CASE_STUDY_EXOPLANET_C0.md`)
+
+Reproduce: `.venv/bin/python experiments/exoplanet/run_c0.py`
+(snapshot `c0_0387e06ec923.csv`, 5843 planets; "Calculated Value" provenance
+stratum, 4320 planets; σ_rep = 1.06×10⁻² from composed 3-significant-digit
+column rounding)
+
+| Law | Inputs | α ≤ | Note |
+|---|---|---|---|
+| `ρ = 5.4961·M/R³` (exponents exactly 1, −3) | x_0 = M_⊕, x_1 = R_⊕ | 10⁻¹⁹¹⁸ | the Archive's computed-density formula, recovered blind on the provenance stratum; the constant decodes the Archive's ~6378 km Earth-radius convention (volumetric 6371 km would give 5.513). The literature stratum correctly abstains |
+
+What did NOT certify, correctly: literature densities (independent
+measurements, not a formula); the insolation identity (98.7% compose to
+10⁻² dex, a 1.3% patchwork tail breaks exhaustive certification — the
+composite-table analogue of the FLAME finding); the population mass–radius
+relation (conjecture, log-log slope 2.35). Registered-but-unfulfillable:
+Kepler III on calculated semi-major axes — PSCompPars has none.
+
 ## Gaia DR3 Phase 3 (`docs/CASE_STUDY_GAIA_P3.md`)
 
 Reproduce: `.venv/bin/python experiments/gaia/run_p3.py`

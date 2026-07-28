@@ -1,0 +1,23 @@
+{
+ "adql": "\nSELECT pl_name, pl_bmasse, pl_rade, pl_orbper, pl_orbsmax, pl_dens,\n       pl_insol, st_mass, st_rad, st_teff, st_lum, st_met, sy_pnum,\n       discoverymethod,\n       pl_dens_reflink, pl_orbsmax_reflink, pl_insol_reflink\nFROM pscomppars\nWHERE pl_bmasse IS NOT NULL AND pl_rade IS NOT NULL\n  AND pl_dens IS NOT NULL AND pl_orbper IS NOT NULL\n",
+ "n_rows": 5843,
+ "columns": [
+  "pl_name",
+  "pl_bmasse",
+  "pl_rade",
+  "pl_orbper",
+  "pl_orbsmax",
+  "pl_dens",
+  "pl_insol",
+  "st_mass",
+  "st_rad",
+  "st_teff",
+  "st_lum",
+  "st_met",
+  "sy_pnum",
+  "discoverymethod",
+  "pl_dens_reflink",
+  "pl_orbsmax_reflink",
+  "pl_insol_reflink"
+ ]
+}

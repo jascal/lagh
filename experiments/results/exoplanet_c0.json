@@ -1,0 +1,47 @@
+{
+ "snapshot": "/home/allans/code/lagh/experiments/exoplanet/data/c0_0387e06ec923.csv",
+ "n_total": 5843,
+ "P1_n_calculated": 4320,
+ "P1_density_calculated": {
+  "n": 4320,
+  "sigma_rep": 0.010558065249081722,
+  "certified": true,
+  "law": "5.4961030518444*x_0/x_1**3",
+  "alpha_log10": -1918.8313552403567,
+  "abstain": null
+ },
+ "P1_density_literature": {
+  "n": 1523,
+  "sigma_rep": 0.010558065249081722,
+  "certified": false,
+  "law": "",
+  "alpha_log10": null,
+  "abstain": "structural"
+ },
+ "P1_const_expected_volumetric_Rearth": 5.51295,
+ "P2_n_calculated": 0,
+ "P2_kepler_calculated": {
+  "n": 0,
+  "certified": false,
+  "abstain": "unfulfillable: no Calculated stratum exists for pl_orbsmax in PSCompPars"
+ },
+ "P3_n_calculated": 1208,
+ "P3_insol_calculated": {
+  "n": 1208,
+  "sigma_rep": 0.004834192362699836,
+  "certified": false,
+  "law": "",
+  "alpha_log10": null,
+  "abstain": "structural"
+ },
+ "P3_residual_decode": {
+  "median_dex": 1.2241598845719182e-08,
+  "mad_dex": 3.849133900474255e-06,
+  "frac_within_1e-2_dex": 0.9867549668874173
+ },
+ "P4_mass_radius": {
+  "track": "conjecture",
+  "tag": "empirical",
+  "expr": "2.34959979190998*x_0 - 0.00927152479471696"
+ }
+}

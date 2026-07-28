@@ -47,6 +47,45 @@ insolation.
   confident-wrong).
 - **P5.** Zero confident-wrong; every certificate carries α ≤ 10⁻⁶.
 
-## Results
+**Execution amendments (logged, 2026-07-27, after the first run — floor/
+error-model corrections; no prediction changed):** (1) the first run fed
+LOG-transformed columns to the storage-precision detector, whose constant
+column round-trips float32 and produced a nonsense 4×10⁻⁸ floor — the
+detector must see RAW columns. Archive columns are rounded to ~3 significant
+digits: RELATIVE precision, so the identities route through σ_rep in linear
+space and the power-law channel, whose rational exponents pin where float
+perturbation cannot (σ_rep composed from the per-column decimal half-steps).
+(2) P3 runs in linear space (L = 10^st_lum) for the same reason.
 
-(after the runs)
+## Results (2026-07-27, `experiments/results/exoplanet_c0.json`; frozen
+snapshot `c0_0387e06ec923.csv`, 5843 planets)
+
+- **P1 MET, both halves.** On the 4320-planet "Calculated Value" stratum:
+  **`ρ = 5.4961·M/R³` certified, α ≤ 10⁻¹⁹¹⁸** — the strongest bound in the
+  program's history — with the exact exponents 1 and −3. The constant
+  decodes: 5.496 is Earth's mean density under the ~6378 km (equatorial/IAU
+  nominal) Earth-radius convention, not the volumetric 6371 km (5.513) —
+  the certificate reveals which constants the Archive's pipeline uses. The
+  1523-planet literature complement **structurally abstains**, exactly as
+  registered: independently measured densities are not a formula.
+- **P2 UNFULFILLABLE — itself a catalogue finding.** Zero of 5843 rows carry
+  a "Calculated Value" reflink for `pl_orbsmax`: PSCompPars takes semi-major
+  axes from literature only, so the registered calculated-stratum Kepler
+  test has no domain. Recorded, not forced.
+- **P3 MISSED as a certificate; the abstain decodes (the FLAME pattern).**
+  The calculated-insolation stratum satisfies `S = L/a²` with median offset
+  10⁻⁸ dex and MAD 4×10⁻⁶ dex — but 1.3% of rows deviate beyond 10⁻² dex,
+  and exhaustive certification correctly refuses: the composite table's
+  per-column literature patchwork leaves a stratum whose inputs (st_lum, a)
+  are not the ones the insolation was computed from. Point estimates that
+  do not compose, third catalogue in a row.
+- **P4 MET:** the population mass–radius relation stays a labeled conjecture
+  (log-log slope 2.35); no certificate, as a multivalued relation demands.
+- **P5 MET:** zero confident-wrong; the one certificate clears the
+  significance gate by 1912 orders of magnitude.
+
+**The sentence this phase earns:** on first contact with the composite
+table, the instrument certified exactly the one column the Archive computes,
+read the Archive's Earth-radius convention out of the constant, refused the
+strata where the patchwork does not compose, and reported a registered
+prediction as unfulfillable rather than bending it.
