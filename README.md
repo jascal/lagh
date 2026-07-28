@@ -24,19 +24,32 @@ refusal saying why no law is certifiable. **Never a confident wrong answer.**
   benchmark data; representation precision is *declared noise*) became
   standing policy.
 
-- **Fourteen certificates from real public archives**
+- **Twenty certificates from four real-archive campaigns**
   ([docs/CERTIFICATES.md](docs/CERTIFICATES.md)): Gaia DR3 (photometric
   zeropoints with the exact 5/2 slope; the DR3 RRab metallicity pipeline
   formula, rediscovered with Nemec's exact coefficients, α ≤ 10⁻¹⁰⁰⁹), the
-  NASA Exoplanet Archive (the composite density formula at **α ≤ 10⁻¹⁹¹⁸**,
-  its constant decoding the Archive's Earth-radius convention), Kepler III
-  three times over from NSSDC tables, and the GDP accounting identity from
-  raw FRED columns.
+  NASA Exoplanet Archive (the composite density formula at α ≤ 10⁻¹⁹¹⁸,
+  its constant decoding the Archive's Earth-radius convention), the
+  Materials Project (`volume/nsites` at **α ≤ 10⁻⁵⁰⁷⁰**; the density
+  identity whose refusal residuals reconstructed the pipeline's
+  2005-vintage atomic-mass table element by element, then certified with
+  the atomic mass constant read out to nine digits), Kepler III three
+  times over from NSSDC tables, and the GDP accounting identity from raw
+  FRED columns.
+- **A registered theory test on 25 GiB of rebuilt DFT** (catalysis
+  campaign, [docs/CASE_STUDY_CATALYSIS_C1.md](docs/CASE_STUDY_CATALYSIS_C1.md)):
+  bond-counting's exact rational scaling slopes, bands frozen in git
+  before any slope was computed — confirmed on the carbon ladder
+  (CH₂: 0.531 ± 0.016 vs 1/2; CH₃: 0.225 ± 0.014 vs 1/4), broken for
+  OH (+0.21) and SH (+0.40) on bimetallic alloys; zero certificates
+  granted on scattered chemistry, exactly as registered.
 - **Refusals that decode into findings**: Saturn's Kepler abstain is J₂
   oblateness plus Hyperion's resonance, quantitatively; Gaia's
   Stefan–Boltzmann abstain is FLAME's marginal medians failing to compose;
   the frame-rotation abstain is the unit-sphere constraint on direction
-  cosines; the exoplanet abstains map PSCompPars's literature patchwork.
+  cosines; the exoplanet abstains map PSCompPars's literature patchwork;
+  the Materials Project census pulled nine unflagged impossible elastic
+  entries out of the database by ID (reported upstream, emmet#1499).
 
 The full program narrative, measured soundness results, and the taxonomy of
 failure modes: [docs/INSTRUMENT_REPORT.md](docs/INSTRUMENT_REPORT.md).
@@ -62,6 +75,18 @@ IAU frame rotation cannot certify while the probe box leaves the data
 manifold — every rival class equals the true law modulo the constraint) and
 the approximant-impostor boundary under declared noise (dense channels are
 empirical-only by design).
+
+## Error-model repertoire (hard-won, both directions)
+
+Real archives taught the ε model its full shape: relative representation
+noise (σ_rep) for float32-rounded columns (Gaia RUWE-class columns, the
+`_over_error` ratios, archive 3-significant-digit rounding); absolute
+floors for fixed-decimal storage (Gaia magnitudes, MP's 3-decimal GPa
+moduli — the same lesson, inverted); per-point propagated `se` for derived
+columns whose input rounding amplifies through ratios (the anisotropy
+formula's extreme-ratio rows); and reference-offset-free ΔE\* spaces where
+unknown per-species constants provably cannot touch the slopes under test
+(the catalysis rebuild, whose deposit ships no gas references).
 
 ## Use
 
