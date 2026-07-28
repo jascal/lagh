@@ -1,0 +1,78 @@
+{
+ "sigma_declared": 0.22,
+ "C1H1_vs_C1": {
+  "n": 255,
+  "gamma_exact": "3/4",
+  "slope": 0.8320395146011152,
+  "se": 0.012446345766104457,
+  "in_band_pm0.10": true,
+  "rational_consistent_2se": false,
+  "scatter_ev": 0.2418566875521201,
+  "intercept": -43.706864033664914,
+  "recover_certified": false,
+  "recover_abstain": "structural"
+ },
+ "C1H2_vs_C1": {
+  "n": 249,
+  "gamma_exact": "1/2",
+  "slope": 0.5312639374216832,
+  "se": 0.01621657220823242,
+  "in_band_pm0.10": true,
+  "rational_consistent_2se": true,
+  "scatter_ev": 0.3118210982580294,
+  "intercept": -107.52831803826648,
+  "recover_certified": false,
+  "recover_abstain": "structural"
+ },
+ "C1H3_vs_C1": {
+  "n": 249,
+  "gamma_exact": "1/4",
+  "slope": 0.22484093233212143,
+  "se": 0.014353984318992624,
+  "in_band_pm0.10": true,
+  "rational_consistent_2se": true,
+  "scatter_ev": 0.27600624208700614,
+  "intercept": -172.6422655438958,
+  "recover_certified": false,
+  "recover_abstain": "structural"
+ },
+ "H1N1_vs_N1": {
+  "n": 255,
+  "gamma_exact": "2/3",
+  "slope": 0.7578278403691171,
+  "se": 0.015374256897445392,
+  "in_band_pm0.10": true,
+  "rational_consistent_2se": false,
+  "scatter_ev": 0.3138468047753019,
+  "intercept": -84.12095015065012,
+  "recover_certified": false,
+  "recover_abstain": "structural"
+ },
+ "H1O1_vs_O1": {
+  "n": 239,
+  "gamma_exact": "1/2",
+  "slope": 0.7147698564994617,
+  "se": 0.029662612610241963,
+  "in_band_pm0.10": false,
+  "rational_consistent_2se": false,
+  "scatter_ev": 0.5765189224769802,
+  "intercept": -143.31635868713263,
+  "recover_certified": false,
+  "recover_abstain": "structural"
+ },
+ "H1S1_vs_S1": {
+  "n": 255,
+  "gamma_exact": "1/2",
+  "slope": 0.8973971812957149,
+  "se": 0.02621351499319116,
+  "in_band_pm0.10": false,
+  "rational_consistent_2se": false,
+  "scatter_ev": 0.3454397578606493,
+  "intercept": -50.39477916413646,
+  "recover_certified": false,
+  "recover_abstain": "structural"
+ },
+ "P1_in_band": "4/6",
+ "P2_rational_consistent": "2/6",
+ "P4_intercept_range_ev": 128.9354015102309
+}
