@@ -64,7 +64,8 @@ snapshot `c1_ecbea094bbdd.json`, 2000 fetched, 1368 clean elastic rows)
   served unflagged. The VRH identity still holds on every defective row —
   the pipeline averaged the defective bounds faithfully — which is exactly
   what lets the arithmetic certificate and the physical-validity census be
-  independent findings. Reported upstream (draft prepared; user-mediated).
+  independent findings. Reported upstream:
+  [materialsproject/emmet#1499](https://github.com/materialsproject/emmet/issues/1499).
 - **P3 MET:** binary-oxide volume scaling slope **−1.17** (n = 60), inside
   the registered [−2.0, −0.8]; `recover` structurally abstains.
 - **P4 MET:** Pugh ratio median **0.522** (q10 0.34, q90 0.73), inside the
