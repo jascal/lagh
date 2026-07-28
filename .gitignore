@@ -17,3 +17,4 @@ machine/run_results.json
 # editor backups / swap files
 *~
 \#*\#
+experiments/catalysis/raw/
