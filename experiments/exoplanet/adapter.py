@@ -44,6 +44,15 @@ FROM pscomppars
 WHERE pl_rade IS NOT NULL AND pl_orbper IS NOT NULL
 """
 
+PH2_ADQL = """
+SELECT hostname, pl_name, sy_pnum, pl_orbper, pl_orbsmax,
+       pl_rade, pl_radeerr1, pl_radeerr2,
+       pl_bmasse, pl_bmasseerr1, pl_bmasseerr2, pl_bmassprov,
+       pl_dens, pl_insol, st_mass, st_teff, discoverymethod
+FROM pscomppars
+WHERE pl_orbper IS NOT NULL
+"""
+
 C0_ADQL = """
 SELECT pl_name, pl_bmasse, pl_rade, pl_orbper, pl_orbsmax, pl_dens,
        pl_insol, st_mass, st_rad, st_teff, st_lum, st_met, sy_pnum,
