@@ -32,7 +32,7 @@ def comp_split(atoms):
 def main(archive: str, out_csv: str):
     n_ok = n_fail = 0
     with open(out_csv, "w") as out:
-        out.write("file,metals,adsorbate,natoms,energy\n")
+        out.write("file,metals,adsorbate,natoms,cell_c,volume,energy\n")
         with tarfile.open(archive, "r:gz") as tf:
             for m in tf:
                 if not m.isfile() or not m.name.endswith(".log"):
@@ -43,7 +43,10 @@ def main(archive: str, out_csv: str):
                                  format="espresso-out")
                     e = float(atoms.get_potential_energy())
                     metals, ads = comp_split(atoms)
-                    out.write(f"{m.name},{metals},{ads},{len(atoms)},{e!r}\n")
+                    cc = float(atoms.cell[2][2])
+                    vol = float(atoms.get_volume())
+                    out.write(f"{m.name},{metals},{ads},{len(atoms)},"
+                              f"{cc:.3f},{vol:.2f},{e!r}\n")
                     n_ok += 1
                 except Exception:                              # noqa: BLE001
                     n_fail += 1
