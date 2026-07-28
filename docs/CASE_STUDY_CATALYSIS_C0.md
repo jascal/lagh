@@ -54,3 +54,30 @@ adsorbate elements from the largest system).
   raw deposit (25 GiB of QE outputs, CC-BY, fully open — the heavy but
   autonomous path); (c) the Origin-header route only under explicit
   authorization.
+
+## The path-2 rebuild (2026-07-28; user directed: raw deposit only, no
+CatHub engagement)
+
+All 25.3 GiB fetched from Materials Cloud (CC-BY); ~92k QE logs
+stream-parsed with ASE (`parse_raw.py`): references 3,648 ok/414 fail —
+**no parseable gas-phase molecules** (so the builder works in
+ΔE* = E(slab+species) − E(slab) space; gas terms are species constants
+that cannot touch scaling slopes); adsorbate archives 76,738 adsorbed rows
+(per-archive failure rates 20–56%, consistent with restart fragments and
+unconverged runs — a census fact, gated below). Builder (`build_table.py`):
+clean slabs by vacuum height (1,614 compositions), pairing on EXACT metal
+counts, most-stable site per (surface, species).
+
+**The rebuilt table serves all six pairs**: CH/CH₂/CH₃ vs C at 255/249/249
+joinable surfaces, NH vs N at 255, OH vs O at 239, SH vs S at 255
+(`data/mamun_rebuilt_energies.csv`, committed).
+
+**Validation gate (mirror overlap, per-species offset calibrated):**
+median |residual| after offset — **O 0.0007 eV, OH 0.0000 eV, C 0.010 eV**
+(the rebuild reproduces the canonical processing exactly where coverage
+aligns; the large offsets are the gas-reference constants, as designed);
+H 0.22 and N 0.15 miss the 0.05 gate with a diagnosis: min-over-different-
+site-sets asymmetry (the mirror slices are tiny and our parse drops
+unconverged sites), not a systematic energy shift. Gate: ACCEPTED for C1
+with the H/N caveat recorded; σ for C1's conjecture track declared from
+the measured site-multiplicity spread (median 0.22 eV).
