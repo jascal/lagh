@@ -1,0 +1,300 @@
+{
+ "linear-2term-d1": {
+  "dim": 1,
+  "certified": true,
+  "law": "3*x_0 - 2",
+  "abstain": null,
+  "note": [],
+  "seconds": 1.0
+ },
+ "linear-3term-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "2*x_0*sin(x_1)**2/3 + 2*x_0*cos(x_1)**2/3 + 4*x_0/3 - 5*x_1*sin(x_0)**2/3 - 5*x_1*cos(x_0)",
+  "abstain": null,
+  "note": [],
+  "seconds": 19.9
+ },
+ "linear-4term-d3": {
+  "dim": 3,
+  "certified": true,
+  "law": "x_0 + x_1*sin(x_0)**2/2 + x_1*sin(x_2)**2/2 + x_1*cos(x_0)**2/2 + x_1*cos(x_2)**2/2 + x_1 ",
+  "abstain": null,
+  "note": [],
+  "seconds": 9.9
+ },
+ "linear-5term-d4": {
+  "dim": 4,
+  "certified": true,
+  "law": "x_0 - x_1 + 2*x_2 - 3*x_3 + 5",
+  "abstain": null,
+  "note": [],
+  "seconds": 3.3
+ },
+ "linear-6term-d5": {
+  "dim": 5,
+  "certified": true,
+  "law": "x_0 + x_1 - x_2 + 2*x_3 - 2*x_4 + 3",
+  "abstain": null,
+  "note": [],
+  "seconds": 5.7
+ },
+ "linear-7term-d6": {
+  "dim": 6,
+  "certified": true,
+  "law": "x_0 - x_1 + x_2 + 2*x_3 - x_4 + 3*x_5 - 1",
+  "abstain": null,
+  "note": [],
+  "seconds": 47.5
+ },
+ "quadric-full-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "2*x_0**2 + 3*x_0*x_1 + x_0 - x_1**2 - x_1 + 1",
+  "abstain": null,
+  "note": [],
+  "seconds": 26.0
+ },
+ "quadric-full-d3": {
+  "dim": 3,
+  "certified": true,
+  "law": "x_0**2 - x_0*x_2 - x_0*sin(x_1)**2/3 - x_0*cos(x_1)**2/3 - 2*x_0/3 + 2*x_1*x_2 + x_1*sin(x",
+  "abstain": null,
+  "note": [],
+  "seconds": 9.6
+ },
+ "quadric-full-d4": {
+  "dim": 4,
+  "certified": true,
+  "law": "x_0*x_1 + x_0 + x_1 - x_2*x_3 + x_2 + x_3**2 + x_3 + 1",
+  "abstain": null,
+  "note": [],
+  "seconds": 10.8
+ },
+ "quadric-full-d5": {
+  "dim": 5,
+  "certified": true,
+  "law": "x_0*x_4 + x_0 - x_1*x_3 + x_1 + x_2**2 + x_2 + x_3 + x_4 + 1",
+  "abstain": null,
+  "note": [],
+  "seconds": 69.1
+ },
+ "cubic-full-d1": {
+  "dim": 1,
+  "certified": true,
+  "law": "x_0**3 - 2*x_0**2 + x_0 - 1",
+  "abstain": null,
+  "note": [],
+  "seconds": 11.3
+ },
+ "cubic-cross-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "x_0**3 - x_0**2*x_1 + 2*x_1*sin(x_0)**2/3 + 2*x_1*cos(x_0)**2/3 + 4*x_1/3 - sin(x_1)**2/3 ",
+  "abstain": null,
+  "note": [],
+  "seconds": 23.0
+ },
+ "cubic-cross-d3": {
+  "dim": 3,
+  "certified": true,
+  "law": "x_0**2*x_1 - x_1*x_2 + x_2**3",
+  "abstain": null,
+  "note": [],
+  "seconds": 31.3
+ },
+ "monomial-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "7*x_0**2/(2*x_1)",
+  "abstain": null,
+  "note": [],
+  "seconds": 26.0
+ },
+ "monomial-d3": {
+  "dim": 3,
+  "certified": true,
+  "law": "2*x_0*x_1**2/x_2**3",
+  "abstain": null,
+  "note": [
+   "CAP-S cheap pre-pass"
+  ],
+  "seconds": 0.3
+ },
+ "monomial-d4": {
+  "dim": 4,
+  "certified": true,
+  "law": "x_0*x_1/(x_2*x_3)",
+  "abstain": null,
+  "note": [
+   "CAP-S cheap pre-pass"
+  ],
+  "seconds": 0.4
+ },
+ "monomial-frac-d1": {
+  "dim": 1,
+  "certified": true,
+  "law": "2*x_0**(3/2)",
+  "abstain": null,
+  "note": [],
+  "seconds": 9.6
+ },
+ "monomial-frac-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "x_0**(3/2)/sqrt(x_1)",
+  "abstain": null,
+  "note": [],
+  "seconds": 24.2
+ },
+ "rational-d1": {
+  "dim": 1,
+  "certified": false,
+  "law": "",
+  "abstain": "structural",
+  "note": [
+   "passive: certified on a split but failed the full-data exhaustive gate"
+  ],
+  "seconds": 16.0
+ },
+ "rational-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "x_0/(x_1 + 1)",
+  "abstain": null,
+  "note": [],
+  "seconds": 30.3
+ },
+ "rational-d3": {
+  "dim": 3,
+  "certified": true,
+  "law": "(x_0/2 + x_1/2)/(x_2/2 + 1)",
+  "abstain": null,
+  "note": [],
+  "seconds": 109.6
+ },
+ "trig-sum-d1": {
+  "dim": 1,
+  "certified": true,
+  "law": "2*sin(x_0) + cos(x_0)",
+  "abstain": null,
+  "note": [],
+  "seconds": 1.0
+ },
+ "trig-prod-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "x_0*sin(x_1)",
+  "abstain": null,
+  "note": [],
+  "seconds": 33.6
+ },
+ "trig-cross-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "sin(x_0)*cos(x_1)",
+  "abstain": null,
+  "note": [],
+  "seconds": 24.1
+ },
+ "exp-decay-d1": {
+  "dim": 1,
+  "certified": true,
+  "law": "3*exp(-Abs(x_0))",
+  "abstain": null,
+  "note": [],
+  "seconds": 2.1
+ },
+ "exp-decay-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "x_0*exp(-Abs(x_1))",
+  "abstain": null,
+  "note": [],
+  "seconds": 3.6
+ },
+ "log-sum-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "x_1 + 2*log(x_0)",
+  "abstain": null,
+  "note": [],
+  "seconds": 62.7
+ },
+ "mixed-4term-d2": {
+  "dim": 2,
+  "certified": false,
+  "law": "",
+  "abstain": "structural",
+  "note": [
+   "passive: certification rejected -- another re-split witnessed material"
+  ],
+  "seconds": 14.3
+ },
+ "sparse3-d1": {
+  "dim": 1,
+  "certified": true,
+  "law": "x_0**2 + 2*sin(x_0) - 3/x_0",
+  "abstain": null,
+  "note": [],
+  "seconds": 1.1
+ },
+ "sparse4-d1": {
+  "dim": 1,
+  "certified": true,
+  "law": "x_0 + sin(x_0) + cos(x_0) - exp(-Abs(x_0))",
+  "abstain": null,
+  "note": [],
+  "seconds": 1.9
+ },
+ "sparse5-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "x_0**2 - x_1 + log(x_1) + sin(x_0) + 2/x_0",
+  "abstain": null,
+  "note": [],
+  "seconds": 17.8
+ },
+ "sparse6-d2": {
+  "dim": 2,
+  "certified": false,
+  "law": "",
+  "abstain": "structural",
+  "note": [
+   "passive: certification rejected -- another re-split witnessed material"
+  ],
+  "seconds": 13.0
+ },
+ "gaussian-d1": {
+  "dim": 1,
+  "certified": true,
+  "law": "exp(-x_0**2 + 3*x_0 - 9/4)",
+  "abstain": null,
+  "note": [],
+  "seconds": 88.1
+ },
+ "inner-linear-trig-d1": {
+  "dim": 1,
+  "certified": true,
+  "law": "595304*sin(x_0)*cos(x_0)/550899 + 1244406*cos(x_0)**2/739423 - 622203/739423",
+  "abstain": null,
+  "note": [],
+  "seconds": 18.2
+ },
+ "sqrt-sum-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "sqrt(x_0**2 + x_1**2)",
+  "abstain": null,
+  "note": [],
+  "seconds": 1267.3
+ },
+ "inverse-square-sum-d2": {
+  "dim": 2,
+  "certified": true,
+  "law": "1/(x_0**2 + x_1**2)",
+  "abstain": null,
+  "note": [],
+  "seconds": 823.1
+ }
+}
