@@ -53,6 +53,15 @@ FROM pscomppars
 WHERE pl_orbper IS NOT NULL
 """
 
+C5_ADQL = """
+SELECT pl_name, pl_rade, pl_bmasse, pl_orbper, pl_orbsmax, pl_dens,
+       pl_insol, pl_eqt, pl_orbeccen, pl_ratror, pl_ratdor, pl_trandep,
+       st_teff, st_rad, st_mass, st_met, st_logg, sy_dist, sy_pnum,
+       pl_ratror_reflink, pl_ratdor_reflink, pl_trandep_reflink
+FROM pscomppars
+WHERE pl_rade IS NOT NULL AND st_rad IS NOT NULL
+"""
+
 C0_ADQL = """
 SELECT pl_name, pl_bmasse, pl_rade, pl_orbper, pl_orbsmax, pl_dens,
        pl_insol, st_mass, st_rad, st_teff, st_lum, st_met, sy_pnum,
