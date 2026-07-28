@@ -1,0 +1,133 @@
+{
+ "snapshot": "/home/allans/code/lagh/experiments/materials/data/c1_ecbea094bbdd.json",
+ "n_fetched": 2000,
+ "n_with_elasticity": 1437,
+ "n_clean_positive": 1368,
+ "P1_K_vrh": {
+  "n": 1368,
+  "floor_abs": 0.003,
+  "certified": true,
+  "law": "x_0/2 + x_1/2",
+  "alpha_log10": -2528.0316903033154,
+  "abstain": null
+ },
+ "P1_G_vrh": {
+  "n": 1368,
+  "floor_abs": 0.003,
+  "certified": false,
+  "law": "",
+  "alpha_log10": null,
+  "abstain": "parametric"
+ },
+ "P1_G_vrh_verify": {
+  "certified": true,
+  "strength": "pinned",
+  "law": "x_0/2 + x_1/2",
+  "note": "pinned: this exact form, no rival within the noise"
+ },
+ "P2_ordering_violations": 12,
+ "P2_violating_rows": [
+  {
+   "id": "mp-aaaaaama",
+   "which": "K",
+   "voigt": 192.24,
+   "reuss": 1156.179,
+   "vrh": 674.209
+  },
+  {
+   "id": "mp-aaaaaama",
+   "which": "G",
+   "voigt": 73.69,
+   "reuss": 271.975,
+   "vrh": 172.832
+  },
+  {
+   "id": "mp-aaaaabqt",
+   "which": "G",
+   "voigt": 52.283,
+   "reuss": 150.723,
+   "vrh": 101.503
+  },
+  {
+   "id": "mp-aaaaacds",
+   "which": "K",
+   "voigt": 45.023,
+   "reuss": 104.273,
+   "vrh": 74.648
+  },
+  {
+   "id": "mp-aaaaaclv",
+   "which": "G",
+   "voigt": 3.36,
+   "reuss": 260.059,
+   "vrh": 131.709
+  },
+  {
+   "id": "mp-aaaaacrk",
+   "which": "K",
+   "voigt": 164.197,
+   "reuss": 343.349,
+   "vrh": 253.773
+  },
+  {
+   "id": "mp-aaaaacrk",
+   "which": "G",
+   "voigt": 73.645,
+   "reuss": 286.71,
+   "vrh": 180.178
+  },
+  {
+   "id": "mp-aaaaacya",
+   "which": "G",
+   "voigt": 5.804,
+   "reuss": 7.384,
+   "vrh": 6.594
+  },
+  {
+   "id": "mp-aaaaadoo",
+   "which": "K",
+   "voigt": 51.554,
+   "reuss": 73.771,
+   "vrh": 62.662
+  },
+  {
+   "id": "mp-aaaaadoo",
+   "which": "G",
+   "voigt": 21.693,
+   "reuss": 65.671,
+   "vrh": 43.682
+  },
+  {
+   "id": "mp-aaaaagpi",
+   "which": "K",
+   "voigt": 164.75,
+   "reuss": 477.692,
+   "vrh": 321.221
+  },
+  {
+   "id": "mp-aaaaagpi",
+   "which": "G",
+   "voigt": 98.316,
+   "reuss": 846.271,
+   "vrh": 472.294
+  }
+ ],
+ "P2_note": "every violation is Reuss > Voigt -- impossible for a valid elastic tensor: defective elasticity entries; the VRH averaging identity still holds on these rows (the pipeline averaged the defective bounds)",
+ "P3_oxide_scaling": {
+  "n": 60,
+  "slope": -1.1686957712316053,
+  "recover_certified": false,
+  "recover_abstain": "structural"
+ },
+ "P4_pugh": {
+  "median_G_over_K": 0.5218669277272676,
+  "q10": 0.3392203050175647,
+  "q90": 0.7327140165743745
+ },
+ "P5_cross_family": {
+  "n": 1368,
+  "scout_slope": -1.3805307291929831,
+  "recover_certified": false,
+  "recover_abstain": "structural"
+ }
+}

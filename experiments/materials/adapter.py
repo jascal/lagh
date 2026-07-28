@@ -30,16 +30,20 @@ def fetch(path: str, params: dict, tag: str):
     if out.exists():
         return json.loads(out.read_text())["data"], out
     import requests
-    docs, page_params = [], dict(params)
+    total = int(params.get("_limit", 0))
+    docs = []
     while True:
+        page_params = dict(params)
+        page_params["_limit"] = min(1000, total - len(docs)) if total \
+            else 1000                    # endpoint caps _limit at 1000/page
+        page_params["_skip"] = len(docs)
         r = requests.get(f"{API}{path}", params=page_params,
                          headers={"X-API-KEY": _key()}, timeout=120)
         r.raise_for_status()
         j = r.json()
         docs.extend(j.get("data", []))
-        if len(docs) >= int(params.get("_limit", 0)) or not j.get("data"):
+        if (total and len(docs) >= total) or not j.get("data"):
             break
-        page_params["_skip"] = len(docs)
     out.write_text(json.dumps({"request": json.loads(canon),
                                "n": len(docs), "data": docs}, indent=1))
     return docs, out

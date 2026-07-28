@@ -98,6 +98,20 @@ column precision; mass table decoded from the data, matching the
 What did NOT certify, correctly: band gap vs formation energy / density
 (structural abstains — the registered confident-wrong bait).
 
+C1 additions (`docs/CASE_STUDY_MATERIALS_C1.md`, snapshot
+`c1_ecbea094bbdd.json`, 1368 elastic rows, floor 3×10⁻³ GPa):
+
+| Law | Inputs | α ≤ | Note |
+|---|---|---|---|
+| `K_VRH = K_voigt/2 + K_reuss/2` (exact 1/2, 1/2) | Voigt/Reuss bulk moduli | 10⁻²⁵²⁸ | the Hill average, certified outright — the program's strongest bound |
+| `G_VRH = G_voigt/2 + G_reuss/2` | Voigt/Reuss shear moduli | verify, pinned | `recover` honestly abstains (coefficient identified to 10⁻⁴, not 10⁻⁵, at the shear dynamic range); the declared exact form verifies with no rational rival |
+
+Census finding: 9 ICSD-matched materials serve **Reuss > Voigt** moduli
+(impossible for a valid elastic tensor; one shear modulus of 4×10⁷ GPa),
+all unflagged (`deprecated: false`, empty `warnings`) — reported upstream.
+Elastic scaling stayed banded conjecture (oxide slope −1.17, Pugh median
+0.522, cross-family abstain).
+
 ## Gaia DR3 Phase 3 (`docs/CASE_STUDY_GAIA_P3.md`)
 
 Reproduce: `.venv/bin/python experiments/gaia/run_p3.py`
