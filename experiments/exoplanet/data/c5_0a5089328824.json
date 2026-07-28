@@ -1,0 +1,28 @@
+{
+ "adql": "\nSELECT pl_name, pl_rade, pl_bmasse, pl_orbper, pl_orbsmax, pl_dens,\n       pl_insol, pl_eqt, pl_orbeccen, pl_ratror, pl_ratdor, pl_trandep,\n       st_teff, st_rad, st_mass, st_met, st_logg, sy_dist, sy_pnum,\n       pl_ratror_reflink, pl_ratdor_reflink, pl_trandep_reflink\nFROM pscomppars\nWHERE pl_rade IS NOT NULL AND st_rad IS NOT NULL\n",
+ "n_rows": 5957,
+ "columns": [
+  "pl_name",
+  "pl_rade",
+  "pl_bmasse",
+  "pl_orbper",
+  "pl_orbsmax",
+  "pl_dens",
+  "pl_insol",
+  "pl_eqt",
+  "pl_orbeccen",
+  "pl_ratror",
+  "pl_ratdor",
+  "pl_trandep",
+  "st_teff",
+  "st_rad",
+  "st_mass",
+  "st_met",
+  "st_logg",
+  "sy_dist",
+  "sy_pnum",
+  "pl_ratror_reflink",
+  "pl_ratdor_reflink",
+  "pl_trandep_reflink"
+ ]
+}

@@ -47,6 +47,43 @@ decimal half-steps). Three dim-2 triples advance unconditionally, on their
   validated in the field on a second archive).
 - **P4.** Zero confident-wrong; every certificate clears α ≤ 10⁻⁶.
 
-## Results
+## Results (2026-07-27, `experiments/results/exoplanet_c5.json`; frozen
+snapshot `c5_0a5089328824.csv`, 5957 planets)
 
-(after the run)
+- **P1 UNFULFILLABLE — the third catalogue-provenance finding.** Zero of
+  5957 rows carry a "Calculated Value" reflink for ANY of the three
+  transit-geometry columns: PSCompPars sources pl_ratror, pl_ratdor, and
+  pl_trandep entirely from KOI tables and literature (top references:
+  Morton 2016, Q1–Q17 DR24/DR25). The registered strata do not exist. The
+  fallback mixture probe decodes why no certificate is possible there: the
+  radius-ratio identity holds only to ~4 millidex MAD with 29% of rows off
+  by more than 10⁻² dex — transit-fit ratios from one paper, radii adopted
+  from another. The patchwork does not compose; the honest verdict is the
+  abstention.
+- **P2 MET:** the 240-pair open sweep certifies NOTHING — every pair is a
+  scout-level conjecture, none reaches the exactness gate. No unregistered
+  certificate appeared; heavy abstention exactly as designed.
+- **P3 MET, both halves — the stress test passes on a second archive.**
+  (a) The density identity on the full 5843-row mixture (no provenance
+  flag): structural abstain. (b) At 10× the measured σ_rep, the certified
+  law is `5.4961·M/R³` — the TRUE two-term monomial, not a whale: the
+  loose-ε closure (refit-parsimony collapse + winner gate + sticky
+  ambiguity) holds in the field on data it was not built against.
+- **P4 MET:** zero confident-wrong; the only certificate C5 produced
+  anywhere is the true density law under deliberate stress.
+
+## Campaign closure
+
+The exoplanet campaign (C0–C5, `PROPOSAL_EXOPLANET.md`) is complete. One
+certificate — the Archive's own density formula at α ≤ 10⁻¹⁹¹⁸, constant
+decoding its Earth-radius convention. Four provenance findings the
+catalogue itself does not advertise: semi-major axes are never
+Archive-computed; neither are any transit-geometry columns; the insolation
+stratum has a 1.3% non-composing tail; the transit-geometry mixture
+disagrees at the percent level. A population-science conjecture set with
+every band hit or miss disclosed: the radius valley at 1.90 R⊕ sloping
+−0.127 with period, the giant plateau flat to 1%, the metallicity
+preference at 0.124 dex, the resonance asymmetry at 96:57 and 100:40, Hill
+spacing at 17.6. And zero confident-wrong across six stages on a catalogue
+built precisely of the heterogeneous literature patchwork the
+zero-confident-wrong invariant exists to survive.

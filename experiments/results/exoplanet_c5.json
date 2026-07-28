@@ -1,0 +1,46 @@
+{
+ "snapshot": "/home/allans/code/lagh/experiments/exoplanet/data/c5_0a5089328824.csv",
+ "n_total": 5957,
+ "P1_ratror": {
+  "n": 0,
+  "sigma_rep": NaN,
+  "certified": false,
+  "law": "",
+  "alpha_log10": null,
+  "abstain": "range"
+ },
+ "P1_ratdor": {
+  "n": 0,
+  "sigma_rep": NaN,
+  "certified": false,
+  "law": "",
+  "alpha_log10": null,
+  "abstain": "range"
+ },
+ "P1_trandep": {
+  "n": 0,
+  "sigma_rep": NaN,
+  "certified": false,
+  "law": "",
+  "alpha_log10": null,
+  "abstain": "range"
+ },
+ "P2_census": {
+  "certified": 0,
+  "conjectured": 240,
+  "abstained": 0
+ },
+ "P2_certified_list": [],
+ "P2_details": [],
+ "P3a_full_mixture": {
+  "n": 5843,
+  "certified": false,
+  "abstain": "structural"
+ },
+ "P3b_loose_10x": {
+  "certified": true,
+  "law": "5.4961030518444*x_0/x_1**3",
+  "n_terms": 0,
+  "abstain": null
+ }
+}
