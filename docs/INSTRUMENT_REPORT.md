@@ -105,6 +105,17 @@ exposure at ≤1% noise) · approximant impostors (structural boundary enforced)
 quantization (declared-noise policy) · unfalsifiable detections (significance-
 gated: a decay slope must exceed 3× its own standard error).
 
+Added 2026-07-28, and they share one shape — **the truth absent from the
+contest**, where every gate that compares rivals is powerless because the right
+answer was never proposed: (a) *α cannot rank structure* — arbitrating two
+dense approximants by their chance-fit bounds certified a form 2×10⁻⁵ off the
+truth just outside the sampled box, closed by requiring every defeated rival to
+be an interpolation the data never constrained (`MUNTZ_ARBITRATION.md`);
+(b) *on-shell degeneracy* — a PDE fitted from ONE solution certified the
+traveling-wave relation `u_t = −u_x` instead of the KdV equation it came from,
+true of that field and not of the equation, closed by requiring certification
+patches from a held-out SOLUTION (`CASE_STUDY_PDE_DEV.md`).
+
 ## 5. What this program claims, and what it does not
 
 Claims: exact certified recovery on clean in-class data with stated α; zero

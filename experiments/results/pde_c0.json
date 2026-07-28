@@ -1,0 +1,340 @@
+{
+ "N1a_iid_null": {
+  "certified": false,
+  "abstain": "all-patches-rejected",
+  "n_patches": 0,
+  "patches_rejected": 24,
+  "notes": [
+   "every patch failed the resolution/aliasing gate: the grid does not represent this field"
+  ]
+ },
+ "N1b_smooth_null": {
+  "certified": false,
+  "law": "",
+  "coeff_max_declared": 2.0,
+  "coeff_max_certified": 0.0,
+  "coeff_audit_ok": true,
+  "law_linear_in_columns": true,
+  "abstain": "structural",
+  "alpha_log10": null,
+  "n_patches": 96,
+  "n_solutions": 4,
+  "holdout": true,
+  "n_cert_patches": 24,
+  "patches_rejected": 0,
+  "features": [
+   "u_xx",
+   "u*u_x",
+   "u_x",
+   "u",
+   "u_xxx",
+   "1"
+  ],
+  "median_signal_to_band": 4777486.042515003,
+  "tier": 3,
+  "notes": [
+   "no law certifies through tier 3"
+  ],
+  "seconds": 13.5
+ },
+ "N2_heat_multiIC": {
+  "certified": true,
+  "law": "[u_xx]/10",
+  "coeff_max_declared": 2.0,
+  "coeff_max_certified": 0.1,
+  "coeff_audit_ok": true,
+  "law_linear_in_columns": true,
+  "abstain": null,
+  "alpha_log10": -163.93303531573437,
+  "n_patches": 96,
+  "n_solutions": 4,
+  "holdout": true,
+  "n_cert_patches": 24,
+  "patches_rejected": 0,
+  "features": [
+   "u_xx",
+   "u*u_x",
+   "u_x",
+   "u",
+   "u_xxx",
+   "1"
+  ],
+  "median_signal_to_band": 7348018.85020655,
+  "tier": 3,
+  "notes": [
+   "CAP-S cheap pre-pass"
+  ],
+  "seconds": 0.0
+ },
+ "N3_advection_multiIC": {
+  "certified": true,
+  "law": "-7*[u_x]/10",
+  "coeff_max_declared": 2.0,
+  "coeff_max_certified": 0.7,
+  "coeff_audit_ok": true,
+  "law_linear_in_columns": true,
+  "abstain": null,
+  "alpha_log10": -174.4919246584998,
+  "n_patches": 96,
+  "n_solutions": 4,
+  "holdout": true,
+  "n_cert_patches": 24,
+  "patches_rejected": 0,
+  "features": [
+   "u_xx",
+   "u*u_x",
+   "u_x",
+   "u",
+   "u_xxx",
+   "1"
+  ],
+  "median_signal_to_band": 16829951.81166143,
+  "tier": 3,
+  "notes": [
+   "CAP-S cheap pre-pass"
+  ],
+  "seconds": 0.0
+ },
+ "N4_burgers_multiIC": {
+  "certified": true,
+  "law": "[u_xx]/5 - [u*u_x]",
+  "coeff_max_declared": 2.0,
+  "coeff_max_certified": 1.0,
+  "coeff_audit_ok": true,
+  "law_linear_in_columns": true,
+  "abstain": null,
+  "alpha_log10": -169.96230247119178,
+  "n_patches": 96,
+  "n_solutions": 4,
+  "holdout": true,
+  "n_cert_patches": 24,
+  "patches_rejected": 0,
+  "features": [
+   "u_xx",
+   "u*u_x",
+   "u_x",
+   "u",
+   "u_xxx",
+   "1"
+  ],
+  "median_signal_to_band": 10540317.930517493,
+  "tier": 1,
+  "notes": [],
+  "seconds": 2.8
+ },
+ "N5a_burgers_single_wave": {
+  "certified": false,
+  "abstain": "single-solution",
+  "n_patches": 21,
+  "patches_rejected": 3,
+  "notes": [
+   "a PDE claim needs patches from a HELD-OUT solution; one solution supports only an on-shell statement about that solution"
+  ]
+ },
+ "N5a_burgers_single_wave_rowsplit": {
+  "certified": false,
+  "law": "",
+  "coeff_max_declared": 2.0,
+  "coeff_max_certified": 0.0,
+  "coeff_audit_ok": true,
+  "law_linear_in_columns": true,
+  "abstain": "structural",
+  "alpha_log10": null,
+  "n_patches": 21,
+  "n_solutions": 1,
+  "holdout": false,
+  "n_cert_patches": 5,
+  "patches_rejected": 3,
+  "features": [
+   "u_xx",
+   "u*u_x",
+   "u_x",
+   "u",
+   "u_xxx",
+   "1"
+  ],
+  "median_signal_to_band": 50.09882170823663,
+  "tier": 1,
+  "notes": [
+   "2 materially different classes certify at tier 1"
+  ],
+  "seconds": 13.1
+ },
+ "N5b_kdv_single_soliton": {
+  "certified": false,
+  "abstain": "single-solution",
+  "n_patches": 24,
+  "patches_rejected": 0,
+  "notes": [
+   "a PDE claim needs patches from a HELD-OUT solution; one solution supports only an on-shell statement about that solution"
+  ]
+ },
+ "N5b_kdv_single_soliton_rowsplit": {
+  "certified": true,
+  "law": "-[u_x]",
+  "coeff_max_declared": 2.0,
+  "coeff_max_certified": 1.0,
+  "coeff_audit_ok": true,
+  "law_linear_in_columns": true,
+  "abstain": null,
+  "alpha_log10": -37.83743012359091,
+  "n_patches": 24,
+  "n_solutions": 1,
+  "holdout": false,
+  "n_cert_patches": 5,
+  "patches_rejected": 0,
+  "features": [
+   "u_xxx",
+   "u*u_x",
+   "u_x",
+   "u",
+   "u_xx",
+   "1"
+  ],
+  "median_signal_to_band": 593054.8724943029,
+  "tier": 3,
+  "notes": [
+   "CAP-S cheap pre-pass"
+  ],
+  "seconds": 0.2
+ },
+ "N5c_burgers_multiIC_control": {
+  "certified": true,
+  "law": "[u_xx]/5 - [u*u_x]",
+  "coeff_max_declared": 2.0,
+  "coeff_max_certified": 1.0,
+  "coeff_audit_ok": true,
+  "law_linear_in_columns": true,
+  "abstain": null,
+  "alpha_log10": -169.96230247119178,
+  "n_patches": 96,
+  "n_solutions": 4,
+  "holdout": true,
+  "n_cert_patches": 24,
+  "patches_rejected": 0,
+  "features": [
+   "u_xx",
+   "u*u_x",
+   "u_x",
+   "u",
+   "u_xxx",
+   "1"
+  ],
+  "median_signal_to_band": 10540317.930517493,
+  "tier": 1,
+  "notes": [],
+  "seconds": 2.8
+ },
+ "N6_heat_family_B": {
+  "certified": true,
+  "law": "[u_xx]/10",
+  "coeff_max_declared": 2.0,
+  "coeff_max_certified": 0.1,
+  "coeff_audit_ok": true,
+  "law_linear_in_columns": true,
+  "abstain": null,
+  "alpha_log10": -101.00636358371511,
+  "n_patches": 48,
+  "n_solutions": 4,
+  "holdout": true,
+  "n_cert_patches": 12,
+  "patches_rejected": 0,
+  "features": [
+   "u_xx",
+   "u*u_x",
+   "u_x",
+   "u",
+   "u_xxx",
+   "1"
+  ],
+  "median_signal_to_band": 859851911.6706138,
+  "tier": 3,
+  "notes": [
+   "CAP-S cheap pre-pass"
+  ],
+  "seconds": 0.0
+ },
+ "N6_burgers_family_B": {
+  "certified": true,
+  "law": "[u_xx]/5 - [u*u_x]",
+  "coeff_max_declared": 2.0,
+  "coeff_max_certified": 1.0,
+  "coeff_audit_ok": true,
+  "law_linear_in_columns": true,
+  "abstain": null,
+  "alpha_log10": -100.42150069918635,
+  "n_patches": 48,
+  "n_solutions": 4,
+  "holdout": true,
+  "n_cert_patches": 12,
+  "patches_rejected": 0,
+  "features": [
+   "u_xx",
+   "u*u_x",
+   "u_x",
+   "u",
+   "u_xxx",
+   "1"
+  ],
+  "median_signal_to_band": 1097694974.415602,
+  "tier": 1,
+  "notes": [],
+  "seconds": 3.0
+ },
+ "N6_heat_family_C": {
+  "certified": true,
+  "law": "[u_xx]/10",
+  "coeff_max_declared": 2.0,
+  "coeff_max_certified": 0.1,
+  "coeff_audit_ok": true,
+  "law_linear_in_columns": true,
+  "abstain": null,
+  "alpha_log10": -136.809667991572,
+  "n_patches": 96,
+  "n_solutions": 4,
+  "holdout": true,
+  "n_cert_patches": 24,
+  "patches_rejected": 0,
+  "features": [
+   "u_xx",
+   "u*u_x",
+   "u_x",
+   "u",
+   "u_xxx",
+   "1"
+  ],
+  "median_signal_to_band": 400447.7998376563,
+  "tier": 3,
+  "notes": [
+   "CAP-S cheap pre-pass"
+  ],
+  "seconds": 0.1
+ },
+ "N6_burgers_family_C": {
+  "certified": true,
+  "law": "[u_xx]/5 - [u*u_x]",
+  "coeff_max_declared": 2.0,
+  "coeff_max_certified": 1.0,
+  "coeff_audit_ok": true,
+  "law_linear_in_columns": true,
+  "abstain": null,
+  "alpha_log10": -145.29401986453908,
+  "n_patches": 96,
+  "n_solutions": 4,
+  "holdout": true,
+  "n_cert_patches": 24,
+  "patches_rejected": 0,
+  "features": [
+   "u_xx",
+   "u*u_x",
+   "u_x",
+   "u",
+   "u_xxx",
+   "1"
+  ],
+  "median_signal_to_band": 845332.8123880306,
+  "tier": 1,
+  "notes": [],
+  "seconds": 4.5
+ }
+}

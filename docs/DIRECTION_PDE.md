@@ -1,9 +1,14 @@
 # Direction: PDE support (the weak-form arc)
 
-**Scoped 2026-07-28, not yet started.** This document is the pickup point:
-it records the full design so the arc can begin in a fresh context with no
-re-derivation. Status of everything here: `open` (design), except where
-marked as established program results it builds on.
+**Scoped 2026-07-28; C0 BUILT AND RUN the same day.** The design below stands
+as written — see `CASE_STUDY_PDE_DEV.md` for the registration and the measured
+results, and `lagh/weakform.py` for the factory. Status: pieces 1–3 built
+(weak-form factory with a declared patch band, patch-ε via the new
+deterministic `hard` channel, multi-solution holdout), heat/advection/Burgers
+certified at exact rational coefficients from held-out solutions, single-
+solution data refused structurally. Pieces 4–5 (forward-integration verify
+track, the rest of the curriculum) and everything under declared noise remain
+`open`.
 
 ## What a PDE claim is, in this program's terms
 
@@ -106,14 +111,44 @@ coherence: small, template exists. Verify track: moderate (needs a
 reference solver; `scipy.solve_ivp` + method-of-lines is enough for the
 curriculum PDEs).
 
-## Pickup checklist (fresh context)
+## Pickup checklist
 
-1. Read this doc, `REACH_ENVELOPE.md`, `MUNTZ_ARBITRATION.md` (results
-   section — confirm the arbitration arc landed), and the memory index.
-2. Start with the weak-form factory as `lagh/weakform.py` + a registration
-   doc `docs/CASE_STUDY_PDE_DEV.md` (predictions before any PDEBench run:
-   null-certification zero; heat/advection certify multi-IC; single-IC
-   Burgers abstains structurally; noise ladder bands).
-3. PDEBench data: start with locally-generated solutions (method of lines,
-   exact ICs) before downloading anything — the dev campaign's C0 needs no
-   external data at all.
+1. ~~Read this doc, `REACH_ENVELOPE.md`, `MUNTZ_ARBITRATION.md`, the memory
+   index.~~ Done 2026-07-28.
+2. ~~Weak-form factory `lagh/weakform.py` + registration
+   `docs/CASE_STUDY_PDE_DEV.md`.~~ Done: factory, tests, C0 registered and
+   run. One registered prediction was falsified (single-solution KdV
+   certified the on-shell relation under a row split) and closed by the
+   solution-holdout gate — read that section before extending anything.
+3. ~~Locally-generated solutions before any download.~~ Done: C0 is entirely
+   analytic (`experiments/pde/fields.py` — Fourier heat, translation
+   advection, Cole–Hopf Burgers, tanh wave, KdV soliton).
+
+### Design for (a), the errors-in-variables ε model — `open`, not yet built
+
+Under declared σ the weak-form design matrix is noisy too, and C0's band
+handles that by bounding the coefficients (`coeff_max`) and summing per-column
+errors. That is honest but loose, and for the stochastic part it is also
+*wrong in shape*: every column is a linear functional of the SAME noise
+realization, so the errors do not add in absolute value, they cancel. For a
+candidate law y = Σ c_k X_k the residual carries
+
+    δ_y − Σ c_k δ_k  =  Σ_i (w_y,i − Σ_k c_k w_k,i g'(u_i)) e_i
+
+whose band is `4σ · ‖w_y − Σ_k c_k w_k g'(u)‖₂` — one norm over the combined
+weight vector, not a sum of norms. This is both tighter and coefficient-aware,
+and it needs one engine extension: ε assembled **per candidate** rather than
+once, i.e. `check()` taking a band *function* of the expression under test
+alongside today's fixed vector. Deterministic parts (quadrature, roundoff) do
+not share a realization and keep the Σ|c_k|·q_k combination they have now.
+
+Registering the shape here because it is the piece that decides whether noisy
+PDE certification is possible at all: with the loose sum-of-columns band, a
+realistic σ swamps the signal well before the noise ladder gets interesting.
+
+**Next (in order):** (a) the σ > 0 ladder, which needs the errors-in-variables
+ε model above — the design-matrix columns are noisy functionals of u, and the current
+model bands only the target; (b) the verify track (integrate the certified law
+forward from a held-out IC and certify the forecast); (c) variable
+coefficients and conservation-law form; then (d) PDEBench, and only then the
+traffic case study.

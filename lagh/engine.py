@@ -278,7 +278,7 @@ def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
 
 def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              sigma: float = 0.0, se_cert=None, floor_abs: float = 1e-12,
-             max_tier: int = 7) -> Result:
+             max_tier: int = 7, hard_cert=None) -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
     Splits must be disjoint: fit, select, certify. Certification is exhaustive on
@@ -302,6 +302,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     X_cert, y_cert = X_cert[mc], y_cert[mc]
     if se_cert is not None:
         se_cert = np.asarray(se_cert, float).ravel()[mc]
+    if hard_cert is not None:
+        hard_cert = np.asarray(hard_cert, float).ravel()[mc]
     dim = X_fit.shape[1]
     if min(len(y_fit), len(y_sel), len(y_cert)) < 2:
         cert = Certificate(False, 0, 0, int(len(y_cert)), [], "",
@@ -312,7 +314,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     if dim == 1:
         syms = [syms] if not isinstance(syms, (list, tuple)) else list(syms)
     syms = list(syms)
-    eps = epsilon(y_cert, sigma=sigma, se=se_cert, floor_abs=floor_abs)
+    eps = epsilon(y_cert, sigma=sigma, se=se_cert, floor_abs=floor_abs,
+                  hard=hard_cert)
     bounds = [(float(X_cert[:, j].min()), float(X_cert[:, j].max()))
               for j in range(dim)]
     # full-data view for the MINIMALITY gate (split-myopia fix, LLMSRBENCH_DEV.md):
@@ -320,7 +323,13 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     # droppable-term test, so it runs on fit+sel+cert at the full-data epsilon
     X_all_m = np.vstack([X_fit, X_sel, X_cert])
     y_all_m = np.concatenate([y_fit, y_sel, y_cert])
-    eps_all = epsilon(y_all_m, sigma=sigma, floor_abs=floor_abs)
+    # the minimality gate sees fit+sel+cert, for which only the CERT rows carry a
+    # computed hard bound; the patch-max stands in there (uniform patch families
+    # make it a close stand-in, and the winner must still certify at the exact
+    # per-row eps above)
+    eps_all = epsilon(y_all_m, sigma=sigma, floor_abs=floor_abs,
+                      hard=(None if hard_cert is None
+                            else np.full(len(y_all_m), float(np.max(hard_cert)))))
     # LOOSE-FLOOR REGIME (CASE_STUDY_GAIA_C0.md registered issue): when a
     # declared absolute floor dominates the machine term, the per-candidate
     # float_pinned gate INVERTS -- the true law's coefficients are honestly

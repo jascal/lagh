@@ -60,7 +60,13 @@ class Certificate:
 
 
 def epsilon(y: np.ndarray, *, sigma: float = 0.0, prop: np.ndarray | None = None,
-            se: np.ndarray | None = None, floor_abs: float = 1e-12) -> np.ndarray:
+            se: np.ndarray | None = None, floor_abs: float = 1e-12,
+            hard: np.ndarray | None = None) -> np.ndarray:
+    """`hard` is a per-point DETERMINISTIC error bound (computed, not declared as
+    a scale) and enters with coefficient 1: the coverage factors KAPPA/LAM_B
+    exist to turn a stochastic scale into a band, and multiplying a computed
+    bound by 4 would loosen epsilon -- the direction that admits impostors (the
+    loose-eps lesson). Introduced for weak-form patch bounds (weakform.py)."""
     y = np.asarray(y, float).ravel()
     eps = MACHINE_REL * np.abs(y) + floor_abs
     if sigma > 0:
@@ -68,7 +74,18 @@ def epsilon(y: np.ndarray, *, sigma: float = 0.0, prop: np.ndarray | None = None
                                      else np.asarray(prop, float).ravel())
     if se is not None:
         eps = eps + LAM_B * np.asarray(se, float).ravel()
+    if hard is not None:
+        eps = eps + np.asarray(hard, float).ravel()
     return eps
+
+
+def free_dof(expr) -> int:
+    """Free numeric parameters of a law: every numeric atom except 0/±1 (the
+    conservative-by-design count -- see significance_log10). Non-sympy law
+    objects (C6 QuasiPoly) report 0."""
+    if expr is None or not hasattr(expr, "atoms"):
+        return 0
+    return sum(1 for a in expr.atoms(sp.Number) if a not in (0, 1, -1))
 
 
 def significance_log10(expr, y: np.ndarray, eps: np.ndarray,
@@ -90,10 +107,8 @@ def significance_log10(expr, y: np.ndarray, eps: np.ndarray,
     R = float(value_range) if value_range else float(np.max(y) - np.min(y))
     if R <= 0 or len(y) == 0:
         return 0.0
-    dof = sum(1 for a in expr.atoms(sp.Number) if a not in (0, 1, -1)) \
-        if expr is not None and hasattr(expr, "atoms") else 0
     # (C6 QuasiPoly and other non-sympy law objects: dof=0, conservative)
-    h = max(0, len(y) - dof)
+    h = max(0, len(y) - free_dof(expr))
     if h == 0:
         return 0.0
     q = np.minimum(1.0, 2.0 * eps / R)
@@ -342,37 +357,68 @@ def reduce_to_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
 
 
 ARBITRATION_MARGIN_LOG10 = 30.0
+ARBITRATION_RIVAL_EVIDENCE_MAX = 0.10
 
 
 def arbitrate_significance(classes: list, y: np.ndarray, eps: np.ndarray,
                            n_hypotheses: int):
     """Significance arbitration at the Müntz boundary (MUNTZ_ARBITRATION.md,
-    registered). Rival classes all certify — they agree everywhere the
-    certificate's domain claim applies — and their per-representative
-    chance-fit bounds differ by q^(dof gap). If exactly one class's bound is
-    at least MARGIN orders of magnitude smaller than EVERY rival's, the
-    rivals are, in the program's own accounting, overwhelmingly artifacts of
-    their richer families: return (winning class, note). Otherwise None —
-    the structural abstain stands.
+    registered 2026-07-28, AMENDED the same day after validation).
+
+    Rival classes all certify — they agree everywhere the certificate's domain
+    claim applies — and their per-representative chance-fit bounds differ by
+    q^(dof gap). Two conditions must BOTH hold before a winner is crowned:
+
+    1. MARGIN: exactly one class's alpha beats every rival's by at least
+       ARBITRATION_MARGIN_LOG10 orders of magnitude.
+    2. RIVAL EVIDENCE: every defeated rival is evidence-starved — it retains
+       under ARBITRATION_RIVAL_EVIDENCE_MAX of the certification sample as
+       held-out points (h/n, h = n - free_dof), i.e. it is an INTERPOLATION of
+       the data, not a law the data constrains. This is the H1a mechanism
+       (`_significance_gate`) applied to rivals rather than the winner.
+
+    Condition 2 is what makes condition 1 sound, and it was added because
+    condition 1 alone was measured UNSOUND: on `rational-d1` (reach audit) the
+    dense channel proposed two fractional-power twins at tier 1 — dof 34 and 45
+    of n=80, h/n 0.57 and 0.44 — neither of them the truth (2x+1)/(x+3), which
+    lives in a channel the escalation never reached. Their alpha gap was 125
+    orders, so the margin alone crowned an approximant that deviates 2e-5 from
+    the truth just outside the sampled box: a form-overclaim. In the contests
+    arbitration was built for (`mixed-4term-d2`, `sparse6-d2`) the defeated
+    rival is a 66/68-term interpolation with h/n = 0.01 and -0.01 — no held-out
+    evidence at all — while the winner carries dof 1-2 with h/n ~ 0.98.
+    alpha bounds CHANCE agreement, never structure (see significance_log10);
+    dismissing a rival the data never constrained is the only structural claim
+    it licenses.
+
+    Returns (winning class, note), or None — the structural abstain stands.
     """
     if len(classes) < 2:
+        return None
+    n = len(np.asarray(y, float).ravel())
+    if n == 0:
         return None
     scored = []
     for cl in classes:
         rep = min(cl[1], key=lambda z: z.complexity)
         a = significance_log10(rep.expr, y, eps, n_hypotheses)
-        scored.append((a, cl))
+        scored.append((a, max(0, n - free_dof(rep.expr)) / n, cl))
     scored.sort(key=lambda t: t[0])
     best, second = scored[0][0], scored[1][0]
     if second - best < ARBITRATION_MARGIN_LOG10:
         return None
+    rival_h = [h for _, h, _ in scored[1:]]
+    if max(rival_h) >= ARBITRATION_RIVAL_EVIDENCE_MAX:
+        return None                      # a rival the data actually constrains
     note = (f"significance arbitration: {len(classes)} rival classes "
-            f"certify; winner alpha <= 1e{best:.0f} vs nearest rival "
-            f"1e{second:.0f} (margin {second - best:.0f} >= "
-            f"{ARBITRATION_MARGIN_LOG10:.0f} orders) -- rivals are "
-            "approximant-class artifacts at this margin; the certificate "
-            "remains a domain claim")
-    return scored[0][1], note
+            f"certify; winner alpha <= 1e{best:.0f} (held-out fraction "
+            f"{scored[0][1]:.2f}) vs nearest rival 1e{second:.0f} (margin "
+            f"{second - best:.0f} >= {ARBITRATION_MARGIN_LOG10:.0f} orders); "
+            f"every rival is evidence-starved (max held-out fraction "
+            f"{max(rival_h):.2f} < {ARBITRATION_RIVAL_EVIDENCE_MAX:g}) -- "
+            "the rivals interpolate the certification sample rather than "
+            "being constrained by it; the certificate remains a domain claim")
+    return scored[0][2], note
 
 
 def refit_minimal(expr, syms, X: np.ndarray, y: np.ndarray,

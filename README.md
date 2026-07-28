@@ -70,10 +70,16 @@ speculative. The ledger, in the order the field taught it:
 | a certified-looking result at an amended floor was split luck — one re-split dissolved a genuine 3-class ambiguity | structural ambiguity is sticky across re-splits |
 | a constant over 4 overflow-artifact points was the program's only confident-wrong | the minimum-domain guard (evidence floors under \|H\|·q^h) |
 | the IAU frame rotation abstained: rival classes equal the true law modulo the unit-sphere constraint the inputs satisfy — the probe box asked an off-manifold question the domain claim never made | constrained-input coherence: machine-exact constraint detection (SVD null-space, 10⁻¹⁰ tolerance), manifold-probe coherence, and winner canonicalization modulo the constraint ideal — the frame rotation now certifies at α ≤ 10⁻⁷⁶⁸⁰ with the constraint named in the certificate |
+| a weak-form PDE system built from ONE solution certified `u_t = −u_x` on a KdV soliton — the on-shell traveling-wave relation, true of that field and not the equation it came from | a PDE claim must certify on patches from a **held-out solution**; single-solution data refuses structurally (`abstain: single-solution`) instead of certifying whatever the library's simplest fit happens to be |
+| Müntz twins at machine floor abstained three reach cells; arbitrating them by α margin alone then **certified an approximant** on `rational-d1` (2×10⁻⁵ off the truth just outside the box) — α ranks dof, and the truth was not even in that contest | significance arbitration with an **evidence bar**: a rival may be dismissed only when it is an interpolation of the sample (held-out fraction h/n < 0.10), never when it retains evidence — reach 33/36 → 35/36, and the genuinely-twinned cell keeps its abstain |
 
 One registered open boundary, honestly held: the approximant-impostor class
 under declared noise (dense channels are empirical-only by design —
-|H|·q^h accounting is the eventual road through).
+|H|·q^h accounting is the eventual road through). A second, newly stated:
+**constrained twins** — rivals that each retain real held-out evidence and
+diverge only outside the sampled box — are indistinguishable under this
+instrument's evidence, and the abstain there is permanent, not a gap
+(`MUNTZ_ARBITRATION.md`).
 
 ## Error-model repertoire (hard-won, both directions)
 
@@ -118,6 +124,7 @@ metadata (`track_`, `tag_`, `alpha_log10_`).
 | `lagh/classes/` | the registered curriculum C1–C9 |
 | `lagh/engine.py` | MDL-ordered escalation; escalates only on an empty certifying set |
 | `lagh/acquisition.py` / `lagh/passive.py` | active and passive regimes |
+| `lagh/weakform.py` | PDE claims in weak form: patch integrals of the RAW field against analytic test-function derivatives, each with a declared bound (no differentiated data ever enters a certificate) |
 | `machine/` | the research loop as a verified Orca state machine; optional bounded LLM proposer |
 | `experiments/gravitybench/` | the deterministic astronomer (planner + digital twin) |
 | `docs/` | registrations, blind-read reports, direction docs — every claim's provenance |
