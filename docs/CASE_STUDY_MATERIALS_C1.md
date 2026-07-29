@@ -57,15 +57,36 @@ snapshot `c1_ecbea094bbdd.json`, 2000 fetched, 1368 clean elastic rows)
   `x₀/2 + x₁/2` then **verifies pinned** (no rational rival) — the RRab
   second-track precedent.
 - **P2: 12 genuine violations, decoded.** Beyond rounding tolerance, 12
-  bound-ordering violations across 9 materials — every one **Reuss > Voigt,
-  impossible for a valid elastic tensor** (one shear modulus of 4×10⁷ GPa).
-  All nine are ICSD-matched compounds with `deprecated: false` and empty
-  `warnings` (checked against the live API): defective elastic-tensor fits
-  served unflagged. The VRH identity still holds on every defective row —
-  the pipeline averaged the defective bounds faithfully — which is exactly
-  what lets the arithmetic certificate and the physical-validity census be
-  independent findings. Reported upstream:
+  bound-ordering violations across **8** materials — every one **Reuss >
+  Voigt, impossible for a valid elastic tensor**. A 9th material
+  (`mp-aaaaabbj`, CeGa6) was reported alongside them for an implausible
+  MAGNITUDE (G_Voigt ≈ 4×10⁷ GPa) with correct bound ordering; merging the two
+  categories under "nine bound violations" was our own imprecision. The VRH
+  identity still holds on every defective row — the pipeline averaged the
+  defective bounds faithfully — which is what lets the arithmetic certificate
+  and the physical-validity census be independent findings. Reported upstream:
   [materialsproject/emmet#1499](https://github.com/materialsproject/emmet/issues/1499).
+
+  **CORRECTED 2026-07-28 after maintainer response** (emmet#1499): the claim
+  that these entries were served **unflagged is wrong, and the error was ours**.
+  `deprecated` and `warnings` on the `summary` endpoint describe the MATERIAL;
+  the elastic property carries its own flag in the `elasticity` collection,
+  where all nine are `deprecated: true` with the warning "Fitting elastic
+  tensor resulted in unphysical modulus" (maintainer-supplied query output; our
+  API key currently returns 403, so this is not independently re-verified
+  here). The unphysical-modulus checks shipped in v2025.02.12.post1. The count
+  is also a SAMPLE count: we swept the first 2000 `summary` entries (1368 with
+  elasticity); the maintainer estimates a few hundred such entries across the
+  full ~13k elasticity collection.
+
+  **The lesson, which is the part worth keeping:** a validity census must read
+  the flag belonging to the COLLECTION THAT OWNS THE PROPERTY. An aggregated
+  endpoint mixes material-level and property-level provenance, and reading its
+  flag as though it covered every field it serves is the same class of error as
+  certifying against numbers whose error model was assumed rather than declared.
+  What survives as an observation, not a defect claim: `summary` still serves
+  the moduli for these materials with no property-level signal in that
+  document.
 - **P3 MET:** binary-oxide volume scaling slope **−1.17** (n = 60), inside
   the registered [−2.0, −0.8]; `recover` structurally abstains.
 - **P4 MET:** Pugh ratio median **0.522** (q10 0.34, q90 0.73), inside the

@@ -48,8 +48,12 @@ refusal saying why no law is certifiable. **Never a confident wrong answer.**
   Stefan–Boltzmann abstain is FLAME's marginal medians failing to compose;
   the frame-rotation abstain is the unit-sphere constraint on direction
   cosines; the exoplanet abstains map PSCompPars's literature patchwork;
-  the Materials Project census pulled nine unflagged impossible elastic
-  entries out of the database by ID (reported upstream, emmet#1499).
+  the Materials Project census pulled eight materials with impossible elastic
+  bound ordering (Reuss > Voigt) out of the database by ID, plus one with an
+  implausible magnitude (reported upstream, emmet#1499 — where the maintainer
+  corrected our reading: those entries ARE flagged, on the `elasticity`
+  collection whose per-property `deprecated` we had not read, not on the
+  aggregated `summary` endpoint we swept).
 
 The full program narrative, measured soundness results, and the taxonomy of
 failure modes: [docs/INSTRUMENT_REPORT.md](docs/INSTRUMENT_REPORT.md).

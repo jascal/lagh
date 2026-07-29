@@ -82,8 +82,10 @@ complete. Five certified pipeline identities — density (with the decoded
 2005-vintage mass table and the atomic mass constant to 9 digits), the two
 VRH averages, volume-per-atom, and the verify-pinned Poisson and
 anisotropy forms — at bounds up to **α ≤ 10⁻⁵⁰⁷⁰**; one upstream
-data-quality report ([emmet#1499](https://github.com/materialsproject/emmet/issues/1499),
-nine unflagged impossible elastic entries); the banded elastic conjectures
+data-quality report ([emmet#1499](https://github.com/materialsproject/emmet/issues/1499)
+— eight materials with Reuss > Voigt plus one implausible magnitude; the
+maintainer corrected our "unflagged" reading, see CASE_STUDY_MATERIALS_C1.md
+P2); the banded elastic conjectures
 all inside their registered bands; and zero confident-wrong across three
 stages. The registered homogeneity contrast with PSCompPars held: a
 computed database is internally consistent in a way a literature composite
