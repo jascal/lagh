@@ -2877,5 +2877,290 @@
   ],
   "system_certified": false,
   "seconds": 13.0
+ },
+ "cfd_trans": {
+  "path": "data/pdebench/1D_CFD_trans_x6.h5",
+  "family": "1d_cfd",
+  "declared_noise": {
+   "sigma": 6.867219781270251e-06,
+   "sigma_rep_absolute": 6.867219781270251e-06,
+   "sigma_rep_relative": 5.960464477539063e-08,
+   "sigma_extra_declared": 0.0,
+   "field_err_declared": 0.0,
+   "field_err_is_measured": false,
+   "coord_regularized": true,
+   "coord_deviation": [
+    {
+     "max_abs": 0.0,
+     "rel_to_step": 0.0,
+     "regularized": true,
+     "tolerance": 9.5367431640625e-07
+    },
+    {
+     "max_abs": 5.006790160244634e-08,
+     "rel_to_step": 5.006790160244634e-06,
+     "regularized": true,
+     "tolerance": 9.5367431640625e-07
+    }
+   ],
+   "notes": [
+    "the coordinate axes are float32 too, so they are rebuilt as exact linspaces and the deviation from what was stored is reported (coord_deviation): unregularized, that rounding lands on the time-derivative column at ~1e-6 of its own size, because the by-parts weights carry 1/step^k with k per term",
+    "sigma_rep is the float32 storage quantization at the field's peak: computed, not assumed",
+    "field_err is a DECLARED solver-error assumption -- PDEBench does not ship the coarse levels a tolerance ladder would need, so it cannot be measured after the fact",
+    "any certificate from this data is conditional on that declaration and says so"
+   ]
+  },
+  "patch_scales": [
+   [
+    84,
+    8
+   ],
+   [
+    128,
+    8
+   ],
+   [
+    172,
+    8
+   ]
+  ],
+  "eta": 1e-08,
+  "zeta": 1e-08,
+  "stated_laws": {
+   "rho_t": {
+    "(rho u)_x": -1.0
+   },
+   "(rho u)_t": {
+    "(rho u^2)_x": -1.0,
+    "p_x": -1.0,
+    "u_xx": 2.3333333333333334e-08
+   }
+  },
+  "geometry": [
+   {
+    "sample": 0,
+    "summary": "1d_cfd:0: fields ['p', 'rho', 'u'] grid 1024x101 sigma_rep 6.867e-06 (rel 5.960e-08) field_err 0.000e+00",
+    "axes": [
+     {
+      "n": 1024,
+      "min": -0.9990234375,
+      "max": 0.9990234375,
+      "step": 0.001953125,
+      "span": 1.998046875,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it",
+     "field 'p' is NOT PERIODIC: its wrap seam is 20.56x an ordinary interior step (periodic fields measure 0.14-0.91). Weak-form certification is unaffected -- test functions vanish inside the domain -- but the spectral verify track does not apply and will refuse"
+    ],
+    "periodicity_seam": {
+     "rho": 4.627391501602874,
+     "u": 17.965669431620686,
+     "p": 20.563522918768832
+    }
+   },
+   {
+    "sample": 1,
+    "summary": "1d_cfd:1: fields ['p', 'rho', 'u'] grid 1024x101 sigma_rep 6.525e-06 (rel 5.960e-08) field_err 0.000e+00",
+    "axes": [
+     {
+      "n": 1024,
+      "min": -0.9990234375,
+      "max": 0.9990234375,
+      "step": 0.001953125,
+      "span": 1.998046875,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it",
+     "field 'u' is NOT PERIODIC: its wrap seam is 5.58x an ordinary interior step (periodic fields measure 0.14-0.91). Weak-form certification is unaffected -- test functions vanish inside the domain -- but the spectral verify track does not apply and will refuse"
+    ],
+    "periodicity_seam": {
+     "rho": 0.5171034704172256,
+     "u": 5.581336235518225,
+     "p": 2.4453861255801583
+    }
+   },
+   {
+    "sample": 2,
+    "summary": "1d_cfd:2: fields ['p', 'rho', 'u'] grid 1024x101 sigma_rep 7.253e-06 (rel 5.960e-08) field_err 0.000e+00",
+    "axes": [
+     {
+      "n": 1024,
+      "min": -0.9990234375,
+      "max": 0.9990234375,
+      "step": 0.001953125,
+      "span": 1.998046875,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it",
+     "field 'u' is NOT PERIODIC: its wrap seam is 3.54x an ordinary interior step (periodic fields measure 0.14-0.91). Weak-form certification is unaffected -- test functions vanish inside the domain -- but the spectral verify track does not apply and will refuse"
+    ],
+    "periodicity_seam": {
+     "rho": 0.47979834804661553,
+     "u": 3.5407681949832788,
+     "p": 2.57862783982187
+    }
+   },
+   {
+    "sample": 3,
+    "summary": "1d_cfd:3: fields ['p', 'rho', 'u'] grid 1024x101 sigma_rep 4.581e-06 (rel 5.960e-08) field_err 0.000e+00",
+    "axes": [
+     {
+      "n": 1024,
+      "min": -0.9990234375,
+      "max": 0.9990234375,
+      "step": 0.001953125,
+      "span": 1.998046875,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it",
+     "field 'u' is NOT PERIODIC: its wrap seam is 6.40x an ordinary interior step (periodic fields measure 0.14-0.91). Weak-form certification is unaffected -- test functions vanish inside the domain -- but the spectral verify track does not apply and will refuse"
+    ],
+    "periodicity_seam": {
+     "rho": 0.4256618342118852,
+     "u": 6.400716770546601,
+     "p": 2.7239520276647067
+    }
+   }
+  ],
+  "field_err_required": {
+   "(rho u)_t": 1e-05,
+   "rho_t": 0.0001
+  },
+  "field_err_used": 0.0001,
+  "n_rows": 34,
+  "patches_rejected": 110,
+  "equations": [
+   {
+    "target": "rho_t",
+    "certified": false,
+    "abstain": "structural",
+    "alpha_log10": null,
+    "n_rows": 34,
+    "n_cert_rows": 2,
+    "n_solutions": 3,
+    "features": [
+     "(rho u)_x",
+     "(rho u^2)_x",
+     "p_x",
+     "rho_x",
+     "u_x",
+     "u_xx",
+     "rho_xx",
+     "p_xx",
+     "rho",
+     "u",
+     "p"
+    ],
+    "tier": 1,
+    "notes": [
+     "at least 3 materially different classes certify at tier 1 (clustering stops once two of them retain held-out evidence: arbitration cannot crown a winner past that point)"
+    ],
+    "truth": {
+     "truth_max_ratio": 0.20547060982235843,
+     "truth_median_ratio": 0.005221547381629505,
+     "truth_certifies": true,
+     "vacuous": false,
+     "signal_to_band": 5.612165088920103,
+     "median_band": 0.02278592641564038,
+     "median_target": 0.1414213131066822,
+     "note": ""
+    }
+   },
+   {
+    "target": "(rho u)_t",
+    "certified": false,
+    "abstain": "structural",
+    "alpha_log10": null,
+    "n_rows": 34,
+    "n_cert_rows": 2,
+    "n_solutions": 3,
+    "features": [
+     "(rho u)_x",
+     "(rho u^2)_x",
+     "p_x",
+     "rho_x",
+     "u_x",
+     "u_xx",
+     "rho_xx",
+     "p_xx",
+     "rho",
+     "u",
+     "p"
+    ],
+    "tier": 1,
+    "notes": [
+     "at least 2 materially different classes certify at tier 1 (clustering stops once two of them retain held-out evidence: arbitration cannot crown a winner past that point)"
+    ],
+    "truth": {
+     "truth_max_ratio": 0.045835971355865396,
+     "truth_median_ratio": 0.0019282563660955624,
+     "truth_certifies": true,
+     "vacuous": false,
+     "signal_to_band": 5.555508244300917,
+     "median_band": 0.08511211102953421,
+     "median_target": 0.31852208171460283,
+     "note": ""
+    }
+   }
+  ],
+  "alpha_log10_total": null,
+  "weakest": [
+   null,
+   null
+  ],
+  "system_certified": false,
+  "seconds": 3.3
  }
 }

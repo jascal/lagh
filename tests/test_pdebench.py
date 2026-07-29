@@ -97,3 +97,30 @@ def test_a_loaded_dataset_feeds_the_factory_unchanged():
     assert np.all(resid <= s.declared_epsilon("u_t", coeff_max=1.0,
                                               sigma=ds.sigma_rep))
     assert "synthetic" in ds.summary()
+
+
+def test_a_non_periodic_field_is_named_and_the_forecast_refuses():
+    """The verify track differentiates spectrally, so it assumes periodicity.
+    Measured on PDEBench's transmissive-boundary CFD: the interior derivative
+    error tracked the wrap seam (8e-2) and NOTHING noticed -- check_geometry
+    returned ok with no notes. A capability applying itself outside its domain
+    is the failure this program exists to prevent."""
+    from experiments.pde.verify import periodicity_seam, verify
+    nx, nt = 128, 9
+    x = np.linspace(0.0, 1.0, nx, endpoint=False)
+    t = np.linspace(0.0, 0.2, nt)
+    per = np.sin(2 * np.pi * x)[:, None] * np.ones(nt)[None, :]
+    ramp = x[:, None] * np.ones(nt)[None, :]          # a jump at the seam
+    assert periodicity_seam(per) < 2.0
+    assert periodicity_seam(ramp) > 2.0
+
+    ds = from_arrays({"u": ramp}, x, t)
+    rep = check_geometry(ds)
+    assert any("NOT PERIODIC" in n for n in rep["notes"])
+    assert rep["periodicity_seam"]["u"] > 2.0
+
+    r = verify(ramp, ramp[:, 0], x, t, {"u_x": (-0.7, -0.7)}, scheme="etd")
+    assert r["refusal"] == "field is not periodic"
+    assert not r["verified"] and not r["data_verified"]
+    # ...and the refusal says what IS still valid
+    assert "certification is unaffected" in r["note"].lower()

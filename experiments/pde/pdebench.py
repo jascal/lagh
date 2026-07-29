@@ -232,6 +232,27 @@ def check_geometry(ds: Dataset, *, periodic=True, rel_tol=1e-6) -> dict:
                     "periodic right endpoint is DUPLICATED; the spectral verify "
                     "track needs it dropped (L = n*dx)")
                 break
+        # ...and the opposite failure, which this check MISSED entirely until a
+        # transmissive-boundary file walked through it (2026-07-29): a field that
+        # is not periodic at all. The raw gap cannot say -- on an
+        # endpoint-excluded grid a periodic field's seam is dx*|u_x|, measured
+        # larger on our own C2 fields than on PDEBench advection -- so the seam
+        # is expressed in units of an ORDINARY interior step.
+        seams = {}
+        for k, v in ds.fields.items():
+            v = np.asarray(v, float)
+            step = np.abs(np.diff(v, axis=0))
+            seams[k] = float(np.median(np.abs(v[0] - v[-1]))
+                             / max(np.quantile(step, 0.99), 1e-300))
+        out["periodicity_seam"] = seams
+        worst = max(seams, key=seams.get) if seams else None
+        if worst and seams[worst] > 2.0:
+            out["notes"].append(
+                f"field {worst!r} is NOT PERIODIC: its wrap seam is "
+                f"{seams[worst]:.2f}x an ordinary interior step (periodic "
+                "fields measure 0.14-0.91). Weak-form certification is "
+                "unaffected -- test functions vanish inside the domain -- but "
+                "the spectral verify track does not apply and will refuse")
     for k, v in ds.fields.items():
         if not np.all(np.isfinite(v)):
             out["ok"] = False

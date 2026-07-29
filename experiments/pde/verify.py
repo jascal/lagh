@@ -217,6 +217,29 @@ def ic_noise_bound(u0, x, t_eval, coeffs, sigma, *, draws=3, rtol=1e-10,
     return worst
 
 
+PERIODIC_SEAM_MAX = 2.0
+
+
+def periodicity_seam(u) -> float:
+    """|u(x_first) - u(x_last)| measured in units of an ORDINARY interior step.
+
+    The raw wrap gap does not discriminate: on an endpoint-excluded grid the
+    first and last cells are one dx apart, so a perfectly periodic field has a
+    gap of dx*|u_x| -- measured at 2.6e-2 to 3.0e-2 on this program's own
+    periodic C2 fields, which is larger than PDEBench advection's. Dividing by
+    the field's own 99th-percentile interior step makes the test scale-free and
+    shock-tolerant: a periodic field's seam is an ordinary step.
+
+    MEASURED separation: every periodic field tested sits at 0.14-0.91 (our C2
+    heat and Burgers, PDEBench advection, Burgers and periodic CFD) while
+    PDEBench's TRANSMISSIVE-boundary CFD sits at 4.63.
+    """
+    u = np.asarray(u, float)
+    wrap = np.abs(u[0] - u[-1])
+    step = np.abs(np.diff(u, axis=0))
+    return float(np.median(wrap) / max(np.quantile(step, 0.99), 1e-300))
+
+
 def _dx(f, k, order):
     """d^order f / dx^order on a periodic grid by FFT."""
     if order == 0:
@@ -486,7 +509,7 @@ def verify_state(u_true, x, t_eval, modes, basis_fns, labels, law, *,
 
 def verify(u_true, u0, x, t_eval, intervals, *, sigma=0.0, rtol=1e-10,
            u_clean=None, scheme="direct", nsub=64, field_err=0.0,
-           n_samples=3):
+           n_samples=3, periodic_tol=PERIODIC_SEAM_MAX):
     """FORECAST-VERIFIED iff the field lies inside the declared band everywhere.
 
     Two claims, kept apart because they are different:
@@ -498,6 +521,23 @@ def verify(u_true, u0, x, t_eval, intervals, *, sigma=0.0, rtol=1e-10,
         the propagated initial-condition noise. This tests the law as a
         predictor of measurements, which is a strictly harder claim.
     """
+    # DOMAIN GUARD. Every forecast here differentiates spectrally, which assumes
+    # periodicity; on a non-periodic field the FFT sees a jump at the seam and
+    # rings. Measured on PDEBench's transmissive-boundary CFD: the interior
+    # derivative error tracks the seam (8e-2), and NOTHING in the pipeline
+    # noticed -- check_geometry returned ok with no notes. A capability that
+    # applies itself outside its domain without saying so is the failure this
+    # program exists to prevent, so the track refuses instead of forecasting.
+    seam = periodicity_seam(u_true if u_clean is None else u_clean)
+    if seam > periodic_tol:
+        return {"verified": False, "data_verified": False,
+                "refusal": "field is not periodic",
+                "periodicity_seam": seam, "periodic_tol": periodic_tol,
+                "note": ("the spectral forecast assumes a periodic domain; this "
+                         "field's wrap seam is " f"{seam:.2f}x an ordinary "
+                         "interior step. Weak-form CERTIFICATION is unaffected "
+                         "(its test functions vanish inside the domain) -- it is "
+                         "the forecast track that does not apply here")}
     got = forecast_envelope(u0, x, t_eval, intervals, rtol=rtol,
                             scheme=scheme, nsub=nsub, n_samples=n_samples)
     if got is None:
