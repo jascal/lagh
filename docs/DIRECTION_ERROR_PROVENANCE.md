@@ -119,8 +119,39 @@ of reading a construction bug as a finding.
 3. **The modified-equation regression** as a reportable diagnostic, with its
    variance-explained and the coefficient — plus the honest note that explaining
    the residual is not the same as certifying the term.
-4. **Wire the verdict to the band**: the characterizer's output selects the
-   channel rather than the analyst selecting it.
+4. ~~**Wire the verdict to the band**~~ — **ATTEMPTED AND REFUSED**, see "The
+   automation does NOT happen" above. The free-fit route under-declares by four
+   orders and mislabels the kind, because the fit absorbs the error being
+   measured. `characterize_rows` now returns `undetermined` and
+   `usable_as_declaration: False` without a stated law.
+
+5. **THE ACTUAL NEXT STEP: an INDEPENDENT reference for the magnitude.** The
+   channel can be chosen automatically wherever one exists; the whole problem is
+   that PDEBench CFD had none. Four candidate routes, cheapest first, none yet
+   built:
+
+   * **Multi-resolution differencing.** Where a source ships the SAME simulation
+     at two resolutions, their difference on the coarse grid IS the
+     discretization error — no model, no closed form, no assumption. Check what
+     PDEBench actually ships per family before assuming it is available.
+   * **The tightest conservation law as an internal floor.** MEASURED, and this
+     one is nearly free: a conservative scheme enforces mass to near machine
+     precision while enforcing derived balances loosely (PDEBench CFD needed
+     1e-4 for continuity against 1e-2 for momentum, and 1e-5 vs 1e-4 at near-zero
+     viscosity). So the conservation law a scheme holds MOST tightly measures its
+     numerical floor, and the gap to the others measures the scheme error —
+     using nothing but the shipped data and a registered vocabulary.
+   * **An independent high-accuracy solve**, which worked for Burgers (2.44e-3,
+     with the reference's own ladder error reported at 9.5e-5) and is blocked
+     wherever this program cannot integrate the family — Euler, and any 2-D
+     system.
+   * **A learned operator**, per the section below: strongest for the
+     deterministic/stochastic SPLIT (σ without replicates) and useless for error
+     shared across the training distribution.
+
+   Route 2 is the one to try first: it is measurable today, on data already
+   fetched, and it is the only one that needs neither a second resolution nor an
+   integrator.
 
 ## Naming
 

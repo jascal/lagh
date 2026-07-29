@@ -177,10 +177,36 @@ it actually lives (back-propagation, not the reading). Conservation-law form
 came free with C3 stage 3 (shallow water certifies `h_t = −(hu)_x` with
 coefficient exactly −1).
 
-**Next (in order):** (d) **PDEBench** — the pre-flight registration is
-`PDEBENCH_READINESS.md` and the loader/declaration is
-`experiments/pde/pdebench.py`; then (c) variable coefficients; then the traffic
-case study.
+~~(d) PDEBench~~ — run 2026-07-29 as a RECONNAISSANCE/dev pass, not a scored
+read: `CASE_STUDY_PDEBENCH.md`. Six families, six verdicts, zero confident-wrong,
+nine defects found in this program's own code. Its durable output is the
+`error provenance` direction and two process rules now in `STRATEGY.md`.
+
+**Next (in order):**
+
+**(c) VARIABLE COEFFICIENTS — and Darcy priced it.** The registered slot said
+"variable coefficients" as though it were a library extension. It is not. For a
+coefficient field that is ITSELF DATA the weak form's central guarantee breaks:
+the library is `∂^α(g(fields))` with g POINTWISE, and `∇·(a∇u)` has an integrand
+`a∇u` pairing a field with a DERIVATIVE of another field. By-parts once leaves
+`∫∇φ·a∇u`, still a data derivative; moving it again gives `∫∇·(a∇φ)u`, which
+needs `∇a`. Rearranging does not escape it — `(a u_x)_x = (au)_xx − a_xx u −
+a_x u_x`. Measured on PDEBench 2-D Darcy, where the piecewise-constant case IS
+reachable (`∇²u = −β/a` on patches interior to one phase, β = 0.1000 recovered)
+and the general case is not. So the work is one of:
+  * a DECLARED error model for `∇a` — spectral differentiation of a band-limited
+    coefficient with a stated aliasing bound, which the factory's own resolution
+    gates could check; or
+  * a MIXED formulation carrying the flux `q = a∇u` as a field, which certifies
+    `∇·q + β = 0` exactly but needs q measured, not derived; or
+  * the honest restriction: certify only where `a` is locally constant, and
+    report the domain — which is what the Darcy run did.
+The choice is a registration decision, not an implementation detail.
+
+**(e) THE TRAFFIC CASE STUDY** — unchanged, and now better prepared: its
+two-strata structure (exact conservation, conjectured closure) is the same shape
+as the CFD result, where continuity needed a 1e-4 declaration and momentum
+1e-2.
 
 One general question the ladder raised and did not settle: **should
 interval-parameter certificates be the default under any declared noise**, not
