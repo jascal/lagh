@@ -15,6 +15,31 @@ statement of what it can and cannot claim there. It is deliberately written
 BEFORE any file is downloaded, so that the error model is a registration rather
 than a reaction to results.
 
+## Retrospective: this was a RECONNAISSANCE pass and did not know it
+
+Added 2026-07-29, after the pass. The three declarations below are about
+MECHANICS — how to load, what to declare, what to refuse — and all three earned
+their place. What this document never registered was a prediction the first run
+could FALSIFY, and that omission shaped the whole session: the truth check firing
+at 1185× arrived as a surprise to be interpreted rather than as a clean
+refutation, so the DEV reclassification, the pipeline-decode reframing and the
+"report the required declaration" device for CFD were all discovered mid-run.
+
+The line that belonged here, in the pre-flight, before any file was opened:
+
+> **The shipped fields' deviation from their own stated laws will be at or below
+> storage precision (σ_rep ≈ 6e-8 relative).** If it is not, this target is model
+> output whose generating error dominates the band, the exercise is pipeline
+> decode rather than discovery, and no score is available from it — in which case
+> the pass proceeds as dev, and its deliverables are defects found and
+> capabilities exercised, not results.
+
+Measured: **8.9e-4 to 2.0e-2 relative**, four orders above storage precision.
+False in the first hour, and every later conclusion follows from it.
+
+`STRATEGY.md` now carries reconnaissance as a category, with the gating rule for
+engine changes found during one.
+
 ## What is ready
 
 | capability | state | where |
