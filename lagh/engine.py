@@ -627,8 +627,20 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                 certifying.append(c)
         if not certifying:
             continue                              # escalate: reach, not ambiguity
+        # SCOPED to the declared-linear-basis path on purpose. The early exit
+        # is sound for the verdict (see certify.coherent), but arbitration
+        # scores a class by its MIN-COMPLEXITY representative while the exit
+        # tests the member that opened the class, and complexity is not dof --
+        # so on an open-ended library a class could be evidence-bearing when
+        # tested and acquire a lower-complexity, higher-dof representative
+        # afterwards. That could turn an arbitrated winner into a structural
+        # abstain: conservative, never a false certificate, but a REACH
+        # regression. The linear-basis path is where the pathology lives (a
+        # loose band inflating the certifying set) and where the verdicts were
+        # checked against the slow path; everything else keeps the exhaustive
+        # clustering and is bit-identical.
         classes = coherent(certifying, syms, P, yscale,
-                           n_evidence=len(y_cert))
+                           n_evidence=len(y_cert) if linear_basis else None)
         constraint_note = None
         constraints = []
         if len(classes) > 1:
@@ -643,7 +655,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             constraints = input_constraints(X_all_m, syms)
             if constraints:
                 mclasses = coherent(certifying, syms, X_all_m, yscale,
-                                    n_evidence=len(y_cert))
+                                    n_evidence=(len(y_cert) if linear_basis
+                                                else None))
                 if len(mclasses) == 1:
                     classes = mclasses
                     constraint_note = (
