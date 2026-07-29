@@ -162,3 +162,24 @@ def test_partial_determination_skips_candidates_it_cannot_read_linearly():
     cands = [C(sp.Float(2.0) * x0), C(x0 * x1), C(sp.sin(x0))]
     got = invariant_content(cands, [x0, x1])
     assert got["n_certifying_read"] == 1            # the nonlinear ones skipped
+
+
+def test_one_vocabulary_for_partial_determination():
+    """Five mechanisms stated partial determination in five encodings. A
+    certified verdict and an under-determined one must be readable by one
+    consumer, or a per-component checker cannot score either."""
+    from lagh.certify import determination
+
+    d = determination([("a", 2.0, 2.0), ("b", -1.0, 0.5), ("c", None, None),
+                       ("e", 0.2, 0.9)], status="certified")
+    assert d["exact"] == ["a"] and d["unconstrained"] == ["c"]
+    assert set(d["interval"]) == {"b", "e"}
+    # RESOLVED is the threshold-free 'is it there at all' test: an interval that
+    # straddles zero is bounded but does not establish presence
+    assert d["components"]["b"]["resolved"] is False      # [-1, 0.5] spans zero
+    assert d["components"]["e"]["resolved"] is True       # [0.2, 0.9] does not
+    assert d["components"]["a"]["resolved"] is True
+    assert d["n_resolved"] == 2
+    # the status names WHAT produced it: a range from one certified law and a
+    # range over a certifying SET are different claims
+    assert d["status"] == "certified"

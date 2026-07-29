@@ -18,8 +18,8 @@ from .base import ALWAYS, Candidate, admissible, design_matrix, lstsq
 from .base import Term as BaseTerm
 from .base import eval_expr, snap_all, to_expr
 from .certify import (MACHINE_REL, Abstain, Certificate,
-                      arbitrate_significance, check, coherent, epsilon,
-                      float_pinned, free_atoms, gated_atoms,
+                      arbitrate_significance, check, coherent, determination,
+                      epsilon, float_pinned, free_atoms, gated_atoms,
                       input_constraints, invariant_content, minimal,
                       parameter_interval, pinned,
                       reduce_mod_constraints, reduce_to_minimal,
@@ -666,6 +666,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                         "constraint variety and the representative is "
                         "canonicalized modulo it")
         arb_note = interval_note = None
+        partial_cert = None
         if len(classes) > 1:
             # MUNTZ_ARBITRATION.md (registered): the program's own alpha
             # currency arbitrates when one class's chance-fit bound beats
@@ -715,13 +716,23 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                         # passed the gate with a value 1.4e-4 off the truth and
                         # said nothing about its own precision.
                         winner.expr = gated
-                        told = []
+                        told, det = [], []
                         for a_ in free_atoms(winner.expr):
                             iv = parameter_interval(winner.expr, syms, X_cert,
                                                     y_cert, eps, a_)
+                            # the SAME record shape a structural abstain emits,
+                            # so a certified verdict and an under-determined one
+                            # are readable by one consumer
+                            det.append((a_, None if iv is None else iv[0],
+                                        None if iv is None else iv[1]))
                             if iv is not None:
                                 told.append(f"{a_} in [{iv[0]:.10g}, "
                                             f"{iv[1]:.10g}]")
+                        if det:
+                            partial_cert = determination(
+                                det, status="certified",
+                                note="parameter ranges over which THIS certified "
+                                     "law still certifies")
                         if told:
                             interval_note = ("parameter precision at "
                                              f"sigma={sigma:g}: certifies for "
@@ -777,7 +788,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             cert = Certificate(True, 0, 0, len(X_cert), bounds, str(winner.expr),
                                alpha_log10=significance_log10(
                                    winner.expr, y_cert, eps, total),
-                               n_hypotheses=total)
+                               n_hypotheses=total, partial=partial_cert)
             if constraint_note:
                 cert.notes.append(constraint_note)
             if arb_note:

@@ -714,6 +714,51 @@ def invariant_content(certifying: list, syms, names=None) -> dict:
                       "vocabulary, the data and the band -- NOT a certificate")}
 
 
+def determination(entries: list, *, status: str, note: str = "") -> dict:
+    """ONE vocabulary for partial determination, whatever produced it.
+
+    lagh states partial determination in at least five places and, until this
+    existed, in five unrelated encodings: interval-parameter certificates put it
+    in a note string, state certificates in a per-mode dict, a structural abstain
+    in a count, the constrained-input closure in free text, and the two-strata
+    campaigns in a convention. A reader could not compare them and the machinery
+    could not compose them -- while `Certificate` was `certified: bool` plus an
+    abstain enum, a binary with an excuse.
+
+    `entries` is a list of (name, lo, hi) with lo == hi meaning EXACT and either
+    bound None meaning unconstrained in that direction. Each becomes:
+
+      exact         -- pinned to a value
+      interval      -- bounded, and RESOLVED when the interval excludes zero
+                       (the mode is present, not merely bounded)
+      unconstrained -- the data does not determine it, and says so
+
+    `status` names what produced the record (`certified`, `structural-abstain`,
+    `state`), because a range from a single certified law and a range over a
+    certifying SET are different claims and must not be silently merged.
+    """
+    out, kinds = {}, {"exact": [], "interval": [], "unconstrained": []}
+    for name, lo, hi in entries:
+        if lo is None or hi is None or not np.isfinite(lo) or not np.isfinite(hi):
+            k = "unconstrained"
+            rec = {"kind": k, "lo": None, "hi": None, "resolved": False}
+        elif lo == hi:
+            k = "exact"
+            rec = {"kind": k, "lo": lo, "hi": hi, "span": 0.0,
+                   "resolved": bool(lo != 0.0)}
+        else:
+            k = "interval"
+            rec = {"kind": k, "lo": lo, "hi": hi, "span": hi - lo,
+                   "resolved": bool(not (lo <= 0.0 <= hi))}
+        out[str(name)] = rec
+        kinds[k].append(str(name))
+    return {"status": status, "components": out,
+            "exact": kinds["exact"], "interval": kinds["interval"],
+            "unconstrained": kinds["unconstrained"],
+            "n_resolved": sum(1 for r in out.values() if r["resolved"]),
+            "note": note}
+
+
 def coherent(certifying: list, syms, P: np.ndarray, yscale: float,
              tau: float = TAU, n_evidence: int | None = None) -> list:
     """Greedy tau-clustering of certifying laws into functional equivalence classes.

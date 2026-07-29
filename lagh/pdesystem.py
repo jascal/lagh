@@ -33,7 +33,7 @@ from dataclasses import dataclass, field
 import numpy as np
 import sympy as sp
 
-from .certify import band, free_atoms, parameter_interval
+from .certify import band, determination, free_atoms, parameter_interval
 from .engine import discover
 from .systems import SystemCertificate, union_alpha_log10
 from .weakform import LIBRARY, PatchEpsilon, build_nd
@@ -336,10 +336,11 @@ def discover_equation(rows: SystemRows, target: str, *, sigma: float = 0.0,
            "n_rows": int(len(y)), "n_cert_rows": int(len(ce)),
            "n_solutions": n_sol, "features": feat, "tier": r.tier,
            "notes": [str(n)[:220] for n in c.notes][:3],
-           # PARTIAL DETERMINATION travels with the verdict: on an abstain it is
-           # what every consistent law agrees on, which is the part a bare
-           # refusal throws away
-           "partial": c.partial}
+           # PARTIAL DETERMINATION travels with the verdict, keyed by the TERM
+           # NAMES this layer knows: on an abstain it is what every consistent
+           # law agrees on -- the part a bare refusal throws away -- and on a
+           # certificate it is the range over which that law still certifies.
+           "partial": _relabel(c.partial, feat)}
     if not c.certified:
         return out
     syms = [sp.Symbol(f"x_{i}") for i in range(len(feat))]
@@ -351,11 +352,43 @@ def discover_equation(rows: SystemRows, target: str, *, sigma: float = 0.0,
     out["coefficients"] = coeffs
     out["coeff_max_declared"] = coeff_max
     out["coeff_max_certified"] = max([abs(v) for v in coeffs.values()] or [0.0])
+    ivs = intervals_for(r.expr, syms, X[ce], y[ce], eps_ce, coeffs, feat)
     out["intervals"] = {k: (None if v is None else [float(v[0]), float(v[1])])
-                        for k, v in intervals_for(r.expr, syms, X[ce], y[ce],
-                                                  eps_ce, coeffs, feat).items()}
+                        for k, v in ivs.items()}
+    out["partial"] = determination(
+        [(k, None if v is None else float(v[0]),
+          None if v is None else float(v[1])) for k, v in ivs.items()],
+        status="certified",
+        note="ranges over which THIS certified law still certifies")
     out["median_signal_to_band"] = float(np.median(
         np.abs(y[ce]) / band(eps_ce, r.expr)))
+    return out
+
+
+def _relabel(partial, feat):
+    """Re-key an engine-level partial record by term name.
+
+    The engine emits `x_i` (structural abstain) or the coefficient atom itself
+    (certified) because it does not know the vocabulary; this layer does. Without
+    it a reader gets `-157943/225626: interval [...]` where they wanted
+    `u_x: interval [...]`."""
+    if not partial:
+        return partial
+    out = dict(partial)
+    comp = partial.get("components") or partial.get("coefficients") or {}
+    ren, mapping = {}, {f"x_{i}": n for i, n in enumerate(feat)}
+    for k, v in comp.items():
+        ren[mapping.get(k, k)] = v
+    if "components" in partial:
+        out["components"] = ren
+        for key in ("exact", "interval", "unconstrained"):
+            if key in out:
+                out[key] = [mapping.get(k, k) for k in out[key]]
+    else:
+        out["coefficients"] = ren
+        for key in ("required_terms", "excluded_terms", "tightest", "loosest"):
+            if key in out:
+                out[key] = [mapping.get(k, k) for k in out[key]]
     return out
 
 

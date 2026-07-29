@@ -3387,77 +3387,77 @@
     "partial": {
      "n_certifying_read": 485,
      "coefficients": {
-      "x_0": {
+      "(rho u)_x": {
        "lo": -1.0002156481019504,
        "hi": 0.0,
        "span": 1.0002156481019504,
        "always_present": false,
        "never_present": false
       },
-      "x_1": {
+      "(rho u^2)_x": {
        "lo": -4.188583752346789e-05,
        "hi": 0.5184009608825287,
        "span": 0.5184428467200523,
        "always_present": false,
        "never_present": false
       },
-      "x_2": {
+      "p_x": {
        "lo": -3.3497480127366936e-05,
        "hi": 2.5708033253579905e-05,
        "span": 5.9205513380946844e-05,
        "always_present": false,
        "never_present": false
       },
-      "x_3": {
+      "rho_x": {
        "lo": -0.00013034334415986068,
        "hi": 0.4279555825270416,
        "span": 0.4280859258712014,
        "always_present": false,
        "never_present": false
       },
-      "x_4": {
+      "u_x": {
        "lo": -0.003188177748591387,
        "hi": 0.0016314874453528874,
        "span": 0.004819665193944275,
        "always_present": false,
        "never_present": false
       },
-      "x_5": {
+      "u_xx": {
        "lo": -8.412774527357166e-05,
        "hi": 0.6742303752876119,
        "span": 0.6743145030328854,
        "always_present": false,
        "never_present": false
       },
-      "x_6": {
+      "rho_xx": {
        "lo": 0.0,
        "hi": 3.4976758152356022e-06,
        "span": 3.4976758152356022e-06,
        "always_present": false,
        "never_present": false
       },
-      "x_7": {
+      "p_xx": {
        "lo": -2.5845526141824794e-07,
        "hi": 1.189588862565672e-06,
        "span": 1.4480441239839198e-06,
        "always_present": false,
        "never_present": false
       },
-      "x_8": {
+      "rho": {
        "lo": -0.563556698046809,
        "hi": 1.2075955502420517,
        "span": 1.7711522482888606,
        "always_present": false,
        "never_present": false
       },
-      "x_9": {
+      "u": {
        "lo": -0.00039364393243141534,
        "hi": 0.003573972912351751,
        "span": 0.003967616844783166,
        "always_present": false,
        "never_present": false
       },
-      "x_10": {
+      "p": {
        "lo": -0.2519596820246721,
        "hi": 6.004184830720275e-05,
        "span": 0.25201972387297933,
@@ -3468,14 +3468,14 @@
      "required_terms": [],
      "excluded_terms": [],
      "tightest": [
-      "x_7",
-      "x_6",
-      "x_2"
+      "p_xx",
+      "rho_xx",
+      "p_x"
      ],
      "loosest": [
-      "x_5",
-      "x_0",
-      "x_8"
+      "u_xx",
+      "(rho u)_x",
+      "rho"
      ],
      "claim": "every law in the declared vocabulary consistent with these observations at this declared band has each coefficient inside the stated range; terms listed as required appear in all of them and terms listed as excluded in none. This is a statement about the vocabulary, the data and the band -- NOT a certificate"
     },
@@ -3518,77 +3518,77 @@
     "partial": {
      "n_certifying_read": 219,
      "coefficients": {
-      "x_0": {
+      "(rho u)_x": {
        "lo": -0.05164584946881381,
        "hi": 0.9095619676997562,
        "span": 0.96120781716857,
        "always_present": false,
        "never_present": false
       },
-      "x_1": {
+      "(rho u^2)_x": {
        "lo": -1.063861247293492,
        "hi": 0.0,
        "span": 1.063861247293492,
        "always_present": false,
        "never_present": false
       },
-      "x_2": {
+      "p_x": {
        "lo": -1.185070759124127,
        "hi": 0.0,
        "span": 1.185070759124127,
        "always_present": false,
        "never_present": false
       },
-      "x_3": {
+      "rho_x": {
        "lo": -0.07205238110742686,
        "hi": 0.006246595624340599,
        "span": 0.07829897673176746,
        "always_present": false,
        "never_present": false
       },
-      "x_4": {
+      "u_x": {
        "lo": -7.223532547918129,
        "hi": 13.489146968161057,
        "span": 20.712679516079184,
        "always_present": false,
        "never_present": false
       },
-      "x_5": {
+      "u_xx": {
        "lo": -1.2663209023468291,
        "hi": 0.35407821029928843,
        "span": 1.6203991126461177,
        "always_present": false,
        "never_present": false
       },
-      "x_6": {
+      "rho_xx": {
        "lo": -0.00982817784897916,
        "hi": 0.008715445662850289,
        "span": 0.01854362351182945,
        "always_present": false,
        "never_present": false
       },
-      "x_7": {
+      "p_xx": {
        "lo": -0.009330130220173915,
        "hi": 0.002356518490402018,
        "span": 0.011686648710575932,
        "always_present": false,
        "never_present": false
       },
-      "x_8": {
+      "rho": {
        "lo": -1.1036163309398923,
        "hi": 4.716315940311011,
        "span": 5.819932271250903,
        "always_present": false,
        "never_present": false
       },
-      "x_9": {
+      "u": {
        "lo": -42.19760015035648,
        "hi": 1.4429811732552176,
        "span": 43.6405813236117,
        "always_present": false,
        "never_present": false
       },
-      "x_10": {
+      "p": {
        "lo": -0.1420946635956283,
        "hi": 0.174360819240351,
        "span": 0.3164554828359793,
@@ -3599,14 +3599,14 @@
      "required_terms": [],
      "excluded_terms": [],
      "tightest": [
-      "x_7",
-      "x_6",
-      "x_3"
+      "p_xx",
+      "rho_xx",
+      "rho_x"
      ],
      "loosest": [
-      "x_8",
-      "x_4",
-      "x_9"
+      "rho",
+      "u_x",
+      "u"
      ],
      "claim": "every law in the declared vocabulary consistent with these observations at this declared band has each coefficient inside the stated range; terms listed as required appear in all of them and terms listed as excluded in none. This is a statement about the vocabulary, the data and the band -- NOT a certificate"
     },
@@ -3628,6 +3628,6 @@
    null
   ],
   "system_certified": false,
-  "seconds": 12.1
+  "seconds": 12.9
  }
 }
