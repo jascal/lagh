@@ -96,6 +96,109 @@ def modified_equation(residual, columns: dict) -> dict:
     return out
 
 
+def required_declarations(resid, det_l1, gram_a, *, kappa=4.0, q=1.0) -> dict:
+    """How large a declaration each CHANNEL would need to cover this residual.
+
+    Analytic rather than a bisection scan: the L1 channel enters the band as
+    field_err * ||w g'||_1 and the L2 channel as kappa * sigma * sqrt(a'Ga), so
+    the declaration each would need is the residual divided by its own
+    multiplier, taken at quantile `q` over the rows.
+
+    These are the numbers a run would otherwise take by hand. They are DERIVED
+    FROM THE RESIDUAL BEING BANDED, which is circular if used to certify the law
+    that produced them -- see `characterize_rows`, which returns them labelled so
+    the circularity cannot travel silently.
+    """
+    r = np.abs(np.asarray(resid, float).ravel())
+    out = {}
+    d = np.asarray(det_l1, float).ravel()
+    m = d > 0
+    if m.any():
+        out["field_err"] = float(np.quantile(r[m] / d[m], q))
+    g = np.sqrt(np.maximum(np.asarray(gram_a, float).ravel(), 0.0))
+    m = g > 0
+    if m.any():
+        out["sigma"] = float(np.quantile(r[m] / (kappa * g[m]), q))
+    return out
+
+
+def characterize_rows(rows, target, *, extensions=(), sigma=0.0,
+                      library=None, stated_law=None, q=1.0):
+    """Characterize the error in a weak-form row set, WITHOUT being told the law.
+
+    The residual is taken from the best fit over the REGISTERED library (or from
+    `stated_law` when one is known, which is the pipeline-decode case), and the
+    modified-equation regression runs against EXTENSION columns held out of that
+    fit -- a higher derivative left in the fitting library would simply be
+    absorbed, and the residual would look structureless by construction.
+
+    Returns (report, required) where `required` carries the declaration each
+    channel would need AND its provenance. The provenance is the point: a
+    magnitude derived from the residual of the very law it will then band is
+    circular, and a run that certifies at such a declaration must say so.
+    """
+    import numpy as _np
+    names = list(rows.names)
+    j = names.index(target)
+    ext = [e for e in extensions if e in names]
+    lib = [n for n in (library if library is not None else rows.features())
+           if n != target and n not in ext]
+    X = rows.A[:, [names.index(n) for n in lib]]
+    y = rows.A[:, j]
+    if stated_law:
+        coef = _np.array([stated_law.get(n, 0.0) for n in lib], float)
+        provenance = "residual of the STATED law (pipeline decode)"
+    else:
+        coef, *_ = _np.linalg.lstsq(X, y, rcond=None)
+        provenance = ("residual of the best fit over the registered library: a "
+                      "LOWER BOUND only, and NOT usable as a declaration -- the "
+                      "fit absorbs the very error being measured")
+    resid = y - X @ coef
+    cols = {e: rows.A[:, names.index(e)] for e in ext}
+    rep = characterize(resid, columns=cols or None,
+                       field_scale=float(_np.median(_np.abs(y))))
+    a = _np.zeros((len(y), len(names)))
+    a[:, j] = 1.0
+    for n, c in zip(lib, coef):
+        a[:, names.index(n)] = -c
+    det_l1 = (rows.field_l1[:, j]
+              + _np.abs(rows.field_l1[:, [names.index(n) for n in lib]]
+                        @ _np.abs(coef))) if rows.field_l1 is not None else None
+    gram_a = _np.einsum("nk,nkl,nl->n", a, rows.gram, a)
+    req = required_declarations(resid, det_l1, gram_a, q=q) \
+        if det_l1 is not None else {}
+    req["provenance"] = provenance
+    req["from_stated_law"] = bool(stated_law)
+    req["usable_as_declaration"] = bool(stated_law)
+    req["fitted_coefficients"] = dict(zip(lib, [float(c) for c in coef]))
+    req["recommended"] = ("field_err" if rep.verdict == "structured-deterministic"
+                          else "sigma" if rep.verdict == "unstructured-stochastic"
+                          else "field_err (conservative: the kind is unknown)")
+    if not stated_law:
+        # MEASURED, and it is the dangerous direction. On PDEBench advection --
+        # where the solver error is independently known to be 2.75e-2 -- the
+        # free fit moves beta to -0.70003 to soak up the dispersion's mean
+        # effect, leaving a residual that is both smaller and less structured:
+        # u_xxx's share of it falls from 84% (stated law) to 13.6%, the verdict
+        # flips to unstructured-stochastic, and the derived field_err comes out
+        # at 2.6e-6 -- FOUR ORDERS too small. Auto-setting a band this way would
+        # have made every certificate four orders too tight, which is how
+        # confident-wrongs are manufactured. The numbers stay, labelled; the
+        # automation does not happen.
+        rep.notes.insert(0,
+            "NOT A DECLARATION: with no stated law the residual comes from a fit "
+            "that absorbs the error being measured, so both the verdict and the "
+            "magnitude are biased toward 'small and unstructured'. Measured on "
+            "PDEBench advection: 13.6% vs 84% explained, and a magnitude 4 "
+            "orders below the independently measured solver error. Use an "
+            "independent reference (an exact solution, a separate solve, or "
+            "replicates), or declare it and report the sensitivity.")
+        rep.verdict = "undetermined"
+        rep.recommended_channel = ("undetermined -- the free-fit residual "
+                                   "cannot decide it")
+    return rep, req
+
+
 def characterize(residual, *, times=None, columns=None, replicates=None,
                  field_scale=None) -> ErrorReport:
     """Measure the error's STRUCTURE from a stated law's residual.

@@ -194,6 +194,36 @@ report says `unstructured-stochastic` but NOTES that this is evidence rather tha
 a demonstration — a deterministic error orthogonal to every column tested would
 look identical. Only replicates settle it.
 
+## The automation does NOT happen, and the measurement says why
+
+Attempted 2026-07-29: wire the characterizer into the runners so the band's
+channel and magnitude stop being hand-set. **It fails, in the dangerous
+direction, and the failure is the useful result.**
+
+Characterizing a residual needs a law, and the law is what discovery is for. The
+apparently law-free route is to take the residual of the BEST FIT over the
+registered library. Measured on PDEBench advection, where the solver error is
+independently known to be 2.75e-2:
+
+| residual taken from | u_xxx explains | verdict | derived field_err |
+|---|---|---|---|
+| the STATED law (`u_t = −0.7u_x`) | **84.0%** | structured-deterministic | — |
+| the best FIT over the library | **13.6%** | unstructured-stochastic ✗ | **2.6e-6** ✗ |
+
+The fit moves β to −0.70003 to soak up the dispersion's mean effect, leaving a
+residual that is both smaller and less structured. So the free-fit route
+under-declares by **four orders of magnitude** and mislabels the kind — and
+under-declaring is the direction that admits impostors. Auto-setting a band this
+way would have made every PDEBench certificate four orders too tight.
+
+`characterize_rows` therefore REFUSES: with no stated law it returns
+`undetermined`, marks `usable_as_declaration: False`, and keeps the computed
+magnitudes only as labelled lower bounds. The channel choice can be automated
+only where an INDEPENDENT reference exists — an exact solution, a separate solve,
+or replicates — which is precisely the CFD case where none was available. The
+human declaration is not removable by this route, and saying so is better than an
+automation that quietly manufactures confident-wrongs.
+
 ## Registered predictions
 
 - **P1.** On our own C1/C2 fields with declared σ (exact analytic solutions plus
