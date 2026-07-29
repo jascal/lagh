@@ -1,0 +1,83 @@
+{
+ "pdebench_advection": {
+  "verdict": "structured-deterministic",
+  "likely_reading": "a pipeline -- a solver, an assimilation system, a reduction -- rather than an instrument",
+  "recommended_channel": "L1 (field_err)",
+  "evidence": {
+   "n": 105,
+   "residual_median": 6.373845656337807e-05,
+   "residual_relative": 3.3649020379382226e-05
+  },
+  "modified_equation": {
+   "residual_l2": 0.0015039864977002182,
+   "terms": {
+    "u_xx": {
+     "coefficient": 2.449173916500526e-07,
+     "variance_explained": 0.015301855810475606
+    },
+    "u_xxx": {
+     "coefficient": 1.087689236302807e-07,
+     "variance_explained": 0.8399144895738606
+    },
+    "u_xxxx": {
+     "coefficient": -4.090622007792352e-10,
+     "variance_explained": 0.009179573709924949
+    }
+   },
+   "best": "u_xxx",
+   "best_variance_explained": 0.8399144895738606,
+   "explains": true
+  },
+  "notes": [
+   "84% of the residual variance is explained by u_xxx (coefficient 1.09e-07) -- a modified-equation signature",
+   "empirical, never a certificate: this reports measured STRUCTURE; instrument and pipeline are the usual causes and are the likely reading, not the finding"
+  ],
+  "certified": false
+ },
+ "own_c1_declared_sigma": {
+  "verdict": "unstructured-stochastic",
+  "likely_reading": "an instrument rather than a pipeline",
+  "recommended_channel": "L2 (sigma)",
+  "evidence": {
+   "n": 144,
+   "residual_median": 0.00010985499460041542,
+   "residual_relative": 0.0009146453462183909
+  },
+  "modified_equation": {
+   "residual_l2": 0.0024935193707641165,
+   "terms": {
+    "u_xxx": {
+     "coefficient": -2.1897590068212035e-06,
+     "variance_explained": 0.0025129810140327447
+    },
+    "u_xxxx": {
+     "coefficient": 1.6024697189164113e-06,
+     "variance_explained": 0.010970682482033034
+    }
+   },
+   "best": "u_xxxx",
+   "best_variance_explained": 0.010970682482033034,
+   "explains": false
+  },
+  "notes": [
+   "no structure found by the tests that ran; without replicates this is evidence for the stochastic reading and not a demonstration -- a deterministic error orthogonal to every column tested would look the same",
+   "empirical, never a certificate: this reports measured STRUCTURE; instrument and pipeline are the usual causes and are the likely reading, not the finding"
+  ],
+  "certified": false
+ },
+ "no_evidence": {
+  "verdict": "undetermined",
+  "likely_reading": "",
+  "recommended_channel": "L1 (field_err) -- the conservative choice while the kind is unknown",
+  "evidence": {
+   "n": 50,
+   "residual_median": 0.6471256299308108
+  },
+  "modified_equation": {},
+  "notes": [
+   "no growth test, no columns and no replicates: nothing was measured that could separate the two, so the answer is UNDETERMINED rather than a default",
+   "empirical, never a certificate: this reports measured STRUCTURE; instrument and pipeline are the usual causes and are the likely reading, not the finding"
+  ],
+  "certified": false
+ }
+}

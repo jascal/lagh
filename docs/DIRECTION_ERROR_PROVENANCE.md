@@ -173,6 +173,27 @@ order of value, and none of them ever touches the band:
 * On shocks it rings, so its residual there is its own artifact rather than the
   data's -- which is the regime it would otherwise be most wanted for.
 
+## Results (2026-07-29, `experiments/pde/run_error_provenance.py`)
+
+Built as `lagh/errormodel.py` and scored against ground truth this session
+produced independently. P1-P4 met; P5 and P6 are not yet run.
+
+| case | known to be | verdict | evidence |
+|---|---|---|---|
+| PDEBench advection | pipeline error (dispersive, measured) | **structured-deterministic → L1** | `u_xxx` explains **84.0%** at c₃ = **1.088e-7**; `u_xx` 1.5%, `u_xxxx` 0.9% |
+| this program's C1 fields | observational (declared σ) | **unstructured-stochastic → L2** | best term explains **1.1%** |
+| no times, no columns, no replicates | — | **undetermined** | nothing measured that could separate them |
+
+The two real cases are separated by a factor of ~76 in variance-explained, so
+the discriminator is not marginal. **P4 (the only forbidden direction) holds**:
+the deterministic case was never called stochastic. The reverse error is
+permitted and remains possible — it merely widens the band.
+
+One honesty property worth keeping: when the tests run and find no structure, the
+report says `unstructured-stochastic` but NOTES that this is evidence rather than
+a demonstration — a deterministic error orthogonal to every column tested would
+look identical. Only replicates settle it.
+
 ## Registered predictions
 
 - **P1.** On our own C1/C2 fields with declared σ (exact analytic solutions plus
