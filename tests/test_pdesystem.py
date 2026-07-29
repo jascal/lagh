@@ -64,6 +64,22 @@ def test_the_truth_sits_inside_its_own_band():
         assert tc["truth_certifies"], (target, tc)
 
 
+def test_the_truth_check_reports_vacuity_rather_than_a_green_light():
+    """When the band swallows the target, EVERY law sits inside it -- so the
+    truth doing so is not evidence. Measured on PDEBench's reaction-diffusion,
+    whose field is frozen over most of its record: the check returned True while
+    the target column was 1.9e-14 against a band of 37."""
+    r = rows()
+    j = r.names.index("u:u_t")
+    r.det = r.det + 1e3 * np.max(np.abs(r.A))      # a band that swallows all
+    tc = truth_check(r, "u:u_t", TRUTH["u:u_t"])
+    assert tc["vacuous"]
+    assert not tc["truth_certifies"]               # not a green light
+    assert tc["signal_to_band"] < 1.0
+    assert "VACUOUS" in tc["note"]
+    del j
+
+
 def test_both_equations_certify_the_true_support_over_shared_rows():
     r = rows()
     eqs = [discover_equation(r, t_, sigma=0.0, max_tier=3) for t_ in TRUTH]

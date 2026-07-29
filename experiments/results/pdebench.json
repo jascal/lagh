@@ -893,5 +893,253 @@
    ]
   ],
   "note": "deviation from an INDEPENDENT high-accuracy solve of the file's own stated law, started from the file's first time slice; the reference's own error is bounded by its substep ladder and reported"
+ },
+ "reacdiff_nu0.5_rho1.0": {
+  "path": "data/pdebench/1D_ReacDiff_Nu0.5_Rho1.0_x6.h5",
+  "family": "diffusion-reaction",
+  "declared_noise": {
+   "sigma": 5.960464477539063e-08,
+   "sigma_rep_absolute": 5.960464477539063e-08,
+   "sigma_rep_relative": 5.960464477539063e-08,
+   "sigma_extra_declared": 0.0,
+   "field_err_declared": 0.0338,
+   "field_err_is_measured": false,
+   "coord_regularized": true,
+   "coord_deviation": [
+    {
+     "max_abs": 0.0,
+     "rel_to_step": 0.0,
+     "regularized": true,
+     "tolerance": 9.5367431640625e-07
+    },
+    {
+     "max_abs": 5.006790160244634e-08,
+     "rel_to_step": 5.006790160244634e-06,
+     "regularized": true,
+     "tolerance": 9.5367431640625e-07
+    }
+   ],
+   "notes": [
+    "the coordinate axes are float32 too, so they are rebuilt as exact linspaces and the deviation from what was stored is reported (coord_deviation): unregularized, that rounding lands on the time-derivative column at ~1e-6 of its own size, because the by-parts weights carry 1/step^k with k per term",
+    "sigma_rep is the float32 storage quantization at the field's peak: computed, not assumed",
+    "field_err is a DECLARED solver-error assumption -- PDEBench does not ship the coarse levels a tolerance ladder would need, so it cannot be measured after the fact",
+    "any certificate from this data is conditional on that declaration and says so"
+   ]
+  },
+  "patch_scales": [
+   [
+    84,
+    8
+   ],
+   [
+    128,
+    8
+   ],
+   [
+    172,
+    8
+   ]
+  ],
+  "speed_declared": 0.0,
+  "geometry": [
+   {
+    "sample": 0,
+    "summary": "1d_single:0: fields ['u'] grid 1024x101 sigma_rep 5.960e-08 (rel 5.960e-08) field_err 3.380e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 1,
+    "summary": "1d_single:1: fields ['u'] grid 1024x101 sigma_rep 5.960e-08 (rel 5.960e-08) field_err 3.380e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 2,
+    "summary": "1d_single:2: fields ['u'] grid 1024x101 sigma_rep 5.960e-08 (rel 5.960e-08) field_err 3.380e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 3,
+    "summary": "1d_single:3: fields ['u'] grid 1024x101 sigma_rep 5.960e-08 (rel 5.960e-08) field_err 3.380e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 4,
+    "summary": "1d_single:4: fields ['u'] grid 1024x101 sigma_rep 5.960e-08 (rel 5.960e-08) field_err 3.380e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   }
+  ],
+  "n_rows": 107,
+  "patches_rejected": 37,
+  "vocabulary": [
+   "u_t",
+   "u_xx",
+   "u^3",
+   "u^2",
+   "u",
+   "u_x"
+  ],
+  "n_samples": 4,
+  "truth_check": {
+   "truth_max_ratio": 0.01167967787622535,
+   "truth_median_ratio": 0.006719768223249734,
+   "truth_certifies": true,
+   "median_band": 37.03829945056934,
+   "median_target": 1.903690360839637e-14
+  },
+  "equation": {
+   "target": "u_t",
+   "certified": false,
+   "abstain": "noise",
+   "alpha_log10": null,
+   "n_rows": 107,
+   "n_cert_rows": 24,
+   "n_solutions": 4,
+   "features": [
+    "u_xx",
+    "u^3",
+    "u^2",
+    "u",
+    "u_x"
+   ],
+   "tier": 0,
+   "notes": [
+    "VACUOUS: eps swallows the signal"
+   ]
+  },
+  "alpha_log10_total": null,
+  "weakest": [
+   null,
+   null
+  ],
+  "seconds": 1.9
+ },
+ "reacdiff_nu0.5_rho1.0_note": {
+  "verdict": "ABSTAIN[noise] (vacuous)",
+  "nu_confirmed": 0.5,
+  "nu_measured_per_mode": [
+   0.4934,
+   0.4996
+  ],
+  "reaction": "absent: rho fitted 0.000 in the homogenized regime",
+  "field_frozen_after_t": 0.1,
+  "median_target": 1.9e-14,
+  "median_band": 37.0,
+  "pure_diffusion_deviation": 0.0338,
+  "stated_law_deviation": 0.2146
  }
 }

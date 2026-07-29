@@ -203,11 +203,25 @@ def truth_check(rows: SystemRows, target: str, truth: dict, *,
             pred = pred + c
     eps = band(m, expr)
     ratio = np.abs(pred - y) / eps
+    # VACUITY, checked here and not left to the reader: if the ZERO law also
+    # sits inside the band then every law does, and "the truth certifies" is not
+    # evidence about the truth. Measured on PDEBench's 1-D reaction-diffusion,
+    # whose field is frozen (spatially and temporally constant) over ~90% of its
+    # record: the u_t column is 1.9e-14 against a band of 37, and the truth
+    # check returned a cheerful True. The engine's own vacuity gate caught the
+    # run, but the pre-verdict check that exists to keep a null honest was
+    # itself giving a false green light.
+    vac = bool(np.all(np.abs(y) <= eps))
     return {"truth_max_ratio": float(np.max(ratio)),
             "truth_median_ratio": float(np.median(ratio)),
-            "truth_certifies": bool(np.max(ratio) <= 1.0),
+            "truth_certifies": bool(np.max(ratio) <= 1.0) and not vac,
+            "vacuous": vac,
+            "signal_to_band": float(np.median(np.abs(y) / eps)),
             "median_band": float(np.median(eps)),
-            "median_target": float(np.median(np.abs(y)))}
+            "median_target": float(np.median(np.abs(y))),
+            "note": ("VACUOUS: the band swallows the target, so the truth "
+                     "'certifying' says nothing -- every law does"
+                     if vac else "")}
 
 
 def agreement(rows: SystemRows, target: str, got: dict, truth: dict, *,

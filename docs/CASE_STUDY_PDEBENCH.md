@@ -177,17 +177,43 @@ The exponential integrator added for this run does it in 0.09 s
   diagnosed by asking whether the TRUE law sits inside its own band before
   reading anything into the abstain.
 
-## Open, and unresolved as of the reclassification
+## 1-D reaction–diffusion: the record is 90% dead, and the reaction is absent
 
-**1-D reaction–diffusion does not match its filename's parameters.** Loaded and
-geometry-checked cleanly (id 133177, `ReacDiff_Nu0.5_Rho1.0`), but the stated law
-`u_t = 0.5 u_xx + u(1−u)` misses by 73% of the field scale pointwise, an
-unconstrained fit over the library does no better (41%), the spatial content
-collapses to k = 0 by t ≈ 0.25, and the mean then stops moving — which logistic
-growth at ρ = 1 does not do. Either the family is parameterized differently or
-the file is being read wrongly; **no certificate was produced and none is
-claimed.** The truth check refused, which is the correct behaviour and is the
-reason this is recorded as an open question rather than a result.
+`ReacDiff_Nu0.5_Rho1.0` (id 133177), resolved after the reclassification.
+Verdict: **ABSTAIN[noise]** — vacuous — and that is the correct answer, for
+reasons that are a property of the file:
+
+- The initial condition is **binary**: min 0.000, max 1.000 per slice.
+- ν = 0.5 is **confirmed exactly**, measured per Fourier mode at early times
+  (ν_eff = 0.4934 – 0.4996 for k = 1, 2 at t = 0.02–0.05), the same
+  mode-resolved method that measured advection's dispersion.
+- Diffusion at that strength erases the field almost immediately: by t = 0.10
+  the slice is **spatially constant** (min = max = 0.5169), and it then stays at
+  that value, unchanged to four decimals, through t = 1.00. **About 90% of the
+  time record carries no information at all.**
+- **No logistic reaction is present.** At ρ = 1 a uniform field at u = 0.517
+  grows to ≈ 0.73 by t = 1; the shipped field does not move. Nor is the deficit
+  a units mismatch that a rescaled ρ would fix, because the field is *static*,
+  not slow. Fitting the homogenized regime returns ρ = 0.000.
+- Consistent with pure diffusion: the reference deviation is 3.4% for
+  `u_t = 0.5 u_xx` against 21% for the stated law with its reaction.
+
+The engine's verdict on the assembled rows is vacuity: median |target| = 1.9e-14
+against a median band of 37. Nothing can be certified from a frozen field, and
+the instrument said so.
+
+### The defect this found in our own discipline
+
+`pdesystem.truth_check` — the gate that exists so a null is never read as a
+finding — reported **`truth_certifies: True`** on this data. It is technically
+right and practically a false green light: when the band swallows the target,
+*every* law sits inside it, so the truth doing so is not evidence about the
+truth. The check now tests vacuity first and reports `vacuous`, `signal_to_band`
+and a note; `truth_certifies` is False when the target is swallowed. Fixed with
+a regression test.
+
+That is the third defect this dev target has found in this program's code, and
+the first one in the honesty machinery itself.
 
 ## Next, as a dev target
 
