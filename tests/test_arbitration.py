@@ -118,3 +118,47 @@ def test_support_proposal_is_bounded_by_the_certification_split():
     assert reached_c == 4
     assert max(len(s) for s in capped) == 4
     assert capped < full                        # a strict subset, nothing new
+
+
+def test_partial_determination_reports_what_every_consistent_law_agrees_on():
+    """A structural abstain discards the part that WAS determined. Measured on
+    PDEBench CFD: 662 classes certified, the verdict reported nothing about the
+    coefficients, and the truth check knew the stated law sat at 0.003 of its
+    band. The invariant content is a claim about vocabulary+data+band, not about
+    nature, so it cannot weaken zero-confident-wrong."""
+    import sympy as sp
+
+    from lagh.certify import invariant_content
+
+    class C:
+        def __init__(self, e):
+            self.expr, self.complexity = e, 2
+
+    x0, x1, x2 = sp.symbols("x_0 x_1 x_2")
+    # every consistent law: uses x_0 with a coefficient in [1.9, 2.1], never
+    # uses x_2, and uses x_1 only sometimes
+    cands = [C(sp.Float(2.0) * x0), C(sp.Float(1.9) * x0 + sp.Float(0.5) * x1),
+             C(sp.Float(2.1) * x0 - sp.Float(0.3) * x1)]
+    got = invariant_content(cands, [x0, x1, x2], names=["u_xx", "u_x", "u_xxx"])
+    assert got["n_certifying_read"] == 3
+    assert got["required_terms"] == ["u_xx"]        # in all of them
+    assert got["excluded_terms"] == ["u_xxx"]       # in none
+    c = got["coefficients"]
+    assert c["u_xx"]["lo"] == 1.9 and c["u_xx"]["hi"] == 2.1
+    assert not c["u_x"]["always_present"] and not c["u_x"]["never_present"]
+    assert "NOT a certificate" in got["claim"]
+
+
+def test_partial_determination_skips_candidates_it_cannot_read_linearly():
+    import sympy as sp
+
+    from lagh.certify import invariant_content
+
+    class C:
+        def __init__(self, e):
+            self.expr, self.complexity = e, 2
+
+    x0, x1 = sp.symbols("x_0 x_1")
+    cands = [C(sp.Float(2.0) * x0), C(x0 * x1), C(sp.sin(x0))]
+    got = invariant_content(cands, [x0, x1])
+    assert got["n_certifying_read"] == 1            # the nonlinear ones skipped

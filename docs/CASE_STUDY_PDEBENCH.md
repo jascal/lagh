@@ -171,6 +171,30 @@ supports interpolate and coherence correctly finds a crowd. **Large parts of
 these files are outside the instrument's reach, and the report says so rather
 than certifying on the thin remainder.**
 
+### What the abstain was throwing away
+
+Added 2026-07-29, after the pass. `ABSTAIN[structural]` reported nothing about
+the coefficients — and the truth check knew the stated law sat at 0.003 of its
+band, so something was determined. `certify.invariant_content` now computes what
+EVERY law consistent with the data at the declared band agrees on, and reports it
+alongside the abstain. On this same CFD run:
+
+| equation | consistent laws | recovered range | truth |
+|---|---|---|---|
+| `ρ_t` | 485 | `(ρu)_x ∈ [−1, 0]` | −1 ✓ |
+| | | `p_xx`, `ρ_xx`, `p_x` pinned to spans 1e-6 – 6e-5 | ≈ 0 ✓ |
+| `(ρu)_t` | 219 | `(ρu²)_x ∈ [−1.06, 0]` | −1 ✓ |
+| | | `p_x ∈ [−1.19, 0]` | −1 ✓ |
+| | | `u_xx ∈ [−1.27, 0.35]` | 0.0233 ✓ |
+| | | `u ∈ [−42, 1.4]` — genuinely unconstrained | — |
+
+**Every true coefficient lies inside its recovered range**, and the terms that
+are NOT determined are named rather than implied. The claim is about the
+vocabulary, the data and the band — not about nature — so it needs no assumption
+that the truth is in the certifying set and cannot weaken zero-confident-wrong:
+it is strictly weaker than any member that already certifies, and it is reported
+ALONGSIDE the abstain, never as a certificate.
+
 ### The defect this found: cost scales with how loose the band is
 
 The run took 1553 s, almost all of it in `certify.coherent`, which clusters the

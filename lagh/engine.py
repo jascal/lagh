@@ -20,7 +20,7 @@ from .base import eval_expr, snap_all, to_expr
 from .certify import (MACHINE_REL, Abstain, Certificate,
                       arbitrate_significance, check, coherent, epsilon,
                       float_pinned, free_atoms, gated_atoms,
-                      input_constraints, minimal,
+                      input_constraints, invariant_content, minimal,
                       parameter_interval, pinned,
                       reduce_mod_constraints, reduce_to_minimal,
                       refit_minimal, sample_box, significance_log10, vacuous)
@@ -795,6 +795,18 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                   f"(clustering stops once two of them retain "
                                   f"held-out evidence: arbitration cannot crown "
                                   f"a winner past that point)"])
+        if linear_basis:
+            # the form is under-determined; report what IS determined rather
+            # than discarding it with the abstain (gated to the declared-linear
+            # path, where a candidate's coefficients are well defined)
+            cert.partial = invariant_content(certifying, syms)
+            req = cert.partial.get("required_terms") or []
+            exc = cert.partial.get("excluded_terms") or []
+            if req or exc:
+                cert.notes.append(
+                    f"partial determination over {cert.partial['n_certifying_read']} "
+                    f"consistent laws: required {req or 'none'}, excluded "
+                    f"{exc or 'none'}")
         return Result(cert, None, tier, total)
 
     # C6: escalate to the exact-integer quasi-polynomial tier when the float tiers

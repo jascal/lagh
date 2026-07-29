@@ -52,6 +52,11 @@ class Certificate:
     notes: list = field(default_factory=list)
     alpha_log10: float | None = None   # log10 of the significance bound |H|*q^h
     n_hypotheses: int | None = None    # |H|: candidates actually checked this run
+    partial: dict | None = None        # PARTIAL DETERMINATION, first-class: what
+                                       # every law consistent with the data at
+                                       # this band agrees on, reported ALONGSIDE
+                                       # an abstain so the determined part is not
+                                       # discarded (see invariant_content)
 
     def one_line(self) -> str:
         if not self.certified:
@@ -630,6 +635,83 @@ def reduce_mod_constraints(expr, syms, constraints: list):
         return sp.expand(r)
     except Exception:                                          # noqa: BLE001
         return expr
+
+
+def invariant_content(certifying: list, syms, names=None) -> dict:
+    """What EVERY law consistent with the data at the declared band agrees on.
+
+    A structural abstain currently discards the part that WAS determined.
+    Measured on PDEBench CFD: 662 materially different classes certified, the
+    verdict was `ABSTAIN[structural]`, nothing was reported about the
+    coefficients -- and the truth check knew the stated law sat at 0.003 of its
+    band. Something was strongly determined and the verdict threw it away.
+
+    The claim this returns is deliberately about the VOCABULARY, the DATA and the
+    BAND rather than about nature:
+
+        every law in the declared vocabulary consistent with these observations
+        at this declared band has coefficient c_k in [lo, hi]
+
+    which is checkable by construction, needs no assumption that the truth is in
+    the certifying set, and CANNOT weaken the zero-confident-wrong record: the
+    shared content is a weaker statement than any member that already certifies,
+    and it is reported ALONGSIDE the abstain, never as a certificate.
+
+    Two things it reports beyond the intervals, and they are what a reader
+    actually wants from an under-determined fit: a term that appears in EVERY
+    consistent law is REQUIRED, and one that appears in none is EXCLUDED.
+
+    Linear-in-the-columns candidates only -- the case the declared-basis path
+    produces. Anything else is skipped rather than guessed at.
+    """
+    cols = {s: [] for s in syms}
+    n = 0
+    for cand in certifying:
+        try:
+            e = sp.expand(sp.sympify(cand.expr))
+        except Exception:                                      # noqa: BLE001
+            continue
+        if e.free_symbols - set(syms):
+            continue
+        got, rest = {}, e
+        ok = True
+        for s in syms:
+            c = e.coeff(s)
+            if c.free_symbols:                     # not linear in the columns
+                ok = False
+                break
+            got[s] = float(c)
+            rest = rest - c * s
+        if not ok or sp.simplify(rest).free_symbols:
+            continue
+        n += 1
+        for s in syms:
+            cols[s].append(got[s])
+    if not n:
+        return {"n_certifying_read": 0}
+    label = {s: (names[i] if names and i < len(names) else str(s))
+             for i, s in enumerate(syms)}
+    out, required, excluded = {}, [], []
+    for s in syms:
+        v = np.array(cols[s], float)
+        lo, hi = float(v.min()), float(v.max())
+        out[label[s]] = {"lo": lo, "hi": hi, "span": hi - lo,
+                         "always_present": bool(np.all(v != 0.0)),
+                         "never_present": bool(np.all(v == 0.0))}
+        if out[label[s]]["always_present"]:
+            required.append(label[s])
+        if out[label[s]]["never_present"]:
+            excluded.append(label[s])
+    order = sorted(out, key=lambda k: out[k]["span"])
+    return {"n_certifying_read": n, "coefficients": out,
+            "required_terms": required, "excluded_terms": excluded,
+            "tightest": order[:3], "loosest": order[-3:],
+            "claim": ("every law in the declared vocabulary consistent with "
+                      "these observations at this declared band has each "
+                      "coefficient inside the stated range; terms listed as "
+                      "required appear in all of them and terms listed as "
+                      "excluded in none. This is a statement about the "
+                      "vocabulary, the data and the band -- NOT a certificate")}
 
 
 def coherent(certifying: list, syms, P: np.ndarray, yscale: float,

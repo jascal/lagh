@@ -167,6 +167,18 @@ framing.
 
 ## Sequencing
 
+0. **Partial determination as a first-class verdict — STARTED 2026-07-29.**
+   `Certificate.partial` and `certify.invariant_content` are in: on a structural
+   abstain the verdict now carries what EVERY law consistent with the data at
+   the declared band agrees on, per coefficient, with the terms that are required
+   in all of them, excluded from all, and the tightest/loosest spans. Measured on
+   PDEBench CFD, which previously reported nothing: every true coefficient lies
+   inside its recovered range, several are pinned to spans of 1e-6, and the
+   genuinely unconstrained ones are named. This is a prerequisite rather than
+   cleanup — the per-component scoring registered above cannot be expressed by
+   `certified: bool`, so the frozen checker's interface depends on it. Remaining:
+   the same treatment for the other four dimensions (interval / mode / domain /
+   stratum) under ONE vocabulary, so verdicts compose.
 1. Register the certificate-kind decision (above) and the checker's interface.
 2. Level 0 — three systems, mostly existing machinery, calibrate κ.
 3. The Itô/generator weak form in `lagh/weakform.py` (new terms, same discipline).

@@ -335,7 +335,11 @@ def discover_equation(rows: SystemRows, target: str, *, sigma: float = 0.0,
            "abstain": c.abstain, "alpha_log10": c.alpha_log10,
            "n_rows": int(len(y)), "n_cert_rows": int(len(ce)),
            "n_solutions": n_sol, "features": feat, "tier": r.tier,
-           "notes": [str(n)[:220] for n in c.notes][:3]}
+           "notes": [str(n)[:220] for n in c.notes][:3],
+           # PARTIAL DETERMINATION travels with the verdict: on an abstain it is
+           # what every consistent law agrees on, which is the part a bare
+           # refusal throws away
+           "partial": c.partial}
     if not c.certified:
         return out
     syms = [sp.Symbol(f"x_{i}") for i in range(len(feat))]
