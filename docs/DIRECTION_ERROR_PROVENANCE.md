@@ -75,12 +75,43 @@ the modified-equation vocabulary at 5e-4 tightened β from **±17% to ±0.3%**, 
 at 3e-5 to **±0.02%** with α from 1e-16 to 1e-87. The diagnosis pays even when
 the diagnosed term is not itself certifiable.
 
+## What the verdict is a claim ABOUT
+
+The labels `observation` and `simulation` are operational, not ontological, and
+the characterizer must say so in its own output. What is measured is STRUCTURE —
+deterministic reproducibility, growth in time, monotone drift in wavenumber,
+asymmetry across conserved quantities — and "simulation error" is shorthand for
+that structure, never a claim about where the numbers came from. Nothing in this
+program can distinguish a physical process from a sufficiently good simulation of
+one, and it does not need to: a certificate claims that over a stated domain,
+within a declared band, a relation holds. That claim is untouched by what the
+substrate turns out to be.
+
+The distinction is not idle, though, because the same diagnostic is used in
+physics for exactly the substrate question. The measurement made here —
+fitting `β_eff(k) = β + c₃k²` and attributing the drift to a `c₃u_xxx` term — is
+formally the modified-equation fit that Lorentz-invariance-violation searches run
+against gamma-ray burst arrival times (`v(E) = c(1 ± E/E_QG)`), where a
+wavenumber-dependent propagation speed would be evidence of a discrete
+substrate rather than of a discrete SOLVER. Same logic, same fit, different
+subject; the experimental bounds there are severe (E_QG ≳ 10¹⁹ GeV), which is
+what makes the question empirical rather than metaphysical.
+
+So the discipline is the one this arc has already been bitten by twice: the
+mundane explanation is checked against its own band FIRST. The c₃ = 1.09e-7
+measured here is a finite-volume scheme's truncation error, fully accounted for
+by the scheme, and reading anything else into it would be the interpretive form
+of reading a construction bug as a finding.
+
 ## What to build
 
 1. **`characterize_error(fields, coords, law=None, replicates=None)`** — measures
    the diagnostics in the table above and returns an `empirical` verdict, never a
-   certificate: `observation` / `simulation` / `both` / **`undetermined`**, with
-   the evidence and the recommended channel and magnitude.
+   certificate: `structured-deterministic` / `unstructured-stochastic` / `both` /
+   **`undetermined`**, with the evidence and the recommended channel and
+   magnitude. The verdict names the STRUCTURE it measured; `simulation` and
+   `observation` are the usual causes of each and are reported as the likely
+   reading, not as the finding.
 2. **UNDETERMINED must be first-class.** A single trajectory with no replicates
    and no reference cannot distinguish a deterministic error that happens to look
    irregular from a stochastic one. Saying so is the correct answer and is the
