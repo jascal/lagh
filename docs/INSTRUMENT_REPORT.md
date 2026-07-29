@@ -31,7 +31,9 @@ through every capability added since. Architecture:
   α ≤ |H|·q^h — the a-priori chance-fit bound from the hypothesis count
   actually searched and the per-point tolerance/range ratio over dof-discounted
   held-out points. Validated by null calibration: **0 false certifications in
-  200 true-random targets.** Refusals thereby become *certified randomness
+  200 true-random targets**, and again 0 / 200 on a fresh sweep under the
+  amended arbitration rule (2026-07-29) — 400 independent trials across the two
+  engine states, no certification in any of them. Refusals thereby become *certified randomness
   statements relative to a stated hypothesis class* — an object no other SR
   tool emits.
 - **Two regimes, one verdict machinery**: active (adaptive ranging, budget-

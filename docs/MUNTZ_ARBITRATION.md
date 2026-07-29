@@ -125,15 +125,21 @@ was *in* the contest; `rational-d1` is the case where it is not.
   its law; the audit shows **no cell regressed** against the committed
   baseline, only the two gains. The Gaia C0 photometric certificate is
   byte-identical at floor 5e-6 (`12660019/492850 − 5·x₀/2`, α ≤ 10⁻⁴⁶¹·¹⁴⁵).
-- **P3 — NOT SCORED under the amended rule; open.** The 200-trial null run was
-  stopped (it needs ~3 h of sequential trials) and is *not* claimed here. What
-  is known: the committed 0/200 result stands for the pre-arbitration engine,
-  and the amendment can only make certification **stricter** — it adds a second
-  condition to arbitration, which itself only ever converts abstains among
-  classes that already certify, and a true-random target produces no certifying
-  class to arbitrate between. That is an argument, not a measurement, and it is
-  registered as the open item: re-run `experiments/run_null_calibration.py`
-  under the amended rule and record the count here.
+- **P3 — MET, measured 2026-07-29.** `experiments/run_null_calibration.py --out
+  experiments/results/null_calibration_amended.jsonl`, 200 fresh OS-seeded
+  trials under the amended rule: **0 / 200 false certifications**, and no trial
+  emitted a law at all. The argument this replaces — that the amendment can only
+  make certification stricter, so a pre-amendment 0/200 implies an amended one —
+  was sound, and is now a measurement rather than an argument. The
+  pre-amendment run is kept beside it (`null_calibration.jsonl`) rather than
+  overwritten, which is what the new `--out` flag is for.
+
+  One observation that is NOT a controlled comparison and should not be read as
+  one: the amended run took 117 min against the original's 190 (mean 35.1 s vs
+  57.1 s per trial). Several engine changes landed between the two — the
+  coherence early exit chief among them — and the machine was loaded
+  differently. It is consistent with the engine having got faster on
+  no-certifying-class inputs; it does not measure that.
 - **P4 — NOT APPLICABLE as registered.** Measured on the frozen C0 snapshot at
   floor 2e-4: **parametric abstain**, and *no arbitration contest ever forms* —
   the whale/truth rivalry the prediction assumed was already dissolved upstream
