@@ -13,6 +13,7 @@ scoring-affecting changes prohibited (registration section 5).
 """
 from __future__ import annotations
 
+import argparse
 import io
 import json
 import signal
@@ -115,15 +116,28 @@ def solve(df, task, units, variant, variant_epoch_fix=False):
     return ans, tw.validate(obs), n_used, state
 
 
-def main():
+def main(argv=None):
+    # --out/--scores exist so a POST-READ re-run can never touch the recorded
+    # blind read. The read was spent once, on 2026-07-27, against the code as it
+    # stood that day; a later fix may well score higher and that number is a DEV
+    # number. Appending it to gravitybench_read.jsonl -- which this runner does
+    # by design, skipping rows already present -- would quietly restate a
+    # one-shot result. Default paths unchanged, so the recorded artifacts are
+    # still what `main()` with no arguments reproduces.
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default=str(OUT))
+    ap.add_argument("--scores",
+                    default="experiments/results/gravitybench_read_scores.json")
+    a = ap.parse_args(argv)
+    out, scores_path = Path(a.out), Path(a.scores)
     insts = load_instances()
     done = set()
-    if OUT.exists():
-        for line in OUT.read_text().splitlines():
+    if out.exists():
+        for line in out.read_text().splitlines():
             r = json.loads(line)
             done.add((r["scenario_id"], r["variant"]))
     signal.signal(signal.SIGALRM, _timeout)
-    with OUT.open("a") as fh:
+    with out.open("a") as fh:
         for inst in insts:
             df = pd.read_csv(io.StringIO(inst["simulation_csv_content"]))
             task = inst["scenario_name"]
@@ -157,7 +171,7 @@ def main():
                       f" {rec['secs']}s", flush=True)
 
     # ---- scoring (mechanical, per-instance thresholds from the dataset) ----
-    rows = [json.loads(line) for line in OUT.read_text().splitlines()]
+    rows = [json.loads(line) for line in out.read_text().splitlines()]
     inst_by_id = {i["scenario_id"]: i for i in insts}
     scored = []
     for r in rows:
@@ -183,7 +197,7 @@ def main():
                             "correct": sum(r["correct"] for r in sub),
                             "pct": round(100 * sum(r["correct"] for r in sub)
                                          / max(len(sub), 1), 2)}
-    Path("experiments/results/gravitybench_read_scores.json").write_text(
+    scores_path.write_text(
         json.dumps({"summary": summary, "rows": scored}, indent=1))
     print(json.dumps(summary, indent=1))
     return 0

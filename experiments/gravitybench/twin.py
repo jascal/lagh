@@ -67,6 +67,19 @@ def system_id(obs):
         p, GM = -2.0, np.nan
     # snap to Newtonian when within tolerance (alpha definition: r^-(2+alpha))
     p_used = -2.0 if abs(p + 2.0) < 0.05 else p
+    # ...and RE-FIT THE INTERCEPT AT THE SNAPPED EXPONENT. Keeping exp(c[0])
+    # after moving the slope leaves GM describing a force law nobody is using:
+    # the intercept was fitted against p, so switching to p_used biases it by
+    # r_mid^(p - p_used). Measured on the dev orbit -- p_raw = -1.999828 snapped
+    # to -2, r_mid = 1.5e11, bias 0.444%, and the total mass came back 0.445%
+    # low. That is small enough to pass every direct mass tolerance and large
+    # enough to fail the twin: a 0.44% mass error is a 0.22% period error, which
+    # over the four-period validation window is a 2*pi*4*0.0022 = 5.6% phase
+    # drift (11% at periastron on an e = 0.3 orbit). The twin's whole premise is
+    # that it can be integrated forward, so a bias the direct answers survive
+    # is one the trajectory does not.
+    if p_used != p and len(rs) >= 3:
+        GM = float(np.exp(np.mean(np.log(accs) - p_used * np.log(rs))))
     M = GM / G_SI
     m2 = M / (1.0 + q)
     m1 = M - m2

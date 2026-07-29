@@ -91,6 +91,10 @@ The budgeted agent outscored the full-data agent — the planner engineers
 better differentiation points than uniform density provides, which is the
 benchmark's own thesis about planning, demonstrated by an instrument.
 
+Both figures are the read as executed on 2026-07-27 (code at `cf54706`) and are
+not restated: a mass-estimate bug found on 2026-07-29 means current `master`
+scores differently, and that number is DEV, not a read.
+
 ### 3.3 The distillation loop (LLM → grammar)
 A bounded LLM proposer, verified by the sound checker, produced 19 certificates
 the grammar could not reach; clustering those verified forms into registered

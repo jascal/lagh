@@ -10,6 +10,12 @@ and [`docs/BLIND_READ_REPORT_GRAVITYBENCH.md`](../../docs/BLIND_READ_REPORT_GRAV
 | full observations | 63.59% (131/206) — below the 74% baseline; mechanism in the report |
 | full observations + dev epoch fix (labeled DEV, post-read) | 91.75% |
 
+> **The code in this repo no longer reproduces those numbers exactly, and that
+> is deliberate.** A mass-estimate bug was found and fixed on 2026-07-29, after
+> the read (details below). **To reproduce the read as it was run, check out
+> `cf54706`** — the commit that recorded it. Current `master` scores are DEV
+> numbers, reported separately and never as the read.
+
 ## What this pipeline is (and is not)
 
 A **fully deterministic, non-LLM baseline**: a fixed observation-planning
@@ -51,3 +57,74 @@ Development provenance: the agent was built and validated ONLY on self-built
 synthetic orbits (`integrator.py`, `battery.py` — 8 hardening rounds,
 committed) before the benchmark data was first opened; the registration doc
 predates the download in git history.
+
+## Post-read fix, 2026-07-29: the snapped exponent kept a stale intercept
+
+Found by a test that had been committed RED — `test_twin_end_to_end` asserts the
+twin reproduces the observations it was fitted from to 5%, and it had been
+returning 11.2% since `4f096aa` ("astronomer hardened"), which is the commit
+that introduced explicit triplet metadata. It passed at `b9a211a` and failed at
+`4f096aa`; nobody re-ran it in between.
+
+`system_id` fits `log|a_rel| = log(GM) + p log r`, then SNAPS `p` to the
+Newtonian −2 when it is within tolerance. It was not re-fitting the intercept
+after moving the slope, so `GM` continued to describe the force law at the free
+`p` while everything downstream used `p_used`. The bias is `r_mid^(p − p_used)`:
+on the dev orbit `p_raw = −1.999828`, `r_mid = 1.5e11`, bias **0.444%**, and the
+total mass came back **0.445% low**.
+
+That size of error is invisible to every direct answer — the tolerances here are
+3–10% — and fatal to the twin, which is *integrated forward*. A 0.44% mass error
+is a 0.22% period error, which over a four-period window is a 5.6% phase drift
+and 11% at periastron on an `e = 0.3` orbit. Re-fitting the intercept at the
+snapped exponent takes the mass error to **0.0029%** and the twin validation
+from **0.112 to 0.00006**.
+
+Effect on the synthetic battery — a Pareto improvement, which is what the
+gating rule asks of a change like this:
+
+| | before | after |
+|---|---|---|
+| cases improved / unchanged / regressed | — | **40 / 3 / 0** |
+| twin-validation median | 0.1120 | **0.0023** |
+| battery verdict | 42 / 43 (drag 17.3%) | **42 / 43 (drag 17.3%, unchanged)** |
+
+`run_blind_read.py` grew `--out` / `--scores` at the same time, so a post-fix
+re-run cannot append to the recorded read: the runner skips rows already in its
+journal, so pointing it at the committed file would have silently restated a
+one-shot result instead of producing a new one.
+
+### What the fixed code scores — DEV, not a read
+
+Both variants re-run against the same dataset
+(`gravitybench_read_postfix{,_scores}.json`):
+
+| variant | read as executed (`cf54706`) | post-fix DEV |
+|---|---|---|
+| budgeted (100 obs) | 94.66% (195/206) | **94.66% (195/206)** — bit-identical, no instance flipped either way |
+| full observations | 63.59% (131/206) | **86.89% (179/206)** — 50 newly correct, 2 newly wrong |
+
+The budgeted variant is untouched, which fits the mechanism: its answers are
+read off a twin fitted to a short, dense, well-conditioned observation plan,
+and none of them sat within 0.44% of a threshold. The full variant is where the
+bias was doing its damage — median twin validation across the read drops from
+**0.538 to 0.0074**.
+
+**The two regressions are worth more than the 48 net gains**, because they are
+a case of being right for the wrong reason. Both are extremes
+(`max_velocity_star1`, `max_angular_velocity_star1`) on one scenario,
+`9p6_M_3p1_M_Proper_Motion2`, whose twin validation improved from **4.09 to
+0.62** — that is, from 409% max reconstruction error to 62%. It was never a
+usable twin and still isn't; the old answers happened to land inside the 5%
+threshold (2.2% and 0.4% error) and the new ones land outside (6.3% and 8.6%).
+Nothing about that scenario got worse except the luck. **The instrument already
+computes the number that would have flagged it** — `twin_validation` is
+recorded per instance and never gates the answer. Gating on it would convert
+both of these from confident-wrong to abstain, and is the registered follow-up.
+
+The other post-read DEV path, `dev_full_retest.py` (native-cadence epoch
+triplets), is **byte-identical before and after** — still 189/206 = 91.75%, so
+the expected output quoted above is unchanged. It builds its epoch state a
+different way and never consumed the biased mass. Note it still beats the
+mass-fix-only full number (91.75% vs 86.89%): the two fixes address different
+things and the epoch one is doing more work on this variant.

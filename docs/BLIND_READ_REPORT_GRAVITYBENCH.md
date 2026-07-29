@@ -7,6 +7,15 @@ unit marker, full-variant uniform 2400-row subsample (bounded runtime; uniform
 cadence preserved). Scoring is mechanical per-instance thresholds from the
 dataset itself.
 
+> **A bug was found in the astronomer AFTER this read (2026-07-29) and the
+> numbers below are NOT restated.** `system_id` snapped the force exponent to
+> the Newtonian −2 without re-fitting the intercept, biasing the total mass by
+> ~0.44% (`experiments/gravitybench/README.md` has the mechanism). The scores in
+> this report are what the code as of `cf54706` produced on the one read it was
+> allowed, and they stand as run. Any post-fix score is a DEV number, reported
+> as such and never as the read — a read cannot be re-taken because the code
+> improved, or it was never a read.
+
 ## Scorecard vs the frozen baselines
 
 | | lagh astronomer | frozen SOTA (o4-mini-high) |
