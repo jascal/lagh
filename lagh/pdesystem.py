@@ -287,7 +287,8 @@ def agreement(rows: SystemRows, target: str, got: dict, truth: dict, *,
 def discover_equation(rows: SystemRows, target: str, *, sigma: float = 0.0,
                       seed: int = 0, max_tier: int = 3,
                       features: list | None = None,
-                      holdout: bool = True, coeff_max: float = 2.0) -> dict:
+                      holdout: bool = True, coeff_max: float = 2.0,
+                      qualifier: dict | None = None) -> dict:
     """One equation of the system: `target` as a certified function of the
     feature columns, certified on rows from a HELD-OUT SOLUTION.
 
@@ -298,6 +299,16 @@ def discover_equation(rows: SystemRows, target: str, *, sigma: float = 0.0,
     certify u_t = -u_x. For a SYSTEM the exposure is larger, not smaller: a
     coupled pair on one trajectory can satisfy relations holding in both
     equations at once.
+
+    `qualifier` (`certify.domain_qualifier`) is the DOMAIN this run's rows were
+    drawn from, when they are not the whole field: Darcy certifies inside ONE
+    conductivity phase, and the restriction is part of the claim rather than a
+    filter applied before it. Passing it here attaches it to the partial record
+    on BOTH paths -- a domain-restricted abstain is still a domain-restricted
+    statement -- and `certify.conjoin_determination` then refuses to conjoin the
+    result with a claim made somewhere else. Default None means the whole field,
+    which is what every campaign predating this kwarg claimed, so they are
+    unaffected by construction.
     """
     feat = list(features) if features is not None else rows.features()
     if target in feat:
@@ -340,7 +351,8 @@ def discover_equation(rows: SystemRows, target: str, *, sigma: float = 0.0,
            # NAMES this layer knows: on an abstain it is what every consistent
            # law agrees on -- the part a bare refusal throws away -- and on a
            # certificate it is the range over which that law still certifies.
-           "partial": _relabel(c.partial, feat)}
+           "partial": _qualify(_relabel(c.partial, feat), qualifier,
+                               c.abstain or "certified")}
     if not c.certified:
         return out
     syms = [sp.Symbol(f"x_{i}") for i in range(len(feat))]
@@ -359,9 +371,36 @@ def discover_equation(rows: SystemRows, target: str, *, sigma: float = 0.0,
         [(k, None if v is None else float(v[0]),
           None if v is None else float(v[1])) for k, v in ivs.items()],
         status="certified",
-        note="ranges over which THIS certified law still certifies")
+        note="ranges over which THIS certified law still certifies",
+        qualifier=qualifier)
     out["median_signal_to_band"] = float(np.median(
         np.abs(y[ce]) / band(eps_ce, r.expr)))
+    return out
+
+
+def _qualify(partial, qualifier, status):
+    """Attach the run's DOMAIN to a partial record, on any path.
+
+    Separate from `_relabel` because it applies to records this layer did not
+    build: the structural-abstain record comes up from the engine, which knows
+    nothing about which region the rows were drawn from, and an abstain made on
+    one phase is still a statement about that phase.
+
+    When there is no partial content at all -- the engine found nothing every
+    consistent law agrees on, which is the emptiest verdict there is -- a
+    qualified run still emits a RECORD, carrying the domain and no components.
+    Measured on Darcy, where the alternative was a domain-restricted abstain
+    whose partial field was `None` and whose restriction lived only in a
+    free-text sibling: a consumer reading `partial` would have seen a claim
+    about the whole field where the run had looked at 16% of it."""
+    if qualifier is None:
+        return partial
+    if not partial:
+        return determination([], status=status,
+                             note="nothing was determined over this domain",
+                             qualifier=qualifier)
+    out = dict(partial)
+    out["qualifier"] = qualifier
     return out
 
 

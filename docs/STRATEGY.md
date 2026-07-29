@@ -198,3 +198,31 @@ predates it is bit-identical by construction rather than by testing. The one
 change that could NOT be gated (reading a linear candidate's coefficients instead
 of differentiating it symbolically) was validated the other way: the C1 ladder
 re-run bit-identical across all 15 rungs.
+
+### A declaration must say what quantity it bounds (added 2026-07-29)
+
+The same reconnaissance pass produced a second standing rule, and this one is
+about the number rather than the code. PDEBench's field error was *measured*
+honestly, against an exact solution, and then declared into a band that consumes
+a different quantity: the measurement was a POINTWISE deviation accumulated over
+a trajectory, the band wanted a LOCAL weak-form residual over a patch. Nothing in
+the run could notice — over-declaring is the safe direction, so every certificate
+came back sound, and merely ~3900× wider than the data supports.
+
+> **Every declared error must travel with the quantity it bounds** — pointwise or
+> weak-form, local or accumulated, absolute or relative — and a runner must not
+> accept a declaration whose quantity does not match what its band consumes.
+
+**A declared error belongs to a CONSUMER, not to a dataset**, which is the same
+rule one turn further on. One field owed PDEBench's runner two different numbers:
+the band integrates against a patch and wanted 7.06e-6, the forecast compares u
+pointwise against a trajectory integrated from t = 0 and wanted 2.75e-2. A single
+`--field-err` fed both, so each check got the other's number, and the failure
+showed up as a *tight* certificate failing its forecast at 26990 points — which
+reads as evidence against tightening and is nothing of the kind.
+
+The tell is cheap and should be routine: **scan the declaration**. If a
+certificate survives three or four decades below the number declared, the
+declaration is not what is binding it, and the reason for the gap is worth
+finding before the result is written up. That scan is what caught this one, and
+it cost one run over data already on disk.

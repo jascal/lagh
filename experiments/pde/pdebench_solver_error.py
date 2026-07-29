@@ -15,6 +15,17 @@ mode the weak-form arc exists to prevent.
 
 Reports the deviation as a function of time, so its GROWTH is visible: storage
 rounding is flat in t, a solver's error is not.
+
+DO NOT DECLARE THIS NUMBER AS A WEAK-FORM `field_err`. Corrected 2026-07-29,
+after every PDEBench certificate had already been declared from it: what this
+script measures is a POINTWISE deviation ACCUMULATED over a trajectory, and the
+band it was fed into is a LOCAL weak-form residual over one patch. They are
+different quantities, and the first exceeds the second by ~3900x on advection
+(2.75e-2 measured here against the 7.06e-6 the weak form requires -- bisected in
+`run_conservation_floor.py`). The direction is safe (over-declaring only widens a
+band) and the cost is large (beta to +-17% instead of +-0.02%). The number is
+still the right one for the question this script asks -- how far the shipped
+field has drifted from the exact solution -- and the wrong one for a band.
 """
 from __future__ import annotations
 

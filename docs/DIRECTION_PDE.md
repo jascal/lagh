@@ -203,6 +203,32 @@ and the general case is not. So the work is one of:
     report the domain — which is what the Darcy run did.
 The choice is a registration decision, not an implementation detail.
 
+**DECIDED 2026-07-29 (user): the honest restriction.** Certify where `a` is
+locally constant and REPORT THE DOMAIN. The two rejected routes each buy reach
+with something this program does not want to spend: a declared `∇a` error model
+adds another hand-set number in a slot where a wrong one is invisible (the
+session that made this decision had just spent a correction on exactly that), and
+the mixed formulation needs `q = a∇u` MEASURED, which the only live dataset does
+not ship. What the chosen route costs is a vocabulary, not an approximation:
+`certify.domain_qualifier` + `conjoin_determination`, now built — a restriction
+that scopes an entire determination record, with the rule that records made on
+different domains REFUSE to conjoin (their conjunction is defined only where both
+were established, and nothing here can intersect two predicates). That is the
+same qualifier the DOMAIN dimension of partial determination needed, so one
+design closes both open items; see `DIRECTION_STOCHASTIC.md` step 0. Reach stays
+piecewise-constant `a`, stated rather than discovered.
+
+**Applied the same day.** `discover_equation(..., qualifier=)` carries the domain
+on BOTH paths — a domain-restricted abstain is still a domain-restricted
+statement — and where there is no partial content at all it emits a record with
+the domain and no components, because "nothing determined, over this region" is
+the honest reading and `None` was being read as a claim about the whole field.
+Darcy re-run in both phases (`darcy_beta0.1_qualified`,
+`darcy_beta0.1_lowphase_qualified`): verdicts unchanged (both
+ABSTAIN[structural]), and `run_darcy_domains.py` confirms on that real output
+that the two phases refuse to conjoin. Every campaign predating the kwarg passes
+`None` and is unaffected by construction, which is what the gating rule asks for.
+
 **(e) THE TRAFFIC CASE STUDY** — unchanged, and now better prepared: its
 two-strata structure (exact conservation, conjectured closure) is the same shape
 as the CFD result, where continuity needed a 1e-4 declaration and momentum

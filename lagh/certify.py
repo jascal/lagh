@@ -714,7 +714,82 @@ def invariant_content(certifying: list, syms, names=None) -> dict:
                       "vocabulary, the data and the band -- NOT a certificate")}
 
 
-def determination(entries: list, *, status: str, note: str = "") -> dict:
+def domain_qualifier(predicate: str, *, coverage: float | None = None,
+                     note: str = "") -> dict:
+    """A restriction that scopes an ENTIRE determination record.
+
+    The fifth dimension of partial determination does not fit the others. A
+    structural, interval or mode statement is ABOUT a component, so it can be one
+    entry among many; a domain restriction ("this holds where the conductivity is
+    in its high phase") qualifies every component at once and is not a component
+    at all. Registered 2026-07-29 (user decision) as the route for variable
+    coefficients: certify where the coefficient field is locally constant and
+    REPORT THE DOMAIN, rather than declaring a `grad a` error model or requiring
+    a measured flux. Darcy is the case that priced it -- beta = 0.1000 recovered
+    in the high-conductivity phase and nowhere else.
+
+    `predicate` is the domain in the caller's own words and is the IDENTITY of
+    the restriction: two records compose only if their predicates match exactly,
+    because this layer cannot decide whether two differently-worded regions are
+    the same set, and guessing that they are is the unsound direction.
+    `coverage` is the fraction of the data the predicate admits, when known.
+    """
+    return {"kind": "domain", "predicate": str(predicate),
+            "coverage": None if coverage is None else float(coverage),
+            "note": note}
+
+
+def conjoin_determination(records: list, *, status: str = "conjoined") -> dict:
+    """Conjoin partial-determination records, REFUSING across domains.
+
+    Two claims that hold on different regions do not conjoin into a claim that
+    holds on either: the conjunction is only defined where both were established.
+    This layer cannot intersect two arbitrary predicates, so it refuses unless
+    they are identical (an unqualified record is unrestricted and composes with
+    anything, taking the other's qualifier).
+
+    Where a component appears in several records the result is the INTERSECTION
+    of its intervals -- both claims hold, so the truth is in both. An EMPTY
+    intersection is a contradiction and is reported as one rather than dropped:
+    it means the inputs cannot all be right, which is a finding about the inputs.
+    """
+    quals = [r.get("qualifier") for r in records if r.get("qualifier")]
+    preds = {q["predicate"] for q in quals}
+    if len(preds) > 1:
+        return {"status": "refused", "refusal": "different domains",
+                "domains": sorted(preds), "components": {}, "exact": [],
+                "interval": [], "unconstrained": [], "n_resolved": 0,
+                "note": ("these records were established on different regions; "
+                         "their conjunction is defined only where both were, "
+                         "and this layer cannot intersect the predicates")}
+    bounds: dict = {}
+    for r in records:
+        for name, rec in r.get("components", {}).items():
+            lo, hi = rec.get("lo"), rec.get("hi")
+            if name not in bounds:
+                bounds[name] = [lo, hi]
+                continue
+            plo, phi = bounds[name]
+            bounds[name] = [
+                lo if plo is None else (plo if lo is None else max(plo, lo)),
+                hi if phi is None else (phi if hi is None else min(phi, hi))]
+    empty = sorted(n for n, (lo, hi) in bounds.items()
+                   if lo is not None and hi is not None and lo > hi)
+    out = determination([(n, lo, hi) for n, (lo, hi) in bounds.items()],
+                        status=status,
+                        note="intersection over the conjoined records")
+    if quals:
+        out["qualifier"] = quals[0]
+    if empty:
+        out["contradiction"] = empty
+        out["note"] += (f"; CONTRADICTION: {', '.join(empty)} have empty "
+                        "intersections, so the conjoined records cannot all "
+                        "be right")
+    return out
+
+
+def determination(entries: list, *, status: str, note: str = "",
+                  qualifier: dict | None = None) -> dict:
     """ONE vocabulary for partial determination, whatever produced it.
 
     lagh states partial determination in at least five places and, until this
@@ -736,6 +811,10 @@ def determination(entries: list, *, status: str, note: str = "") -> dict:
     `status` names what produced the record (`certified`, `structural-abstain`,
     `state`), because a range from a single certified law and a range over a
     certifying SET are different claims and must not be silently merged.
+
+    `qualifier` (see `domain_qualifier`) scopes the WHOLE record rather than any
+    one component -- the DOMAIN dimension, which is the one that does not fit the
+    entry shape. A record without one claims its components over the whole data.
     """
     out, kinds = {}, {"exact": [], "interval": [], "unconstrained": []}
     for name, lo, hi in entries:
@@ -752,11 +831,14 @@ def determination(entries: list, *, status: str, note: str = "") -> dict:
                    "resolved": bool(not (lo <= 0.0 <= hi))}
         out[str(name)] = rec
         kinds[k].append(str(name))
-    return {"status": status, "components": out,
-            "exact": kinds["exact"], "interval": kinds["interval"],
-            "unconstrained": kinds["unconstrained"],
-            "n_resolved": sum(1 for r in out.values() if r["resolved"]),
-            "note": note}
+    rec = {"status": status, "components": out,
+           "exact": kinds["exact"], "interval": kinds["interval"],
+           "unconstrained": kinds["unconstrained"],
+           "n_resolved": sum(1 for r in out.values() if r["resolved"]),
+           "note": note}
+    if qualifier is not None:
+        rec["qualifier"] = qualifier
+    return rec
 
 
 def coherent(certifying: list, syms, P: np.ndarray, yscale: float,

@@ -1,0 +1,87 @@
+{
+ "high": {
+  "status": "structural",
+  "components": {},
+  "exact": [],
+  "interval": [],
+  "unconstrained": [],
+  "n_resolved": 0,
+  "note": "nothing was determined over this domain",
+  "qualifier": {
+   "kind": "domain",
+   "predicate": "a == 1, patch interior, >= 8 cells from the nearest conductivity interface",
+   "coverage": 0.1574074074074074,
+   "note": "patches straddling an interface are excluded because div(a grad u) is not a laplacian there and the stated law is false, not merely unresolved"
+  }
+ },
+ "low": {
+  "status": "structural",
+  "components": {},
+  "exact": [],
+  "interval": [],
+  "unconstrained": [],
+  "n_resolved": 0,
+  "note": "nothing was determined over this domain",
+  "qualifier": {
+   "kind": "domain",
+   "predicate": "a == 0.1, patch interior, >= 8 cells from the nearest conductivity interface",
+   "coverage": 0.2638888888888889,
+   "note": "patches straddling an interface are excluded because div(a grad u) is not a laplacian there and the stated law is false, not merely unresolved"
+  }
+ },
+ "same_domain": {
+  "status": "conjoined",
+  "components": {},
+  "exact": [],
+  "interval": [],
+  "unconstrained": [],
+  "n_resolved": 0,
+  "note": "intersection over the conjoined records",
+  "qualifier": {
+   "kind": "domain",
+   "predicate": "a == 1, patch interior, >= 8 cells from the nearest conductivity interface",
+   "coverage": 0.1574074074074074,
+   "note": "patches straddling an interface are excluded because div(a grad u) is not a laplacian there and the stated law is false, not merely unresolved"
+  }
+ },
+ "cross_domain": {
+  "status": "refused",
+  "refusal": "different domains",
+  "domains": [
+   "a == 0.1, patch interior, >= 8 cells from the nearest conductivity interface",
+   "a == 1, patch interior, >= 8 cells from the nearest conductivity interface"
+  ],
+  "components": {},
+  "exact": [],
+  "interval": [],
+  "unconstrained": [],
+  "n_resolved": 0,
+  "note": "these records were established on different regions; their conjunction is defined only where both were, and this layer cannot intersect the predicates"
+ },
+ "with_unqualified": {
+  "status": "conjoined",
+  "components": {
+   "1/a": {
+    "kind": "interval",
+    "lo": -0.11,
+    "hi": -0.09,
+    "span": 0.020000000000000004,
+    "resolved": true
+   }
+  },
+  "exact": [],
+  "interval": [
+   "1/a"
+  ],
+  "unconstrained": [],
+  "n_resolved": 1,
+  "note": "intersection over the conjoined records",
+  "qualifier": {
+   "kind": "domain",
+   "predicate": "a == 1, patch interior, >= 8 cells from the nearest conductivity interface",
+   "coverage": 0.1574074074074074,
+   "note": "patches straddling an interface are excluded because div(a grad u) is not a laplacian there and the stated law is false, not merely unresolved"
+  }
+ },
+ "rule_holds": true
+}

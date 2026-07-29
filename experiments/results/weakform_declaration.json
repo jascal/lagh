@@ -1,0 +1,229 @@
+{
+ "advection_beta0.7": {
+  "path": "data/pdebench/1D_Advection_beta0.7_x6.h5",
+  "family": "advection",
+  "law": {
+   "u_x": -0.7
+  },
+  "n_rows": 120,
+  "sigma_rep": 4.959154509265318e-08,
+  "patch_scales": [
+   [
+    84,
+    8
+   ],
+   [
+    128,
+    12
+   ],
+   [
+    172,
+    16
+   ]
+  ],
+  "required_declaration": 7.054610095542215e-06,
+  "grid_point_that_holds": 1e-05,
+  "scan": [
+   {
+    "field_err": 0.0,
+    "truth_over_band": 1185.1705530127067,
+    "signal_over_band": 1309566.600310007,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 1e-10,
+    "truth_over_band": 1165.3567049427986,
+    "signal_over_band": 1293841.9210342937,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 1e-09,
+    "truth_over_band": 1012.9456011272471,
+    "signal_over_band": 1178435.2520478447,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 1e-08,
+    "truth_over_band": 438.9132202998873,
+    "signal_over_band": 660041.148270654,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 1e-07,
+    "truth_over_band": 66.3431133330116,
+    "signal_over_band": 112740.14079168925,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 1e-06,
+    "truth_over_band": 7.015914640912146,
+    "signal_over_band": 14557.747318120744,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 1e-05,
+    "truth_over_band": 0.7056503405964029,
+    "signal_over_band": 2540.2460094139324,
+    "holds": true,
+    "vacuous": false
+   },
+   {
+    "field_err": 0.0001,
+    "truth_over_band": 0.0706058812716275,
+    "signal_over_band": 276.3875264558395,
+    "holds": true,
+    "vacuous": false
+   },
+   {
+    "field_err": 0.001,
+    "truth_over_band": 0.007060996859390262,
+    "signal_over_band": 27.773646704650773,
+    "holds": true,
+    "vacuous": false
+   },
+   {
+    "field_err": 0.01,
+    "truth_over_band": 0.000706103773521576,
+    "signal_over_band": 2.7787280627889963,
+    "holds": true,
+    "vacuous": false
+   },
+   {
+    "field_err": 0.1,
+    "truth_over_band": 7.061041822824341e-05,
+    "signal_over_band": 0.27788645481111357,
+    "holds": true,
+    "vacuous": false
+   },
+   {
+    "field_err": 1.0,
+    "truth_over_band": 7.061042231585459e-06,
+    "signal_over_band": 0.027788781981058365,
+    "holds": false,
+    "vacuous": true
+   }
+  ],
+  "pointwise_measurement": 0.0275,
+  "over_declaration": 3898.1601573384137
+ },
+ "burgers_nu0.01": {
+  "path": "data/pdebench/1D_Burgers_Nu0.01_x6.h5",
+  "family": "burgers",
+  "law": {
+   "u_xx": 0.0031830988618379067,
+   "u*u_x": -1.0
+  },
+  "n_rows": 143,
+  "sigma_rep": 4.959154509265318e-08,
+  "patch_scales": [
+   [
+    84,
+    8
+   ],
+   [
+    128,
+    8
+   ],
+   [
+    172,
+    8
+   ]
+  ],
+  "required_declaration": 1.4368563158287417e-05,
+  "grid_point_that_holds": 0.0001,
+  "scan": [
+   {
+    "field_err": 0.0,
+    "truth_over_band": 98.61103022472443,
+    "signal_over_band": 24126.285233397244,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 1e-10,
+    "truth_over_band": 97.50529446899363,
+    "signal_over_band": 24124.89894515692,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 1e-09,
+    "truth_over_band": 88.56726839745144,
+    "signal_over_band": 23989.902343852482,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 1e-08,
+    "truth_over_band": 46.85540005680115,
+    "signal_over_band": 22521.803286444,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 1e-07,
+    "truth_over_band": 17.455051494303998,
+    "signal_over_band": 15553.539022865254,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 1e-06,
+    "truth_over_band": 8.565154644954761,
+    "signal_over_band": 3934.3547637256543,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 1e-05,
+    "truth_over_band": 1.405731681806832,
+    "signal_over_band": 483.7837350523938,
+    "holds": false,
+    "vacuous": false
+   },
+   {
+    "field_err": 0.0001,
+    "truth_over_band": 0.16643415070954523,
+    "signal_over_band": 49.24638968882791,
+    "holds": true,
+    "vacuous": false
+   },
+   {
+    "field_err": 0.001,
+    "truth_over_band": 0.018623728334864063,
+    "signal_over_band": 4.933490754310969,
+    "holds": true,
+    "vacuous": false
+   },
+   {
+    "field_err": 0.01,
+    "truth_over_band": 0.0018847990759005857,
+    "signal_over_band": 0.4934377683337654,
+    "holds": true,
+    "vacuous": false
+   },
+   {
+    "field_err": 0.1,
+    "truth_over_band": 0.00018870714416074636,
+    "signal_over_band": 0.04934466393780094,
+    "holds": false,
+    "vacuous": true
+   },
+   {
+    "field_err": 1.0,
+    "truth_over_band": 1.887298979573428e-05,
+    "signal_over_band": 0.004934475264999771,
+    "holds": false,
+    "vacuous": true
+   }
+  ],
+  "pointwise_measurement": 0.0024434,
+  "over_declaration": 170.05179801786304
+ }
+}

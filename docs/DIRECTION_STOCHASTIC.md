@@ -176,9 +176,41 @@ framing.
    inside its recovered range, several are pinned to spans of 1e-6, and the
    genuinely unconstrained ones are named. This is a prerequisite rather than
    cleanup — the per-component scoring registered above cannot be expressed by
-   `certified: bool`, so the frozen checker's interface depends on it. Remaining:
-   the same treatment for the other four dimensions (interval / mode / domain /
-   stratum) under ONE vocabulary, so verdicts compose.
+   `certified: bool`, so the frozen checker's interface depends on it.
+
+   **THREE of five dimensions are now on the shared vocabulary** (2026-07-29):
+   STRUCTURE (`invariant_content` over the certifying set), INTERVAL (the
+   certified law's own ranges), and — added after the PDEBench re-run — MODE:
+   `StateCertificate.partial` is a `determination(status="state")` record keyed
+   by mode label, and a test asserts it cannot drift from the `modes` dict it
+   duplicates (kind, bounds and `resolved` component-wise). The mode dimension
+   was cheap precisely because `determination`'s vocabulary was lifted from
+   C4's state certificates in the first place; this closes the loop.
+
+   Remaining, and neither is code-shaped:
+
+   * **DOMAIN — DECIDED AND BUILT 2026-07-29.** A domain restriction ("this
+     holds where the conductivity is in its high phase") qualifies EVERY
+     component at once rather than being one among them, so it does not fit the
+     `(name, lo, hi)` entry shape. It is now a QUALIFIER on the record
+     (`certify.domain_qualifier`), and the rule that gives it teeth is in
+     `conjoin_determination`: records established on DIFFERENT domains REFUSE to
+     conjoin, because the conjunction is defined only where both were
+     established and this layer cannot intersect two predicates — guessing that
+     two differently-worded regions are the same set is the unsound direction.
+     Same-domain records intersect component-wise, and an EMPTY intersection is
+     reported as a contradiction rather than dropped. The decision arrived via
+     `DIRECTION_PDE.md` (c): the honest domain restriction was chosen as the
+     variable-coefficient route, and this qualifier is what it costs. Darcy is
+     the live case (β = 0.1000 in one phase, ~49% off in the other) and is now
+     also the first PRODUCER: both phases were re-run with
+     `discover_equation(..., qualifier=)`, and `run_darcy_domains.py` checks the
+     refusal on that output rather than on constructed records. The interface
+     step 1 freezes has therefore been exercised end-to-end by something real,
+     which was the point of doing it before the freeze rather than after.
+   * **STRATUM is a campaign convention** (certifiable conservation vs
+     conjectured closure, per the traffic plan) rather than a per-verdict
+     record, and is the lowest priority of the five.
 1. Register the certificate-kind decision (above) and the checker's interface.
 2. Level 0 — three systems, mostly existing machinery, calibrate κ.
 3. The Itô/generator weak form in `lagh/weakform.py` (new terms, same discipline).

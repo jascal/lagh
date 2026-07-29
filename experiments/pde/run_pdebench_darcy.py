@@ -52,6 +52,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from experiments.pde import pdebench as PB                        # noqa: E402
+from lagh.certify import domain_qualifier                         # noqa: E402
 from lagh.pdesystem import (assemble, conjoin, discover_equation,  # noqa: E402
                             truth_check)
 from lagh.weakform import Term, make_patches_nd                   # noqa: E402
@@ -200,8 +201,23 @@ def main(argv=None):
     truth = {"u_yy": -1.0, "1/a": -a_.beta}          # u_xx = -u_yy - beta/a
     tc = truth_check(rows, "u_xx", truth, sigma=sigma)
     print("== truth check (before any verdict):", tc)
+    # THE DOMAIN IS PART OF THE CLAIM, and now says so in the shared vocabulary
+    # rather than in a free-text field. This run is the registered
+    # variable-coefficient route (DIRECTION_PDE.md (c), decided 2026-07-29):
+    # certify where `a` is locally constant, report where, and let
+    # `certify.conjoin_determination` refuse to combine this with a claim made
+    # in the other phase.
+    kept = sum(len(k) for _, _, k in sols)
+    qual = domain_qualifier(
+        f"a == {a_.phase:g}, patch interior, >= {a_.min_dist:g} cells from "
+        "the nearest conductivity interface",
+        coverage=kept / (kept + dropped) if kept + dropped else None,
+        note=("patches straddling an interface are excluded because "
+              "div(a grad u) is not a laplacian there and the stated law is "
+              "false, not merely unresolved"))
     eq = discover_equation(rows, "u_xx", sigma=sigma, max_tier=3,
-                           features=[n for n in rows.names if n != "u_xx"])
+                           features=[n for n in rows.names if n != "u_xx"],
+                           qualifier=qual)
     print(f"== {'CERTIFIED' if eq['certified'] else 'ABSTAIN'} "
           f"{eq.get('abstain') or ''} {eq.get('law', '')}")
     if eq.get("certified"):
@@ -217,6 +233,10 @@ def main(argv=None):
            "vocabulary": rows.names, "stated_law": truth,
            "truth_check": tc, "equation": eq,
            "alpha_log10_total": conjoin([eq]).alpha_log10_total,
+           # the free-text `domain` below is kept for readers; the machine-
+           # readable statement is `equation.partial.qualifier`, which is what
+           # conjunction and any per-component checker actually consume
+           "qualifier": qual,
            "domain": ("patches lying strictly inside one conductivity region; "
                       "on a patch straddling an interface div(a grad u) is not "
                       "a laplacian and the stated law is false"),

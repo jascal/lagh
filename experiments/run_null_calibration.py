@@ -9,6 +9,7 @@ tiers would have been undercounted). Clean sigma=0 regime first.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 import time
@@ -22,12 +23,21 @@ from lagh.engine import discover  # noqa: E402
 N_TRIALS = 200
 
 
-def main():
+def main(argv=None):
+    # The re-run under the AMENDED arbitration rule (the evidence-starved rival
+    # bar, 2026-07-28) writes beside the original rather than over it: the
+    # amendment can only ever REDUCE certifications, so the comparison against
+    # the pre-amendment 0/200 is the whole point of running it again.
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default="experiments/results/null_calibration.jsonl")
+    ap.add_argument("--trials", type=int, default=N_TRIALS)
+    args = ap.parse_args(argv)
     rng = np.random.default_rng()          # OS-seeded: a true null, not replayable
-    out = Path("experiments/results/null_calibration.jsonl")
+    out = Path(args.out)
+    n_trials = args.trials
     rows = []
     certs = 0
-    for t in range(N_TRIALS):
+    for t in range(n_trials):
         dim = int(rng.integers(1, 4))
         n = int(rng.integers(60, 200))
         lo, hi = 0.5, 10.0
@@ -48,9 +58,9 @@ def main():
             certs += 1
             print(f"!! FALSE CERTIFICATION trial {t}: {rec}", flush=True)
         if (t + 1) % 20 == 0:
-            print(f"{t+1}/{N_TRIALS} trials, false certs: {certs}", flush=True)
+            print(f"{t+1}/{n_trials} trials, false certs: {certs}", flush=True)
     out.write_text("\n".join(json.dumps(r) for r in rows) + "\n")
-    print(f"\nNULL CALIBRATION: {certs}/{N_TRIALS} false certifications "
+    print(f"\nNULL CALIBRATION: {certs}/{n_trials} false certifications "
           f"(bound demands 0; any hit falsifies the |H| accounting)")
     return 0
 

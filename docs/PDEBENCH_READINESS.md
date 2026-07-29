@@ -79,6 +79,18 @@ statement travels with the result (`pdebench.declared_noise` returns
 number is part of the report, not a footnote. **A run that sets it to zero is
 claiming the data is exact and must say so in those words.**
 
+> **Amended 2026-07-29, from the run this declaration governed.** Two things were
+> missing here and both bit. (a) Solver error CAN be measured where an exact
+> solution exists — advection has one, and `pdebench_solver_error.py` measured
+> 2.75e-2. (b) Having measured it, the run declared it, and **that was the wrong
+> quantity**: a pointwise deviation accumulated over a trajectory is not a local
+> weak-form residual over a patch, and it over-declared by ~3900× (the weak form
+> requires 7.06e-6 on that file). The declaration this section should have
+> demanded is therefore sharper: **state the field error, AND state which
+> quantity it is a bound on — pointwise or weak-form, local or accumulated —
+> because only the second is what the band consumes.** The direction of the
+> error was safe; four orders of needless width was not.
+
 **3. Coordinate storage — regularized, and the deviation reported.** Found in
 the dry run, and it would have been a real error: PDEBench stores its
 COORDINATE vectors in float32 as well as its fields. A perfectly uniform

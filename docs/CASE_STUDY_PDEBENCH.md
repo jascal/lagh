@@ -7,6 +7,23 @@
 > KIND — the same session that produced these numbers also produced the evidence
 > that a read is not the right instrument here.
 
+> **CORRECTION 2026-07-29, after the run** (`run_conservation_floor.py`, written
+> up in `DIRECTION_ERROR_PROVENANCE.md`): **every declared field error below is
+> over-declared by ~3900×, and the certificates are correspondingly weaker than
+> they need to be.** The declarations were set from a POINTWISE solver-error
+> measurement — deviation from the exact solution, accumulated over a whole
+> trajectory — but the band they feed is a WEAK-FORM residual, a local violation
+> over one patch. Different quantities. On advection the weak form requires
+> **7.06e-6** where 2.75e-2 was declared. Nothing below is unsound: an
+> over-declaration only widens a band, so the certificates stand and the
+> intervals genuinely contain the truth. They are just far looser than the data
+> supports. **RE-RUN 2026-07-29 at the corrected declarations** — β ± 17% →
+> **± 0.0066%**, ν ± 25% → **± 0.33%**, α from 1e-16 to 1e-115, every forecast
+> still verified and the truth still inside every interval: see "Re-run at the
+> corrected declaration" below, which is now the result of record. The tables in
+> between are kept as they were run. **The interval widths were not a property of
+> PDEBench** — see the correction to that claim below.
+
 **Run 2026-07-29**, against the published PDEBench data (DaRUS
 `doi:10.18419/darus-2986`), following the pre-flight registered the night before
 in `PDEBENCH_READINESS.md`. Runner `experiments/pde/run_pdebench.py`, loader
@@ -39,7 +56,7 @@ around it. Darcy also exercised the first non-evolution geometry in the arc.
 | samples | 4 fitted/certified + 1 held out for the forecast | same |
 | patch rows | 120 (24 patches rejected) | 143 (1 rejected) |
 | declared σ (float32 storage) | 5.0e-8 | 5.0e-8 |
-| **declared field error** | **2.75e-2 (measured)** | **2.44e-3 (measured)** |
+| **declared field error** | **2.75e-2 (measured pointwise, and ~3900× over-declared for a weak-form band — the weak form requires 7.06e-6)** | **2.44e-3 (measured pointwise, 170× over-declared — the weak form requires 1.44e-5)** |
 | law | `u_t = −(157943/225626)·[u_x]` | `u_t = 0.0032124·[u_xx] − 1.00096·[u*u_x]` |
 | truth | β = 0.7 | ν/π = 0.0031831, −1 |
 | intervals | β ∈ [0.587, 0.830] ✓ | [0.002422, 0.004029] ✓, [−1.0565, −0.9494] ✓ |
@@ -89,9 +106,65 @@ deviation being measured, so the measurement stands rather than being refused.
 **Consequence for anyone certifying against these files:** the band is set by
 that undeclared term, not by the storage precision. It is what holds these
 certificates to β ± 17% and ν ± 25% instead of the 1e-4 the same instrument
-reaches on its own exact fields (C1). The certificate is honest and weak, and it
-is weak for a reason that is a property of the benchmark rather than of the
-method.
+reaches on its own exact fields (C1). The certificate is honest and weak.
+
+**Corrected 2026-07-29:** the sentence that stood here — that the weakness "is a
+property of the benchmark rather than of the method" — is **wrong**, and it is
+the one conclusion in this document the Route 2 run overturns rather than
+merely loosens. The undeclared term is real and is a property of the benchmark;
+the ±17% is not. That came from feeding a pointwise trajectory deviation into a
+weak-form band, which over-declared by ~3900×. Re-run at the declaration the weak
+form actually requires, the same files on the same instrument give β to
+**± 0.0066%**. The benchmark cost us the four orders between σ_rep and 7e-6; the
+method cost us the three and a half orders above that, and only the first was the
+benchmark's to give.
+
+## Re-run at the corrected declaration (2026-07-29) — the result of record
+
+Same files, same samples, same patch families, same libraries, same held-out
+forecast sample. One thing changed: **the band gets the local weak-form
+requirement and the forecast gets the pointwise measurement**, instead of both
+getting the pointwise one.
+
+| | declared to the BAND | declared to the FORECAST |
+|---|---|---|
+| advection | **1.040e-5** — what R2, a *different* registered relation, needs (`run_conservation_floor.py`); 1.47× above the 7.06e-6 the certified law itself needs, and independent of it | 2.75e-2 — the measured pointwise deviation from the exact shift solution |
+| Burgers | **2.874e-5** — 2× the 1.437e-5 the stated law needs (`run_weakform_declaration.py`), the factor 2 declared as margin. Circular: no second relation exists for this family in the registered vocabulary, so this one uses the stated law | 2.4434e-3 — the measured deviation from the independent high-accuracy solve |
+
+| run | coefficient | before | after | tighter by |
+|---|---|---|---|---|
+| advection | β | ± 17.4%, α ≤ 1e-16, s/b 2.22 | **± 0.0066%**, α ≤ 1e-115, s/b 5632 | **2650×** |
+| advection-modified | β | ± 0.019%, α ≤ 1e-87, **forecast FAILED 26990/205824** | **± 0.0066%**, α ≤ 1e-98, **forecast OK 0/205824** | 2.9× and a failure repaired |
+| Burgers | ν | ± 25.0%, α ≤ 1e-43, s/b 2.27 | **± 0.33%**, α ≤ 1e-106, s/b 192 | **75×** |
+| Burgers | u·u_x | ± 5.35% | **± 0.067%** | **80×** |
+
+**Everything that has to hold, holds.** The truth is inside every interval
+(β = 0.7 ∈ [0.699985, 0.700077]; ν/π = 0.0031831 ∈ [0.0031742, 0.0031954];
+−1 ∈ [−1.00080, −0.99946]), every forecast verifies 0 / 205824 on the unseen
+sample, and the truth check passes before any verdict at truth/band 0.68
+(advection) and 0.51 (Burgers) — comfortably inside, which is what declaring
+above the requirement buys. Burgers' recovered ν also moved *closer* to the
+truth, 0.92% off → 0.14%, because the tighter band changed which representative
+parsimony keeps.
+
+**The advection-modified row is the correction's other half, and it is the one
+that would have been missed.** That run already had a tight band (3e-5, chosen by
+hand) and it FAILED its forecast at 26990 points — which reads as "the tight band
+is wrong" and was the reason not to trust tightening. It was not. The forecast
+compares u pointwise against a trajectory integrated from t = 0, so it needs the
+*accumulated pointwise* deviation, and the runner was handing it the *local
+weak-form* number. Each quantity was wrong in the other's slot. Given both, the
+same law certifies at ± 0.0066% **and** verifies at 0 / 205824. The runner now
+takes `--field-err` and `--forecast-err` separately and records both.
+
+**CFD was never affected**, and that is worth stating precisely: its declaration
+came from a *scan* (the runner reports what the stated laws require) rather than
+from a pointwise measurement, so it was the right KIND all along — merely decadal,
+1e-2 where 5.05e-3 suffices. Re-run at 5.5e-3 (`cfd_eta0.01_corrected`), momentum
+stays ABSTAIN[structural] and continuity moves from ABSTAIN[structural] to
+ABSTAIN[noise] — the tighter band admits fewer classes, so the mechanism that
+blocks it changes, but no certificate is gained. Reaction–diffusion (vacuous) and
+Darcy (no true, non-vacuous declaration exists) are untouched by any of this.
 
 ## What this target actually is: model output, so the exercise is pipeline decode
 
@@ -241,6 +314,19 @@ avoid. Rearranging does not escape it: `(a u_x)_x = (au)_xx − a_xx u − a_x u
 which bears directly on the registered next step "(c) variable coefficients": it
 needs a declared error model for `∇a` or a mixed formulation, and it is not free.
 
+> **Route decided 2026-07-29 (user), and this run is now its first consumer.**
+> Neither of those two — the honest domain restriction wins, i.e. exactly what
+> this section does, promoted from a description of the run to the registered
+> method. Re-run as `darcy_beta0.1_qualified` (a = 1, 34 rows, 15.7% of patches)
+> and `darcy_beta0.1_lowphase_qualified` (a = 0.1, 57 rows, 26.4%), the verdict
+> is unchanged — both ABSTAIN[structural] — but the domain now travels inside
+> the verdict as a `certify.domain_qualifier` on the partial record instead of
+> as a free-text sibling field. `run_darcy_domains.py` checks the rule that
+> makes it a claim: the two phases **REFUSE to conjoin**, an unqualified record
+> composes and inherits the restriction, and same-domain records intersect.
+> Before this, a consumer reading `partial` on the high-phase run got `None` and
+> no indication that the run had looked at 16% of the field.
+
 **What is measurable, and it is exact where it should be.** PDEBench's
 coefficient is binary (a ∈ {0.1, 1.0}), so wherever a is locally constant the
 equation collapses to `∇²u = −β/a`, whose every term is divergence form with a
@@ -335,7 +421,11 @@ win, lose or mixed. Four things make that impossible here, and three of them
 were demonstrated by this pass rather than argued in advance:
 
 1. **The band's dominant term is chosen by the analyst, per file.** The declared
-   field error is what holds these certificates to β ± 17%, and it was set after
+   field error is what holds these certificates to β ± 17% (and it was the wrong
+   KIND of measurement for the band it feeds, over-declaring ~3900× — see the
+   correction at the top, which makes this reason stronger, not weaker: an
+   analyst-chosen binding parameter is exactly the kind that can be wrong by four
+   orders without anything in the run noticing), and it was set after
    the truth check showed σ_rep alone could not work. A protocol in which the
    binding parameter is picked once the answer is in view is a dev loop, however
    carefully each individual step is declared.

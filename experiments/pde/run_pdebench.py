@@ -90,8 +90,21 @@ def main(argv=None):
     ap.add_argument("--samples", type=int, default=4)
     ap.add_argument("--tmax-index", type=int, default=None)
     ap.add_argument("--field-err", type=float, default=0.0,
-                    help="DECLARED solver error; it cannot be measured from "
-                         "shipped data and the record says so")
+                    help="DECLARED solver error for the WEAK-FORM band: a bound "
+                         "on a LOCAL violation over one patch")
+    # Two consumers, two quantities, and conflating them cost this campaign
+    # three and a half orders of interval width. The BAND integrates against a
+    # patch, so it wants a local weak-form bound. The FORECAST compares u
+    # pointwise against a trajectory integrated from t=0, so it wants the
+    # pointwise deviation ACCUMULATED over that trajectory -- for PDEBench
+    # advection 2.75e-2, which is ~3900x the 7.06e-6 the weak form needs.
+    # Feeding one number to both is why `advection_modified_tight` certified
+    # beta to +-0.02% and then failed its own forecast at 26990 points.
+    ap.add_argument("--forecast-err", type=float, default=None,
+                    help="DECLARED pointwise field error for the forecast "
+                         "check, accumulated over the trajectory; defaults to "
+                         "--field-err, which is right only when the two "
+                         "quantities happen to coincide")
     ap.add_argument("--extra-sigma", type=float, default=0.0,
                     help="any declared measurement noise beyond float32 storage")
     ap.add_argument("--truth", default=None,
@@ -109,6 +122,7 @@ def main(argv=None):
     a = ap.parse_args(argv)
 
     t0 = time.time()
+    forecast_err = a.field_err if a.forecast_err is None else a.forecast_err
     # one extra sample, reserved for the FORECAST: C2's discipline is that the
     # verify track runs on data no stage of the pipeline has seen, and the
     # certification holdout sample has already been seen by certification
@@ -146,6 +160,7 @@ def main(argv=None):
           f"{rows.rejected} patches rejected, vocabulary {rows.names}")
 
     res = {"path": str(a.path), "family": a.family, "declared_noise": noise,
+           "field_err_weakform": a.field_err, "field_err_pointwise": forecast_err,
            "patch_scales": res_scales, "speed_declared": a.speed,
            "geometry": reports, "n_rows": int(len(rows.A)),
            "patches_rejected": int(rows.rejected),
@@ -180,7 +195,7 @@ def main(argv=None):
             # on a SUBSTEP ladder instead of a tolerance ladder.
             v = verify(ds.fields["u"], ds.fields["u"][:, 0], x, t, ivs,
                        sigma=sigma, scheme="etd", nsub=64,
-                       field_err=a.field_err, n_samples=a.envelope_samples)
+                       field_err=forecast_err, n_samples=a.envelope_samples)
         except Exception as e:                                 # noqa: BLE001
             v = {"verified": False, "refusal": f"verify raised: {e}"}
         res["verify"] = v

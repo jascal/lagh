@@ -150,3 +150,33 @@ def test_joint_intervals_are_at_least_as_wide_as_conditional_ones():
         joint = m["interval"][1] - m["interval"][0]
         cond = m["conditional_interval"][1] - m["conditional_interval"][0]
         assert joint >= cond * (1 - 1e-6)
+
+
+def test_the_partial_record_says_the_same_thing_as_the_modes_dict():
+    """MODE is one of the five places lagh states partial determination, and
+    since `certify.determination` exists they must not drift: a mode the joint
+    projection leaves unbounded is `unconstrained` there, a bounded one is an
+    `interval` with the same bounds, and `resolved` (the interval excludes zero,
+    so the certificate can tell the mode is present at all) must agree
+    component-wise. Two encodings of one claim is how the vocabulary was lost
+    the first time."""
+    x, t = grid()
+    u = heat_field(x, t)
+    labels, fns = fourier_basis(3)
+    B, y, eps, info = assemble_state(u, x, t, {"u_xx": 0.1},
+                                     state_patches(x, t), fns, p=16, sigma=1e-5)
+    cert = certify_state(B, y, eps, labels, info=info)
+    assert cert.certified, cert.abstain
+    assert cert.partial["status"] == "state"
+    assert set(cert.partial["components"]) == set(cert.modes)
+    assert sorted(cert.partial["unconstrained"]) == sorted(cert.undetermined)
+    for lab, m in cert.modes.items():
+        rec = cert.partial["components"][lab]
+        assert rec["resolved"] == m["resolved"]
+        if m["interval"] is None:
+            assert rec["kind"] == "unconstrained"
+            assert not m["determined"]
+        else:
+            assert rec["kind"] in ("interval", "exact")
+            assert rec["lo"] == m["interval"][0]
+            assert rec["hi"] == m["interval"][1]

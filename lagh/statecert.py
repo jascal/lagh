@@ -51,7 +51,8 @@ from dataclasses import dataclass, field
 import numpy as np
 import sympy as sp
 
-from .certify import band, check, parameter_interval, significance_log10
+from .certify import (band, check, determination, parameter_interval,
+                      significance_log10)
 from .weakform import LIBRARY, PatchEpsilon, build, ic_columns
 
 # h = n_rows - dof must clear this: a certificate resting on fewer independent
@@ -156,6 +157,14 @@ class StateCertificate:
     amp_max_declared: float | None = None
     amp_max_certified: float | None = None
     slack: float | None = None                  # LP margin inside the band
+    # PARTIAL DETERMINATION in the shared vocabulary (`certify.determination`),
+    # keyed by MODE LABEL. `modes` above stays as it is -- it carries the
+    # conditional interval and the fitted value, which the shared record does
+    # not model -- but the determined/undetermined/resolved statement now reads
+    # the same here as it does on a law certificate and a structural abstain,
+    # which is the whole point of having one vocabulary. This is the MODE
+    # dimension of the five.
+    partial: dict = field(default_factory=dict)
 
     def one_line(self) -> str:
         if not self.certified:
@@ -353,6 +362,14 @@ def certify_state(B, y, eps, labels, *, window=(), amp_max: float = 10.0,
                            float(0.5 * (iv[1] - iv[0]))}
         if iv is None:
             cert.undetermined.append(lab)
+    cert.partial = determination(
+        [(lab, None if m["interval"] is None else m["interval"][0],
+          None if m["interval"] is None else m["interval"][1])
+         for lab, m in cert.modes.items()],
+        status="state",
+        note="joint projections over the feasible set of initial conditions: "
+             "every state whose amplitudes lie in these intervals reproduces "
+             "the observations within the declared band")
     cert.certified = True
     # |H| = 1: fixed basis, known law, no search over forms. This is a pure
     # chance-agreement bound and is NOT comparable with a law certificate's

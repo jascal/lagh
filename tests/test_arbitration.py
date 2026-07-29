@@ -183,3 +183,43 @@ def test_one_vocabulary_for_partial_determination():
     # the status names WHAT produced it: a range from one certified law and a
     # range over a certifying SET are different claims
     assert d["status"] == "certified"
+
+
+def test_a_domain_qualifier_scopes_the_whole_record_and_blocks_composition():
+    """DOMAIN is the fifth dimension and the one that is not a component: a
+    restriction qualifies every entry at once. Registered 2026-07-29 as the
+    variable-coefficient route -- certify where the coefficient is locally
+    constant and report where. The rule that earns it: two records established
+    on DIFFERENT regions must not conjoin, because the conjunction is defined
+    only where both were, and this layer cannot intersect two predicates."""
+    from lagh.certify import (conjoin_determination, determination,
+                              domain_qualifier)
+
+    hi = domain_qualifier("a == a_hi", coverage=0.61)
+    lo = domain_qualifier("a == a_lo", coverage=0.39)
+    d_hi = determination([("beta", 0.0999, 0.1001)], status="certified",
+                         qualifier=hi)
+    d_lo = determination([("beta", 0.048, 0.052)], status="certified",
+                         qualifier=lo)
+    assert d_hi["qualifier"]["predicate"] == "a == a_hi"
+    assert determination([("beta", 0.1, 0.1)], status="certified") \
+        .get("qualifier") is None                      # unqualified = everywhere
+
+    refused = conjoin_determination([d_hi, d_lo])
+    assert refused["status"] == "refused"
+    assert refused["domains"] == ["a == a_hi", "a == a_lo"]
+
+    # same domain: the conjunction is the INTERSECTION, and it keeps the scope
+    tighter = determination([("beta", 0.09995, 0.10005)], status="certified",
+                            qualifier=hi)
+    both = conjoin_determination([d_hi, tighter])
+    assert both["components"]["beta"]["lo"] == 0.09995
+    assert both["components"]["beta"]["hi"] == 0.10005
+    assert both["qualifier"]["predicate"] == "a == a_hi"
+    assert "contradiction" not in both
+
+    # an EMPTY intersection is a finding about the inputs, not something to drop
+    clash = conjoin_determination(
+        [d_hi, determination([("beta", 0.2, 0.3)], status="certified",
+                             qualifier=hi)])
+    assert clash["contradiction"] == ["beta"]

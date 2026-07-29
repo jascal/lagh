@@ -40,6 +40,16 @@ PREDICTIONS, fixed before the run:
 A third outcome is possible and is NOT a pass: both relations tight, which would
 mean the declaration is not being driven by the scheme error at all and the
 diagnostic is measuring something else.
+
+GRID REFINED 2026-07-29, AFTER the first run and after the verdict: the decadal
+scan reports the smallest grid POINT that holds, which quantizes every
+requirement UP to the next decade -- and the spread between two relations is a
+ratio of two such numbers, so a decadal grid can only ever return a power of ten.
+The first run's headline "spread 10x" was one grid step, not a measurement. The
+requirement is now bisected to where truth_max_ratio = 1, which is assumption-
+free (rebanded() is affine in field_err, so this is a cheap monotone bisection on
+the same rows). This changes the NUMBERS, not the hypothesis or its scoring rule:
+both clauses are re-scored against the refined values and both still fail.
 """
 from __future__ import annotations
 
@@ -51,6 +61,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from experiments.pde import pdebench as PB                       # noqa: E402
+from experiments.pde.declaration import required_declaration     # noqa: E402
 from experiments.pde.run_pdebench import default_scales          # noqa: E402
 from lagh.pdesystem import assemble, truth_check                 # noqa: E402
 from lagh.weakform import Term, multiscale_patches               # noqa: E402
@@ -87,30 +98,31 @@ def main():
            "n_rows": int(len(base.A)), "relations": {}}
     need = {}
     for label, (target, law) in RELATIONS.items():
-        row = []
-        smallest = None
-        for fe in [0.0] + [10.0 ** e for e in range(-8, 0)]:
-            tc = truth_check(base.rebanded(fe), target, law, sigma=sigma)
-            row.append((fe, tc["truth_max_ratio"], tc["signal_to_band"],
-                        tc["truth_certifies"], tc["vacuous"]))
-            if smallest is None and tc["truth_certifies"] and not tc["vacuous"]:
-                smallest = fe
-        need[label] = smallest
+        exact, smallest, scan = required_declaration(
+            base, target, law, sigma,
+            grid=[0.0] + [10.0 ** e for e in range(-8, 0)])
+        need[label] = exact
         res["relations"][label] = {
-            "required_declaration": smallest,
-            "scan": [{"field_err": f, "truth_over_band": r,
-                      "signal_over_band": s, "holds": h, "vacuous": v}
-                     for f, r, s, h, v in row]}
+            "required_declaration": exact,
+            "grid_point_that_holds": smallest, "scan": scan}
         print(f"\n{label}")
-        for f, r, s, h, v in row:
-            if f == 0.0 or (smallest and f <= smallest * 10) or r < 100:
-                print(f"   field_err {f:8.1e}  truth/band {r:10.3g}  "
-                      f"signal/band {s:9.3g}"
-                      f"{'   <- holds' if h and not v else ''}"
-                      f"{'  VACUOUS' if v else ''}")
-        print(f"   -> requires {smallest:g}" if smallest else "   -> never holds")
+        for r in scan:
+            if (r["field_err"] == 0.0 or r["truth_over_band"] < 100
+                    or (smallest and r["field_err"] <= smallest * 10)):
+                print(f"   field_err {r['field_err']:8.1e}  "
+                      f"truth/band {r['truth_over_band']:10.3g}  "
+                      f"signal/band {r['signal_over_band']:9.3g}"
+                      f"{'   <- holds' if r['holds'] else ''}"
+                      f"{'  VACUOUS' if r['vacuous'] else ''}")
+        if smallest:
+            print(f"   -> grid says {smallest:g}; bisected requirement "
+                  f"{exact:.3e}  ({exact/sigma:.0f}x sigma_rep)")
+        elif exact == 0.0:
+            print("   -> holds on sigma_rep alone; requires no declaration")
+        else:
+            print("   -> never holds")
 
-    vals = [v for v in need.values() if v]
+    vals = [v for v in need.values() if v is not None]
     print("\n=== VERDICT")
     if len(vals) < 2:
         print("  INCONCLUSIVE: fewer than two relations ever hold")
@@ -119,7 +131,8 @@ def main():
         tight, loose = min(vals), max(vals)
         floor_like = tight <= 0.1 * KNOWN_SCHEME_ERROR
         spread = loose / tight if tight > 0 else float("inf")
-        print(f"  tightest requires {tight:g}, loosest {loose:g}, spread {spread:.0f}x")
+        print(f"  tightest requires {tight:.3e}, loosest {loose:.3e}, "
+              f"spread {spread:.2f}x")
         print(f"  independently measured scheme error {KNOWN_SCHEME_ERROR:g}")
         # H has TWO clauses and they must be scored separately: the tightest
         # must sit near the FLOOR (not merely below the scheme error), and the
@@ -129,8 +142,16 @@ def main():
         spread_predicts = 0.1 <= (loose / KNOWN_SCHEME_ERROR) <= 10
         res["clause_tightest_near_floor"] = bool(near_floor)
         res["clause_spread_estimates_scheme_error"] = bool(spread_predicts)
+        # How WIDE the miss is, reported next to the verdict: a clause that
+        # fails by 1.4x against a threshold fixed in advance is a fail, but it
+        # is not the decisive fail that "142x sigma_rep" reads as, and the
+        # difference is what says whether the question is worth reopening.
+        margin = tight / (100 * res["sigma_rep"])
+        res["clause_1_margin"] = float(margin)
         print(f"  clause 1 -- tightest near the floor ({res['sigma_rep']:.1e})? "
-              f"{near_floor} (it is {tight/res['sigma_rep']:.0f}x sigma_rep)")
+              f"{near_floor} (it is {tight/res['sigma_rep']:.0f}x sigma_rep; "
+              f"{'fails' if margin > 1 else 'passes'} by {max(margin, 1/margin):.2f}x "
+              f"against the 100x threshold)")
         print(f"  clause 2 -- spread estimates the scheme error? "
               f"{spread_predicts} (loosest {loose:g} vs known "
               f"{KNOWN_SCHEME_ERROR:g}, off by {KNOWN_SCHEME_ERROR/loose:.0f}x)")
@@ -149,7 +170,11 @@ def main():
                   "relation sees the floor -- route 2 does not measure what it "
                   "was meant to on this family")
             res["verdict"] = "H fails"
-        res.update({"tightest": tight, "loosest": loose, "spread": spread})
+        over = KNOWN_SCHEME_ERROR / tight if tight > 0 else float("inf")
+        res.update({"tightest": tight, "loosest": loose, "spread": spread,
+                    "pointwise_over_declaration": over})
+        print(f"\n  the pointwise scheme error over-declares the weak-form band "
+              f"by {over:.0f}x")
     OUT.write_text(json.dumps(res, indent=1))
     return 0
 

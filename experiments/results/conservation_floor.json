@@ -4,7 +4,8 @@
  "n_rows": 120,
  "relations": {
   "R1  u_t = -b u_x       (the integrated equation)": {
-   "required_declaration": 1e-05,
+   "required_declaration": 7.054610095542215e-06,
+   "grid_point_that_holds": 1e-05,
    "scan": [
     {
      "field_err": 0.0,
@@ -72,7 +73,8 @@
    ]
   },
   "R2  (u^2)_t = -b (u^2)_x (derived conservation)": {
-   "required_declaration": 0.0001,
+   "required_declaration": 1.0403919195413456e-05,
+   "grid_point_that_holds": 0.0001,
    "scan": [
     {
      "field_err": 0.0,
@@ -142,8 +144,10 @@
  },
  "clause_tightest_near_floor": false,
  "clause_spread_estimates_scheme_error": false,
+ "clause_1_margin": 1.422542911772945,
  "verdict": "H fails as stated; the scan is still useful",
- "tightest": 1e-05,
- "loosest": 0.0001,
- "spread": 10.0
+ "tightest": 7.054610095542215e-06,
+ "loosest": 1.0403919195413456e-05,
+ "spread": 1.4747688468265112,
+ "pointwise_over_declaration": 3898.1601573384137
 }
