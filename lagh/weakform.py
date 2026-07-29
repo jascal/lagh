@@ -426,6 +426,18 @@ class PatchEpsilon:
             e = sp.sympify(expr)
             if e.free_symbols - set(self.syms):
                 return None
+            # FAST PATH for a law that is LINEAR in the columns, which every
+            # weak-form PDE law is: the gradient is the coefficient, a constant,
+            # so there is nothing to differentiate or lambdify. The general path
+            # costs one sympy.diff + one lambdify PER FEATURE PER CANDIDATE, and
+            # with an exhaustive linear-basis search over 13 declared columns
+            # that is ~8000 candidates x 13 -- measured as the dominant cost of
+            # the PDEBench CFD run, above the weak-form integration itself.
+            poly = e.as_poly(*self.syms) if self.syms else None
+            if poly is not None and poly.total_degree() <= 1:
+                c = np.array([float(e.coeff(s)) for s in self.syms])
+                C = np.broadcast_to(c, (len(self.y), len(self.syms)))
+                return np.array(C) if np.all(np.isfinite(C)) else None
             grads = [sp.lambdify(self.syms, sp.diff(e, s), "numpy")
                      for s in self.syms]
             cols = [np.broadcast_to(np.asarray(
