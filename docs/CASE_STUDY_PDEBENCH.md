@@ -81,6 +81,46 @@ reaches on its own exact fields (C1). The certificate is honest and weak, and it
 is weak for a reason that is a property of the benchmark rather than of the
 method.
 
+## What this target actually is: model output, so the exercise is pipeline decode
+
+Framing corrected 2026-07-29 (user observation), and it improves the results
+rather than excusing them.
+
+**For PDEBench's own task, the solver error measured below is not an error.**
+Surrogates are scored by RMSE against the same solver's output, so systematic
+solver error cancels exactly out of their metric — it is part of the target
+function they intend to be learned. It is invisible from that side and dominant
+from this one because the two sides are asking different questions, not because
+the data is careless. Generating 10⁴ trajectories per family at a resolution
+where the error would be negligible is not a trade anyone would make.
+
+It is also not *realistic* error, and the distinction is worth keeping: real
+measurement error arrives characterized and shipped — an error budget, a
+calibration, an uncertainty column — while this arrives undocumented, and its
+structure (a phase speed rising monotonically with wavenumber) is a scheme
+signature rather than an instrument's. A benchmark of that shape is a poor
+substitute for real systematics; if this program wants those, it should inject
+them itself, declared and controlled.
+
+The productive reading is the one `DIRECTION_PDE.md` already reached for ERA5,
+which it rejected as a discovery target because reanalysis is model output (the
+FLAME circularity) while noting it "becomes interesting later, as a
+pipeline-decode exercise (certifying which balances the assimilation system
+enforces)". PDEBench is model output too, so **that is what these runs are**: not
+recovering physics from a benchmark, but decoding what the generating solver
+enforces and how tightly. Under that reading the results below are positive
+findings rather than complaints:
+
+- continuity needs a 1e-4 declaration and momentum 1e-2 — the scheme enforces
+  **mass conservation about 100× more tightly** than the momentum balance;
+- advection's effective speed rises 0.70001 → 0.70035 with wavenumber — the
+  scheme's numerical dispersion, quantified per mode;
+- reaction–diffusion ships pure diffusion at the stated ν, with the reaction
+  absent.
+
+Each is a statement about a generating pipeline, and each needed a declared
+error model to be sayable at all.
+
 ## Why this is dev and not a read
 
 A blind read freezes SOTA and protocol before download, runs once, and reports
