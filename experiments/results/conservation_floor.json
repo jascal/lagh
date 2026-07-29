@@ -1,0 +1,149 @@
+{
+ "sigma_rep": 4.959154509265318e-08,
+ "known_scheme_error": 0.0275,
+ "n_rows": 120,
+ "relations": {
+  "R1  u_t = -b u_x       (the integrated equation)": {
+   "required_declaration": 1e-05,
+   "scan": [
+    {
+     "field_err": 0.0,
+     "truth_over_band": 1185.1705530127067,
+     "signal_over_band": 1309566.600310007,
+     "holds": false,
+     "vacuous": false
+    },
+    {
+     "field_err": 1e-08,
+     "truth_over_band": 438.9132202998873,
+     "signal_over_band": 660041.148270654,
+     "holds": false,
+     "vacuous": false
+    },
+    {
+     "field_err": 1e-07,
+     "truth_over_band": 66.3431133330116,
+     "signal_over_band": 112740.14079168925,
+     "holds": false,
+     "vacuous": false
+    },
+    {
+     "field_err": 1e-06,
+     "truth_over_band": 7.015914640912146,
+     "signal_over_band": 14557.747318120744,
+     "holds": false,
+     "vacuous": false
+    },
+    {
+     "field_err": 1e-05,
+     "truth_over_band": 0.7056503405964029,
+     "signal_over_band": 2540.2460094139324,
+     "holds": true,
+     "vacuous": false
+    },
+    {
+     "field_err": 0.0001,
+     "truth_over_band": 0.0706058812716275,
+     "signal_over_band": 276.3875264558395,
+     "holds": true,
+     "vacuous": false
+    },
+    {
+     "field_err": 0.001,
+     "truth_over_band": 0.007060996859390262,
+     "signal_over_band": 27.773646704650773,
+     "holds": true,
+     "vacuous": false
+    },
+    {
+     "field_err": 0.01,
+     "truth_over_band": 0.000706103773521576,
+     "signal_over_band": 2.7787280627889963,
+     "holds": true,
+     "vacuous": false
+    },
+    {
+     "field_err": 0.1,
+     "truth_over_band": 7.061041822824341e-05,
+     "signal_over_band": 0.27788645481111357,
+     "holds": true,
+     "vacuous": false
+    }
+   ]
+  },
+  "R2  (u^2)_t = -b (u^2)_x (derived conservation)": {
+   "required_declaration": 0.0001,
+   "scan": [
+    {
+     "field_err": 0.0,
+     "truth_over_band": 1090.2653337443885,
+     "signal_over_band": 1132741.0307686878,
+     "holds": false,
+     "vacuous": false
+    },
+    {
+     "field_err": 1e-08,
+     "truth_over_band": 473.8466277674984,
+     "signal_over_band": 583589.4250087966,
+     "holds": false,
+     "vacuous": false
+    },
+    {
+     "field_err": 1e-07,
+     "truth_over_band": 93.01440602025026,
+     "signal_over_band": 107193.60854683875,
+     "holds": false,
+     "vacuous": false
+    },
+    {
+     "field_err": 1e-06,
+     "truth_over_band": 10.29257934924387,
+     "signal_over_band": 14197.982036601876,
+     "holds": false,
+     "vacuous": false
+    },
+    {
+     "field_err": 1e-05,
+     "truth_over_band": 1.040343581526776,
+     "signal_over_band": 2427.893352442673,
+     "holds": false,
+     "vacuous": false
+    },
+    {
+     "field_err": 0.0001,
+     "truth_over_band": 0.10414652941517524,
+     "signal_over_band": 265.6877504298618,
+     "holds": true,
+     "vacuous": false
+    },
+    {
+     "field_err": 0.001,
+     "truth_over_band": 0.010415775984676382,
+     "signal_over_band": 26.821744522519285,
+     "holds": true,
+     "vacuous": false
+    },
+    {
+     "field_err": 0.01,
+     "truth_over_band": 0.0010415888302313533,
+     "signal_over_band": 2.684730670343843,
+     "holds": true,
+     "vacuous": false
+    },
+    {
+     "field_err": 0.1,
+     "truth_over_band": 0.00010415899534210475,
+     "signal_over_band": 0.26849865601928236,
+     "holds": true,
+     "vacuous": false
+    }
+   ]
+  }
+ },
+ "clause_tightest_near_floor": false,
+ "clause_spread_estimates_scheme_error": false,
+ "verdict": "H fails as stated; the scan is still useful",
+ "tightest": 1e-05,
+ "loosest": 0.0001,
+ "spread": 10.0
+}

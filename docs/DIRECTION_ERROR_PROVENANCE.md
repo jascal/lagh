@@ -153,6 +153,40 @@ of reading a construction bug as a finding.
    fetched, and it is the only one that needs neither a second resolution nor an
    integrator.
 
+### Route 2 RUN 2026-07-29 — H fails as stated, and corrects an earlier error
+
+`experiments/pde/run_conservation_floor.py`, registered before running, scored on
+PDEBench advection — the one family whose scheme error is INDEPENDENTLY known
+(2.75e-2). Two relations that both hold exactly for the true solution:
+`u_t = −βu_x` (the equation the solver integrates) and `(u²)_t = −β(u²)_x`
+(derived conservation).
+
+| relation | smallest declaration it needs |
+|---|---|
+| R1 `u_t = −βu_x` | **1e-5** |
+| R2 `(u²)_t = −β(u²)_x` | **1e-4** |
+
+**Both clauses of H are false.** The tightest is 1e-5 — 202× σ_rep, so it is NOT
+the floor. The spread is 10×, and the loosest (1e-4) sits **275× below** the
+known scheme error, so the spread does NOT estimate it. Route 2 does not measure
+what it was designed to measure.
+
+**What the run did establish, and it matters more:** a POINTWISE solver-error
+measurement is the wrong magnitude for a WEAK-FORM band. The 2.75e-2 is an
+*accumulated* pointwise deviation over a whole trajectory; the weak-form residual
+is a *local* violation over a patch. They are different quantities and this
+program conflated them — every PDEBench certificate was declared at 2.75e-2 when
+the weak form only required **1e-5**, an over-declaration of ~2750×. That is why
+β came back at ±17% instead of far tighter, and it is a correction to
+`CASE_STUDY_PDEBENCH.md`'s numbers rather than to its conclusions: the
+certificates were sound and needlessly weak.
+
+**Route 2 survives in weakened form.** R2 gives an INDEPENDENT, non-circular
+declaration (1e-4) for certifying R1 — no exact solution, no reference solve, no
+second resolution — and it is 275× tighter than the pointwise number. That is
+exactly the situation CFD is in. What it cannot claim is to measure the floor or
+the scheme error.
+
 ## Naming
 
 **Observational error** and **pipeline error** are the pair to use. "Pipeline"
