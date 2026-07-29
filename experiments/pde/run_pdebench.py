@@ -33,6 +33,13 @@ OUT = Path("experiments/results/pdebench.json")
 # Registered libraries per PDE family. The target is always the time derivative.
 FAMILIES = {
     "advection": ["u_t", "u_x", "u_xx", "u*u_x", "u", "1"],
+    # the MODIFIED-equation vocabulary: a scheme solving u_t + beta u_x = 0
+    # actually integrates u_t + beta u_x = c2 u_xx + c3 u_xxx + ..., and on this
+    # data c3 (dispersion) explains 84% of the stated law's residual while c2
+    # (dissipation) explains 1.5%. Certifying the modified equation is the
+    # honest description of MODEL OUTPUT; certifying the physical law and
+    # banding the difference is the honest description of an experiment.
+    "advection-modified": ["u_t", "u_x", "u_xxx", "u_xx", "u*u_x", "u", "1"],
     "burgers": ["u_t", "u_xx", "u*u_x", "u_x", "u", "1"],
     "diffusion-reaction": ["u_t", "u_xx", "u^3", "u^2", "u", "u_x", "1"],
     "generic-1d": ["u_t", "u_xx", "u_xxx", "u*u_x", "u_x", "u", "1"],
