@@ -50,6 +50,9 @@ class Ctx:
                                  # declared columns (a weak-form PDE always is),
                                  # so proposal is exhaustive over supports and
                                  # the engine builds no products/powers of them
+    n_cert: int | None = None    # certification sample size: bounds the largest
+                                 # support worth proposing (dof >= n_cert has no
+                                 # held-out evidence and is always demoted)
 
 
 @dataclass
@@ -89,8 +92,18 @@ def _significance_gate(cert: Certificate) -> Certificate:
 LINEAR_BASIS_BUDGET = 20000     # exhaustive-support budget (see _basis_supports)
 
 
-def _basis_supports(T: int, budget: int = LINEAR_BASIS_BUDGET) -> tuple:
+def _basis_supports(T: int, budget: int = LINEAR_BASIS_BUDGET,
+                    max_size: int | None = None) -> tuple:
     """Every support up to the largest size the budget affords, EXHAUSTIVELY.
+
+    `max_size` is bounded by the CERTIFICATION SPLIT, and that bound is exact
+    rather than a budget heuristic: significance counts only the held-out points
+    h = n - dof, so a support with dof >= n_cert has h = 0, alpha_log10 = 0, and
+    is demoted by `_significance_gate` no matter how well it fits. Proposing such
+    supports cannot produce a certificate -- it can only enlarge the certifying
+    set that coherence must then cluster pairwise. Measured on PDEBench CFD: 5
+    certification rows against 12 declared columns, 8191 supports enumerated, 662
+    materially different classes, 1553 s to reach an abstain.
 
     For a DECLARED linear basis the candidate space is the library itself, so
     proposal should be complete rather than greedy: measured on the PDE system
@@ -104,8 +117,9 @@ def _basis_supports(T: int, budget: int = LINEAR_BASIS_BUDGET) -> tuple:
     silently capped: above it the greedy channels still contribute.
     """
     from math import comb
+    top = T if max_size is None else max(1, min(T, int(max_size)))
     sups, count, reached = set(), 0, 0
-    for size in range(1, T + 1):
+    for size in range(1, top + 1):
         c = comb(T, size)
         if count + c > budget:
             break
@@ -123,7 +137,9 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
     yscale = float(np.sqrt(np.mean(y_va**2))) + 1e-300
     sups = stlsq_supports(M_tr, y_tr)
     if ctx.linear_basis:
-        sups |= _basis_supports(len(ctx.terms))[0]
+        # bounded by the certification split, exactly (see _basis_supports)
+        cap = None if ctx.n_cert is None else ctx.n_cert - 1
+        sups |= _basis_supports(len(ctx.terms), max_size=cap)[0]
     sups |= {c for size in (1, 2) for c in combinations(range(len(ctx.terms)), size)}
     # Targeted size-3..5 supports from the best singles -- the same measured
     # lesson as C2's pairs/triples fix, finally applied to the linear channel:
@@ -298,7 +314,8 @@ def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
         base += [BaseTerm(f"x_{j}", (lambda j: lambda X: X[:, j])(j), ALWAYS, 1)
                  for j in range(dim)]
         ctx = Ctx(syms, admissible(base, X_fit, X_cert), X_fit, y_fit, X_sel,
-                  y_sel, sigma, band_sel=band_sel, linear_basis=True)
+                  y_sel, sigma, band_sel=band_sel, linear_basis=True,
+                  n_cert=len(X_cert))
         return _linear_candidates(ctx)
     active = [(t, m) for t, m in CURRICULUM if t <= tier]
     base_terms = []
@@ -610,7 +627,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                 certifying.append(c)
         if not certifying:
             continue                              # escalate: reach, not ambiguity
-        classes = coherent(certifying, syms, P, yscale)
+        classes = coherent(certifying, syms, P, yscale,
+                           n_evidence=len(y_cert))
         constraint_note = None
         constraints = []
         if len(classes) > 1:
@@ -624,7 +642,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             # verdict, with the winner canonicalized modulo the constraint.
             constraints = input_constraints(X_all_m, syms)
             if constraints:
-                mclasses = coherent(certifying, syms, X_all_m, yscale)
+                mclasses = coherent(certifying, syms, X_all_m, yscale,
+                                    n_evidence=len(y_cert))
                 if len(mclasses) == 1:
                     classes = mclasses
                     constraint_note = (
@@ -758,8 +777,11 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
         cert = Certificate(False, 0, 0, len(X_cert), bounds,
                            str(min(certifying, key=lambda z: z.complexity).expr),
                            abstain=Abstain.STRUCTURAL.value,
-                           notes=[f"{len(classes)} materially different classes "
-                                  f"certify at tier {tier}"])
+                           notes=[f"at least {len(classes)} materially "
+                                  f"different classes certify at tier {tier} "
+                                  f"(clustering stops once two of them retain "
+                                  f"held-out evidence: arbitration cannot crown "
+                                  f"a winner past that point)"])
         return Result(cert, None, tier, total)
 
     # C6: escalate to the exact-integer quasi-polynomial tier when the float tiers

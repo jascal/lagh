@@ -633,11 +633,28 @@ def reduce_mod_constraints(expr, syms, constraints: list):
 
 
 def coherent(certifying: list, syms, P: np.ndarray, yscale: float,
-             tau: float = TAU) -> list:
+             tau: float = TAU, n_evidence: int | None = None) -> list:
     """Greedy tau-clustering of certifying laws into functional equivalence classes.
     ALL complexities are rivals -- parsimony may not veto (the equal-complexity rule
-    was a measured clean-data artifact)."""
+    was a measured clean-data artifact).
+
+    `n_evidence` (the certification sample size) enables an EXACT early exit, not
+    an approximation. Arbitration can crown a winner only when every defeated
+    rival is evidence-starved (held-out fraction h/n < ARBITRATION_RIVAL_EVIDENCE_MAX
+    -- see arbitrate_significance). So the moment TWO classes are found whose
+    representatives each retain h/n >= that bar, at most one of them can be the
+    winner and the other is a rival that is not evidence-starved: arbitration
+    must decline and the verdict is a structural abstain, whatever the remaining
+    candidates would have clustered into. Stopping there changes no verdict.
+
+    It matters because this clustering is PAIRWISE -- quadratic in the certifying
+    set -- and a loose declared band inflates that set: measured on PDEBench CFD,
+    where a 1e-2 declaration produced 662 classes for one equation and 1553 s of
+    clustering to reach an abstain the second evidence-bearing class had already
+    settled. Cost rising with the messiness of the data is backwards.
+    """
     reps: list[tuple] = []
+    with_evidence = 0
     for cand in certifying:
         v = eval_expr(cand.expr, syms, P)
         # a certified law may be legitimately undefined on part of the EXTENDED
@@ -653,4 +670,10 @@ def coherent(certifying: list, syms, P: np.ndarray, yscale: float,
                 break
         else:
             reps.append((cand.expr, [cand]))
+            if n_evidence:
+                h = max(0, n_evidence - free_dof(cand.expr)) / n_evidence
+                if h >= ARBITRATION_RIVAL_EVIDENCE_MAX:
+                    with_evidence += 1
+                    if with_evidence >= 2:
+                        return reps        # the structural verdict is settled
     return reps

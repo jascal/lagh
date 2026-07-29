@@ -76,3 +76,45 @@ def test_two_whales_no_winner():
     w1 = Candidate(expr=_dense(40, 3), complexity=113, channel="linear")
     w2 = Candidate(expr=_dense(39, 4), complexity=110, channel="linear")
     assert arbitrate_significance(_classes(w1, w2), Y, EPS, 500) is None
+
+
+def test_coherence_stops_once_two_classes_retain_evidence():
+    """EXACT early exit, not an approximation: arbitration can crown a winner
+    only when every defeated rival is evidence-starved, so two classes that both
+    retain held-out evidence settle a structural abstain no matter what else
+    would have clustered. Measured motivation: a loose declared band produced 662
+    classes on PDEBench CFD and 1553 s of pairwise clustering to reach the
+    abstain the second class had already decided."""
+    import numpy as np
+    import sympy as sp
+
+    from lagh.certify import coherent
+
+    class C:
+        def __init__(self, e):
+            self.expr, self.complexity = e, 2
+
+    x = sp.Symbol("x_0")
+    # materially different, each with ONE free parameter, so h/n is ~1
+    cands = [C(sp.Float(c) * x) for c in (1.0, 2.0, 3.0, 4.0, 5.0)]
+    P = np.linspace(1.0, 2.0, 60).reshape(-1, 1)
+    full = coherent(cands, [x], P, 1.0)
+    assert len(full) == 5                       # all distinct without the hint
+    early = coherent(cands, [x], P, 1.0, n_evidence=50)
+    assert len(early) == 2                      # stopped at the settled verdict
+    # ...and the verdict both would produce is the same: structural
+    assert len(full) > 1 and len(early) > 1
+
+
+def test_support_proposal_is_bounded_by_the_certification_split():
+    """A support with dof >= n_cert has h = 0, so alpha_log10 = 0 and the
+    significance gate demotes it however well it fits. Proposing it can only
+    inflate the certifying set that coherence must cluster."""
+    from lagh.engine import _basis_supports
+
+    full, reached = _basis_supports(8)
+    assert reached == 8 and max(len(s) for s in full) == 8
+    capped, reached_c = _basis_supports(8, max_size=4)
+    assert reached_c == 4
+    assert max(len(s) for s in capped) == 4
+    assert capped < full                        # a strict subset, nothing new
