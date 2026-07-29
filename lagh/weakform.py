@@ -161,6 +161,41 @@ class WeakSystem:
     rejected: int = 0                   # patches dropped as unresolved
     gram: np.ndarray | None = None      # (n_patches, n_terms, n_terms) noise Gram
 
+    def normalize(self, by: str = "1", drop: bool = True) -> "WeakSystem":
+        """Divide every row by its own `by` integral (default ∫φ), and drop that
+        column.
+
+        Rows from different patch SCALES are not commensurable: ∫φ differs, so a
+        source term contributes a patch-dependent amount and the `1` column is a
+        real, varying input. Handing it to a general library is a modelling
+        error, and a measured one -- the library promptly built laws like
+        u_xx·[1]^(3/2) and u_xx/[1], and 21 materially different classes
+        certified on clean heat data, because `[1]` takes one value per scale and
+        any function hitting the right value at three points fits.
+
+        Normalizing removes the scale from the feature space entirely: every
+        column becomes a patch AVERAGE, the linear relation is unchanged (row
+        scaling cancels), a source term becomes a plain intercept the engine
+        already proposes, and the bands scale with the rows they band (the Gram
+        by the square, since the noise sensitivity vector scales linearly).
+        """
+        j = self.names.index(by)
+        w = self.A[:, j].astype(float)
+        if not np.all(np.isfinite(w)) or np.any(w == 0):
+            raise ValueError(f"cannot normalize by {by!r}: zero/non-finite")
+        keep = [k for k in range(len(self.names)) if not (drop and k == j)]
+        return WeakSystem(
+            A=(self.A / w[:, None])[:, keep],
+            names=[self.names[k] for k in keep],
+            patches=self.patches,
+            quad=(self.quad / np.abs(w)[:, None])[:, keep],
+            roundoff=(self.roundoff / np.abs(w)[:, None])[:, keep],
+            noise_l2=(self.noise_l2 / np.abs(w)[:, None])[:, keep],
+            order=self.order[:, keep],
+            rejected=self.rejected,
+            gram=(self.gram / (w ** 2)[:, None, None])[:, keep][:, :, keep]
+            if self.gram is not None else None)
+
     def signal_to_band(self, target: str, **kw) -> float:
         """median |target| / declared band: how much evidence a patch family
         actually carries. A family near 1 certifies nothing worth having; the
@@ -292,6 +327,30 @@ def make_patches(x: np.ndarray, t: np.ndarray, *, nx_half: int, nt_half: int,
                              nt_half * ht,
                              slice(i - nx_half, i + nx_half + 1),
                              slice(j - nt_half, j + nt_half + 1)))
+    return out
+
+
+def multiscale_patches(x: np.ndarray, t: np.ndarray, scales, *, n_x: int,
+                       n_t: int) -> list[Patch]:
+    """Patches at several supports pooled into one family.
+
+    `scales` is a list of (nx_half, nt_half) in grid cells. Two reasons this is
+    the default rather than a refinement:
+
+    * a SINGLE-scale family makes any constant-integrand column exactly constant
+      across rows -- the `1` term integrates to the same number on every patch --
+      and the constrained-input detector then correctly reads that as a
+      machine-exact input constraint and switches the engine to its
+      domain-restricted path. The degeneracy is an artifact of the patch family,
+      not of the physics (measured in the C1 ladder).
+    * the test-function scale is a knob the law must be INDEPENDENT of; pooling
+      scales puts that independence inside the certificate's own domain rather
+      than leaving it to a separate patch-family sweep.
+    """
+    out = []
+    for nxh, nth in scales:
+        out += make_patches(x, t, nx_half=int(nxh), nt_half=int(nth),
+                            n_x=n_x, n_t=n_t)
     return out
 
 

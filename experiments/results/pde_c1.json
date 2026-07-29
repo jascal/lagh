@@ -3,7 +3,7 @@
   "certified": true,
   "law": "[u_xx]/10",
   "abstain": null,
-  "alpha_log10": -180.90211229401493,
+  "alpha_log10": -339.69511878546587,
   "support_ok": true,
   "coefficients": {
    "u_xx": 0.1
@@ -12,126 +12,122 @@
    "u_xx": 0.0
   },
   "interval_note": null,
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
-  "tier": 3,
-  "notes": [
-   "CAP-S cheap pre-pass"
-  ],
-  "seconds": 0.1
+  "tier": 1,
+  "notes": [],
+  "seconds": 2.3
  },
  "heat_sigma1e-08": {
   "certified": true,
-  "law": "0.0999999977570174*[u_xx]",
+  "law": "89436083*[u_xx]/894360839",
   "abstain": null,
-  "alpha_log10": -143.72635969303263,
+  "alpha_log10": -236.59361986247953,
   "support_ok": true,
   "coefficients": {
-   "u_xx": 0.09999999775701737
+   "u_xx": 0.09999999899369476
   },
   "rel_error": {
-   "u_xx": -2.2429826329606328e-08
+   "u_xx": -1.0063052474640344e-08
   },
-  "interval_note": "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 42584926/425849263 in [0.09999997285, 0.1000000227]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=1e-08: certifies for 89436083/894360839 in [0.09999999068, 0.1000000084]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 42584926/425849263 in [0.09999997285, 0.1000000227]"
+   "parameter precision at sigma=1e-08: certifies for 89436083/894360839 in [0.09999999068, 0.1000000084]"
   ],
-  "seconds": 16.7
+  "seconds": 2.3
  },
  "heat_sigma1e-07": {
   "certified": true,
-  "law": "0.099999996185901*[u_xx]",
+  "law": "52677049*[u_xx]/526770543",
   "abstain": null,
-  "alpha_log10": -120.7011612322553,
+  "alpha_log10": -201.11054873924905,
   "support_ok": true,
   "coefficients": {
-   "u_xx": 0.09999999618590102
+   "u_xx": 0.09999998993869329
   },
   "rel_error": {
-   "u_xx": -3.8140989810919734e-08
+   "u_xx": -1.006130671832306e-07
   },
-  "interval_note": "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 95170828/951708347 in [0.09999968994, 0.1000003024]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=1e-07: certifies for 52677049/526770543 in [0.09999990682, 0.1000000843]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 95170828/951708347 in [0.09999968994, 0.1000003024]"
+   "parameter precision at sigma=1e-07: certifies for 52677049/526770543 in [0.09999990682, 0.1000000843]"
   ],
-  "seconds": 17.6
+  "seconds": 3.0
  },
  "heat_sigma1e-06": {
   "certified": true,
-  "law": "0.0999999618764513*[u_xx]",
+  "law": "99393*[u_xx]/993931",
   "abstain": null,
-  "alpha_log10": -97.69766164383373,
+  "alpha_log10": -166.04220371992156,
   "support_ok": true,
   "coefficients": {
-   "u_xx": 0.09999996187645127
+   "u_xx": 0.09999989938939423
   },
   "rel_error": {
-   "u_xx": -3.812354873455881e-07
+   "u_xx": -1.0061060577715164e-06
   },
-  "interval_note": "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 41763319/417633484 in [0.09999689941, 0.1000030243]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=1e-06: certifies for 99393/993931 in [0.09999906822, 0.1000008429]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 41763319/417633484 in [0.09999689941, 0.1000030243]"
+   "parameter precision at sigma=1e-06: certifies for 99393/993931 in [0.09999906822, 0.1000008429]"
   ],
-  "seconds": 18.1
+  "seconds": 3.6
  },
  "heat_sigma1e-05": {
   "certified": true,
-  "law": "99412*[u_xx]/994127",
+  "law": "89458*[u_xx]/894589",
   "abstain": null,
-  "alpha_log10": -74.67514277221272,
+  "alpha_log10": -131.03766286625682,
   "support_ok": true,
   "coefficients": {
-   "u_xx": 0.09999929586461287
+   "u_xx": 0.09999899395141232
   },
   "rel_error": {
-   "u_xx": -7.041353871362066e-06
+   "u_xx": -1.0060485876872693e-05
   },
-  "interval_note": "parameter precision at sigma=1e-05: certifies for 99412/994127 in [0.09996899498, 0.1000302451]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=1e-05: certifies for 89458/894589 in [0.09999068227, 0.100008429]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "domain-restricted certificate: inputs satisfy 34873*x_0*x_4/409072 - 189*x_0/133796 + 7603*x_1*x_4/956025 - 107*x_1/811968 - 16833*x_2*x_4/632626 + 287*x_2/650936 + 92571*x_3*x_4/702247 - 227*x_3/1039",
-   "parameter precision at sigma=1e-05: certifies for 99412/994127 in [0.09996899498, 0.1000302451]"
+   "parameter precision at sigma=1e-05: certifies for 89458/894589 in [0.09999068227, 0.100008429]"
   ],
-  "seconds": 22.4
+  "seconds": 3.8
  },
  "heat_sigma0.0001": {
   "certified": true,
-  "law": "0.0999963270782597*[u_xx]",
+  "law": "62651*[u_xx]/626573",
   "abstain": null,
-  "alpha_log10": -51.665287909918014,
+  "alpha_log10": -95.98332769968584,
   "support_ok": true,
   "coefficients": {
-   "u_xx": 0.09999632707825974
+   "u_xx": 0.09998994530565473
   },
   "rel_error": {
-   "u_xx": -3.6729217402636793e-05
+   "u_xx": -0.00010054694345271176
   },
-  "interval_note": "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 97495187/975020693 in [0.09969003578, 0.1003026184]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=0.0001: certifies for 62651/626573 in [0.09990683373, 0.1000842894]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "domain-restricted certificate: inputs satisfy 45410*x_0*x_4/798911 - 410*x_0/435313 - 28901*x_1*x_4/656548 + 611*x_1/837656 - 7319*x_2*x_4/347784 + 3*x_2/8603 + 33061*x_3*x_4/793908 - 682*x_3/988347 +",
-   "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 97495187/975020693 in [0.09969003578, 0.1003026184]"
+   "parameter precision at sigma=0.0001: certifies for 62651/626573 in [0.09990683373, 0.1000842894]"
   ],
-  "seconds": 24.2
+  "seconds": 4.3
  },
  "heat_sigma0.001": {
   "certified": false,
@@ -144,20 +140,20 @@
    "u_xx": -1.0
   },
   "interval_note": null,
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "16 materially different classes certify at tier 1"
+   "6 materially different classes certify at tier 1"
   ],
-  "seconds": 66.2
+  "seconds": 15.1
  },
  "advection_sigma0": {
   "certified": true,
   "law": "-7*[u_x]/10",
   "abstain": null,
-  "alpha_log10": -182.29930736902992,
+  "alpha_log10": -336.06552563283435,
   "support_ok": true,
   "coefficients": {
    "u_x": -0.7
@@ -166,152 +162,148 @@
    "u_x": 0.0
   },
   "interval_note": null,
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
-  "tier": 3,
-  "notes": [
-   "CAP-S cheap pre-pass"
-  ],
-  "seconds": 0.0
+  "tier": 1,
+  "notes": [],
+  "seconds": 3.2
  },
  "advection_sigma1e-08": {
   "certified": true,
-  "law": "-72158844*[u_x]/103084063",
+  "law": "-625909717*[u_x]/894156741",
   "abstain": null,
-  "alpha_log10": -160.64082927269303,
+  "alpha_log10": -255.0125127160019,
   "support_ok": true,
   "coefficients": {
-   "u_x": -0.6999999990299179
+   "u_x": -0.6999999980987673
   },
   "rel_error": {
-   "u_x": 1.3858314495962532e-09
+   "u_x": 2.7160465939804877e-09
   },
-  "interval_note": "parameter precision at sigma=1e-08: certifies for -72158844/103084063 in [-0.7000000574, -0.6999999582]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=1e-08: certifies for -625909717/894156741 in [-0.7000000185, -0.6999999831]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "parameter precision at sigma=1e-08: certifies for -72158844/103084063 in [-0.7000000574, -0.6999999582]"
+   "parameter precision at sigma=1e-08: certifies for -625909717/894156741 in [-0.7000000185, -0.6999999831]"
   ],
-  "seconds": 17.1
+  "seconds": 2.3
  },
  "advection_sigma1e-07": {
   "certified": true,
-  "law": "-383747043*[u_x]/548210069",
+  "law": "-600511188*[u_x]/857873149",
   "abstain": null,
-  "alpha_log10": -136.58392488757656,
+  "alpha_log10": -219.58848880806295,
   "support_ok": true,
   "coefficients": {
-   "u_x": -0.6999999903321732
+   "u_x": -0.6999999809995219
   },
   "rel_error": {
-   "u_x": 1.3811181087675097e-08
+   "u_x": 2.71435401139846e-08
   },
-  "interval_note": "parameter precision at sigma=1e-07: certifies for -383747043/548210069 in [-0.7000006519, -0.6999995956]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=1e-07: certifies for -600511188/857873149 in [-0.7000001855, -0.6999998306]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "parameter precision at sigma=1e-07: certifies for -383747043/548210069 in [-0.7000006519, -0.6999995956]"
+   "parameter precision at sigma=1e-07: certifies for -600511188/857873149 in [-0.7000001855, -0.6999998306]"
   ],
-  "seconds": 17.2
+  "seconds": 3.2
  },
  "advection_sigma1e-06": {
   "certified": true,
-  "law": "-544669705*[u_x]/778099686",
+  "law": "-368433*[u_x]/526333",
   "abstain": null,
-  "alpha_log10": -113.57825203386895,
+  "alpha_log10": -184.49999091734563,
   "support_ok": true,
   "coefficients": {
-   "u_x": -0.6999999033542856
+   "u_x": -0.6999998100062128
   },
   "rel_error": {
-   "u_x": 1.3806530617190204e-07
+   "u_x": 2.7141969592493963e-07
   },
-  "interval_note": "parameter precision at sigma=1e-06: certifies for -544669705/778099686 in [-0.7000065191, -0.6999959561]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=1e-06: certifies for -368433/526333 in [-0.7000018546, -0.6999983057]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "parameter precision at sigma=1e-06: certifies for -544669705/778099686 in [-0.7000065191, -0.6999959561]"
+   "parameter precision at sigma=1e-06: certifies for -368433/526333 in [-0.7000018546, -0.6999983057]"
   ],
-  "seconds": 17.6
+  "seconds": 3.5
  },
  "advection_sigma1e-05": {
   "certified": true,
-  "law": "-217286*[u_x]/310409",
+  "law": "-36843*[u_x]/52633",
   "abstain": null,
-  "alpha_log10": -90.56053296490938,
+  "alpha_log10": -149.5000691111691,
   "support_ok": true,
   "coefficients": {
-   "u_x": -0.6999990335331772
+   "u_x": -0.6999981000512986
   },
   "rel_error": {
-   "u_x": 1.3806668897053953e-06
+   "u_x": 2.7142124305244512e-06
   },
-  "interval_note": "parameter precision at sigma=1e-05: certifies for -217286/310409 in [-0.7000651915, -0.6999595607]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=1e-05: certifies for -36843/52633 in [-0.700018546, -0.6999830567]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "parameter precision at sigma=1e-05: certifies for -217286/310409 in [-0.7000651915, -0.6999595607]"
+   "parameter precision at sigma=1e-05: certifies for -36843/52633 in [-0.700018546, -0.6999830567]"
   ],
-  "seconds": 18.5
+  "seconds": 3.8
  },
  "advection_sigma0.0001": {
   "certified": true,
-  "law": "-289579*[u_x]/413690",
+  "law": "-165766*[u_x]/236815",
   "abstain": null,
-  "alpha_log10": -67.53322323938603,
+  "alpha_log10": -114.46192920611787,
   "support_ok": true,
   "coefficients": {
-   "u_x": -0.6999903309241219
+   "u_x": -0.6999809978253067
   },
   "rel_error": {
-   "u_x": 1.3812965540102189e-05
+   "u_x": 2.7145963847579378e-05
   },
-  "interval_note": "parameter precision at sigma=0.0001: certifies for -289579/413690 in [-0.7006519727, -0.6995956223]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=0.0001: certifies for -165766/236815 in [-0.7001854639, -0.6998305697]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "parameter precision at sigma=0.0001: certifies for -289579/413690 in [-0.7006519727, -0.6995956223]"
+   "parameter precision at sigma=0.0001: certifies for -165766/236815 in [-0.7001854639, -0.6998305697]"
   ],
-  "seconds": 20.5
+  "seconds": 3.8
  },
  "advection_sigma0.001": {
-  "certified": true,
-  "law": "-647063*[u_x]/924504",
-  "abstain": null,
-  "alpha_log10": -44.40067466509676,
-  "support_ok": true,
-  "coefficients": {
-   "u_x": -0.6999028668345405
-  },
+  "certified": false,
+  "law": "",
+  "abstain": "structural",
+  "alpha_log10": null,
+  "support_ok": null,
+  "coefficients": {},
   "rel_error": {
-   "u_x": 0.00013876166494207278
+   "u_x": 1.0
   },
-  "interval_note": "parameter precision at sigma=0.001: certifies for -647063/924504 in [-0.706525546, -0.6959577561]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": null,
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "parameter precision at sigma=0.001: certifies for -647063/924504 in [-0.706525546, -0.6959577561]"
+   "2 materially different classes certify at tier 1"
   ],
-  "seconds": 26.2
+  "seconds": 4.9
  },
  "burgers_sigma0": {
   "certified": true,
   "law": "[u_xx]/5 - [u*u_x]",
   "abstain": null,
-  "alpha_log10": -184.16233373688783,
+  "alpha_log10": -342.4413222353147,
   "support_ok": true,
   "coefficients": {
    "u_xx": 0.2,
@@ -322,134 +314,132 @@
    "u*u_x": 0.0
   },
   "interval_note": null,
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [],
-  "seconds": 6.5
+  "seconds": 0.4
  },
  "burgers_sigma1e-08": {
   "certified": true,
-  "law": "0.199999978823596*[u_xx] - 1.0000002644189*[u*u_x]",
+  "law": "0.199999996975869*[u_xx] - 0.999999976270735*[u*u_x]",
   "abstain": null,
-  "alpha_log10": -134.02032982327225,
+  "alpha_log10": -220.5245270582773,
   "support_ok": true,
   "coefficients": {
-   "u_xx": 0.199999978823596,
-   "u*u_x": -1.0000002644188961
+   "u_xx": 0.1999999969758685,
+   "u*u_x": -0.9999999762707352
   },
   "rel_error": {
-   "u_xx": -1.0588202009609304e-07,
-   "u*u_x": -2.6441889611206193e-07
+   "u_xx": -1.5120657503864265e-08,
+   "u*u_x": 2.3729264775340653e-08
   },
-  "interval_note": "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 175617706410/878088532591 in [0.1999999143, 0.2000000434]; -499953874/499953893 in [-1.000001191, -0.9999993374]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 61168696/305843485 in [0.1999999703, 0.2000000237]; -840442615/840442548 in [-1.00000065, -0.999999303]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 175617706410/878088532591 in [0.1999999143, 0.2000000434]; -499953874/499953893 in [-1.000001191, -0"
+   "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 61168696/305843485 in [0.1999999703, 0.2000000237]; -840442615/840442548 in [-1.00000065, -0.9999993"
   ],
-  "seconds": 2.3
+  "seconds": 1.5
  },
  "burgers_sigma1e-07": {
   "certified": true,
-  "law": "0.19999978824651*[u_xx] - 1.00000264422839*[u*u_x]",
+  "law": "0.199999969758721*[u_xx] - 0.999999762696836*[u*u_x]",
   "abstain": null,
-  "alpha_log10": -111.9677122321347,
+  "alpha_log10": -186.49110095796172,
   "support_ok": true,
   "coefficients": {
-   "u_xx": 0.1999997882465105,
-   "u*u_x": -1.0000026442283856
+   "u_xx": 0.1999999697587205,
+   "u*u_x": -0.9999997626968362
   },
   "rel_error": {
-   "u_xx": -1.0587674476036923e-06,
-   "u*u_x": -2.644228385584313e-06
+   "u_xx": -1.512063975417366e-07,
+   "u*u_x": 2.3730316378589578e-07
   },
-  "interval_note": "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 65417545/327087727 in [0.1999991429, 0.2000004336]; -597386797/597387024 in [-1.000011915, -0.9999933738]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 129691943/648459821 in [0.1999997029, 0.2000002367]; -766421082/766420471 in [-1.000006495, -0.9999930304]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 65417545/327087727 in [0.1999991429, 0.2000004336]; -597386797/597387024 in [-1.000011915, -0.999993"
+   "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 129691943/648459821 in [0.1999997029, 0.2000002367]; -766421082/766420471 in [-1.000006495, -0.99999"
   ],
-  "seconds": 2.7
+  "seconds": 1.6
  },
  "burgers_sigma1e-06": {
   "certified": true,
-  "law": "0.199997882529446*[u_xx] - 1.00002644191115*[u*u_x]",
+  "law": "122350*[u_xx]/611751 - 125439*[u*u_x]/125438",
   "abstain": null,
-  "alpha_log10": -89.93131979918634,
+  "alpha_log10": -152.54218507016452,
   "support_ok": true,
   "coefficients": {
-   "u_xx": 0.1999978825294455,
-   "u*u_x": -1.0000264419111518
+   "u_xx": 0.19999967306959857,
+   "u*u_x": -1.0000079720658812
   },
   "rel_error": {
-   "u_xx": -1.0587352772539749e-05,
-   "u*u_x": -2.6441911151753317e-05
+   "u_xx": -1.6346520072263448e-06,
+   "u*u_x": -7.972065881212131e-06
   },
-  "interval_note": "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 199035509/995177606 in [0.199991429, 0.2000043361]; -263161/263162 in [-1.000119146, -0.9999337378]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=1e-06: certifies for 122350/611751 in [0.1999970286, 0.2000023666]; -125439/125438 in [-1.00006495, -0.9999303041]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 199035509/995177606 in [0.199991429, 0.2000043361]; -263161/263162 in [-1.000119146, -0.9999337378]"
+   "parameter precision at sigma=1e-06: certifies for 122350/611751 in [0.1999970286, 0.2000023666]; -125439/125438 in [-1.00006495, -0.9999303041]"
   ],
-  "seconds": 2.7
+  "seconds": 1.6
  },
  "burgers_sigma1e-05": {
   "certified": true,
-  "law": "0.199978830748002*[u_xx] - 1.00026437751831*[u*u_x]",
+  "law": "171259*[u_xx]/856309 - 890758*[u*u_x]/890687",
   "abstain": null,
-  "alpha_log10": -67.87068376216857,
+  "alpha_log10": -118.34192536702768,
   "support_ok": true,
   "coefficients": {
-   "u_xx": 0.1999788307480025,
-   "u*u_x": -1.0002643775183095
+   "u_xx": 0.1999967301523165,
+   "u*u_x": -1.0000797137490498
   },
   "rel_error": {
-   "u_xx": -0.00010584625998760755,
-   "u*u_x": -0.00026437751830954426
+   "u_xx": -1.634923841753455e-05,
+   "u*u_x": -7.971374904980344e-05
   },
-  "interval_note": "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 9482359/47411825 in [0.1999142983, 0.2000433632]; -420927/420943 in [-1.001191422, -0.9993373326]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=1e-05: certifies for 171259/856309 in [0.1999702868, 0.2000236663]; -890758/890687 in [-1.000649502, -0.9993030536]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "domain-restricted certificate: inputs satisfy 22413*x_0*x_4/264610 - 1223*x_0/871372 - x_1*x_4 + 14239*x_1/859311 - 64*x_2*x_4/34211 + 7*x_2/225816 + 25435*x_3*x_4/153833 - 1129*x_3/412081 + 220999*x_",
-   "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 9482359/47411825 in [0.1999142983, 0.2000433632]; -420927/420943 in [-1.001191422, -0.9993373326]"
+   "parameter precision at sigma=1e-05: certifies for 171259/856309 in [0.1999702868, 0.2000236663]; -890758/890687 in [-1.000649502, -0.9993030536]"
   ],
-  "seconds": 3.2
+  "seconds": 2.1
  },
  "burgers_sigma0.0001": {
   "certified": true,
-  "law": "48111*[u_xx]/240557 - 970363*[u*u_x]/970733",
+  "law": "175831*[u_xx]/879299 - 745155*[u*u_x]/744562",
   "abstain": null,
-  "alpha_log10": -44.824762967372756,
+  "alpha_log10": -83.24366122428148,
   "support_ok": true,
   "coefficients": {
-   "u_xx": 0.19999833719243257,
-   "u*u_x": -0.9996188447286741
+   "u_xx": 0.1999672466362409,
+   "u*u_x": -1.0007964413977615
   },
   "rel_error": {
-   "u_xx": -8.31403783721485e-06,
-   "u*u_x": 0.00038115527132587257
+   "u_xx": -0.00016376681879551325,
+   "u*u_x": -0.0007964413977614715
   },
-  "interval_note": "parameter precision at sigma=0.0001: certifies for 48111/240557 in [0.1991438525, 0.2004338495]; -970363/970733 in [-1.011910478, -0.9933687323]",
-  "n_patches": 96,
-  "n_cert_patches": 24,
+  "interval_note": "parameter precision at sigma=0.0001: certifies for 175831/879299 in [0.1997029724, 0.2002366779]; -745155/744562 in [-1.006495223, -0.9930318274]",
+  "n_patches": 144,
+  "n_cert_patches": 36,
   "patches_rejected": 0,
   "tier": 1,
   "notes": [
-   "domain-restricted certificate: inputs satisfy 79516*x_0*x_4/626895 - 1939*x_0/922548 - 720687*x_1*x_4/867298 + 3391*x_1/246275 + 16622*x_2*x_4/727751 - 153*x_2/404261 + 47847*x_3*x_4/818954 - 853*x_3/",
-   "parameter precision at sigma=0.0001: certifies for 48111/240557 in [0.1991438525, 0.2004338495]; -970363/970733 in [-1.011910478, -0.9933687323]"
+   "parameter precision at sigma=0.0001: certifies for 175831/879299 in [0.1997029724, 0.2002366779]; -745155/744562 in [-1.006495223, -0.9930318274]"
   ],
-  "seconds": 14.7
+  "seconds": 4.5
  },
  "burgers_sigma0.001": {
   "certified": false,
@@ -463,14 +453,14 @@
    "u*u_x": 1.0
   },
   "interval_note": null,
-  "n_patches": 95,
-  "n_cert_patches": 24,
-  "patches_rejected": 1,
+  "n_patches": 137,
+  "n_cert_patches": 36,
+  "patches_rejected": 7,
   "tier": 1,
   "notes": [
-   "4 materially different classes certify at tier 1"
+   "2 materially different classes certify at tier 1"
   ],
-  "seconds": 52.6
+  "seconds": 15.8
  },
  "null_iid_sigma0": {
   "certified": false,
@@ -505,11 +495,11 @@
  "single_wave_sigma0": {
   "certified": false,
   "abstain": "single-solution",
-  "n_patches": 21
+  "n_patches": 28
  },
  "single_wave_sigma0.0001": {
   "certified": false,
   "abstain": "single-solution",
-  "n_patches": 24
+  "n_patches": 36
  }
 }

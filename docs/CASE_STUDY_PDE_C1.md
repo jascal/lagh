@@ -136,6 +136,77 @@ initial conditions, certifying on a held-out solution.
   right move for identifiability, since the C0 registration already called for
   "multiple scales").
 
+## C1b — multi-scale patch families (registered 2026-07-28, before the re-run)
+
+The C1 ladder ran on a single-scale family, which makes the `1` term's column
+exactly constant (measured spread 2.2e-16, i.e. 1.3e-14 relative) — a genuine
+machine-exact input constraint that the constrained-input machinery correctly
+detected, switching the engine to its domain-restricted path at two rungs. The
+degeneracy is an artifact of the patch family, and pooling scales removes it
+(`weakform.multiscale_patches`): measured, the same column then spans 75% of its
+own magnitude with signal-to-band essentially unchanged (1.05e7 vs 1.09e7).
+
+Scales pooled: (16, 8), (24, 12), (32, 16) half-widths in grid cells, 12 patch
+centres each, 36 rows per solution against the previous 24.
+
+- **S1 — the domain-restricted path stops firing.** No input constraint is
+  detected at any rung (it fired at heat σ = 1e-5 and Burgers σ = 1e-4).
+- **S2 — no regression.** Every rung that certified the true support under the
+  single-scale family still certifies the true support.
+- **S3 — the interval story survives.** Half-width/σ stays constant in σ per
+  system (the linearity result), and the constants move by less than 2× in
+  either direction. Adding rows adds constraints, so I expect tightening rather
+  than widening, but the pooled small patches carry less signal per row, which
+  is why the prediction is a bound and not a direction.
+- **S4 — zero confident-wrong.** Every reported interval contains the truth.
+
+### C1b results: three attempts, and the two failures are the content
+
+**Attempt 1 — scales (16,8), (24,12), (32,16): every heat and advection rung
+went to a structural abstain, including σ = 0.** Diagnosis: the (16,8) patches
+carry a band ~2000× looser than the others (signal-to-band 5.3e3 vs 1.05e7,
+because a smaller support means fewer points across the bump and a worse
+quadrature). Rivals certify at the loosest row's band, so **a pooled patch
+family is only as sound as its worst-conditioned member** — the loose-ε lesson,
+one level up.
+
+**Attempt 2 — resolved scales only, (24,12), (32,16), (40,20): heat still
+abstained, now with 21 materially different certifying classes** on clean data.
+Diagnosis, and it was a modelling error of ours rather than an engine one: with
+multiple scales the `1` column VARIES, so it is a genuine input, and the general
+library duly built laws like `u_xx·[1]^(3/2)`, `u_xx·√[1]` and `u_xx/[1]`.
+Because `[1]` takes exactly one value per scale, any function hitting the right
+value at three points fits — the patch scale had become a state variable, which
+a PDE law must never depend on.
+
+**Attempt 3 — normalize each row by its own ∫φ and drop that column
+(`WeakSystem.normalize`).** Every column becomes a patch AVERAGE, commensurable
+across scales; the linear relation is unchanged (row scaling cancels); a source
+term becomes the intercept the engine already proposes; bands scale with their
+rows (the Gram by the square). 144 rows, 4 features.
+
+| σ | heat | advection | Burgers |
+|---|---|---|---|
+| 0 | exact `1/10` | exact `−7/10` | exact `1/5`, `−1` |
+| 1e-8 … 1e-4 | ±0.89σ | ±1.77σ | ±2.67σ, ±67.3σ |
+| 1e-3 | abstain | abstain | abstain |
+
+- **S1 — met.** No input constraint is detected at any rung; the
+  domain-restricted path no longer fires.
+- **S2 — MISSED at one rung.** Advection at σ = 1e-3 certified under the
+  single-scale family and now abstains structurally. Everywhere else the true
+  support still certifies, and heat/Burgers/advection now all reach σ = 1e-4.
+- **S3 — MISSED on the bound, met on the substance.** Half-width/σ stays
+  constant in σ (the linearity result survives), and the constants TIGHTEN, as
+  expected — but by more than the 2× I registered: heat 3.06 → 0.89 (3.4×),
+  advection 5.28 → 1.77 (3.0×), Burgers 6.45 → 2.67 (2.4×) and 92.7 → 67.3
+  (1.4×). More rows, better conditioned, and the scale nuisance removed.
+- **S4 — met.** Every interval at every rung contains the truth; zero
+  confident-wrong across the re-run.
+
+Net: same verdict shape as C1, one rung lost, parameters determined 1.4–3.4×
+more tightly, and the constant-column artifact gone.
+
 ### Open
 
 Multi-scale patch families; a σ-ladder on the harder curriculum (KdV,

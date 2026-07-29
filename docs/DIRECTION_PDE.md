@@ -157,12 +157,15 @@ realistic σ swamps the signal well before the noise ladder gets interesting.
 
 **Next (in order):** ~~(a) the σ > 0 ladder~~ — done, C1: heat/advection/Burgers
 certify with interval parameters through σ = 1e-4 (advection to 1e-3), every
-interval containing the truth, zero confident-wrong. Then: (a′) **multi-scale
-patch families** — a single-scale family makes the `1` column exactly constant,
-which the constrained-input machinery correctly reads as a machine-exact input
-constraint; the fix is the multiple scales the C0 registration already called
-for; (b) the verify track (integrate the certified law forward from a held-out
-IC and certify the forecast); (c) variable coefficients and conservation-law
+interval containing the truth, zero confident-wrong. ~~(a′) multi-scale patch families~~ — done, C1b: pooled scales plus ROW
+NORMALIZATION by each patch's own ∫φ (a pooled family is only as sound as its
+worst-conditioned member, and an un-normalized varying `1` column turns the
+patch scale into a state variable). Parameters 1.4–3.4× more tightly
+determined. ~~(b) the verify track~~ — done, C2: every one of 18 certificates forecasts
+inside its declared band from a fifth, unseen initial condition, and a
+10x-interval-wrong law fails at ~95% of points. It forced the
+initial-condition-noise term into the band and the law-verify / data-verify
+split. Then: (c) variable coefficients and conservation-law
 form; then (d) PDEBench, and only then the traffic case study.
 
 One general question the ladder raised and did not settle: **should

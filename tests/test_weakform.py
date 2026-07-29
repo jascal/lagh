@@ -130,6 +130,48 @@ def test_unresolved_patches_are_rejected_not_kept():
     assert len(s.A) < len(pa)
 
 
+def test_multiscale_family_breaks_the_constant_column():
+    """A single-scale family makes the `1` column exactly constant, which the
+    constrained-input detector reads (correctly) as a machine-exact input
+    constraint. Pooling scales is what removes the degeneracy."""
+    from lagh.weakform import multiscale_patches
+    nu, k = 0.1, 1.0
+    u, x, t = heat_field(nu, k, nx=257, nt=81)
+    one = ["u_t", "u_xx", "1"]
+    s1 = build(u, x, t, one, make_patches(x, t, nx_half=24, nt_half=12,
+                                          n_x=4, n_t=3), p=16)
+    sm = build(u, x, t, one, multiscale_patches(
+        x, t, [(24, 12), (32, 16), (40, 20)], n_x=4, n_t=3), p=16)
+    c1 = s1.A[:, s1.names.index("1")]
+    cm = sm.A[:, sm.names.index("1")]
+    assert (c1.max() - c1.min()) / abs(c1).max() < 1e-12      # degenerate
+    assert (cm.max() - cm.min()) / abs(cm).max() > 0.1        # a real direction
+
+
+def test_normalize_preserves_the_law_and_scales_the_bands():
+    """Row normalization must not move the law: dividing a row by its own ∫φ
+    cancels out of a linear relation, and the bands must ride along."""
+    from lagh.weakform import multiscale_patches
+    nu = 0.1
+    u, x, t = heat_field(nu, 1.0, nx=257, nt=81)
+    terms = ["u_t", "u_xx", "u_x", "1"]
+    s = build(u, x, t, terms, multiscale_patches(
+        x, t, [(24, 12), (32, 16)], n_x=4, n_t=3), p=16)
+    n = s.normalize(by="1")
+    assert "1" not in n.names and len(n.names) == len(s.names) - 1
+    w = s.A[:, s.names.index("1")]
+    # the law survives: u_t = nu*u_xx holds in both, within each one's own band
+    for sys_ in (s, n):
+        ut = sys_.A[:, sys_.names.index("u_t")]
+        uxx = sys_.A[:, sys_.names.index("u_xx")]
+        assert np.all(np.abs(ut - nu * uxx)
+                      <= sys_.declared_epsilon("u_t", coeff_max=1.0))
+    # and the rows really were divided by their own test-function integral
+    assert np.allclose(n.A[:, n.names.index("u_t")],
+                       s.A[:, s.names.index("u_t")] / w)
+    assert np.allclose(n.gram, s.gram[:, :-1, :-1] / (w ** 2)[:, None, None])
+
+
 def test_library_signs_are_the_by_parts_signs():
     for name, term in LIBRARY.items():
         assert term.sign == (-1) ** (term.ax + term.at), name

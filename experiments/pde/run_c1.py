@@ -20,10 +20,19 @@ from experiments.pde import fields as F                          # noqa: E402
 from experiments.pde.run_c0 import (advection_solutions,         # noqa: E402
                                     burgers_solutions, heat_solutions)
 from lagh.engine import discover                                 # noqa: E402
-from lagh.weakform import PatchEpsilon, build, make_patches      # noqa: E402
+from lagh.weakform import (PatchEpsilon, build,                  # noqa: E402
+                            multiscale_patches)
 
 OUT = Path("experiments/results/pde_c1.json")
-FAMILY = dict(nx_half=24, nt_half=12, n_x=6, n_t=4)
+# MULTI-SCALE (C1b, registered): a single-scale family makes the `1` column
+# exactly constant, which the constrained-input detector correctly reads as a
+# machine-exact input constraint -- an artifact of the family, not the physics.
+# The scales must be COMPARABLY RESOLVED: the first attempt pooled (16,8), whose
+# band is ~2000x looser (signal-to-band 5.3e3 vs 1.05e7), and every heat and
+# advection rung went to a structural abstain -- rivals certify at the loosest
+# row's band. A pooled family is only as sound as its worst-conditioned member.
+SCALES = [(24, 12), (32, 16), (40, 20)]
+FAMILY = dict(n_x=4, n_t=3)
 P_BUMP = 16
 SIGMAS = [0.0, 1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3]
 
@@ -47,19 +56,25 @@ def assemble(sols, terms, sigma, seed=0):
     A, det, gram, sol, rejected = [], [], [], [], 0
     for i, (u, x, t) in enumerate(sols):
         un = u + (rng.normal(0, sigma, u.shape) if sigma > 0 else 0.0)
-        s = build(un, x, t, terms, make_patches(x, t, **FAMILY), p=P_BUMP,
+        s = build(un, x, t, terms,
+                  multiscale_patches(x, t, SCALES, **FAMILY), p=P_BUMP,
                   sigma=sigma)
         rejected += s.rejected
         if len(s.A) == 0:
             continue
+        # rows from different scales are not commensurable until normalized by
+        # their own test-function integral; a source term then becomes the
+        # engine's own intercept instead of a scale-valued input column
+        s = s.normalize(by="1")
         A.append(s.A); det.append(s.quad + s.roundoff); gram.append(s.gram)
         sol.append(np.full(len(s.A), i))
     if not A:
         return None
     A = np.vstack(A)
-    j = terms.index("u_t")
-    cols = [k for k in range(len(terms)) if k != j]
-    m = PatchEpsilon(terms, "u_t", A[:, j], A[:, cols], np.vstack(det),
+    names = [n for n in terms if n != "1"]        # normalize() dropped it
+    j = names.index("u_t")
+    cols = [k for k in range(len(names)) if k != j]
+    m = PatchEpsilon(names, "u_t", A[:, j], A[:, cols], np.vstack(det),
                      np.concatenate(gram), sigma=sigma, floor_abs=0.0,
                      coeff_max=2.0)
     return A[:, cols], A[:, j], m, np.concatenate(sol), rejected
@@ -91,7 +106,7 @@ def run(name, sigma, seed=0):
     if got is None:
         return {"certified": False, "abstain": "all-patches-rejected"}
     X, y, m, sol, rejected = got
-    feat = [n for n in terms if n != "u_t"]
+    feat = [n for n in terms if n not in ("u_t", "1")]
     held = np.unique(sol)[-1]
     tr = np.random.default_rng(seed).permutation(np.where(sol != held)[0])
     ce = np.where(sol == held)[0]
