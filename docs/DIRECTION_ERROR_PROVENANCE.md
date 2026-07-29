@@ -122,6 +122,57 @@ of reading a construction bug as a finding.
 4. **Wire the verdict to the band**: the characterizer's output selects the
    channel rather than the analyst selecting it.
 
+## Naming
+
+**Observational error** and **pipeline error** are the pair to use. "Pipeline"
+because a solver is one, and so is a data-assimilation system, a photometric
+reduction, or a counting-and-binning step — the program already says "pipeline
+decode" for exactly this in `DIRECTION_PDE.md`. Where the pipeline is
+specifically a discretization, **scheme error** is the narrower term. The
+measured verdict stays `structured-deterministic` / `unstructured-stochastic`,
+because that is what is measured; the two names above are the usual causes.
+
+## A learned operator (FNO) as an instrument for this
+
+Registered here rather than in `PDEBENCH_READINESS.md`, because error provenance
+turns out to be the better use for one than equation proposal is. Four roles, in
+order of value, and none of them ever touches the band:
+
+1. **A reference where none exists.** The measurement needs something to compare
+   against: advection had a closed form, Burgers an independent high-accuracy
+   solve, and CFD had NEITHER -- which is why that run could only report the
+   declaration required rather than measure the error. A learned operator
+   supplies a reference for families this program cannot integrate.
+2. **Resolution extrapolation → the discretization error itself.** An FNO is
+   parameterized in mode space and is resolution-transferable, so training across
+   the resolutions a benchmark ships and extrapolating the learned operator to
+   h → 0 estimates the scheme's error directly. Richardson extrapolation in
+   operator space, no closed form needed. This is the role that would unblock
+   the CFD case.
+3. **Symbol probing → the modified equation, better conditioned.** Perturbing a
+   trained operator with single Fourier modes at small amplitude and reading the
+   linearized response recovers lambda-hat(k) directly, giving beta_eff(k) or
+   nu_eff(k). The same quantity the weak-form residual regression measured
+   (c3 = 1.09e-7), but fitted over all 10^4 samples rather than 4.
+4. **The deterministic/stochastic split, i.e. sigma WITHOUT replicates.** This is
+   the case the characterizer would otherwise have to call `undetermined`. A
+   learned operator is a deterministic function of its input, so what it predicts
+   ON HELD-OUT SAMPLES is reproducible-given-input (pipeline), and the
+   irreducible residual is what no deterministic operator can recover
+   (observational). Held-out is load-bearing -- enough capacity memorizes noise.
+
+**Limits, which matter more than the promises:**
+
+* It cannot detect error shared by the whole training distribution. If every
+  sample carries the same dispersion, the operator learns it as SIGNAL. It
+  separates reproducible-given-input from not, never true from false -- and the
+  advection dispersion measured here would be invisible to it for exactly that
+  reason.
+* It carries no declarable bound of its own, so it may inform which CHANNEL to
+  use and never the magnitude that goes into it.
+* On shocks it rings, so its residual there is its own artifact rather than the
+  data's -- which is the regime it would otherwise be most wanted for.
+
 ## Registered predictions
 
 - **P1.** On our own C1/C2 fields with declared σ (exact analytic solutions plus
@@ -139,6 +190,14 @@ of reading a construction bug as a finding.
 - **P5.** On PDEBench CFD the modified-equation terms differ between the
   continuity and momentum equations, consistent with the measured 100× asymmetry
   in the declaration each needs.
+- **P6 (learned operator).** Trained on a family with declared σ and held out by
+  sample, an operator's irreducible residual estimates that σ within a factor of
+  2 — recovering the noise scale with no replicates. On PDEBench advection the
+  same procedure returns a residual floor far BELOW the measured 2.75e-2
+  deviation, because the dispersion is common to the training distribution and is
+  learned as signal. Both halves are the prediction: it finds observational error
+  and is blind to distribution-wide pipeline error, and that asymmetry is exactly
+  why it informs the channel and never the magnitude.
 
 ## Why this matters beyond PDEBench
 
