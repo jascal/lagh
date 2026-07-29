@@ -13,10 +13,19 @@ in `PDEBENCH_READINESS.md`. Runner `experiments/pde/run_pdebench.py`, loader
 `experiments/pde/pdebench.py`, extractor `experiments/pde/pdebench_fetch.py`,
 results `experiments/results/pdebench.json`.
 
-Two families in this pass: **1-D advection** (β = 0.7) and **1-D Burgers**
-(ν = 0.01). Both certify their true support, both report intervals containing
-the truth, both forecast-verify on a sample no stage of the pipeline saw, and
-zero confident-wrong.
+Four families in this pass, and they produced four different verdicts — which is
+the most useful thing about the pass:
+
+| family | verdict |
+|---|---|
+| 1-D advection (β = 0.7) | **CERTIFIED**, β = 0.70002, forecast verified |
+| 1-D Burgers (ν = 0.01) | **CERTIFIED**, both coefficients, forecast verified |
+| 1-D reaction–diffusion | **ABSTAIN[noise]** — vacuous: the field is frozen over ~90% of the record |
+| 1-D CFD (η = ζ = 0.01) | **ABSTAIN[structural]** — the stated laws hold but 15 / 662 classes fit |
+
+Zero confident-wrong across all four. Each refusal names a different mechanism —
+a swallowed signal, and an under-determined one — and each was reached through
+the truth check rather than around it.
 
 ## What was actually run
 
@@ -120,6 +129,64 @@ findings rather than complaints:
 
 Each is a statement about a generating pipeline, and each needed a declared
 error model to be sayable at all.
+
+## 1-D CFD: the stated laws hold, and the data does not determine them
+
+`1D_CFD_Rand_Eta0.01_Zeta0.01_periodic` (id 164672), three shipped fields
+(density, Vx, pressure) run through `lagh/pdesystem.py` as a two-equation system
+— the first PDEBench family needing the system path, and the first with shocks.
+
+**The declared field error is reported, not chosen.** CFD has no closed form and
+this program's integrator does not solve Euler, so neither the advection trick
+(exact solution) nor the Burgers one (independent solve) is available. Instead
+the run scans the declaration and reports the smallest one under which each
+stated law sits inside its own band:
+
+| equation | smallest declaration needed |
+|---|---|
+| continuity `ρ_t = −∂ₓ(ρu)` | **1e-4** |
+| momentum `(ρu)_t = −∂ₓ(ρu²+p) + (4η/3+ζ)u_xx` | **1e-2** |
+
+Two equations of the same system, on the same rows, differing by **100×** in how
+much declared error their own stated form requires. Read as pipeline decode: the
+generating scheme enforces mass conservation about two orders more tightly than
+it enforces the momentum balance, which is what a conservative finite-volume
+method with an approximated viscous closure would do. A single tuned band would
+have hidden that entirely.
+
+**Verdict: ABSTAIN[structural] on both equations**, and it is the correct one.
+The stated laws hold comfortably inside the band they need (truth/band 0.003 and
+0.507, neither vacuous) — but 15 materially different classes certify for
+continuity and **662** for momentum. The data admits the stated law and does not
+single it out.
+
+The proximate cause is thinness rather than looseness alone: the resolution gate
+rejected **102 of 144 patches** (71%) as unresolved, which is the honest response
+to shocks, leaving 42 rows over 3 samples and only **5 certification rows**
+against 12 declared features. Five points cannot discriminate 12 columns, so
+supports interpolate and coherence correctly finds a crowd. **Large parts of
+these files are outside the instrument's reach, and the report says so rather
+than certifying on the thin remainder.**
+
+### The defect this found: cost scales with how loose the band is
+
+The run took 1553 s, almost all of it in `certify.coherent`, which clusters the
+certifying set by PAIRWISE divergence on the probe box — quadratic in a set that
+a loose declaration inflates (662 classes implies a far larger certifying set
+behind them). The dev campaigns never hit this because their bands were tight and
+a handful of candidates ever certified. **Cost rising with the messiness of the
+data is backwards**: the harder the case, the more expensive the refusal, and the
+answer at the end is an abstain that the certifying-set size alone would have
+predicted. Two fixes worth registering, neither taken yet: short-circuit the
+clustering once the certifying set exceeds a reported bound (thousands of
+materially-different certifying laws IS a structural abstain), and make the
+proposal budget aware of the certification split (5 rows cannot support 8191
+enumerated supports, and enumerating them anyway is what generated the crowd).
+
+Also fixed on the way: `PatchEpsilon` re-differentiated every candidate
+symbolically — one `sympy.diff` plus one `lambdify` per feature per candidate,
+~8000 × 13 for this vocabulary — where every weak-form law is linear in its
+columns and the gradient IS the coefficient.
 
 ## Why this is dev and not a read
 

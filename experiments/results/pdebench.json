@@ -1669,5 +1669,262 @@
    "verified": false
   },
   "seconds": 6.0
+ },
+ "cfd_eta0.01": {
+  "path": "data/pdebench/1D_CFD_Eta0.01_periodic_x6.h5",
+  "family": "1d_cfd",
+  "declared_noise": {
+   "sigma": 6.560698238899931e-06,
+   "sigma_rep_absolute": 6.560698238899931e-06,
+   "sigma_rep_relative": 5.960464477539063e-08,
+   "sigma_extra_declared": 0.0,
+   "field_err_declared": 0.0,
+   "field_err_is_measured": false,
+   "coord_regularized": true,
+   "coord_deviation": [
+    {
+     "max_abs": 0.0,
+     "rel_to_step": 0.0,
+     "regularized": true,
+     "tolerance": 9.5367431640625e-07
+    },
+    {
+     "max_abs": 5.006790160244634e-08,
+     "rel_to_step": 5.006790160244634e-06,
+     "regularized": true,
+     "tolerance": 9.5367431640625e-07
+    }
+   ],
+   "notes": [
+    "the coordinate axes are float32 too, so they are rebuilt as exact linspaces and the deviation from what was stored is reported (coord_deviation): unregularized, that rounding lands on the time-derivative column at ~1e-6 of its own size, because the by-parts weights carry 1/step^k with k per term",
+    "sigma_rep is the float32 storage quantization at the field's peak: computed, not assumed",
+    "field_err is a DECLARED solver-error assumption -- PDEBench does not ship the coarse levels a tolerance ladder would need, so it cannot be measured after the fact",
+    "any certificate from this data is conditional on that declaration and says so"
+   ]
+  },
+  "patch_scales": [
+   [
+    84,
+    8
+   ],
+   [
+    128,
+    8
+   ],
+   [
+    172,
+    8
+   ]
+  ],
+  "eta": 0.01,
+  "zeta": 0.01,
+  "stated_laws": {
+   "rho_t": {
+    "(rho u)_x": -1.0
+   },
+   "(rho u)_t": {
+    "(rho u^2)_x": -1.0,
+    "p_x": -1.0,
+    "u_xx": 0.023333333333333334
+   }
+  },
+  "geometry": [
+   {
+    "sample": 0,
+    "summary": "1d_cfd:0: fields ['p', 'rho', 'u'] grid 1024x101 sigma_rep 6.561e-06 (rel 5.960e-08) field_err 0.000e+00",
+    "axes": [
+     {
+      "n": 1024,
+      "min": -0.9990234375,
+      "max": 0.9990234375,
+      "step": 0.001953125,
+      "span": 1.998046875,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 1,
+    "summary": "1d_cfd:1: fields ['p', 'rho', 'u'] grid 1024x101 sigma_rep 6.269e-06 (rel 5.960e-08) field_err 0.000e+00",
+    "axes": [
+     {
+      "n": 1024,
+      "min": -0.9990234375,
+      "max": 0.9990234375,
+      "step": 0.001953125,
+      "span": 1.998046875,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 2,
+    "summary": "1d_cfd:2: fields ['p', 'rho', 'u'] grid 1024x101 sigma_rep 7.736e-06 (rel 5.960e-08) field_err 0.000e+00",
+    "axes": [
+     {
+      "n": 1024,
+      "min": -0.9990234375,
+      "max": 0.9990234375,
+      "step": 0.001953125,
+      "span": 1.998046875,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 3,
+    "summary": "1d_cfd:3: fields ['p', 'rho', 'u'] grid 1024x101 sigma_rep 4.401e-06 (rel 5.960e-08) field_err 0.000e+00",
+    "axes": [
+     {
+      "n": 1024,
+      "min": -0.9990234375,
+      "max": 0.9990234375,
+      "step": 0.001953125,
+      "span": 1.998046875,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 101,
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.01,
+      "span": 1.0,
+      "uniform": true,
+      "nonuniformity_rel": 1.0234868508263162e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 1.02e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   }
+  ],
+  "field_err_used": 0.01,
+  "n_rows": 42,
+  "patches_rejected": 102,
+  "equations": [
+   {
+    "target": "rho_t",
+    "certified": false,
+    "abstain": "structural",
+    "alpha_log10": null,
+    "n_rows": 42,
+    "n_cert_rows": 5,
+    "n_solutions": 3,
+    "features": [
+     "(rho u)_x",
+     "(rho u^2)_x",
+     "p_x",
+     "rho_x",
+     "u_x",
+     "u_xx",
+     "rho_xx",
+     "p_xx",
+     "rho",
+     "u",
+     "p"
+    ],
+    "tier": 1,
+    "notes": [
+     "15 materially different classes certify at tier 1"
+    ],
+    "truth": {
+     "truth_max_ratio": 0.003071763091751205,
+     "truth_median_ratio": 0.0004303849969793166,
+     "truth_certifies": true,
+     "vacuous": false,
+     "signal_to_band": 3.4029169298101527,
+     "median_band": 2.283981477269199,
+     "median_target": 8.570021391642666,
+     "note": ""
+    }
+   },
+   {
+    "target": "(rho u)_t",
+    "certified": false,
+    "abstain": "structural",
+    "alpha_log10": null,
+    "n_rows": 42,
+    "n_cert_rows": 5,
+    "n_solutions": 3,
+    "features": [
+     "(rho u)_x",
+     "(rho u^2)_x",
+     "p_x",
+     "rho_x",
+     "u_x",
+     "u_xx",
+     "rho_xx",
+     "p_xx",
+     "rho",
+     "u",
+     "p"
+    ],
+    "tier": 1,
+    "notes": [
+     "662 materially different classes certify at tier 1"
+    ],
+    "truth": {
+     "truth_max_ratio": 0.50710121662651,
+     "truth_median_ratio": 0.07683198697437911,
+     "truth_certifies": true,
+     "vacuous": false,
+     "signal_to_band": 2.398152319358016,
+     "median_band": 7.042081688572992,
+     "median_target": 20.158457036917824,
+     "note": ""
+    }
+   }
+  ],
+  "alpha_log10_total": null,
+  "weakest": [
+   null,
+   null
+  ],
+  "system_certified": false,
+  "seconds": 1552.8
  }
 }
