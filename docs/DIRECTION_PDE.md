@@ -124,7 +124,16 @@ curriculum PDEs).
    analytic (`experiments/pde/fields.py` — Fourier heat, translation
    advection, Cole–Hopf Burgers, tanh wave, KdV soliton).
 
-### Design for (a), the errors-in-variables ε model — `open`, not yet built
+### (a) the errors-in-variables ε model — **BUILT 2026-07-28**, see
+`CASE_STUDY_PDE_C1.md` for the registration, the three engine changes it
+required (per-candidate ε, noise-corrected resolution gates,
+interval-parameter certificates) and the measured noise ladder. The design as
+sketched below is what was built; the one thing it did not anticipate is that
+the *claim shape* had to change too — under noise a physical coefficient is
+determined to an INTERVAL, and demanding an exact rational there was the wrong
+question, not a stricter one.
+
+### Original design sketch (kept for provenance)
 
 Under declared σ the weak-form design matrix is noisy too, and C0's band
 handles that by bounding the coefficients (`coeff_max`) and summing per-column
@@ -146,9 +155,18 @@ Registering the shape here because it is the piece that decides whether noisy
 PDE certification is possible at all: with the loose sum-of-columns band, a
 realistic σ swamps the signal well before the noise ladder gets interesting.
 
-**Next (in order):** (a) the σ > 0 ladder, which needs the errors-in-variables
-ε model above — the design-matrix columns are noisy functionals of u, and the current
-model bands only the target; (b) the verify track (integrate the certified law
-forward from a held-out IC and certify the forecast); (c) variable
-coefficients and conservation-law form; then (d) PDEBench, and only then the
-traffic case study.
+**Next (in order):** ~~(a) the σ > 0 ladder~~ — done, C1: heat/advection/Burgers
+certify with interval parameters through σ = 1e-4 (advection to 1e-3), every
+interval containing the truth, zero confident-wrong. Then: (a′) **multi-scale
+patch families** — a single-scale family makes the `1` column exactly constant,
+which the constrained-input machinery correctly reads as a machine-exact input
+constraint; the fix is the multiple scales the C0 registration already called
+for; (b) the verify track (integrate the certified law forward from a held-out
+IC and certify the forecast); (c) variable coefficients and conservation-law
+form; then (d) PDEBench, and only then the traffic case study.
+
+One general question the ladder raised and did not settle: **should
+interval-parameter certificates be the default under any declared noise**, not
+just for a declared basis? An exact rational is the right claim for a
+definitional identity and the wrong one for a measured coefficient, and that
+distinction is not specific to PDEs.

@@ -18,7 +18,9 @@ from .base import (Candidate, admissible, design_matrix, lstsq, snap_all,
                    to_expr, eval_expr)
 from .certify import (MACHINE_REL, Abstain, Certificate,
                       arbitrate_significance, check, coherent, epsilon,
-                      float_pinned, input_constraints, minimal, pinned,
+                      float_pinned, free_atoms, gated_atoms,
+                      input_constraints, minimal,
+                      parameter_interval, pinned,
                       reduce_mod_constraints, reduce_to_minimal,
                       refit_minimal, sample_box, significance_log10, vacuous)
 from .classes import CURRICULUM, c5_transforms, c6_quasipoly, c7_levy
@@ -39,6 +41,10 @@ class Ctx:
     sigma: float = 0.0    # declared noise: prefilters must not out-tighten epsilon
     deep_supports: bool = True   # CAP-Q sparse-support search (raw target only;
                                  # transform passes set False)
+    band_sel: np.ndarray | None = None   # declared per-row band on the SELECT
+                                 # split, when the caller has one (weak-form
+                                 # rows): the prefilter is stated in relative-y
+                                 # units, which such rows do not obey
 
 
 @dataclass
@@ -199,7 +205,18 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
         # statistical noise (>=1e-3) it admitted impostors without adding
         # recoveries (measured RNOISE regression -- the noisy-recoverable set
         # lives in the unprefiltered channels). sigma=0 -> unchanged.
-        if vr > max(PREFILTER_REL, min(3.0 * ctx.sigma, 3e-4)) * yscale:
+        lim = max(PREFILTER_REL, min(3.0 * ctx.sigma, 3e-4)) * yscale
+        if ctx.band_sel is not None:
+            # A DECLARED band says what residual the error model itself expects;
+            # a relative-y threshold cannot know that (measured: weak-form rows
+            # at field-sigma 1e-6 carry ~1e-3 relative row error, so every
+            # support -- including the truth -- was prefiltered away and the
+            # engine proposed NOTHING). Widening a PROPOSAL filter is sound in
+            # the one direction that matters: it only ever admits more
+            # candidates for an exact check, never certifies one.
+            lim = max(lim, 3.0 * float(np.sqrt(np.mean(
+                np.asarray(ctx.band_sel, float) ** 2))))
+        if vr > lim:
             continue
         sub = [ctx.terms[i] for i in cols]
         snapped = snap_all(c)
@@ -228,7 +245,8 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
 
 
 def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
-                     X_cert, sigma: float = 0.0) -> list[Candidate]:
+                     X_cert, sigma: float = 0.0,
+                     band_sel: np.ndarray | None = None) -> list[Candidate]:
     """All candidates available at `tier`, lower tiers included."""
     active = [(t, m) for t, m in CURRICULUM if t <= tier]
     base_terms = []
@@ -236,7 +254,7 @@ def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
         if hasattr(mod, "terms"):
             base_terms += mod.terms(dim, X_fit, y_fit, X_cert)
     terms = admissible(base_terms, X_fit, X_cert)
-    ctx = Ctx(syms, terms, X_fit, y_fit, X_sel, y_sel, sigma)
+    ctx = Ctx(syms, terms, X_fit, y_fit, X_sel, y_sel, sigma, band_sel=band_sel)
     cands = _linear_candidates(ctx)
     for t, mod in active:
         if hasattr(mod, "candidates"):
@@ -278,11 +296,23 @@ def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
 
 def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              sigma: float = 0.0, se_cert=None, floor_abs: float = 1e-12,
-             max_tier: int = 7, hard_cert=None) -> Result:
+             max_tier: int = 7, hard_cert=None, eps_model=None,
+             declared_basis: bool = False, band_sel=None) -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
     Splits must be disjoint: fit, select, certify. Certification is exhaustive on
     (X_cert, y_cert) at the assembled epsilon.
+
+    `declared_basis` says the input columns are a REGISTERED term library whose
+    members are the claim's vocabulary (the weak-form PDE library), not an
+    open-ended basis a dense channel might fit slop with. It only lifts the
+    under-noise dense-channel skip below, whose measured justification (PO12/
+    PO40: Taylor-slop approximants certify when the true support goes
+    unproposed) is an argument about UNREGISTERED bases and does not transfer:
+    with a declared library the candidate space IS the library, and the
+    corresponding failure mode there is on-shell degeneracy, which the
+    multi-solution holdout closes instead. Default False -- no existing caller
+    changes behaviour, and switching it on is a declaration the caller makes.
     """
     X_fit = np.asarray(X_fit, float)
     X_cert = np.asarray(X_cert, float)
@@ -314,8 +344,15 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     if dim == 1:
         syms = [syms] if not isinstance(syms, (list, tuple)) else list(syms)
     syms = list(syms)
-    eps = epsilon(y_cert, sigma=sigma, se=se_cert, floor_abs=floor_abs,
-                  hard=hard_cert)
+    # ERRORS-IN-VARIABLES REGIME: when the INPUTS carry error too (weak-form patch
+    # integrals are noisy functionals of the same field as the target), the band
+    # depends on the candidate's own coefficients and cannot be assembled once.
+    # `eps_model` is then a callable band (certify.band) and every gate that
+    # checks a law -- including the perturbed laws float_pinned invents -- gets
+    # the band of the law it is actually checking.
+    eps = eps_model if eps_model is not None else \
+        epsilon(y_cert, sigma=sigma, se=se_cert, floor_abs=floor_abs,
+                hard=hard_cert)
     bounds = [(float(X_cert[:, j].min()), float(X_cert[:, j].max()))
               for j in range(dim)]
     # full-data view for the MINIMALITY gate (split-myopia fix, LLMSRBENCH_DEV.md):
@@ -461,7 +498,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     total = 0
     for tier in [t for t, _ in CURRICULUM if t <= max_tier]:
         cands = _tier_candidates(tier, syms, dim, X_fit, y_fit, X_sel, y_sel,
-                                 X_cert, sigma)
+                                 X_cert, sigma, band_sel=band_sel)
         total += len(cands)
         certifying = []
         for c in sorted(cands, key=lambda z: z.complexity):
@@ -491,7 +528,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                     else:
                         c.expr = refit_minimal(c.expr, syms, X_all_m, y_all_m,
                                                eps_all)
-                elif c.channel in ("linear", "c2-pure", "c2-implicit"):
+                elif (c.channel in ("linear", "c2-pure", "c2-implicit")
+                      and not declared_basis):
                     # SIGNIFICANCE BOUNDARY (measured PO12/PO40): at envelope
                     # epsilon on a bounded box, the DENSE channels certify
                     # Taylor-slop approximants of smooth laws whenever the true
@@ -528,7 +566,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                         + " (machine-exact); rivals coincide on the "
                         "constraint variety and the representative is "
                         "canonicalized modulo it")
-        arb_note = None
+        arb_note = interval_note = None
         if len(classes) > 1:
             # MUNTZ_ARBITRATION.md (registered): the program's own alpha
             # currency arbitrates when one class's chance-fit bound beats
@@ -560,6 +598,69 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             if sigma > 0:
                 winner.expr = reduce_to_minimal(winner.expr, syms, X_all_m,
                                                 y_all_m, eps_all)
+                if declared_basis:
+                    # The dense channel is only reachable under noise because a
+                    # declared basis says so, and its candidates arrive with the
+                    # fitted coefficient SNAPPED (measured: 90360785/903607052
+                    # for a true 1/10) -- a huge-denominator rational is a float
+                    # in a costume, which is exactly what this gate exists to
+                    # catch. Under noise it is sigma-scaled and never snaps.
+                    ok, gated = float_pinned(winner.expr, syms, X_cert, y_cert,
+                                             eps, sigma)
+                    if ok:
+                        # Report the interval EVEN WHEN the gate passes: whether
+                        # a coefficient counts as "pinned" is decided by
+                        # float_pinned's sigma-scaled perturbation (+-10/30 sigma
+                        # relative), which is not derived from this data, while
+                        # the interval is. Measured: advection at sigma = 1e-3
+                        # passed the gate with a value 1.4e-4 off the truth and
+                        # said nothing about its own precision.
+                        winner.expr = gated
+                        told = []
+                        for a_ in free_atoms(winner.expr):
+                            iv = parameter_interval(winner.expr, syms, X_cert,
+                                                    y_cert, eps, a_)
+                            if iv is not None:
+                                told.append(f"{a_} in [{iv[0]:.10g}, "
+                                            f"{iv[1]:.10g}]")
+                        if told:
+                            interval_note = ("parameter precision at "
+                                             f"sigma={sigma:g}: certifies for "
+                                             + "; ".join(told))
+                    else:
+                        # INTERVAL-PARAMETER CERTIFICATE. An exact rational is
+                        # the right claim for a definitional identity and the
+                        # wrong one for a measured physical coefficient: a
+                        # diffusivity has no reason to be rational, so "not
+                        # pinned to an exact value" is not the same as "not
+                        # determined". Measure what the data DOES determine --
+                        # the interval over which the law still certifies -- and
+                        # claim that. An unbounded interval still abstains: then
+                        # the parameter really is undetermined.
+                        ivs, centred = [], winner.expr
+                        for a_ in free_atoms(winner.expr):
+                            iv = parameter_interval(winner.expr, syms, X_cert,
+                                                    y_cert, eps, a_)
+                            if iv is None:
+                                ivs = None
+                                break
+                            ivs.append((str(a_), float(iv[0]), float(iv[1])))
+                            centred = centred.xreplace(
+                                {a_: sp.Float(0.5 * (iv[0] + iv[1]))})
+                        if not ivs:
+                            cert = Certificate(
+                                False, 0, 0, len(X_cert), bounds,
+                                str(winner.expr),
+                                abstain=Abstain.PARAMETRIC.value,
+                                notes=["declared-basis winner gate: parameters "
+                                       f"not determined at sigma={sigma:g}"])
+                            return Result(cert, None, tier, total)
+                        winner.expr = centred
+                        interval_note = (
+                            "interval-parameter certificate: no exact value is "
+                            "claimed; the law certifies for every parameter in "
+                            + "; ".join(f"{v} in [{lo:.10g}, {hi:.10g}]"
+                                        for v, lo, hi in ivs))
             elif floor_dom:
                 winner.expr = reduce_to_minimal(winner.expr, syms, X_all_m,
                                                 y_all_m, eps_all)
@@ -582,6 +683,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                 cert.notes.append(constraint_note)
             if arb_note:
                 cert.notes.append(arb_note)
+            if interval_note:
+                cert.notes.append(interval_note)
             cert = _significance_gate(cert)
             return Result(cert, winner.expr if cert.certified else None,
                           tier, total)

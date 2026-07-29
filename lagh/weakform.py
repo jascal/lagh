@@ -37,6 +37,8 @@ from functools import lru_cache
 import numpy as np
 import sympy as sp
 
+from .certify import KAPPA, MACHINE_REL   # one epsilon vocabulary
+
 MACHINE_EPS = float(np.finfo(float).eps)
 
 # A patch is unresolved when the declared quadrature bound exceeds this fraction
@@ -75,6 +77,12 @@ class Term:
 
     def g(self, u: np.ndarray) -> np.ndarray:
         f = _gfun(self.gexpr)
+        return np.broadcast_to(np.asarray(f(u), float), u.shape)
+
+    def dg(self, u: np.ndarray) -> np.ndarray:
+        """g'(u): how a perturbation of the field at a point moves this term's
+        integrand -- the sensitivity the errors-in-variables band is built from."""
+        f = _gfun(str(sp.diff(sp.sympify(self.gexpr), sp.Symbol("u"))))
         return np.broadcast_to(np.asarray(f(u), float), u.shape)
 
 
@@ -151,6 +159,7 @@ class WeakSystem:
     noise_l2: np.ndarray | None = None  # (n_patches, n_terms) ||w||_2: sigma multiplier
     order: np.ndarray | None = None     # (n_patches, n_terms) observed ladder order
     rejected: int = 0                   # patches dropped as unresolved
+    gram: np.ndarray | None = None      # (n_patches, n_terms, n_terms) noise Gram
 
     def signal_to_band(self, target: str, **kw) -> float:
         """median |target| / declared band: how much evidence a patch family
@@ -177,6 +186,94 @@ class WeakSystem:
         return err[:, j] + coeff_max * others.sum(axis=1)
 
 
+@dataclass
+class PatchEpsilon:
+    """The errors-in-variables band for weak-form rows: a CALLABLE epsilon
+    (`certify.band`) assembled per candidate law.
+
+    Why it has to be per candidate: the residual of y = sum_k c_k X_k is
+        (delta_y - sum_k c_k delta_k)  +  (deterministic quadrature/roundoff),
+    and every delta is a functional of the SAME field noise, so the stochastic
+    part is `KAPPA * sigma * ||nu_y - sum_k c_k nu_k||_2` -- one norm over the
+    combined sensitivity vector, computed here as the quadratic form a'Ga with
+    a = (1, -c). Bounding the coefficients instead (the C0 `coeff_max` band)
+    both loosens epsilon and smuggles in an assumption; loosening epsilon is the
+    direction that admits impostors.
+
+    For a candidate that is not linear in the columns the same first-order
+    formula holds with c_k = df/dX_k evaluated PER ROW, which is what
+    `coefficients` returns. If the gradient cannot be evaluated, the band falls
+    back to the conservative `coeff_max` form rather than guessing.
+    """
+    names: list[str]                 # term order of the Gram / quad columns
+    target: str
+    y: np.ndarray                    # (n_rows,) target column
+    X: np.ndarray                    # (n_rows, n_feat) feature columns
+    det: np.ndarray                  # (n_rows, n_terms) quadrature + roundoff
+    gram: np.ndarray                 # (n_rows, n_terms, n_terms)
+    sigma: float = 0.0
+    floor_abs: float = 0.0
+    coeff_max: float = 2.0
+
+    def __post_init__(self):
+        self.j = self.names.index(self.target)
+        self.feat = [n for n in self.names if n != self.target]
+        self.cols = [self.names.index(n) for n in self.feat]
+        self.syms = [sp.Symbol(f"x_{i}") for i in range(len(self.feat))]
+
+    def subset(self, idx) -> "PatchEpsilon":
+        idx = np.asarray(idx, int)
+        return PatchEpsilon(self.names, self.target, self.y[idx], self.X[idx],
+                            self.det[idx], self.gram[idx], self.sigma,
+                            self.floor_abs, self.coeff_max)
+
+    def coefficients(self, expr):
+        """(n_rows, n_feat) of df/dX_k, or None when the law cannot be read that
+        way (non-finite, or not a function of the columns)."""
+        if expr is None:
+            return None
+        try:
+            e = sp.sympify(expr)
+            if e.free_symbols - set(self.syms):
+                return None
+            grads = [sp.lambdify(self.syms, sp.diff(e, s), "numpy")
+                     for s in self.syms]
+            cols = [np.broadcast_to(np.asarray(
+                g(*[self.X[:, i] for i in range(len(self.feat))]), float),
+                (len(self.y),)) for g in grads]
+        except Exception:                                      # noqa: BLE001
+            return None
+        C = np.column_stack(cols) if cols else np.zeros((len(self.y), 0))
+        return C if np.all(np.isfinite(C)) else None
+
+    def __call__(self, expr=None) -> np.ndarray:
+        C = self.coefficients(expr)
+        n, m = len(self.y), len(self.names)
+        eps = MACHINE_REL * np.abs(self.y) + self.floor_abs
+        if C is None:
+            # conservative fallback: coefficients unknown, so bound them, and
+            # add the stochastic parts by triangle inequality (no cancellation)
+            d = self.det[:, self.j] + self.coeff_max * np.delete(
+                self.det, self.j, axis=1).sum(axis=1)
+            if self.sigma > 0:
+                sd = np.sqrt(np.maximum(np.diagonal(self.gram, axis1=1,
+                                                    axis2=2), 0.0))
+                d = d + KAPPA * self.sigma * (
+                    sd[:, self.j] + self.coeff_max
+                    * np.delete(sd, self.j, axis=1).sum(axis=1))
+            return eps + d
+        a = np.zeros((n, m))
+        a[:, self.j] = 1.0
+        for k, col in enumerate(self.cols):
+            a[:, col] = -C[:, k]
+        eps = eps + self.det[:, self.j] + np.einsum(
+            "nk,nk->n", np.abs(C), self.det[:, self.cols])
+        if self.sigma > 0:
+            q = np.einsum("nk,nkl,nl->n", a, self.gram, a)
+            eps = eps + KAPPA * self.sigma * np.sqrt(np.maximum(q, 0.0))
+        return eps
+
+
 def make_patches(x: np.ndarray, t: np.ndarray, *, nx_half: int, nt_half: int,
                  n_x: int, n_t: int) -> list[Patch]:
     """A grid of patch centers whose supports lie strictly inside the domain.
@@ -199,7 +296,7 @@ def make_patches(x: np.ndarray, t: np.ndarray, *, nx_half: int, nt_half: int,
 
 
 def aliasing_ratio(u_patch: np.ndarray, patch: Patch, xs: np.ndarray,
-                   ts: np.ndarray, dpsi) -> float:
+                   ts: np.ndarray, dpsi, sigma: float = 0.0) -> float:
     """Fraction of the windowed patch field's spectral energy sitting in the top
     half of the representable band.
 
@@ -212,35 +309,77 @@ def aliasing_ratio(u_patch: np.ndarray, patch: Patch, xs: np.ndarray,
     non-periodic patch (psi*u is smooth and compactly supported)."""
     wx = dpsi[0]((xs - patch.xc) / patch.ax)
     wt = dpsi[0]((ts - patch.tc) / patch.at)
-    f = np.outer(wx, wt) * u_patch
-    F = np.abs(np.fft.rfft2(f)) ** 2
-    tot = float(F.sum())
+    W = np.outer(wx, wt)
+    F = np.abs(np.fft.fft2(W * u_patch)) ** 2
+    kx = np.fft.fftfreq(F.shape[0])                      # cycles/sample
+    kt = np.fft.fftfreq(F.shape[1])
+    mask = (np.abs(kx) > 0.25)[:, None] | (np.abs(kt) > 0.25)[None, :]
+    # DECLARED NOISE IS NOT ALIASING: white noise puts energy in every mode, so
+    # an honest resolution test subtracts what the declared sigma is expected to
+    # contribute (E|F_k|^2 = sigma^2 * sum(W^2) per mode, uniformly) before
+    # asking whether the FIELD has unrepresentable structure. Without this the
+    # gate rejects patches for carrying the noise the eps model already bands.
+    per_mode = sigma ** 2 * float((W ** 2).sum())
+    hi = float(F[mask].sum()) - per_mode * int(mask.sum())
+    tot = float(F.sum()) - per_mode * F.size
     if tot <= 0:
-        return 0.0
-    kx = np.fft.fftfreq(f.shape[0])           # cycles/sample, |kx| <= 1/2
-    kt = np.fft.rfftfreq(f.shape[1])
-    mask = (np.abs(kx) > 0.25)[:, None] | (kt > 0.25)[None, :]
-    return float(F[mask].sum()) / tot
+        return 1.0 if hi > 0 else 0.0
+    return max(0.0, hi) / tot
+
+
+def _weights(term: Term, xs: np.ndarray, ts: np.ndarray, patch: Patch,
+             dpsi) -> np.ndarray:
+    """The analytic weight array (-1)^|alpha| (d^alpha phi)(z_i) * hx * ht."""
+    hx = float(xs[1] - xs[0])
+    ht = float(ts[1] - ts[0])
+    wx = dpsi[term.ax]((xs - patch.xc) / patch.ax) / patch.ax ** term.ax
+    wt = dpsi[term.at]((ts - patch.tc) / patch.at) / patch.at ** term.at
+    return np.outer(wx, wt) * (hx * ht) * term.sign
 
 
 def _integrate(term: Term, u_patch: np.ndarray, xs: np.ndarray, ts: np.ndarray,
                patch: Patch, dpsi) -> tuple:
     """One patch integral at one resolution: value, sum|contributions|,
     ||w||_2 (the noise multiplier for a linear-in-u term)."""
-    hx = float(xs[1] - xs[0])
-    ht = float(ts[1] - ts[0])
-    sx = (xs - patch.xc) / patch.ax
-    st = (ts - patch.tc) / patch.at
-    wx = dpsi[term.ax](sx) / patch.ax ** term.ax
-    wt = dpsi[term.at](st) / patch.at ** term.at
-    W = np.outer(wx, wt) * (hx * ht) * term.sign
+    W = _weights(term, xs, ts, patch, dpsi)
     C = W * term.g(u_patch)
     return (float(C.sum()), float(np.abs(C).sum()),
             float(np.sqrt(np.sum(W ** 2))))
 
 
+def _ladder_noise(term: Term, u_patch: np.ndarray, xs: np.ndarray,
+                  ts: np.ndarray, patch: Patch, dpsi, sa: int, sb: int) -> float:
+    """||d||_2 for the difference functional I_{sa*h} - I_{sb*h}: the ladder
+    difference is ALSO a linear functional of the field noise, with a computable
+    weight vector, so sigma * this is exactly how much of an observed ladder
+    difference the declared noise explains."""
+    d = np.zeros(u_patch.shape)
+    for s, sign in ((sa, 1.0), (sb, -1.0)):
+        sub = (slice(None, None, s), slice(None, None, s))
+        d[sub] += sign * (_weights(term, xs[::s], ts[::s], patch, dpsi)
+                          * term.dg(u_patch[sub]))
+    return float(np.sqrt((d ** 2).sum()))
+
+
+def _noise_gram(terms, u_patch: np.ndarray, xs: np.ndarray, ts: np.ndarray,
+                patch: Patch, dpsi) -> np.ndarray:
+    """Gram matrix of the per-term noise SENSITIVITY vectors on this patch:
+    G[k,l] = sum_i (W_k g_k'(u))_i (W_l g_l'(u))_i.
+
+    To first order a field perturbation e moves term k's integral by
+    <W_k g_k'(u), e>, so the residual of y = sum_k c_k X_k moves by <v, e> with
+    v = nu_target - sum_k c_k nu_k -- ONE vector, because every column is a
+    functional of the SAME realization. Its length is a'Ga with
+    a = (1, -c_1, ..., -c_K), which is why the Gram is what gets stored: the
+    band for any candidate is then a quadratic form costing K^2 flops per patch
+    instead of a pass over the grid."""
+    nu = np.stack([(_weights(tm, xs, ts, patch, dpsi)
+                    * tm.dg(u_patch)).ravel() for tm in terms])
+    return nu @ nu.T
+
+
 def build(u: np.ndarray, x: np.ndarray, t: np.ndarray, terms: list[str],
-          patches: list[Patch], *, p: int = 8) -> WeakSystem:
+          patches: list[Patch], *, p: int = 8, sigma: float = 0.0) -> WeakSystem:
     """The factory: field u[i, j] on grid (x[i], t[j]) -> patch design matrix
     with a declared error bound per entry.
 
@@ -264,13 +403,13 @@ def build(u: np.ndarray, x: np.ndarray, t: np.ndarray, terms: list[str],
     T = [LIBRARY[n] if isinstance(n, str) else n for n in terms]
     maxo = max(max(tm.ax, tm.at) for tm in T)
     dpsi = bump_derivatives(p, maxo)
-    rows, quad, rnd, l2, orders, kept = [], [], [], [], [], []
+    rows, quad, rnd, l2, orders, kept, grams = [], [], [], [], [], [], []
     rejected = 0
     for pa in patches:
         xs_f, ts_f = x[pa.ix], t[pa.it]
         up = u[pa.ix, pa.it]
         vals, qs, rs, ls, ords = [], [], [], [], []
-        ok = aliasing_ratio(up, pa, xs_f, ts_f, dpsi) <= ALIAS_MAX
+        ok = aliasing_ratio(up, pa, xs_f, ts_f, dpsi, sigma) <= ALIAS_MAX
         if not ok:
             rejected += 1
             continue
@@ -285,8 +424,21 @@ def build(u: np.ndarray, x: np.ndarray, t: np.ndarray, terms: list[str],
             d2 = abs(ladder[2][0] - ladder[1][0])          # |I_4h - I_2h|
             scale = max(absum, MACHINE_EPS)
             round_h = MACHINE_EPS * absum
-            if d1 <= round_h:
-                q, r = round_h, np.inf        # converged into the roundoff floor
+            # Under declared noise the ladder differences are dominated by the
+            # NOISE, not by truncation, and the raw convergence test then rejects
+            # patches for carrying noise the eps model already bands (measured:
+            # 16 of 24 heat patches lost at sigma = 1e-4). Subtract what sigma
+            # explains before asking whether refinement bought accuracy.
+            ns1 = ns2 = 0.0
+            if sigma > 0:
+                ns1 = sigma * _ladder_noise(tm, up, xs_f, ts_f, pa, dpsi, 1, 2)
+                ns2 = sigma * _ladder_noise(tm, up, xs_f, ts_f, pa, dpsi, 2, 4)
+                d1 = max(0.0, d1 - KAPPA * ns1)
+                d2 = max(0.0, d2 - KAPPA * ns2)
+            if d1 <= max(round_h, ns1):
+                # truncation is not detectable above the roundoff/noise floor:
+                # declare it AT that floor rather than pretending to resolve it
+                q, r = max(round_h, ns1), np.inf
             else:
                 # ASYMPTOTIC-REGIME TEST: the Richardson estimate is only
                 # meaningful once refinement actually buys accuracy. Observed
@@ -321,8 +473,10 @@ def build(u: np.ndarray, x: np.ndarray, t: np.ndarray, terms: list[str],
         l2.append(ls)
         orders.append(ords)
         kept.append(pa)
+        grams.append(_noise_gram(T, up, xs_f, ts_f, pa, dpsi))
     return WeakSystem(A=np.array(rows, float), names=[tm.name for tm in T],
                       patches=kept, quad=np.array(quad, float),
                       roundoff=np.array(rnd, float),
                       noise_l2=np.array(l2, float),
-                      order=np.array(orders, float), rejected=rejected)
+                      order=np.array(orders, float), rejected=rejected,
+                      gram=np.array(grams, float) if grams else None)

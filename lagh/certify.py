@@ -79,6 +79,28 @@ def epsilon(y: np.ndarray, *, sigma: float = 0.0, prop: np.ndarray | None = None
     return eps
 
 
+def band(eps, expr=None) -> np.ndarray:
+    """Resolve an epsilon argument to a per-point array.
+
+    `eps` is either a fixed array — the standard model, where the inputs are
+    exact and only y carries error — or a CALLABLE assembled PER CANDIDATE.
+    The per-candidate form exists because in the weak form (weakform.py) the
+    design-matrix columns are themselves noisy functionals of the same field as
+    the target: the residual of y = sum_k c_k X_k carries
+    delta_y - sum_k c_k delta_k, whose band depends on the c_k and, because all
+    of them are linear functionals of ONE noise realization, is a single norm
+    over the combined weight vector rather than a sum of per-column norms.
+    A band assembled without the coefficients has to bound them instead, which
+    is both looser and an assumption.
+
+    Every gate that re-checks a MODIFIED law (float_pinned's perturbations,
+    reduce_to_minimal's drops) therefore gets the band of the law it is actually
+    checking, which is the point: the band is a property of the claim.
+    """
+    e = eps(expr) if callable(eps) else eps
+    return np.asarray(e, float).ravel()
+
+
 def free_dof(expr) -> int:
     """Free numeric parameters of a law: every numeric atom except 0/±1 (the
     conservative-by-design count -- see significance_log10). Non-sympy law
@@ -100,7 +122,7 @@ def significance_log10(expr, y: np.ndarray, eps: np.ndarray,
     the certified form is unique (structure uniqueness is coherence's job, and
     the approximant-impostor boundary is unaffected)."""
     y = np.asarray(y, float).ravel()
-    eps = np.asarray(eps, float).ravel()
+    eps = band(eps, expr)
     # value_range override: a ZERO-VALUED identity's own range is its residual
     # noise, which makes q vacuous; the chance-agreement range is the scale of
     # the CONSTITUENT terms (measured: color identity got alpha > 1)
@@ -118,9 +140,11 @@ def significance_log10(expr, y: np.ndarray, eps: np.ndarray,
     return float(np.log10(max(n_hypotheses, 1)) + np.sum(log_q))
 
 
-def check(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray) -> dict:
-    """Exhaustive: every point checked; wrong-value and no-value kept distinct."""
+def check(expr, syms, X: np.ndarray, y: np.ndarray, eps) -> dict:
+    """Exhaustive: every point checked; wrong-value and no-value kept distinct.
+    `eps` may be a per-candidate band (see `band`)."""
     y = np.asarray(y, float).ravel()
+    eps = band(eps, expr)
     pred = eval_expr(expr, syms, X)
     if pred is None:
         return {"certified": False, "nmiss": 0, "nuncov": len(X)}
@@ -236,7 +260,7 @@ def pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray,
                     diff = diff[np.isfinite(diff)]
                     if not diff.size or float(diff.max()) / max(yscale, 1e-300) <= tau:
                         continue                     # same function at best scale
-                    if np.all(np.abs(alpha * av - y) <= eps):
+                    if np.all(np.abs(alpha * av - y) <= band(eps, alpha * alt)):
                         return False                 # a different rational also fits
     return True
 
@@ -277,10 +301,7 @@ def float_pinned(expr, syms, X: np.ndarray, y: np.ndarray,
     from fractions import Fraction
     noisy = sigma > 0
     rels = (10.0 * sigma, 30.0 * sigma) if noisy else (1e-5, 1e-4)
-    floats = sorted((a for a in expr.atoms(sp.Float, sp.Rational)
-                     if isinstance(a, sp.Float)
-                     or (a.q > 10**6 and not isinstance(a, sp.Integer))),
-                    key=lambda f: abs(float(f)))
+    floats = gated_atoms(expr)
     if not floats:
         return True, expr
     for f in floats:
@@ -328,6 +349,75 @@ def minimal(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray) -> bool:
         if check(reduced, syms, X, y, eps)["certified"]:
             return False               # a smaller law also certifies -> not minimal
     return True
+
+
+def free_atoms(expr) -> list:
+    """Every numeric atom a law's parameters live in (0/+-1 excluded, as in
+    free_dof). Under declared noise a MODEST-denominator rational is no more
+    supported than a float -- the snapper produced it from noisy data -- so the
+    interval report covers all of them, not just the ones `gated_atoms` flags."""
+    if expr is None or not hasattr(expr, "atoms"):
+        return []
+    return sorted((a for a in expr.atoms(sp.Number) if a not in (0, 1, -1)),
+                  key=lambda f: abs(float(f)))
+
+
+def gated_atoms(expr) -> list:
+    """The numeric atoms an exactness claim rests on: raw Floats, and Rationals
+    with denominator > 10^6 (a huge-denominator rational is a float in a
+    costume). Shared by `float_pinned` and `parameter_interval` so the gate and
+    the interval always talk about the same numbers."""
+    if expr is None or not hasattr(expr, "atoms"):
+        return []
+    return sorted((a for a in expr.atoms(sp.Float, sp.Rational)
+                   if isinstance(a, sp.Float)
+                   or (a.q > 10**6 and not isinstance(a, sp.Integer))),
+                  key=lambda f: abs(float(f)))
+
+
+def parameter_interval(expr, syms, X: np.ndarray, y: np.ndarray, eps, atom,
+                       *, max_rel: float = 0.5, iters: int = 40):
+    """The interval of values for `atom` over which the law STILL CERTIFIES,
+    every other parameter held — measured by bisection on the certification
+    predicate itself, not by a linearization or a covariance.
+
+    This is what a noisy measurement actually determines about a physical
+    coefficient. Demanding an exact rational instead is right for a definitional
+    identity and wrong for a diffusivity: measured on weak-form heat rows, the
+    certifying interval for nu is 0.1 +- 1.5e-8 / 2.1e-6 / 2.6e-4 at field noise
+    1e-8 / 1e-6 / 1e-4 -- linear in sigma, centred on the truth, and never an
+    exact rational. Returns (lo, hi), or None when the parameter is not bounded
+    within `max_rel` of its own value (the data does not determine it at all).
+    """
+    v0 = float(atom)
+    if v0 == 0 or not np.isfinite(v0):
+        return None
+
+    def ok(v):
+        return check(expr.xreplace({atom: sp.Float(v)}), syms, X, y,
+                     eps)["certified"]
+
+    if not ok(v0):
+        return None
+    out = []
+    for sign in (-1.0, 1.0):
+        step, far = abs(v0) * 1e-9, None
+        while step <= abs(v0) * max_rel:
+            if not ok(v0 + sign * step):
+                far = v0 + sign * step
+                break
+            step *= 2.0
+        if far is None:
+            return None                     # unbounded within max_rel
+        near = v0 + sign * step / 2.0
+        for _ in range(iters):
+            mid = 0.5 * (near + far)
+            if ok(mid):
+                near = mid
+            else:
+                far = mid
+        out.append(near)
+    return (min(out), max(out))
 
 
 def reduce_to_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
@@ -463,7 +553,12 @@ def refit_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
                 continue
             Aj = A[:, sel + [j]]
             w, *_ = np.linalg.lstsq(Aj, y, rcond=None)
-            r = float(np.max(np.abs(y - Aj @ w) - eps))
+            if callable(eps):        # per-candidate band: score against the band
+                e_j = band(eps, sum((sp.Float(c) * basis[k]      # of THIS support
+                                     for c, k in zip(w, sel + [j])), sp.S.Zero))
+            else:
+                e_j = eps            # fixed band: no expression to build
+            r = float(np.max(np.abs(y - Aj @ w) - e_j))
             if best is None or r < best[0]:
                 best = (r, j, w)
         if best is None:
