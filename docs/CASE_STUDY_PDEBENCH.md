@@ -23,6 +23,7 @@ the most useful thing about the pass:
 | 1-D reaction–diffusion | **ABSTAIN[noise]** — vacuous: the field is frozen over ~90% of the record |
 | 1-D CFD (η = ζ = 0.01) | **ABSTAIN[structural]** — the stated laws hold but 15 / 662 classes fit |
 | 2-D Darcy (β = 0.1, steady state) | **ABSTAIN** — no declaration is both true and informative; β = 0.1000 measurable in one phase |
+| 1-D CFD transmissive (non-periodic) | **ABSTAIN[structural]** + the verify track now REFUSES instead of silently forecasting |
 
 Zero confident-wrong across all five. Each refusal names a DIFFERENT mechanism —
 a swallowed signal, an under-determined one, and a required declaration that
@@ -259,6 +260,49 @@ silently kept only the a = 1 patches and reported a clean result for a domain
 half the size of the one it claimed. The phase selector now compares with a
 tolerance. A silent filter that agrees with your hypothesis is the most dangerous
 kind.
+
+## Non-periodic CFD: a capability that applied itself outside its domain
+
+`1D_CFD_Rand_Eta1.e-8_Zeta1.e-8_trans_Train` (id 133155). Run against a
+registered expectation for once — `PDEBENCH_READINESS.md` already said
+non-periodic runs "get weak-form certification without the verify track, and
+must say so". **Scored: it failed.** `check_geometry` returned `ok=True` with no
+notes, and the spectral forecast would have run happily on a field whose wrap
+seam is 4.6× an ordinary interior step. That is defect #9 and a more serious
+class than the previous eight: not a wrong number, but a capability applying
+itself where it does not hold and saying nothing.
+
+The discriminator needed care. The RAW wrap gap does not work: on an
+endpoint-excluded grid a periodic field's seam is `dx·|u_x|`, and this program's
+own C2 fields measure 2.6e-2 – 3.0e-2 there — LARGER than PDEBench advection's
+9.7e-3. Expressed in units of an ordinary interior step it separates cleanly:
+
+| field | seam / interior step |
+|---|---|
+| our C2 heat / Burgers | 0.91 / 0.65 |
+| PDEBench advection / Burgers / periodic CFD | 0.74 / 0.14 / 0.16 |
+| **PDEBench CFD transmissive** | **4.63** |
+
+`verify()` now refuses with a named refusal that states what remains valid, and
+the pre-flight names the condition. Confirmed selective: the transmissive file
+refuses, advection still verifies 0/205824, and the C2 campaign is identical
+across all 36 entries.
+
+**An unplanned cross-check came with it.** The declaration each equation needs
+reverses between the two CFD files:
+
+| | continuity | momentum |
+|---|---|---|
+| periodic, η = ζ = 0.01 | 1e-4 | **1e-2** |
+| transmissive, η = ζ = 1e-8 | 1e-4 | **1e-5** |
+
+At near-zero viscosity momentum needs 1000× LESS. That independently supports
+the earlier reading that the periodic file's 100× asymmetry was the **viscous
+closure** rather than the momentum balance — a prediction nobody made in advance,
+confirmed by a file chosen for an unrelated reason.
+
+Certification itself: 34 rows, 110 of 144 patches rejected (77%, against 71% for
+the viscous file — consistent with inviscid shocks), both equations structural.
 
 ## Why this is dev and not a read
 
