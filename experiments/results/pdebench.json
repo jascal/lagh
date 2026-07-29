@@ -1926,5 +1926,180 @@
   ],
   "system_certified": false,
   "seconds": 1552.8
+ },
+ "darcy_beta0.1": {
+  "path": "data/pdebench/2D_Darcy_beta0.1_x6.h5",
+  "family": "2d_darcy",
+  "beta": 0.1,
+  "steady_state": true,
+  "a_values": [
+   0.10000000149011612,
+   1.0
+  ],
+  "sigma_rep": 6.835006782779374e-09,
+  "n_rows": 114,
+  "patches_excluded_straddling": 102,
+  "patches_rejected_resolution": 0,
+  "vocabulary": [
+   "u_xx",
+   "u_yy",
+   "u_x",
+   "u_y",
+   "1/a",
+   "a",
+   "u",
+   "a*u"
+  ],
+  "stated_law": {
+   "u_yy": -1.0,
+   "1/a": -0.1
+  },
+  "truth_check": {
+   "truth_max_ratio": 241759.30561702474,
+   "truth_median_ratio": 45941.47867376727,
+   "truth_certifies": false,
+   "vacuous": false,
+   "signal_to_band": 59450.36708465101,
+   "median_band": 8.613958072543064e-06,
+   "median_target": 0.43742248874092965,
+   "note": ""
+  },
+  "equation": {
+   "target": "u_xx",
+   "certified": false,
+   "abstain": "structural",
+   "alpha_log10": null,
+   "n_rows": 114,
+   "n_cert_rows": 23,
+   "n_solutions": 6,
+   "features": [
+    "u_yy",
+    "u_x",
+    "u_y",
+    "1/a",
+    "a",
+    "u",
+    "a*u"
+   ],
+   "tier": 3,
+   "notes": [
+    "no law certifies through tier 3"
+   ]
+  },
+  "alpha_log10_total": null,
+  "domain": "patches lying strictly inside one conductivity region; on a patch straddling an interface div(a grad u) is not a laplacian and the stated law is false",
+  "reach_note": "the GENERAL variable-coefficient equation is out of reach: a grad u is not a pointwise g, and removing grad u introduces grad a -- a derivative of measured data",
+  "seconds": 7.3
+ },
+ "darcy_beta0.1_phase1": {
+  "path": "data/pdebench/2D_Darcy_beta0.1_x6.h5",
+  "family": "2d_darcy",
+  "beta": 0.1,
+  "phase": 1.0,
+  "min_dist_cells": 8.0,
+  "steady_state": true,
+  "a_values": [
+   0.10000000149011612,
+   1.0
+  ],
+  "sigma_rep": 6.835006782779374e-09,
+  "n_rows": 139,
+  "patches_excluded_straddling": 461,
+  "patches_rejected_resolution": 0,
+  "vocabulary": [
+   "u_xx",
+   "u_yy",
+   "u_x",
+   "u_y",
+   "1/a",
+   "a",
+   "u",
+   "a*u"
+  ],
+  "stated_law": {
+   "u_yy": -1.0,
+   "1/a": -0.1
+  },
+  "truth_check": {
+   "truth_max_ratio": 171.9476611887808,
+   "truth_median_ratio": 0.7007415544512983,
+   "truth_certifies": false,
+   "vacuous": false,
+   "signal_to_band": 609.4567056478121,
+   "median_band": 6.946676008048403e-05,
+   "median_target": 0.057847391335981636,
+   "note": ""
+  },
+  "equation": {
+   "target": "u_xx",
+   "certified": false,
+   "abstain": "structural",
+   "alpha_log10": null,
+   "n_rows": 139,
+   "n_cert_rows": 13,
+   "n_solutions": 6,
+   "features": [
+    "u_yy",
+    "u_x",
+    "u_y",
+    "1/a",
+    "a",
+    "u",
+    "a*u"
+   ],
+   "tier": 3,
+   "notes": [
+    "no law certifies through tier 3"
+   ]
+  },
+  "alpha_log10_total": null,
+  "domain": "patches lying strictly inside one conductivity region; on a patch straddling an interface div(a grad u) is not a laplacian and the stated law is false",
+  "reach_note": "the GENERAL variable-coefficient equation is out of reach: a grad u is not a pointwise g, and removing grad u introduces grad a -- a derivative of measured data",
+  "seconds": 3.3
+ },
+ "darcy_beta0.1_summary": {
+  "family": "2d_darcy",
+  "steady_state": true,
+  "note": "no time axis; first non-evolution run in the arc",
+  "a_values": [
+   0.1,
+   1.0
+  ],
+  "beta_stated": 0.1,
+  "implied_beta_by_phase_and_distance": {
+   "a=1.0": {
+    "0-2": 0.125,
+    "2-4": 0.1008,
+    "4-8": 0.1008,
+    ">=8": 0.1
+   },
+   "a=0.1": {
+    "0-2": 0.143,
+    "2-4": 0.1634,
+    "4-8": 0.135,
+    ">=8": 0.1492
+   }
+  },
+  "declaration_scan_phase1_mindist8": {
+   "0": {
+    "max": 172,
+    "median": 0.701,
+    "signal_to_band": 609
+   },
+   "1e-6": {
+    "max": 5.56,
+    "median": 0.00301,
+    "signal_to_band": 4.44
+   },
+   "1e-5": {
+    "max": 0.573,
+    "median": 0.000302,
+    "signal_to_band": 0.446,
+    "certifies": true,
+    "but": "signal/band<1"
+   }
+  },
+  "verdict": "ABSTAIN -- no declaration makes the stated law hold while the claim stays informative",
+  "reach_boundary": "general variable coefficient out of reach: a*grad u is not a pointwise g, and removing grad u introduces grad a (a derivative of measured data)"
  }
 }

@@ -22,10 +22,12 @@ the most useful thing about the pass:
 | 1-D Burgers (ν = 0.01) | **CERTIFIED**, both coefficients, forecast verified |
 | 1-D reaction–diffusion | **ABSTAIN[noise]** — vacuous: the field is frozen over ~90% of the record |
 | 1-D CFD (η = ζ = 0.01) | **ABSTAIN[structural]** — the stated laws hold but 15 / 662 classes fit |
+| 2-D Darcy (β = 0.1, steady state) | **ABSTAIN** — no declaration is both true and informative; β = 0.1000 measurable in one phase |
 
-Zero confident-wrong across all four. Each refusal names a different mechanism —
-a swallowed signal, and an under-determined one — and each was reached through
-the truth check rather than around it.
+Zero confident-wrong across all five. Each refusal names a DIFFERENT mechanism —
+a swallowed signal, an under-determined one, and a required declaration that
+exceeds the signal — and each was reached through the truth check rather than
+around it. Darcy also exercised the first non-evolution geometry in the arc.
 
 ## What was actually run
 
@@ -187,6 +189,76 @@ Also fixed on the way: `PatchEpsilon` re-differentiated every candidate
 symbolically — one `sympy.diff` plus one `lambdify` per feature per candidate,
 ~8000 × 13 for this vocabulary — where every weak-form law is linear in its
 columns and the gradient IS the coefficient.
+
+## 2-D Darcy: the first steady-state run, and a third way to fail
+
+`2D_DarcyFlow_beta0.1` (id 133218). Every claim the weak-form arc had made until
+now was an EVOLUTION equation — a time-derivative target, time as the last axis,
+a verify track that integrates forward. Darcy has no time axis at all: it ships
+`nu (10000,128,128)` and `tensor (10000,1,128,128)` with x- and y-coordinates
+only, for `−∇·(a∇u) = β`. Steady states, equilibria and constitutive laws are a
+large share of real science and this program had never tested whether it could
+express such a claim.
+
+**The machinery works unchanged.** `build_nd` over two SPATIAL axes, patches,
+weak-form columns, bands and the discovery path all run with no modification —
+the geometry was already n-dimensional and nothing in it required the last axis
+to be time. That is a capability confirmation worth having.
+
+**The reach boundary, stated precisely.** The general variable-coefficient
+equation is NOT in this factory's reach. The library is `∂^α(g(fields))` with g
+POINTWISE; `∇·(a∇u)` is divergence form at the outer level but its integrand
+`a∇u` pairs a field with a DERIVATIVE of another field. By-parts once leaves
+`∫∇φ·a∇u`, still a data derivative; moving it again gives `∫∇·(a∇φ)u`, which
+needs `∇a` — a derivative of measured data, exactly what the weak form exists to
+avoid. Rearranging does not escape it: `(a u_x)_x = (au)_xx − a_xx u − a_x u_x`.
+**A variable coefficient that is itself DATA breaks the arc's central guarantee**,
+which bears directly on the registered next step "(c) variable coefficients": it
+needs a declared error model for `∇a` or a mixed formulation, and it is not free.
+
+**What is measurable, and it is exact where it should be.** PDEBench's
+coefficient is binary (a ∈ {0.1, 1.0}), so wherever a is locally constant the
+equation collapses to `∇²u = −β/a`, whose every term is divergence form with a
+pointwise g. Measured on patches lying inside one phase, binned by distance to
+the nearest interface:
+
+| distance to interface | implied β, a = 1.0 | implied β, a = 0.1 |
+|---|---|---|
+| 0–2 cells | 0.1250 | 0.1430 |
+| 2–4 | 0.1008 | 0.1634 |
+| 4–8 | 0.1008 | 0.1350 |
+| **≥ 8 (deep interior)** | **0.1000** | 0.1492 |
+
+The high-conductivity interior recovers **β = 0.1000**, matching the filename to
+four digits with an IQR of 7e-4. The low-conductivity phase is ~49% off at EVERY
+distance, so it is not interface smearing; the natural reading is that `u` is
+stored downsampled from a finer solve, which is harmless where u is smooth
+(a = 1) and biases second derivatives where it is steep (a = 0.1, curvature 16×
+larger).
+
+**And a third distinct way to fail.** Restricting to the a = 1 interior, no
+declaration works:
+
+| declared field error | truth/band (max) | truth/band (median) | signal/band |
+|---|---|---|---|
+| 0 | 172 | 0.701 | 609 |
+| 1e-6 | 5.56 | 0.003 | 4.44 |
+| 1e-5 | 0.573 | 0.0003 | **0.446** |
+
+At 1e-6 the claim is informative but the stated law misses; at 1e-5 the law holds
+but the band has swallowed the signal. **The window between "the law holds" and
+"the claim is not vacuous" is empty** — a few outlier patches (median 0.70, max
+172) force a declaration larger than the signal itself. That is neither the
+vacuity of reaction–diffusion (where the signal was genuinely zero) nor the
+under-determination of CFD (where many laws fit); it is a fourth verdict, and the
+scan is what makes it sayable.
+
+**A lesson from a bug in the diagnostic, not the instrument.** `a` arrives as
+float32 and `float32(0.1) ≠ float64(0.1)`, so a first pass comparing `a == 0.1`
+silently kept only the a = 1 patches and reported a clean result for a domain
+half the size of the one it claimed. The phase selector now compares with a
+tolerance. A silent filter that agrees with your hypothesis is the most dangerous
+kind.
 
 ## Why this is dev and not a read
 
