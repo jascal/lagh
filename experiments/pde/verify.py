@@ -143,7 +143,7 @@ def solver_bound(u0, x, t_eval, coeffs, *, rtol=1e-10, scheme="direct",
 
 
 def forecast_envelope(u0, x, t_eval, intervals, *, rtol=1e-10,
-                      scheme="direct", nsub=64):
+                      scheme="direct", nsub=64, n_samples=3):
     """Integrate at every combination of interval ENDPOINTS plus the centre and
     return (lo, hi, centre, solver_bound). The certificate claims a family of
     laws, so the forecast is a family too."""
@@ -151,8 +151,14 @@ def forecast_envelope(u0, x, t_eval, intervals, *, rtol=1e-10,
     corners = [{}]
     for n in names:
         lo, hi = intervals[n]
-        mid = 0.5 * (lo + hi)
-        corners = [dict(c, **{n: v}) for c in corners for v in (lo, mid, hi)]
+        # SAMPLE the interval, do not just take its ends. For a translation the
+        # forecast is not monotone in the parameter, so the pointwise min/max
+        # over {lo, mid, hi} is NOT an envelope of the family: measured on
+        # PDEBench advection, where a wide beta interval left 45309 of 205824
+        # points outside a "envelope" built from three corners while every
+        # member of the family was fine. `n_samples` is reported.
+        vs = np.linspace(lo, hi, max(3, n_samples)) if hi > lo else [lo]
+        corners = [dict(c, **{n: float(v)}) for c in corners for v in vs]
     runs, sb = [], None
     for c in corners:
         y, bound = solver_bound(u0, x, t_eval, c, rtol=rtol, scheme=scheme,
@@ -465,7 +471,8 @@ def verify_state(u_true, x, t_eval, modes, basis_fns, labels, law, *,
 
 
 def verify(u_true, u0, x, t_eval, intervals, *, sigma=0.0, rtol=1e-10,
-           u_clean=None, scheme="direct", nsub=64):
+           u_clean=None, scheme="direct", nsub=64, field_err=0.0,
+           n_samples=3):
     """FORECAST-VERIFIED iff the field lies inside the declared band everywhere.
 
     Two claims, kept apart because they are different:
@@ -478,7 +485,7 @@ def verify(u_true, u0, x, t_eval, intervals, *, sigma=0.0, rtol=1e-10,
         predictor of measurements, which is a strictly harder claim.
     """
     got = forecast_envelope(u0, x, t_eval, intervals, rtol=rtol,
-                            scheme=scheme, nsub=nsub)
+                            scheme=scheme, nsub=nsub, n_samples=n_samples)
     if got is None:
         return {"verified": False, "refusal": "solver-ladder-did-not-converge"}
     lo, hi, centre, sb = got
@@ -487,10 +494,18 @@ def verify(u_true, u0, x, t_eval, intervals, *, sigma=0.0, rtol=1e-10,
                          scheme=scheme, nsub=nsub)
     if icb is None:
         return {"verified": False, "refusal": "ic-noise-probe-did-not-converge"}
-    band_lo = lo - sb - 4.0 * sigma - icb
-    band_hi = hi + sb + 4.0 * sigma + icb
+    # A DECLARED field error belongs in the forecast band as well as in the
+    # certification band: the measured field is only that accurate, so a
+    # forecast compared against it cannot be held to a tighter standard.
+    # Coefficient 1, not 4 -- it is a computed/declared bound, not a stochastic
+    # scale (certify.epsilon's `hard` channel convention). Measured on PDEBench
+    # advection, where omitting it failed 58736 of 205824 points while the
+    # certified law was right to 3e-5.
+    band_lo = lo - sb - 4.0 * sigma - icb - field_err
+    band_hi = hi + sb + 4.0 * sigma + icb + field_err
     inside = (u_true >= band_lo) & (u_true <= band_hi)
-    out = {"data_verified": bool(np.all(inside)),
+    out = {"envelope_samples_per_parameter": int(max(3, n_samples)),
+           "data_verified": bool(np.all(inside)),
            "n_outside": int((~inside).sum()), "n_points": int(inside.size),
            "worst_excess": float(np.max(np.maximum(band_lo - u_true,
                                                    u_true - band_hi))),
@@ -499,13 +514,14 @@ def verify(u_true, u0, x, t_eval, intervals, *, sigma=0.0, rtol=1e-10,
            "ic_noise_bound": float(icb)}
     if u_clean is not None:
         gc = forecast_envelope(u_clean[:, 0], x, t_eval, intervals, rtol=rtol,
-                               scheme=scheme, nsub=nsub)
+                               scheme=scheme, nsub=nsub, n_samples=n_samples)
         if gc is None:
             out["verified"] = False
             out["refusal"] = "solver-ladder-did-not-converge (clean)"
             return out
         clo, chi, cc, csb = gc
-        ins = (u_clean >= clo - csb) & (u_clean <= chi + csb)
+        ins = ((u_clean >= clo - csb - field_err)
+               & (u_clean <= chi + csb + field_err))
         out["verified"] = bool(np.all(ins))              # the LAW claim
         out["law_n_outside"] = int((~ins).sum())
         out["law_max_err"] = (None if cc is None

@@ -37,9 +37,29 @@ FAMILIES = {
     "diffusion-reaction": ["u_t", "u_xx", "u^3", "u^2", "u", "u_x", "1"],
     "generic-1d": ["u_t", "u_xx", "u_xxx", "u*u_x", "u_x", "u", "1"],
 }
-SCALES = [(24, 12), (32, 16), (40, 20)]
 FAMILY = dict(n_x=4, n_t=3)
 P_BUMP = 16
+
+
+def default_scales(nx, nt, speed=0.0, dx=1.0, dt=1.0):
+    """Patch half-widths in grid cells, as FRACTIONS of the grid rather than
+    fixed counts -- a PDEBench 1-D file is 1024x201 where the dev campaign ran
+    257x81, and a family sized for one is wrong for the other.
+
+    When the dynamics have a propagation speed, the time window must be short
+    enough that the signal does not traverse the patch: `speed * at <~ ax`, or
+    the integrand oscillates across its own window and the resolution gate
+    (correctly) throws the patch away. The caller passes the speed it expects
+    from the family; 0 means no constraint."""
+    scales = []
+    for fx, ft in ((12, 20), (8, 16), (6, 12)):
+        nxh = max(8, 4 * round(nx / fx / 4))
+        nth = max(8, 4 * round(nt / ft / 4))
+        if speed > 0:
+            cap = max(8, 4 * int(nxh * dx / (speed * dt) / 4))
+            nth = min(nth, cap)
+        scales.append((nxh, nth))
+    return scales
 
 
 def load_samples(path, layout, n_samples, tmax_index, field_err):
@@ -71,6 +91,14 @@ def main(argv=None):
                     help="JSON dict of the generating law, when the filename "
                          "states it: runs the truth check BEFORE any verdict")
     ap.add_argument("--tag", default=None)
+    ap.add_argument("--scales", default=None,
+                    help="JSON [[nx_half, nt_half], ...] in grid cells")
+    ap.add_argument("--envelope-samples", type=int, default=9,
+                    help="samples per parameter interval in the forecast "
+                         "envelope; three corners do not bound a translation")
+    ap.add_argument("--speed", type=float, default=0.0,
+                    help="expected propagation speed: caps the time window so "
+                         "the signal cannot traverse its own patch")
     a = ap.parse_args(argv)
 
     t0 = time.time()
@@ -94,8 +122,14 @@ def main(argv=None):
     sigma = noise["sigma"]
     terms = [LIBRARY[n] for n in FAMILIES[a.family]]
     sols = [({k: v for k, v in ds.fields.items()}, ds.coords) for ds in data]
+    cx, ct = data[0].coords[0], data[0].coords[-1]
+    scales = (json.loads(a.scales) if a.scales else
+              default_scales(len(cx), len(ct), speed=a.speed,
+                             dx=float(cx[1] - cx[0]), dt=float(ct[1] - ct[0])))
+    res_scales = [list(s) for s in scales]
+    print(f"== patch family (half-widths in cells): {res_scales}")
     rows = assemble(sols, terms, lambda c: multiscale_patches(
-        c[0], c[-1], SCALES, **FAMILY), sigma=sigma, field_err=a.field_err,
+        c[0], c[-1], scales, **FAMILY), sigma=sigma, field_err=a.field_err,
         p=P_BUMP)
     if rows is None:
         print("ABSTAIN: every patch failed the resolution/aliasing gate -- the "
@@ -105,6 +139,7 @@ def main(argv=None):
           f"{rows.rejected} patches rejected, vocabulary {rows.names}")
 
     res = {"path": str(a.path), "family": a.family, "declared_noise": noise,
+           "patch_scales": res_scales, "speed_declared": a.speed,
            "geometry": reports, "n_rows": int(len(rows.A)),
            "patches_rejected": int(rows.rejected),
            "vocabulary": rows.names, "n_samples": rows.n_solutions}
@@ -137,7 +172,8 @@ def main(argv=None):
             # integrator solves the linear part exactly and declares its error
             # on a SUBSTEP ladder instead of a tolerance ladder.
             v = verify(ds.fields["u"], ds.fields["u"][:, 0], x, t, ivs,
-                       sigma=sigma, scheme="etd", nsub=64)
+                       sigma=sigma, scheme="etd", nsub=64,
+                       field_err=a.field_err, n_samples=a.envelope_samples)
         except Exception as e:                                 # noqa: BLE001
             v = {"verified": False, "refusal": f"verify raised: {e}"}
         res["verify"] = v

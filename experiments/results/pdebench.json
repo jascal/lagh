@@ -1,0 +1,897 @@
+{
+ "advection_beta0.7": {
+  "path": "data/pdebench/1D_Advection_beta0.7_x6.h5",
+  "family": "advection",
+  "declared_noise": {
+   "sigma": 4.959154509265318e-08,
+   "sigma_rep_absolute": 4.959154509265318e-08,
+   "sigma_rep_relative": 5.960464477539063e-08,
+   "sigma_extra_declared": 0.0,
+   "field_err_declared": 0.0275,
+   "field_err_is_measured": false,
+   "coord_regularized": true,
+   "coord_deviation": [
+    {
+     "max_abs": 0.0,
+     "rel_to_step": 0.0,
+     "regularized": true,
+     "tolerance": 9.5367431640625e-07
+    },
+    {
+     "max_abs": 1.0013580320489268e-07,
+     "rel_to_step": 1.0013580320489268e-05,
+     "regularized": true,
+     "tolerance": 1.9073486328125e-06
+    }
+   ],
+   "notes": [
+    "the coordinate axes are float32 too, so they are rebuilt as exact linspaces and the deviation from what was stored is reported (coord_deviation): unregularized, that rounding lands on the time-derivative column at ~1e-6 of its own size, because the by-parts weights carry 1/step^k with k per term",
+    "sigma_rep is the float32 storage quantization at the field's peak: computed, not assumed",
+    "field_err is a DECLARED solver-error assumption -- PDEBench does not ship the coarse levels a tolerance ladder would need, so it cannot be measured after the fact",
+    "any certificate from this data is conditional on that declaration and says so"
+   ]
+  },
+  "patch_scales": [
+   [
+    84,
+    8
+   ],
+   [
+    128,
+    12
+   ],
+   [
+    172,
+    16
+   ]
+  ],
+  "speed_declared": 0.7,
+  "geometry": [
+   {
+    "sample": 0,
+    "summary": "1d_single:0: fields ['u'] grid 1024x201 sigma_rep 4.959e-08 (rel 5.960e-08) field_err 2.750e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 1,
+    "summary": "1d_single:1: fields ['u'] grid 1024x201 sigma_rep 8.068e-08 (rel 5.960e-08) field_err 2.750e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 2,
+    "summary": "1d_single:2: fields ['u'] grid 1024x201 sigma_rep 6.199e-08 (rel 5.960e-08) field_err 2.750e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 3,
+    "summary": "1d_single:3: fields ['u'] grid 1024x201 sigma_rep 8.423e-08 (rel 5.960e-08) field_err 2.750e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 4,
+    "summary": "1d_single:4: fields ['u'] grid 1024x201 sigma_rep 1.112e-07 (rel 5.960e-08) field_err 2.750e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   }
+  ],
+  "n_rows": 120,
+  "patches_rejected": 24,
+  "vocabulary": [
+   "u_t",
+   "u_x",
+   "u_xx",
+   "u*u_x",
+   "u"
+  ],
+  "n_samples": 4,
+  "truth_check": {
+   "truth_max_ratio": 0.000256765113652493,
+   "truth_median_ratio": 3.264783928404523e-05,
+   "truth_certifies": true,
+   "median_band": 1.749673314009721,
+   "median_target": 1.8013247482741206
+  },
+  "equation": {
+   "target": "u_t",
+   "certified": true,
+   "abstain": null,
+   "alpha_log10": -16.449137990260432,
+   "n_rows": 120,
+   "n_cert_rows": 30,
+   "n_solutions": 4,
+   "features": [
+    "u_x",
+    "u_xx",
+    "u*u_x",
+    "u"
+   ],
+   "tier": 1,
+   "notes": [
+    "parameter precision at sigma=4.95915e-08: certifies for -157943/225626 in [-0.8303840755, -0.5866731859]"
+   ],
+   "law": "-157943*[u_x]/225626",
+   "expr": "-157943*x_0/225626",
+   "linear_in_columns": true,
+   "coefficients": {
+    "u_x": -0.7000212741439373
+   },
+   "coeff_max_declared": 2.0,
+   "coeff_max_certified": 0.7000212741439373,
+   "intervals": {
+    "u_x": [
+     -0.830384075495672,
+     -0.5866731858904327
+    ]
+   },
+   "median_signal_to_band": 2.2159490057215905
+  },
+  "alpha_log10_total": -16.449137990260432,
+  "weakest": [
+   "u_t",
+   -16.449137990260432
+  ],
+  "verify": {
+   "envelope_samples_per_parameter": 25,
+   "data_verified": true,
+   "n_outside": 0,
+   "n_points": 205824,
+   "worst_excess": -0.021917349702591293,
+   "envelope_width_med": 1.6722158297013379,
+   "solver_bound": 2.082192021321796e-12,
+   "noise_term": 1.983661803706127e-07,
+   "ic_noise_bound": 1.9427029529506257e-07,
+   "verified": true
+  },
+  "seconds": 9.9
+ },
+ "advection_beta0.7_declared": {
+  "path": "data/pdebench/1D_Advection_beta0.7_x6.h5",
+  "family": "advection",
+  "declared_noise": {
+   "sigma": 4.959154509265318e-08,
+   "sigma_rep_absolute": 4.959154509265318e-08,
+   "sigma_rep_relative": 5.960464477539063e-08,
+   "sigma_extra_declared": 0.0,
+   "field_err_declared": 0.0275,
+   "field_err_is_measured": false,
+   "coord_regularized": true,
+   "coord_deviation": [
+    {
+     "max_abs": 0.0,
+     "rel_to_step": 0.0,
+     "regularized": true,
+     "tolerance": 9.5367431640625e-07
+    },
+    {
+     "max_abs": 1.0013580320489268e-07,
+     "rel_to_step": 1.0013580320489268e-05,
+     "regularized": true,
+     "tolerance": 1.9073486328125e-06
+    }
+   ],
+   "notes": [
+    "the coordinate axes are float32 too, so they are rebuilt as exact linspaces and the deviation from what was stored is reported (coord_deviation): unregularized, that rounding lands on the time-derivative column at ~1e-6 of its own size, because the by-parts weights carry 1/step^k with k per term",
+    "sigma_rep is the float32 storage quantization at the field's peak: computed, not assumed",
+    "field_err is a DECLARED solver-error assumption -- PDEBench does not ship the coarse levels a tolerance ladder would need, so it cannot be measured after the fact",
+    "any certificate from this data is conditional on that declaration and says so"
+   ]
+  },
+  "patch_scales": [
+   [
+    84,
+    8
+   ],
+   [
+    128,
+    12
+   ],
+   [
+    172,
+    16
+   ]
+  ],
+  "speed_declared": 0.7,
+  "geometry": [
+   {
+    "sample": 0,
+    "summary": "1d_single:0: fields ['u'] grid 1024x201 sigma_rep 4.959e-08 (rel 5.960e-08) field_err 2.750e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 1,
+    "summary": "1d_single:1: fields ['u'] grid 1024x201 sigma_rep 8.068e-08 (rel 5.960e-08) field_err 2.750e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 2,
+    "summary": "1d_single:2: fields ['u'] grid 1024x201 sigma_rep 6.199e-08 (rel 5.960e-08) field_err 2.750e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 3,
+    "summary": "1d_single:3: fields ['u'] grid 1024x201 sigma_rep 8.423e-08 (rel 5.960e-08) field_err 2.750e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 4,
+    "summary": "1d_single:4: fields ['u'] grid 1024x201 sigma_rep 1.112e-07 (rel 5.960e-08) field_err 2.750e-02",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   }
+  ],
+  "n_rows": 120,
+  "patches_rejected": 24,
+  "vocabulary": [
+   "u_t",
+   "u_x",
+   "u_xx",
+   "u*u_x",
+   "u"
+  ],
+  "n_samples": 4,
+  "truth_check": {
+   "truth_max_ratio": 0.000256765113652493,
+   "truth_median_ratio": 3.264783928404523e-05,
+   "truth_certifies": true,
+   "median_band": 1.749673314009721,
+   "median_target": 1.8013247482741206
+  },
+  "equation": {
+   "target": "u_t",
+   "certified": true,
+   "abstain": null,
+   "alpha_log10": -16.449137990260432,
+   "n_rows": 120,
+   "n_cert_rows": 30,
+   "n_solutions": 4,
+   "features": [
+    "u_x",
+    "u_xx",
+    "u*u_x",
+    "u"
+   ],
+   "tier": 1,
+   "notes": [
+    "parameter precision at sigma=4.95915e-08: certifies for -157943/225626 in [-0.8303840755, -0.5866731859]"
+   ],
+   "law": "-157943*[u_x]/225626",
+   "expr": "-157943*x_0/225626",
+   "linear_in_columns": true,
+   "coefficients": {
+    "u_x": -0.7000212741439373
+   },
+   "coeff_max_declared": 2.0,
+   "coeff_max_certified": 0.7000212741439373,
+   "intervals": {
+    "u_x": [
+     -0.830384075495672,
+     -0.5866731858904327
+    ]
+   },
+   "median_signal_to_band": 2.2159490057215905
+  },
+  "alpha_log10_total": -16.449137990260432,
+  "weakest": [
+   "u_t",
+   -16.449137990260432
+  ],
+  "verify": {
+   "data_verified": false,
+   "n_outside": 58736,
+   "n_points": 205824,
+   "worst_excess": 0.24245876673655742,
+   "envelope_width_med": 1.2859599325481037,
+   "solver_bound": 2.082192021321796e-12,
+   "noise_term": 1.983661803706127e-07,
+   "ic_noise_bound": 1.9427029529506257e-07,
+   "verified": false
+  },
+  "seconds": 3.7
+ },
+ "burgers_nu0.01": {
+  "path": "data/pdebench/1D_Burgers_Nu0.01_x6.h5",
+  "family": "burgers",
+  "declared_noise": {
+   "sigma": 4.959154509265318e-08,
+   "sigma_rep_absolute": 4.959154509265318e-08,
+   "sigma_rep_relative": 5.960464477539063e-08,
+   "sigma_extra_declared": 0.0,
+   "field_err_declared": 0.0024434,
+   "field_err_is_measured": false,
+   "coord_regularized": true,
+   "coord_deviation": [
+    {
+     "max_abs": 0.0,
+     "rel_to_step": 0.0,
+     "regularized": true,
+     "tolerance": 9.5367431640625e-07
+    },
+    {
+     "max_abs": 1.0013580320489268e-07,
+     "rel_to_step": 1.0013580320489268e-05,
+     "regularized": true,
+     "tolerance": 1.9073486328125e-06
+    }
+   ],
+   "notes": [
+    "the coordinate axes are float32 too, so they are rebuilt as exact linspaces and the deviation from what was stored is reported (coord_deviation): unregularized, that rounding lands on the time-derivative column at ~1e-6 of its own size, because the by-parts weights carry 1/step^k with k per term",
+    "sigma_rep is the float32 storage quantization at the field's peak: computed, not assumed",
+    "field_err is a DECLARED solver-error assumption -- PDEBench does not ship the coarse levels a tolerance ladder would need, so it cannot be measured after the fact",
+    "any certificate from this data is conditional on that declaration and says so"
+   ]
+  },
+  "patch_scales": [
+   [
+    84,
+    8
+   ],
+   [
+    128,
+    8
+   ],
+   [
+    172,
+    8
+   ]
+  ],
+  "speed_declared": 2.0,
+  "geometry": [
+   {
+    "sample": 0,
+    "summary": "1d_single:0: fields ['u'] grid 1024x201 sigma_rep 4.959e-08 (rel 5.960e-08) field_err 2.443e-03",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 1,
+    "summary": "1d_single:1: fields ['u'] grid 1024x201 sigma_rep 8.068e-08 (rel 5.960e-08) field_err 2.443e-03",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 2,
+    "summary": "1d_single:2: fields ['u'] grid 1024x201 sigma_rep 6.199e-08 (rel 5.960e-08) field_err 2.443e-03",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 3,
+    "summary": "1d_single:3: fields ['u'] grid 1024x201 sigma_rep 8.423e-08 (rel 5.960e-08) field_err 2.443e-03",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   },
+   {
+    "sample": 4,
+    "summary": "1d_single:4: fields ['u'] grid 1024x201 sigma_rep 1.112e-07 (rel 5.960e-08) field_err 2.443e-03",
+    "axes": [
+     {
+      "n": 1024,
+      "min": 0.00048828125,
+      "max": 0.99951171875,
+      "step": 0.0009765625,
+      "span": 0.9990234375,
+      "uniform": true,
+      "nonuniformity_rel": 0.0
+     },
+     {
+      "n": 201,
+      "min": 0.0,
+      "max": 2.0,
+      "step": 0.01,
+      "span": 2.0,
+      "uniform": true,
+      "nonuniformity_rel": 2.1337098754514727e-14
+     }
+    ],
+    "ok": true,
+    "notes": [
+     "axis 1 spacing carries 2.13e-14 relative jitter from float32 coordinate storage; the quadrature step inherits it"
+    ]
+   }
+  ],
+  "n_rows": 143,
+  "patches_rejected": 1,
+  "vocabulary": [
+   "u_t",
+   "u_xx",
+   "u*u_x",
+   "u_x",
+   "u"
+  ],
+  "n_samples": 4,
+  "truth_check": {
+   "truth_max_ratio": 0.0076820500865216615,
+   "truth_median_ratio": 0.0005227127296671204,
+   "truth_certifies": true,
+   "median_band": 0.21815612641699234,
+   "median_target": 0.46445708453582485
+  },
+  "equation": {
+   "target": "u_t",
+   "certified": true,
+   "abstain": null,
+   "alpha_log10": -42.89089476243906,
+   "n_rows": 143,
+   "n_cert_rows": 35,
+   "n_solutions": 4,
+   "features": [
+    "u_xx",
+    "u*u_x",
+    "u_x",
+    "u"
+   ],
+   "tier": 1,
+   "notes": [
+    "interval-parameter certificate: no exact value is claimed; the law certifies for every parameter in 1035793/325469853 in [0.002409523187, 0.004015337929]; -461797/461761 in [-1.054378604, -0.9475492137]"
+   ],
+   "law": "0.00321243055784426*[u_xx] - 1.00096390895724*[u*u_x]",
+   "expr": "0.00321243055784426*x_0 - 1.00096390895724*x_1",
+   "linear_in_columns": true,
+   "coefficients": {
+    "u_xx": 0.0032124305578442617,
+    "u*u_x": -1.0009639089572393
+   },
+   "coeff_max_declared": 2.0,
+   "coeff_max_certified": 1.0009639089572393,
+   "intervals": {
+    "u_xx": [
+     0.002422134010693211,
+     0.004029385288073766
+    ],
+    "u*u_x": [
+     -1.056484507883141,
+     -0.9494397598371915
+    ]
+   },
+   "median_signal_to_band": 2.267906016890288
+  },
+  "alpha_log10_total": -42.89089476243906,
+  "weakest": [
+   "u_t",
+   -42.89089476243906
+  ],
+  "verify": {
+   "envelope_samples_per_parameter": 9,
+   "data_verified": true,
+   "n_outside": 0,
+   "n_points": 205824,
+   "worst_excess": -0.0026507029265006032,
+   "envelope_width_med": 0.08155163606407162,
+   "solver_bound": 0.00020691118197187702,
+   "noise_term": 1.983661803706127e-07,
+   "ic_noise_bound": 1.9337834888943917e-07,
+   "verified": true
+  },
+  "seconds": 113.7
+ },
+ "_solver_error_advection_beta0.7": {
+  "path": "data/pdebench/1D_Advection_beta0.7_x6.h5",
+  "beta": 0.7,
+  "n_samples": 6,
+  "field_scale": 1.8653342723846436,
+  "max_abs_error": 0.028494711511345583,
+  "max_rel_error": 0.01527592771611811,
+  "error_vs_time": [
+   [
+    0.0,
+    4.440892098500626e-16
+   ],
+   [
+    0.19999998807907104,
+    0.012434206460198556
+   ],
+   [
+    0.3999999761581421,
+    0.015761054541421234
+   ],
+   [
+    0.5999999642372131,
+    0.01881535358659941
+   ],
+   [
+    0.7999999523162842,
+    0.019625087134988808
+   ],
+   [
+    1.0,
+    0.022072668742304628
+   ],
+   [
+    1.1999999284744263,
+    0.02377126328394089
+   ],
+   [
+    1.399999976158142,
+    0.024054740254709835
+   ],
+   [
+    1.5999999046325684,
+    0.026317573705785975
+   ],
+   [
+    1.7999999523162842,
+    0.027279896636519706
+   ],
+   [
+    2.0,
+    0.02752817386917409
+   ]
+  ],
+  "note": "deviation from the EXACT solution of the file's own stated law, computed spectrally from its first time slice; it grows with t, which storage rounding cannot"
+ },
+ "_solver_error_burgers_nu0.01": {
+  "path": "data/pdebench/1D_Burgers_Nu0.01_x6.h5",
+  "law": {
+   "u*u_x": -1.0,
+   "u_xx": 0.0031830988618379067
+  },
+  "n_samples": 6,
+  "field_scale": 1.8653342723846436,
+  "reference_ladder_error": 9.462223499978606e-05,
+  "max_abs_error": 0.0024433966470052138,
+  "max_rel_error": 0.0013098974715569746,
+  "error_vs_time": [
+   [
+    0.0,
+    4.440892098500626e-16
+   ],
+   [
+    0.19999998807907104,
+    0.0010643218614125871
+   ],
+   [
+    0.3999999761581421,
+    0.00039744140985886744
+   ],
+   [
+    0.5999999642372131,
+    0.00011776247361749981
+   ],
+   [
+    0.7999999523162842,
+    0.000595551969170327
+   ],
+   [
+    1.0,
+    0.0007718365940559413
+   ],
+   [
+    1.1999999284744263,
+    0.0015148373454280106
+   ],
+   [
+    1.399999976158142,
+    0.0021798834253787813
+   ],
+   [
+    1.5999999046325684,
+    0.0024156102264717427
+   ],
+   [
+    1.7999999523162842,
+    0.0024374700316840414
+   ],
+   [
+    2.0,
+    0.0023923032724887383
+   ]
+  ],
+  "note": "deviation from an INDEPENDENT high-accuracy solve of the file's own stated law, started from the file's first time slice; the reference's own error is bounded by its substep ladder and reported"
+ }
+}
