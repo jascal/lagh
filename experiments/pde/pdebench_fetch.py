@@ -52,18 +52,24 @@ def catalog(cache: Path | None = None) -> list:
 
 
 def fetch(file_id: int, samples: int, out: Path, *, tmax_index=None,
-          block=2 ** 20) -> dict:
+          block=2 ** 20, fields=("tensor",)) -> dict:
+    """`fields` names the sample-major datasets to copy. The 1-D single-field
+    files ship one (`tensor`); the CFD files ship three (`Vx`, `density`,
+    `pressure`) of the same shape, which is a SYSTEM and not a different kind of
+    file -- so the extract keeps all of them side by side."""
     import fsspec
     import h5py
     url = API.format(id=file_id)
     fs = fsspec.filesystem("http", client_kwargs={"trust_env": True})
     notes = []
+    payload = {}
     with h5py.File(fs.open(url, block_size=block), "r") as h:
         keys = list(h.keys())
-        if "tensor" not in h:
-            raise SystemExit(f"unexpected layout {keys}: this fetcher handles "
-                             "the 1-D single-field files")
-        ten = h["tensor"]
+        missing = [f for f in fields if f not in h]
+        if missing:
+            raise SystemExit(f"{missing} not in {keys}: name the datasets with "
+                             "--fields, this fetcher does not guess a layout")
+        ten = h[fields[0]]
         n_s, n_t, n_x = ten.shape
         x = np.asarray(h["x-coordinate"][()], np.float32)
         t = np.asarray(h["t-coordinate"][()], np.float32)
@@ -76,14 +82,19 @@ def fetch(file_id: int, samples: int, out: Path, *, tmax_index=None,
                          f"time slices; kept the first {n_t}, dropped {dropped}")
             t = t[:n_t]
         keep = min(samples, n_s)
-        data = np.asarray(ten[:keep], np.float32)
+        for f in fields:
+            a = np.asarray(h[f][:keep], np.float32)
+            if tmax_index:
+                a = a[:, :tmax_index]
+            payload[f] = a
+        data = payload[fields[0]]
         if tmax_index:
-            data = data[:, :tmax_index]
             t = t[:tmax_index]
             notes.append(f"time axis truncated to {tmax_index} slices")
     out.parent.mkdir(parents=True, exist_ok=True)
     with h5py.File(out, "w") as g:
-        g.create_dataset("tensor", data=data)
+        for f, a in payload.items():
+            g.create_dataset(f, data=a)
         g.create_dataset("x-coordinate", data=x)
         g.create_dataset("t-coordinate", data=t)
         g.attrs["source_doi"] = DOI
@@ -91,7 +102,9 @@ def fetch(file_id: int, samples: int, out: Path, *, tmax_index=None,
         g.attrs["source_shape"] = json.dumps([int(n_s), int(n_t), int(n_x)])
         g.attrs["samples_taken"] = json.dumps(list(range(keep)))
         g.attrs["notes"] = json.dumps(notes)
-    return {"file_id": file_id, "out": str(out), "shape": list(data.shape),
+        g.attrs["fields"] = json.dumps(list(fields))
+    return {"file_id": file_id, "out": str(out), "fields": list(fields),
+            "shape": list(data.shape),
             "source_shape": [n_s, n_t, n_x], "notes": notes,
             "x_span": [float(x[0]), float(x[-1])],
             "t_span": [float(t[0]), float(t[-1])]}
@@ -106,6 +119,9 @@ def main(argv=None):
     ap.add_argument("--list", action="store_true",
                     help="print the published catalog instead of fetching")
     ap.add_argument("--grep", default="")
+    ap.add_argument("--fields", default="tensor",
+                    help="comma-separated sample-major datasets to copy "
+                         "(CFD: Vx,density,pressure)")
     a = ap.parse_args(argv)
     if a.list:
         for s, i, p in catalog():
@@ -114,7 +130,8 @@ def main(argv=None):
         return 0
     if not (a.id and a.out):
         ap.error("--id and --out are required unless --list")
-    info = fetch(a.id, a.samples, a.out, tmax_index=a.tmax_index)
+    info = fetch(a.id, a.samples, a.out, tmax_index=a.tmax_index,
+                 fields=tuple(a.fields.split(",")))
     print(json.dumps(info, indent=1))
     return 0
 

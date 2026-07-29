@@ -52,6 +52,21 @@ class SystemRows:
     ndim: int = 2
     fields: tuple = ()
     field_err: float = 0.0
+    field_l1: np.ndarray | None = None   # (n_rows, n_terms) L1 sensitivity
+
+    def rebanded(self, field_err: float) -> "SystemRows":
+        """The same rows under a DIFFERENT declared field error.
+
+        Only the deterministic band term changes with that declaration, so
+        re-integrating the whole patch family to answer 'what would this look
+        like at 1e-4?' is pure waste -- and the scan that asks how much declared
+        error a stated law needs asks it seven or eight times."""
+        if self.field_l1 is None:
+            raise ValueError("no field_l1 recorded: rebuild with assemble()")
+        det = self.det + (field_err - self.field_err) * self.field_l1
+        return SystemRows(self.A, self.names, self.terms, det, self.gram,
+                          self.sol, self.rejected, self.ndim, self.fields,
+                          field_err, self.field_l1)
 
     @property
     def n_solutions(self) -> int:
@@ -83,6 +98,7 @@ def assemble(solutions, terms, patch_fn, *, sigma: float = 0.0,
     every later stage has to state it.
     """
     A, det, gram, sol, rejected = [], [], [], [], 0
+    l1 = []
     names = None
     for i, (fields, coords) in enumerate(solutions):
         s = build_nd(fields, coords, terms, patch_fn(coords), p=p, sigma=sigma)
@@ -96,11 +112,13 @@ def assemble(solutions, terms, patch_fn, *, sigma: float = 0.0,
             keep = [k for k in range(len(s.names)) if k != j]
             A.append((s.A / w[:, None])[:, keep])
             det.append((d / np.abs(w)[:, None])[:, keep])
+            l1.append((s.field_l1 / np.abs(w)[:, None])[:, keep])
             gram.append((s.gram / (w ** 2)[:, None, None])[:, keep][:, :, keep])
             names = [s.names[k] for k in keep]
         else:
             A.append(s.A)
             det.append(d)
+            l1.append(s.field_l1)
             gram.append(s.gram)
             names = list(s.names)
         sol.append(np.full(len(s.A), i))
@@ -113,7 +131,7 @@ def assemble(solutions, terms, patch_fn, *, sigma: float = 0.0,
                       sol=np.concatenate(sol), rejected=rejected,
                       ndim=len(solutions[0][1]),
                       fields=tuple(sorted(solutions[0][0])),
-                      field_err=field_err)
+                      field_err=field_err, field_l1=np.vstack(l1))
 
 
 def linear_coefficients(expr, feat) -> tuple:
