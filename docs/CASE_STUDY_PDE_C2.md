@@ -118,6 +118,26 @@ fluctuate while the ladder difference does not, and part of the residual is
 float roundoff the ladder cannot see. The bound is declared uniformly over the
 domain, floored at the program's machine term.
 
+### Amended 2026-07-28 (C3/PDEBench readiness): the integrator
+
+The explicit RK45 method-of-lines used above is DIFFUSION-LIMITED — its stable
+step goes like `1/(ν k_max²)`, so on a 512-point grid at ν = 0.2 it needs ~250k
+steps per trajectory and a verify run does not finish. Measured while preparing
+the PDEBench pass: the same forecast that hangs there completes in 0.09 s under
+an exponential integrator (ETD-RK2), which solves every LINEAR term exactly per
+substep and steps only the nonlinearity.
+
+`verify.integrate(scheme=...)` now carries both. `"direct"` is the default, so
+the C2 results above stand exactly as run; `"etd"` is what PDEBench-scale grids
+use, and it declares its error the same way everything else here does — by a
+ladder, in substeps rather than in tolerance. On the C2 fields the two agree to
+1e-9 or better, and on the linear parts the exponential scheme is the more
+accurate of the two (heat: 3.8e-15 against 1.3e-11).
+
+An integrating factor unwrapped from t₀ rather than per substep was tried first
+and is simply wrong for diffusion: it carries `exp(+ν k² t)`, which overflows
+within a fraction of a time unit at any real resolution.
+
 ### Open
 
 Longer windows (this ran to t = 0.4, where Burgers has not yet steepened);

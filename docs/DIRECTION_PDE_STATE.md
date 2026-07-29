@@ -1,5 +1,16 @@
 # Direction: state certificates — inverting for initial conditions
 
+**BUILT AND RUN 2026-07-28 — see `CASE_STUDY_PDE_C4.md` for the registration and
+the measured results.** All four pieces below exist (one-sided-in-time test
+functions with Romberg-in-time quadrature and analytic IC columns in
+`lagh/weakform.py`; assembly, semantics and per-mode LP intervals in
+`lagh/statecert.py`; the curriculum in `experiments/pde/run_c4_state.py`; the
+forecast track in `verify.py::verify_state`). W1, W2, W4 and W5 met; W3 met in
+direction. Two of the predictions needed their own geometry corrected before
+they meant anything — the `exp(+νk²T)` curve lives in the BACK-PROPAGATION, not
+in a window that starts at t = 0, and the Cole-Hopf family cannot form a shock —
+and both corrections are in the case study.
+
 **Scoped 2026-07-28 after a positive scoping probe.** Everything this program
 has certified is a LAW over a stated domain. Recovering an initial condition is
 a claim about one system's particular history, which is a different kind of

@@ -1,5 +1,19 @@
 # Direction: systems of PDEs
 
+**BUILT AND RUN 2026-07-28 — see `CASE_STUDY_PDE_C3.md` for the registration and
+the measured results.** All five pieces below exist (`lagh/weakform.py`
+multi-field + n-D geometry, `lagh/pdesystem.py` driver + conjoined certificate,
+`experiments/pde/verify.py::verify_system`, `experiments/pde/run_c3_systems.py`
+curriculum). The whole curriculum certifies: linear coupled, FitzHugh-Nagumo,
+Brusselator, shallow water, and 2-D Navier-Stokes vorticity. Y1-Y5 all met, with
+one correction the run forced (Y4: spectrally poor data creates a degeneracy the
+solution holdout cannot break, which the constrained-input path correctly
+reports as a domain-restricted certificate rather than a wrong one) and one
+engine change (`discover(linear_basis=True)`, without which the greedy proposal
+channels found nothing for a 5-term support over 8 declared columns).
+
+The design below stands as written.
+
 **Scoped 2026-07-28 after a positive scoping probe.** Coupled fields are where
 real PDE discovery lives — reaction–diffusion, shallow water, Navier–Stokes —
 and traffic, the arc's intended real-data case study, is already a system in

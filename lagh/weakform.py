@@ -9,15 +9,18 @@ lesson forbids. The weak form removes the problem instead of estimating it:
 integrate every candidate term against a smooth compactly-supported test
 function phi and move all derivatives onto phi by parts,
 
-    int phi * d^alpha( g(u) )  =  (-1)^|alpha| int (d^alpha phi) * g(u)
+    int phi * d^alpha( g(fields) )  =  (-1)^|alpha| int (d^alpha phi) * g(fields)
 
-so the data enters only through a POINTWISE g of the raw field, weighted by an
-ANALYTIC known function. Each patch integral is one "data point"; the
+so the data enters only through a POINTWISE g of the raw field(s), weighted by
+an ANALYTIC known function. Each patch integral is one "data point"; the
 certification domain is the patch family.
 
-The library is divergence-form terms {d^alpha(g(u))} only -- u*u_xx and friends
+The library is divergence-form terms {d^alpha(g)} only -- u*u_xx and friends
 cannot be moved onto phi and are out of reach by construction (stated in the
-registration, not hidden).
+registration, not hidden). `g` may depend on SEVERAL fields (u*v, u**2*v, h*u),
+which is what makes systems of PDEs reachable with no change to the engine
+(docs/DIRECTION_PDE_SYSTEMS.md): a coupled system is one row set with one
+target per equation and features spanning every field.
 
 Error accounting per patch, all parts computed or declared:
   * float summation R -- rigorous: eps_mach * sum|contributions| (the quadrature
@@ -25,9 +28,20 @@ Error accounting per patch, all parts computed or declared:
   * quadrature truncation Q -- MEASURED on a three-level (h, 2h, 4h) ladder with
     the Richardson estimate at h as the declared value; a patch whose ladder does
     not converge is REJECTED as unresolved rather than silently kept,
-  * declared noise -- sigma * ||w||_2 through the known linear functional
-    (returned per patch; C0 runs sigma = 0, see the registration on why the
-    noisy case needs an errors-in-variables eps model first).
+  * declared field noise -- sigma * ||w||_2 through the known linear functional
+    (per patch, and as a Gram over terms so the errors-in-variables band can be
+    assembled per candidate: see PatchEpsilon),
+  * declared FIELD error -- a field produced by a reference solver carries the
+    solver's own declared error, which is deterministic (no cancellation across
+    a realization) and so enters through the L1 sensitivity ||w g'||_1 rather
+    than the L2 one. `WeakSystem.field_l1` carries it; `WeakSystem.det()`
+    multiplies it by the declared bound.
+
+Geometry is n-dimensional: coordinates are (x, ..., t) with TIME LAST. The 1-D+t
+entry points (`build`, `make_patches`) are the special case every campaign
+through C2 used; `build_nd` / `make_patches_nd` take an arbitrary coordinate
+list, which is what 2-D fields (Navier-Stokes vorticity, the 2-D half of
+PDEBench) need.
 """
 from __future__ import annotations
 
@@ -62,33 +76,88 @@ MAX_TRUSTED_ORDER = 4.0
 # sits in the middle of that five-decade gap.
 ALIAS_MAX = 1e-3
 
+FIELD_SEP = ":"          # system term names are "<field>:<term>" (u:u_xx, v:u)
+
 
 @dataclass(frozen=True)
 class Term:
-    """One divergence-form library term: (-1)^|alpha| int (d^alpha phi) g(u)."""
+    """One divergence-form library term: (-1)^|alpha| int (d^alpha phi) g.
+
+    `gexpr` is a pointwise function of ONE OR MORE named fields; the symbols it
+    is written in ARE the fields it reads (`u*v` reads u and v). `ax`/`at` are
+    the 1-D+t convenience form of the derivative multi-index; `alpha` states it
+    in full for n-D geometry (space axes first, TIME LAST).
+    """
     name: str
-    ax: int                      # x-derivatives moved onto phi
-    at: int                      # t-derivatives moved onto phi
-    gexpr: str                   # pointwise function of u, as a sympy string
+    ax: int = 0
+    at: int = 0
+    gexpr: str = "u"
+    alpha: tuple | None = None
+
+    def multi(self, ndim: int) -> tuple:
+        """The derivative multi-index over `ndim` axes (space..., time)."""
+        if self.alpha is not None:
+            if len(self.alpha) != ndim:
+                raise ValueError(f"term {self.name!r}: alpha has "
+                                 f"{len(self.alpha)} axes, geometry has {ndim}")
+            return tuple(int(a) for a in self.alpha)
+        if ndim < 2:
+            raise ValueError("geometry needs at least one space axis and time")
+        return (self.ax,) + (0,) * (ndim - 2) + (self.at,)
+
+    def order(self, ndim: int) -> int:
+        return sum(self.multi(ndim))
 
     @property
     def sign(self) -> int:
-        return (-1) ** (self.ax + self.at)
+        """(-1)^|alpha| -- the by-parts sign, independent of the geometry it is
+        evaluated in (the multi-index total is the same either way)."""
+        return (-1) ** (sum(self.alpha) if self.alpha is not None
+                        else self.ax + self.at)
 
-    def g(self, u: np.ndarray) -> np.ndarray:
-        f = _gfun(self.gexpr)
-        return np.broadcast_to(np.asarray(f(u), float), u.shape)
+    @property
+    def fields(self) -> tuple:
+        """The field names g reads, in sorted order (empty for a constant)."""
+        return _gsyms(self.gexpr)
 
-    def dg(self, u: np.ndarray) -> np.ndarray:
-        """g'(u): how a perturbation of the field at a point moves this term's
-        integrand -- the sensitivity the errors-in-variables band is built from."""
-        f = _gfun(str(sp.diff(sp.sympify(self.gexpr), sp.Symbol("u"))))
-        return np.broadcast_to(np.asarray(f(u), float), u.shape)
+    def g(self, fields) -> np.ndarray:
+        f, shape = _as_fields(fields)
+        syms = self.fields
+        out = _gfun(self.gexpr, syms)(*[f[s] for s in syms])
+        return np.broadcast_to(np.asarray(out, float), shape)
+
+    def dg(self, fields, wrt: str | None = None) -> np.ndarray:
+        """dg/d(field): how a perturbation of that field at a point moves this
+        term's integrand -- the sensitivity every band is built from. `wrt=None`
+        means the single-field default, kept for the scalar campaigns."""
+        f, shape = _as_fields(fields)
+        if wrt is None:
+            wrt = next(iter(f))
+        syms = self.fields
+        if wrt not in syms:
+            return np.zeros(shape)
+        d = str(sp.diff(sp.sympify(self.gexpr), sp.Symbol(wrt)))
+        out = _gfun(d, syms)(*[f[s] for s in syms])
+        return np.broadcast_to(np.asarray(out, float), shape)
+
+
+def _as_fields(fields):
+    """Accept a bare array (the single-field scalar case) or a name->array dict."""
+    if isinstance(fields, dict):
+        shape = np.shape(next(iter(fields.values())))
+        return {k: np.asarray(v, float) for k, v in fields.items()}, shape
+    a = np.asarray(fields, float)
+    return {"u": a}, a.shape
 
 
 @lru_cache(maxsize=None)
-def _gfun(gexpr: str):
-    return sp.lambdify(sp.Symbol("u"), sp.sympify(gexpr), "numpy")
+def _gsyms(gexpr: str) -> tuple:
+    return tuple(sorted(str(s) for s in sp.sympify(gexpr).free_symbols))
+
+
+@lru_cache(maxsize=None)
+def _gfun(gexpr: str, syms: tuple):
+    return sp.lambdify([sp.Symbol(s) for s in syms], sp.sympify(gexpr), "numpy")
 
 
 # The C0 curriculum library: heat, advection, wave, Burgers, KdV, and the
@@ -98,6 +167,7 @@ LIBRARY: dict[str, Term] = {
         Term("1", 0, 0, "1"),
         Term("u", 0, 0, "u"),
         Term("u^2", 0, 0, "u**2"),
+        Term("u^3", 0, 0, "u**3"),
         Term("u_x", 1, 0, "u"),
         Term("u_xx", 2, 0, "u"),
         Term("u_xxx", 3, 0, "u"),
@@ -110,11 +180,38 @@ LIBRARY: dict[str, Term] = {
 }
 
 
-def bump_derivatives(p: int, max_order: int) -> list:
-    """psi(s) = (1 - s^2)^p on |s| < 1, zero outside, and its derivatives as
-    numpy callables. psi is C^(p-1) with every derivative up to p-1 vanishing at
-    the support boundary -- which is what makes the by-parts identity exact (no
-    boundary terms) and the uniform-grid quadrature converge fast."""
+def field_terms(fieldname: str, names) -> list:
+    """The scalar LIBRARY rewritten in one field's symbol, named `<field>:<term>`.
+
+    For a LINEAR system every feature is a single-field term of one field or the
+    other, which is why the system probe needed no factory extension at all; this
+    just makes that vocabulary explicit and unambiguous when several fields share
+    one row set."""
+    out = []
+    for n in names:
+        base = LIBRARY[n] if isinstance(n, str) else n
+        gx = str(sp.sympify(base.gexpr).xreplace(
+            {sp.Symbol("u"): sp.Symbol(fieldname)}))
+        out.append(Term(f"{fieldname}{FIELD_SEP}{base.name}", base.ax, base.at,
+                        gx, base.alpha))
+    return out
+
+
+def bump_derivatives(p: int, max_order: int, onesided: bool = False) -> list:
+    """psi(s) = (1 - s^2)^p and its derivatives as numpy callables.
+
+    Two-sided (the default): support |s| < 1. psi is C^(p-1) with every
+    derivative up to p-1 vanishing at BOTH support boundaries -- which is what
+    makes the by-parts identity exact (no boundary terms) and the uniform-grid
+    quadrature converge fast.
+
+    One-sided: support 0 <= s < 1, i.e. the SAME psi restricted to the right
+    half. It still vanishes to order p at s = 1, but psi(0) = 1, so the by-parts
+    identity in time keeps its boundary term at the window's left edge -- which
+    is exactly the term a state certificate reads the initial condition out of
+    (docs/DIRECTION_PDE_STATE.md). psi'(0) = 0, so the window is still smooth
+    where it meets the initial time.
+    """
     s = sp.Symbol("s")
     psi = (1 - s ** 2) ** p
     out = []
@@ -126,7 +223,7 @@ def bump_derivatives(p: int, max_order: int) -> list:
             def call(v):
                 v = np.asarray(v, float)
                 y = np.zeros_like(v)
-                m = np.abs(v) < 1.0
+                m = (v >= 0.0) & (v < 1.0) if onesided else np.abs(v) < 1.0
                 if np.any(m):
                     y[m] = np.asarray(f(v[m]), float)
                 return y
@@ -137,14 +234,46 @@ def bump_derivatives(p: int, max_order: int) -> list:
 
 @dataclass
 class Patch:
-    """A test-function support: center and half-widths in (x, t), plus the grid
-    index window it covers."""
-    xc: float
-    tc: float
-    ax: float
-    at: float
-    ix: slice
-    it: slice
+    """A test-function support: centre and half-width per axis (space..., time
+    last), plus the grid index window it covers.
+
+    `onesided` marks a time window running from its LEFT edge (the centre, in
+    that case) to centre + halfwidth, with the test function equal to 1 at the
+    left edge: the shape a state certificate needs.
+    """
+    centers: tuple
+    halfwidths: tuple
+    idx: tuple
+    onesided: bool = False
+
+    # 1-D+t names, kept because every campaign through C2 speaks them
+    @property
+    def xc(self) -> float:
+        return self.centers[0]
+
+    @property
+    def tc(self) -> float:
+        return self.centers[-1]
+
+    @property
+    def ax(self) -> float:
+        return self.halfwidths[0]
+
+    @property
+    def at(self) -> float:
+        return self.halfwidths[-1]
+
+    @property
+    def ix(self):
+        return self.idx[0]
+
+    @property
+    def it(self):
+        return self.idx[-1]
+
+    @property
+    def ndim(self) -> int:
+        return len(self.centers)
 
 
 @dataclass
@@ -156,7 +285,8 @@ class WeakSystem:
     patches: list[Patch] = field(default_factory=list)
     quad: np.ndarray | None = None      # (n_patches, n_terms) declared quadrature bound
     roundoff: np.ndarray | None = None  # (n_patches, n_terms) rigorous float bound
-    noise_l2: np.ndarray | None = None  # (n_patches, n_terms) ||w||_2: sigma multiplier
+    noise_l2: np.ndarray | None = None  # (n_patches, n_terms) ||w g'||_2: sigma multiplier
+    field_l1: np.ndarray | None = None  # (n_patches, n_terms) ||w g'||_1: solver-error mult.
     order: np.ndarray | None = None     # (n_patches, n_terms) observed ladder order
     rejected: int = 0                   # patches dropped as unresolved
     gram: np.ndarray | None = None      # (n_patches, n_terms, n_terms) noise Gram
@@ -191,10 +321,28 @@ class WeakSystem:
             quad=(self.quad / np.abs(w)[:, None])[:, keep],
             roundoff=(self.roundoff / np.abs(w)[:, None])[:, keep],
             noise_l2=(self.noise_l2 / np.abs(w)[:, None])[:, keep],
+            field_l1=(self.field_l1 / np.abs(w)[:, None])[:, keep]
+            if self.field_l1 is not None else None,
             order=self.order[:, keep],
             rejected=self.rejected,
             gram=(self.gram / (w ** 2)[:, None, None])[:, keep][:, :, keep]
             if self.gram is not None else None)
+
+    def det(self, field_err: float = 0.0) -> np.ndarray:
+        """The DETERMINISTIC per-entry error: quadrature + roundoff, plus a
+        declared field error (a reference solver's own tolerance-ladder bound)
+        propagated through the L1 sensitivity.
+
+        L1, not L2: a solver error is one fixed function, not a realization, so
+        nothing cancels across the patch and the honest propagation is
+        sum_i |w_i g'(u)_i| * delta. First order in delta, and declared as such."""
+        d = self.quad + self.roundoff
+        if field_err > 0:
+            if self.field_l1 is None:
+                raise ValueError("no field_l1: rebuild with the factory that "
+                                 "records it before declaring a field error")
+            d = d + field_err * self.field_l1
+        return d
 
     def signal_to_band(self, target: str, **kw) -> float:
         """median |target| / declared band: how much evidence a patch family
@@ -204,7 +352,8 @@ class WeakSystem:
         return float(np.median(np.abs(y) / self.declared_epsilon(target, **kw)))
 
     def declared_epsilon(self, target: str, *, coeff_max: float = 10.0,
-                         sigma: float = 0.0) -> np.ndarray:
+                         sigma: float = 0.0,
+                         field_err: float = 0.0) -> np.ndarray:
         """Per-patch declared band for the TARGET residual.
 
         The certified relation is y = sum_k c_k X_k, so the residual carries the
@@ -214,7 +363,7 @@ class WeakSystem:
         check against the certified law and re-assemble if it was too small
         (an assumption stated and verified, never assumed silently)."""
         j = self.names.index(target)
-        err = (self.quad + self.roundoff)
+        err = self.det(field_err)
         if sigma > 0:
             err = err + sigma * self.noise_l2
         others = np.delete(err, j, axis=1)
@@ -239,6 +388,10 @@ class PatchEpsilon:
     formula holds with c_k = df/dX_k evaluated PER ROW, which is what
     `coefficients` returns. If the gradient cannot be evaluated, the band falls
     back to the conservative `coeff_max` form rather than guessing.
+
+    For a SYSTEM the vector nu spans every field (independent per-field noise
+    makes the Gram block-diagonal over fields, and the blocks are summed when the
+    Gram is built), so nothing here changes: it is still one quadratic form.
     """
     names: list[str]                 # term order of the Gram / quad columns
     target: str
@@ -249,10 +402,12 @@ class PatchEpsilon:
     sigma: float = 0.0
     floor_abs: float = 0.0
     coeff_max: float = 2.0
+    feat_names: list | None = None   # feature order, when it is not "names minus target"
 
     def __post_init__(self):
         self.j = self.names.index(self.target)
-        self.feat = [n for n in self.names if n != self.target]
+        self.feat = ([n for n in self.names if n != self.target]
+                     if self.feat_names is None else list(self.feat_names))
         self.cols = [self.names.index(n) for n in self.feat]
         self.syms = [sp.Symbol(f"x_{i}") for i in range(len(self.feat))]
 
@@ -260,7 +415,7 @@ class PatchEpsilon:
         idx = np.asarray(idx, int)
         return PatchEpsilon(self.names, self.target, self.y[idx], self.X[idx],
                             self.det[idx], self.gram[idx], self.sigma,
-                            self.floor_abs, self.coeff_max)
+                            self.floor_abs, self.coeff_max, self.feat)
 
     def coefficients(self, expr):
         """(n_rows, n_feat) of df/dX_k, or None when the law cannot be read that
@@ -314,19 +469,54 @@ def make_patches(x: np.ndarray, t: np.ndarray, *, nx_half: int, nt_half: int,
     """A grid of patch centers whose supports lie strictly inside the domain.
     `nx_half`/`nt_half` are half-widths in GRID CELLS (the ladder needs the
     window to stay a multiple of 4)."""
+    return make_patches_nd((x, t), (nx_half, nt_half), (n_x, n_t))
+
+
+def make_patches_nd(coords, halves, counts) -> list[Patch]:
+    """n-D patch grid: `coords` are the axis coordinate vectors (space..., time
+    last), `halves` the half-widths in grid cells per axis, `counts` how many
+    centres per axis. Supports lie strictly inside the domain on every axis."""
+    coords = [np.asarray(c, float) for c in coords]
+    halves = [int(h) for h in halves]
+    centres = [np.linspace(h, len(c) - 1 - h, n).astype(int)
+               for c, h, n in zip(coords, halves, counts)]
+    steps = [float(c[1] - c[0]) for c in coords]
+    out = []
+    for combo in _product(centres):
+        out.append(Patch(
+            centers=tuple(float(c[i]) for c, i in zip(coords, combo)),
+            halfwidths=tuple(h * s for h, s in zip(halves, steps)),
+            idx=tuple(slice(i - h, i + h + 1) for i, h in zip(combo, halves))))
+    return out
+
+
+def onesided_patches(x: np.ndarray, t: np.ndarray, *, nx_half: int,
+                     nt_cells: int, n_x: int, t0_index: int = 0) -> list[Patch]:
+    """Patches whose TIME window starts at t[t0_index] and runs forward, with a
+    test function equal to 1 there.
+
+    The by-parts identity in time then keeps its boundary term, and that term is
+    a linear functional of the INITIAL CONDITION with an analytic weight -- the
+    whole mechanism of a state certificate (docs/DIRECTION_PDE_STATE.md). Space
+    windows are the usual two-sided bumps, so nothing leaks at the spatial
+    boundary."""
     x = np.asarray(x, float)
     t = np.asarray(t, float)
     hx = float(x[1] - x[0])
     ht = float(t[1] - t[0])
     xs = np.linspace(nx_half, len(x) - 1 - nx_half, n_x).astype(int)
-    ts = np.linspace(nt_half, len(t) - 1 - nt_half, n_t).astype(int)
     out = []
+    if t0_index + nt_cells > len(t) - 1:
+        # the window would run past the observations. A patch whose support is
+        # not covered by data is not a patch -- silently truncating the slice
+        # would leave the weight array claiming a window the field never fills.
+        return out
     for i in xs:
-        for j in ts:
-            out.append(Patch(float(x[i]), float(t[j]), nx_half * hx,
-                             nt_half * ht,
-                             slice(i - nx_half, i + nx_half + 1),
-                             slice(j - nt_half, j + nt_half + 1)))
+        out.append(Patch(centers=(float(x[i]), float(t[t0_index])),
+                         halfwidths=(nx_half * hx, nt_cells * ht),
+                         idx=(slice(i - nx_half, i + nx_half + 1),
+                              slice(t0_index, t0_index + nt_cells + 1)),
+                         onesided=True))
     return out
 
 
@@ -354,8 +544,109 @@ def multiscale_patches(x: np.ndarray, t: np.ndarray, scales, *, n_x: int,
     return out
 
 
-def aliasing_ratio(u_patch: np.ndarray, patch: Patch, xs: np.ndarray,
-                   ts: np.ndarray, dpsi, sigma: float = 0.0) -> float:
+def multiscale_patches_nd(coords, scales, counts) -> list[Patch]:
+    """`multiscale_patches` for n-D geometry: each entry of `scales` is a full
+    per-axis tuple of half-widths in grid cells."""
+    out = []
+    for half in scales:
+        out += make_patches_nd(coords, half, counts)
+    return out
+
+
+def _product(vectors):
+    """Cartesian product of index vectors, as tuples."""
+    out = [()]
+    for v in vectors:
+        out = [c + (int(i),) for c in out for i in v]
+    return out
+
+
+def _windows(patch: Patch, coords, dpsi, dpsi_one, alpha):
+    """Per-axis analytic weight vectors (d^a psi)(s)/halfwidth^a, with the time
+    axis one-sided (and trapezoid-weighted) when the patch says so."""
+    ws = []
+    for a, (c, cen, hw) in enumerate(zip(coords, patch.centers,
+                                         patch.halfwidths)):
+        k = alpha[a]
+        last = a == len(coords) - 1
+        d = dpsi_one if (patch.onesided and last) else dpsi
+        w = d[k]((np.asarray(c, float) - cen) / hw) / hw ** k
+        if patch.onesided and last:
+            # A window that does NOT vanish at its left edge loses the
+            # Euler-Maclaurin cancellation that makes the two-sided rule
+            # spectrally accurate, so the rule there is composite trapezoid
+            # (half weight at the endpoints) and the value is Richardson-
+            # extrapolated across the same ladder that declares its error
+            # (see _romberg_weights). Straight rectangle summation is O(h) here
+            # and would put a quadrature floor two decades above the noise.
+            w = w.copy()
+            w[0] *= 0.5
+            w[-1] *= 0.5
+        ws.append(w)
+    return ws
+
+
+def _tensor(vs):
+    out = vs[0]
+    for v in vs[1:]:
+        out = out[..., None] * v
+    return out
+
+
+def _weights(term: Term, coords, patch: Patch, dpsi, dpsi_one=None
+             ) -> np.ndarray:
+    """The analytic weight array (-1)^|alpha| (d^alpha phi)(z_i) * prod(h_a)."""
+    ndim = len(coords)
+    alpha = term.multi(ndim)
+    ws = _windows(patch, coords, dpsi, dpsi_one, alpha)
+    h = 1.0
+    for c in coords:
+        c = np.asarray(c, float)
+        h *= float(c[1] - c[0])
+    return _tensor(ws) * h * term.sign
+
+
+def _embed(term: Term, coords, patch: Patch, dpsi, dpsi_one,
+           steps) -> np.ndarray:
+    """The weight array of the rule that subsamples axis a by steps[a],
+    embedded (zero-padded) on the FULL patch grid."""
+    shape = tuple(len(np.asarray(c, float)) for c in coords)
+    W = np.zeros(shape)
+    sub = tuple(slice(None, None, s) for s in steps)
+    W[sub] = _weights(term, [np.asarray(c)[::s] for c, s in zip(coords, steps)],
+                      patch, dpsi, dpsi_one)
+    return W
+
+
+def _romberg_weights(term: Term, coords, patch: Patch, dpsi, dpsi_one,
+                     step: int, xstep: int = 1) -> np.ndarray:
+    """Weights of the Richardson-extrapolated (Romberg) rule in the TIME axis,
+    embedded on the full patch grid.
+
+    E = I_h + (I_h - I_2h) / 3 cancels the h^2 endpoint term the one-sided
+    window leaves behind. Returning it as one weight ARRAY (rather than
+    combining computed integrals) is what keeps the noise vector, the Gram, the
+    L1 sensitivity and the roundoff bound all referring to the SAME functional
+    as the reported value -- the band must band the number that was actually
+    reported.
+
+    ONLY the time axis is refined, and that is the whole point: the space
+    windows vanish at both ends, so their rule is spectrally accurate at h and
+    garbage at 4h (a 21-point window subsampled to 6 points is not a
+    quadrature). Extrapolating across a joint refinement mixes the two and
+    CORRECTS with the junk -- measured: it moved the u_t integral by 1.3% and
+    every one-sided patch was rejected as unresolved. The space direction gets
+    its own separate, non-extrapolated bound in build_nd.
+    """
+    nd = len(coords)
+    sx = (xstep,) * (nd - 1)
+    Wa = _embed(term, coords, patch, dpsi, dpsi_one, sx + (step,))
+    Wb = _embed(term, coords, patch, dpsi, dpsi_one, sx + (2 * step,))
+    return Wa + (Wa - Wb) / 3.0
+
+
+def aliasing_ratio(u_patch: np.ndarray, patch: Patch, coords, dpsi,
+                   sigma: float = 0.0, dpsi_one=None) -> float:
     """Fraction of the windowed patch field's spectral energy sitting in the top
     half of the representable band.
 
@@ -365,14 +656,33 @@ def aliasing_ratio(u_patch: np.ndarray, patch: Patch, xs: np.ndarray,
     while all three are garbage. This is the direct test -- energy near Nyquist
     means the grid cannot represent the field, let alone its derivatives.
     Windowing by the test function first is what makes the DFT meaningful on a
-    non-periodic patch (psi*u is smooth and compactly supported)."""
-    wx = dpsi[0]((xs - patch.xc) / patch.ax)
-    wt = dpsi[0]((ts - patch.tc) / patch.at)
-    W = np.outer(wx, wt)
-    F = np.abs(np.fft.fft2(W * u_patch)) ** 2
-    kx = np.fft.fftfreq(F.shape[0])                      # cycles/sample
-    kt = np.fft.fftfreq(F.shape[1])
-    mask = (np.abs(kx) > 0.25)[:, None] | (np.abs(kt) > 0.25)[None, :]
+    non-periodic patch (psi*u is smooth and compactly supported).
+
+    A ONE-SIDED patch is diagnosed with its own two-sided window instead: that
+    window does not taper at t0, so the windowed signal has a step there and its
+    spectrum is broad no matter how well resolved the FIELD is (measured: 8e-3
+    against a 1e-3 bar, rejecting every state patch). The resolution test is a
+    statement about the field, so it gets a tapered window centred in the same
+    time span -- the test function's own shape is not evidence about the grid.
+    """
+    if patch.onesided:
+        patch = Patch(centers=patch.centers[:-1]
+                      + (patch.centers[-1] + 0.5 * patch.halfwidths[-1],),
+                      halfwidths=patch.halfwidths[:-1]
+                      + (0.5 * patch.halfwidths[-1],),
+                      idx=patch.idx, onesided=False)
+        dpsi_one = None
+    zero = Term("w", 0, 0, "u", alpha=(0,) * len(coords))
+    W = _tensor(_windows(patch, coords, dpsi, dpsi_one, zero.multi(len(coords))))
+    F = np.abs(np.fft.fftn(W * u_patch)) ** 2
+    mask = None
+    for a in range(len(coords)):
+        k = np.abs(np.fft.fftfreq(F.shape[a])) > 0.25
+        shp = [1] * len(coords)
+        shp[a] = -1
+        m = k.reshape(shp)
+        mask = m if mask is None else (mask | m)
+    mask = np.broadcast_to(mask, F.shape)
     # DECLARED NOISE IS NOT ALIASING: white noise puts energy in every mode, so
     # an honest resolution test subtracts what the declared sigma is expected to
     # contribute (E|F_k|^2 = sigma^2 * sum(W^2) per mode, uniformly) before
@@ -386,44 +696,52 @@ def aliasing_ratio(u_patch: np.ndarray, patch: Patch, xs: np.ndarray,
     return max(0.0, hi) / tot
 
 
-def _weights(term: Term, xs: np.ndarray, ts: np.ndarray, patch: Patch,
-             dpsi) -> np.ndarray:
-    """The analytic weight array (-1)^|alpha| (d^alpha phi)(z_i) * hx * ht."""
-    hx = float(xs[1] - xs[0])
-    ht = float(ts[1] - ts[0])
-    wx = dpsi[term.ax]((xs - patch.xc) / patch.ax) / patch.ax ** term.ax
-    wt = dpsi[term.at]((ts - patch.tc) / patch.at) / patch.at ** term.at
-    return np.outer(wx, wt) * (hx * ht) * term.sign
+def _entry(W: np.ndarray, term: Term, fp: dict, names) -> tuple:
+    """(value, sum|contributions|, ||w g'||_2, ||w g'||_1) for one weight array.
+
+    The sensitivity norms sum over EVERY field the term reads: with independent
+    per-field noise the sensitivity vectors simply concatenate, so the L2 norm
+    is the root of the summed per-field squares (docs/DIRECTION_PDE_SYSTEMS.md).
+    """
+    C = W * term.g(fp)
+    l2sq, l1 = 0.0, 0.0
+    for f in names:
+        d = W * term.dg(fp, f)
+        l2sq += float(np.sum(d ** 2))
+        l1 += float(np.sum(np.abs(d)))
+    return (float(C.sum()), float(np.abs(C).sum()), float(np.sqrt(l2sq)), l1)
 
 
-def _integrate(term: Term, u_patch: np.ndarray, xs: np.ndarray, ts: np.ndarray,
-               patch: Patch, dpsi) -> tuple:
-    """One patch integral at one resolution: value, sum|contributions|,
-    ||w||_2 (the noise multiplier for a linear-in-u term)."""
-    W = _weights(term, xs, ts, patch, dpsi)
-    C = W * term.g(u_patch)
-    return (float(C.sum()), float(np.abs(C).sum()),
-            float(np.sqrt(np.sum(W ** 2))))
+def _wnorm(W: np.ndarray, term: Term, fp: dict, names) -> float:
+    """||W g'||_2 summed over fields: how much declared noise a difference
+    functional with weight array W explains."""
+    return float(np.sqrt(sum(np.sum((W * term.dg(fp, f)) ** 2)
+                             for f in names)))
 
 
-def _ladder_noise(term: Term, u_patch: np.ndarray, xs: np.ndarray,
-                  ts: np.ndarray, patch: Patch, dpsi, sa: int, sb: int) -> float:
+def _ladder_noise(term: Term, fp: dict, coords, patch: Patch, dpsi, dpsi_one,
+                  sa: int, sb: int, names) -> float:
     """||d||_2 for the difference functional I_{sa*h} - I_{sb*h}: the ladder
     difference is ALSO a linear functional of the field noise, with a computable
     weight vector, so sigma * this is exactly how much of an observed ladder
     difference the declared noise explains."""
-    d = np.zeros(u_patch.shape)
-    for s, sign in ((sa, 1.0), (sb, -1.0)):
-        sub = (slice(None, None, s), slice(None, None, s))
-        d[sub] += sign * (_weights(term, xs[::s], ts[::s], patch, dpsi)
-                          * term.dg(u_patch[sub]))
-    return float(np.sqrt((d ** 2).sum()))
+    shape = np.shape(next(iter(fp.values())))
+    total = 0.0
+    for f in names:
+        d = np.zeros(shape)
+        for s, sign in ((sa, 1.0), (sb, -1.0)):
+            sub = tuple(slice(None, None, s) for _ in coords)
+            sc = [np.asarray(c)[::s] for c in coords]
+            fsub = {k: v[sub] for k, v in fp.items()}
+            d[sub] += sign * (_weights(term, sc, patch, dpsi, dpsi_one)
+                              * term.dg(fsub, f))
+        total += float((d ** 2).sum())
+    return float(np.sqrt(total))
 
 
-def _noise_gram(terms, u_patch: np.ndarray, xs: np.ndarray, ts: np.ndarray,
-                patch: Patch, dpsi) -> np.ndarray:
+def _noise_gram(terms, Ws, fp: dict, names) -> np.ndarray:
     """Gram matrix of the per-term noise SENSITIVITY vectors on this patch:
-    G[k,l] = sum_i (W_k g_k'(u))_i (W_l g_l'(u))_i.
+    G[k,l] = sum_fields sum_i (W_k dg_k/df)_i (W_l dg_l/df)_i.
 
     To first order a field perturbation e moves term k's integral by
     <W_k g_k'(u), e>, so the residual of y = sum_k c_k X_k moves by <v, e> with
@@ -431,16 +749,32 @@ def _noise_gram(terms, u_patch: np.ndarray, xs: np.ndarray, ts: np.ndarray,
     functional of the SAME realization. Its length is a'Ga with
     a = (1, -c_1, ..., -c_K), which is why the Gram is what gets stored: the
     band for any candidate is then a quadratic form costing K^2 flops per patch
-    instead of a pass over the grid."""
-    nu = np.stack([(_weights(tm, xs, ts, patch, dpsi)
-                    * tm.dg(u_patch)).ravel() for tm in terms])
-    return nu @ nu.T
+    instead of a pass over the grid. With several fields the vector simply
+    concatenates over them (independent per-field noise), which is this sum.
+    """
+    G = np.zeros((len(terms), len(terms)))
+    for f in names:
+        nu = np.stack([(W * tm.dg(fp, f)).ravel() for tm, W in zip(terms, Ws)])
+        G += nu @ nu.T
+    return G
 
 
-def build(u: np.ndarray, x: np.ndarray, t: np.ndarray, terms: list[str],
-          patches: list[Patch], *, p: int = 8, sigma: float = 0.0) -> WeakSystem:
-    """The factory: field u[i, j] on grid (x[i], t[j]) -> patch design matrix
+def build(u, x: np.ndarray, t: np.ndarray, terms: list, patches: list[Patch],
+          *, p: int = 8, sigma: float = 0.0) -> WeakSystem:
+    """The 1-D+t factory: field(s) on grid (x[i], t[j]) -> patch design matrix
     with a declared error bound per entry.
+
+    `u` is either an array (the single field "u") or a dict of named fields
+    sharing the grid -- a system is one row set over several fields.
+    """
+    fields, _ = _as_fields(u)
+    return build_nd(fields, (x, t), terms, patches, p=p, sigma=sigma)
+
+
+def build_nd(fields, coords, terms: list, patches: list[Patch], *,
+             p: int = 8, sigma: float = 0.0) -> WeakSystem:
+    """The factory over arbitrary geometry: `coords` are the axis coordinate
+    vectors (space..., TIME LAST) and every field array is shaped accordingly.
 
     Each entry is computed at three resolutions (h, 2h, 4h) on the SAME patch;
     the declared quadrature bound comes from that ladder and the observed order
@@ -455,32 +789,96 @@ def build(u: np.ndarray, x: np.ndarray, t: np.ndarray, terms: list[str],
     from p = 8 to p = 16 at fixed patch size; since the declared band is set by
     the roughest term in the library, a library with third derivatives wants
     p >= 12.
+
+    `sigma` is ONE declared field-noise scale for every field. Per-field scales
+    that differ must be declared at the largest (conservative) -- an unequal
+    declaration would need per-field Gram blocks and is not claimed here.
     """
-    u = np.asarray(u, float)
-    x = np.asarray(x, float)
-    t = np.asarray(t, float)
+    fields, shape = _as_fields(fields)
+    coords = [np.asarray(c, float) for c in coords]
+    ndim = len(coords)
     T = [LIBRARY[n] if isinstance(n, str) else n for n in terms]
-    maxo = max(max(tm.ax, tm.at) for tm in T)
+    fnames = sorted(fields)
+    for tm in T:
+        missing = set(tm.fields) - set(fnames)
+        if missing:
+            raise ValueError(f"term {tm.name!r} reads unknown field(s) "
+                             f"{sorted(missing)}; have {fnames}")
+    maxo = max(max(tm.multi(ndim)) for tm in T)
     dpsi = bump_derivatives(p, maxo)
-    rows, quad, rnd, l2, orders, kept, grams = [], [], [], [], [], [], []
+    dpsi_one = (bump_derivatives(p, maxo, onesided=True)
+                if any(pa.onesided for pa in patches) else None)
+    rows, quad, rnd, l2, l1s, orders, kept, grams = [], [], [], [], [], [], [], []
     rejected = 0
     for pa in patches:
-        xs_f, ts_f = x[pa.ix], t[pa.it]
-        up = u[pa.ix, pa.it]
-        vals, qs, rs, ls, ords = [], [], [], [], []
-        ok = aliasing_ratio(up, pa, xs_f, ts_f, dpsi, sigma) <= ALIAS_MAX
+        sub = tuple(pa.idx)
+        cs = [c[s] for c, s in zip(coords, sub)]
+        fp = {k: v[sub] for k, v in fields.items()}
+        vals, qs, rs, ls, l1v, ords, Ws = [], [], [], [], [], [], []
+        ok = all(aliasing_ratio(fp[f], pa, cs, dpsi, sigma, dpsi_one)
+                 <= ALIAS_MAX for f in fnames)
         if not ok:
             rejected += 1
             continue
         for tm in T:
+            if pa.onesided:
+                # The reported value, its weight array and its declared bound
+                # all come from the Romberg-in-time rule (see
+                # _romberg_weights). TWO separate truncation bounds are declared
+                # and summed, because the two directions converge for different
+                # reasons: the time bound is the disagreement between the two
+                # extrapolants, the space bound is the plain h-vs-2h difference
+                # in x alone (over-covering, since that direction converges
+                # spectrally).
+                W1 = _romberg_weights(tm, cs, pa, dpsi, dpsi_one, 1)
+                W2 = _romberg_weights(tm, cs, pa, dpsi, dpsi_one, 2)
+                W4 = _romberg_weights(tm, cs, pa, dpsi, dpsi_one, 4)
+                Wx = _romberg_weights(tm, cs, pa, dpsi, dpsi_one, 1, xstep=2)
+                v_h, absum, w2, wl1 = _entry(W1, tm, fp, fnames)
+                v_2, _, _, _ = _entry(W2, tm, fp, fnames)
+                v_4, _, _, _ = _entry(W4, tm, fp, fnames)
+                v_x, _, _, _ = _entry(Wx, tm, fp, fnames)
+                round_h = MACHINE_EPS * absum
+                d1, d2, dx_ = abs(v_h - v_2), abs(v_2 - v_4), abs(v_h - v_x)
+                ns1 = ns2 = 0.0
+                if sigma > 0:
+                    ns1 = sigma * _wnorm(W1 - W2, tm, fp, fnames)
+                    ns2 = sigma * _wnorm(W1 - Wx, tm, fp, fnames)
+                    d1 = max(0.0, d1 - KAPPA * ns1)
+                    d2 = max(0.0, d2 - KAPPA * sigma
+                             * _wnorm(W2 - W4, tm, fp, fnames))
+                    dx_ = max(0.0, dx_ - KAPPA * ns2)
+                # SAME asymptotic-regime discipline as the two-sided ladder: the
+                # extrapolant is 4th order, so |e_h| <= d1 / (2^r - 1) once
+                # refinement really buys accuracy at the observed order r; below
+                # order 2 no Richardson estimate would be honest and the raw
+                # difference stands.
+                r_t = (np.log2(d2 / d1) if d1 > 0 and d2 > 0 else 0.0)
+                if np.isfinite(r_t) and r_t >= MIN_LADDER_ORDER:
+                    r_used = float(np.clip(r_t, MIN_LADDER_ORDER,
+                                           MAX_TRUSTED_ORDER))
+                    q_t = d1 / (2.0 ** r_used - 1.0)
+                else:
+                    q_t = d1
+                q = max(q_t + dx_, round_h, ns1, ns2)
+                if q > UNRESOLVED_REL * max(absum, MACHINE_EPS):
+                    ok = False
+                    break
+                vals.append(v_h); qs.append(q); rs.append(round_h)
+                ls.append(w2); l1v.append(wl1)
+                ords.append(float(r_t))
+                Ws.append(W1)
+                continue
             ladder = []
             for step in (1, 2, 4):
-                v, absum, w2 = _integrate(tm, up[::step, ::step], xs_f[::step],
-                                          ts_f[::step], pa, dpsi)
-                ladder.append((v, absum, w2))
-            v_h, absum, w2 = ladder[0]
-            d1 = abs(ladder[1][0] - ladder[0][0])          # |I_2h - I_h|
-            d2 = abs(ladder[2][0] - ladder[1][0])          # |I_4h - I_2h|
+                sc = [c[::step] for c in cs]
+                fsub = {k: v[tuple(slice(None, None, step) for _ in coords)]
+                        for k, v in fp.items()}
+                W = _weights(tm, sc, pa, dpsi, dpsi_one)
+                ladder.append((_entry(W, tm, fsub, fnames), W))
+            (v_h, absum, w2, wl1), W_h = ladder[0]
+            d1 = abs(ladder[1][0][0] - ladder[0][0][0])    # |I_2h - I_h|
+            d2 = abs(ladder[2][0][0] - ladder[1][0][0])    # |I_4h - I_2h|
             scale = max(absum, MACHINE_EPS)
             round_h = MACHINE_EPS * absum
             # Under declared noise the ladder differences are dominated by the
@@ -490,8 +888,10 @@ def build(u: np.ndarray, x: np.ndarray, t: np.ndarray, terms: list[str],
             # explains before asking whether refinement bought accuracy.
             ns1 = ns2 = 0.0
             if sigma > 0:
-                ns1 = sigma * _ladder_noise(tm, up, xs_f, ts_f, pa, dpsi, 1, 2)
-                ns2 = sigma * _ladder_noise(tm, up, xs_f, ts_f, pa, dpsi, 2, 4)
+                ns1 = sigma * _ladder_noise(tm, fp, cs, pa, dpsi, dpsi_one,
+                                            1, 2, fnames)
+                ns2 = sigma * _ladder_noise(tm, fp, cs, pa, dpsi, dpsi_one,
+                                            2, 4, fnames)
                 d1 = max(0.0, d1 - KAPPA * ns1)
                 d2 = max(0.0, d2 - KAPPA * ns2)
             if d1 <= max(round_h, ns1):
@@ -522,7 +922,9 @@ def build(u: np.ndarray, x: np.ndarray, t: np.ndarray, terms: list[str],
             qs.append(max(q, round_h))
             rs.append(round_h)
             ls.append(w2)
+            l1v.append(wl1)
             ords.append(float(r))
+            Ws.append(W_h)
         if not ok:
             rejected += 1
             continue
@@ -530,12 +932,50 @@ def build(u: np.ndarray, x: np.ndarray, t: np.ndarray, terms: list[str],
         quad.append(qs)
         rnd.append(rs)
         l2.append(ls)
+        l1s.append(l1v)
         orders.append(ords)
         kept.append(pa)
-        grams.append(_noise_gram(T, up, xs_f, ts_f, pa, dpsi))
+        grams.append(_noise_gram(T, Ws, fp, fnames))
     return WeakSystem(A=np.array(rows, float), names=[tm.name for tm in T],
                       patches=kept, quad=np.array(quad, float),
                       roundoff=np.array(rnd, float),
                       noise_l2=np.array(l2, float),
+                      field_l1=np.array(l1s, float),
                       order=np.array(orders, float), rejected=rejected,
                       gram=np.array(grams, float) if grams else None)
+
+
+# --------------------------------------------------------------------------
+# Initial-condition columns (state certificates, docs/DIRECTION_PDE_STATE.md)
+# --------------------------------------------------------------------------
+
+def ic_columns(basis, x: np.ndarray, patches: list[Patch], *, p: int = 16,
+               nodes: int = 400) -> tuple:
+    """The boundary columns B[i, j] = int phi_i(x, t0) b_j(x) dx, and their
+    declared quadrature error.
+
+    These are the pleasant asymmetry of a state certificate: phi is analytic and
+    the basis is declared, so the columns carry NO DATA ERROR AT ALL -- only the
+    quadrature error of an integral of two known smooth functions, which
+    Gauss-Legendre drives to the float floor. They are computed OFF the data
+    grid on purpose: nothing about the measurement enters them.
+
+    Returns (B, err) with err[j] the per-column bound, measured by doubling the
+    node count (a convergence check, never an assumed exactness).
+    """
+    psi = bump_derivatives(p, 0, onesided=False)[0]
+
+    def quad(n):
+        out = np.zeros((len(patches), len(basis)))
+        z, w = np.polynomial.legendre.leggauss(n)
+        for i, pa in enumerate(patches):
+            xs = pa.centers[0] + pa.halfwidths[0] * z
+            ww = w * pa.halfwidths[0] * psi(z)
+            for j, b in enumerate(basis):
+                out[i, j] = float(np.sum(ww * np.asarray(b(xs), float)))
+        return out
+
+    B = quad(nodes)
+    Bc = quad(nodes // 2)
+    err = np.max(np.abs(B - Bc), axis=0) + MACHINE_REL * np.max(np.abs(B), axis=0)
+    return B, err

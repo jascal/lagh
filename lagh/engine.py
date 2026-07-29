@@ -14,8 +14,9 @@ from itertools import combinations
 import numpy as np
 import sympy as sp
 
-from .base import (Candidate, admissible, design_matrix, lstsq, snap_all,
-                   to_expr, eval_expr)
+from .base import ALWAYS, Candidate, admissible, design_matrix, lstsq
+from .base import Term as BaseTerm
+from .base import eval_expr, snap_all, to_expr
 from .certify import (MACHINE_REL, Abstain, Certificate,
                       arbitrate_significance, check, coherent, epsilon,
                       float_pinned, free_atoms, gated_atoms,
@@ -45,6 +46,10 @@ class Ctx:
                                  # split, when the caller has one (weak-form
                                  # rows): the prefilter is stated in relative-y
                                  # units, which such rows do not obey
+    linear_basis: bool = False   # the claim is a LINEAR COMBINATION of the
+                                 # declared columns (a weak-form PDE always is),
+                                 # so proposal is exhaustive over supports and
+                                 # the engine builds no products/powers of them
 
 
 @dataclass
@@ -81,6 +86,35 @@ def _significance_gate(cert: Certificate) -> Certificate:
     return cert
 
 
+LINEAR_BASIS_BUDGET = 20000     # exhaustive-support budget (see _basis_supports)
+
+
+def _basis_supports(T: int, budget: int = LINEAR_BASIS_BUDGET) -> tuple:
+    """Every support up to the largest size the budget affords, EXHAUSTIVELY.
+
+    For a DECLARED linear basis the candidate space is the library itself, so
+    proposal should be complete rather than greedy: measured on the PDE system
+    stages, a 5-term true support over 8 declared columns was proposed by
+    neither STLSQ, OMP, nor the size-5-from-top-6-singles rule, and the engine
+    returned ZERO candidates while the truth sat 4 orders inside its own band.
+    Greedy proposal is the right tool for an open-ended library; for a registered
+    one it is a hole.
+
+    Returns (supports, max_exhaustive_size) -- the size is reported, never
+    silently capped: above it the greedy channels still contribute.
+    """
+    from math import comb
+    sups, count, reached = set(), 0, 0
+    for size in range(1, T + 1):
+        c = comb(T, size)
+        if count + c > budget:
+            break
+        sups |= set(combinations(range(T), size))
+        count += c
+        reached = size
+    return sups, reached
+
+
 def _linear_candidates(ctx: Ctx) -> list[Candidate]:
     M_tr = design_matrix(ctx.terms, ctx.X_fit)
     M_va = design_matrix(ctx.terms, ctx.X_sel)
@@ -88,6 +122,8 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
     y_va = np.asarray(ctx.y_sel, float).ravel()
     yscale = float(np.sqrt(np.mean(y_va**2))) + 1e-300
     sups = stlsq_supports(M_tr, y_tr)
+    if ctx.linear_basis:
+        sups |= _basis_supports(len(ctx.terms))[0]
     sups |= {c for size in (1, 2) for c in combinations(range(len(ctx.terms)), size)}
     # Targeted size-3..5 supports from the best singles -- the same measured
     # lesson as C2's pairs/triples fix, finally applied to the linear channel:
@@ -246,8 +282,24 @@ def _linear_candidates(ctx: Ctx) -> list[Candidate]:
 
 def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
                      X_cert, sigma: float = 0.0,
-                     band_sel: np.ndarray | None = None) -> list[Candidate]:
-    """All candidates available at `tier`, lower tiers included."""
+                     band_sel: np.ndarray | None = None,
+                     linear_basis: bool = False) -> list[Candidate]:
+    """All candidates available at `tier`, lower tiers included.
+
+    `linear_basis` restricts the space to linear combinations of the DECLARED
+    columns: no powers, no products, no transforms. That is not a shortcut, it
+    is what the declaration says -- a weak-form PDE law IS a linear combination
+    of its library's columns, and letting the general curriculum build
+    x_0**3*x_1 out of patch integrals produces laws like u_xx*[1]**(3/2), the
+    measured C1b failure. It also shrinks |H|, which tightens alpha honestly.
+    """
+    if linear_basis:
+        base = [BaseTerm("1", lambda X: np.ones(len(X)), ALWAYS, 1)]
+        base += [BaseTerm(f"x_{j}", (lambda j: lambda X: X[:, j])(j), ALWAYS, 1)
+                 for j in range(dim)]
+        ctx = Ctx(syms, admissible(base, X_fit, X_cert), X_fit, y_fit, X_sel,
+                  y_sel, sigma, band_sel=band_sel, linear_basis=True)
+        return _linear_candidates(ctx)
     active = [(t, m) for t, m in CURRICULUM if t <= tier]
     base_terms = []
     for t, mod in active:
@@ -297,7 +349,8 @@ def _tier_candidates(tier: int, syms, dim, X_fit, y_fit, X_sel, y_sel,
 def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              sigma: float = 0.0, se_cert=None, floor_abs: float = 1e-12,
              max_tier: int = 7, hard_cert=None, eps_model=None,
-             declared_basis: bool = False, band_sel=None) -> Result:
+             declared_basis: bool = False, band_sel=None,
+             linear_basis: bool = False) -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
     Splits must be disjoint: fit, select, certify. Certification is exhaustive on
@@ -313,6 +366,17 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     corresponding failure mode there is on-shell degeneracy, which the
     multi-solution holdout closes instead. Default False -- no existing caller
     changes behaviour, and switching it on is a declaration the caller makes.
+
+    `linear_basis` goes one step further and says the claim is a LINEAR
+    COMBINATION of those columns -- which a weak-form PDE law always is, since
+    every candidate term is already a column. The engine then proposes supports
+    EXHAUSTIVELY over the library instead of greedily, and builds no powers,
+    products or transforms of the columns. Both halves matter and both were
+    measured: the greedy channels proposed nothing at all for a 5-term true
+    support over 8 declared columns (PDE system stage 2, where the truth sat 4
+    orders inside its own band), and the general curriculum's products of patch
+    integrals are the C1b `u_xx*[1]**(3/2)` failure. Default False; it is a
+    declaration about the claim, not a search-budget knob.
     """
     X_fit = np.asarray(X_fit, float)
     X_cert = np.asarray(X_cert, float)
@@ -409,7 +473,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     # nonpositive output = log|phi|), the general library under-determines the exponent
     # (fractional-power impostors); this restricted grammar makes the true form unique.
     # Tried BEFORE the general fallthrough but only on its domain.
-    if max_tier >= 7 and dim == 1 and c7_levy.is_levy_domain(X_fit, y_fit):
+    if max_tier >= 7 and dim == 1 and not linear_basis \
+            and c7_levy.is_levy_domain(X_fit, y_fit):
         class _Ctx:
             pass
         cx = _Ctx(); cx.X_fit, cx.y_fit = X_fit, y_fit
@@ -444,7 +509,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     # applies the FULL verdict machinery (certification, coefficient gate,
     # coherence on the extended probe, pinned); a unique certifying class returns,
     # anything else falls through to the untouched escalation loop.
-    if dim >= 3 and max_tier >= 3 and not floor_dom:
+    if dim >= 3 and max_tier >= 3 and not floor_dom and not linear_basis:
         from .classes import c3_powerlaw, c8_angular, c9_genmonomial
         pctx = Ctx(syms, [], X_fit, y_fit, X_sel, y_sel, sigma)
         pcands = (c3_powerlaw.candidates(pctx) + c9_genmonomial.candidates(pctx)
@@ -496,9 +561,11 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             # ambiguity or unpinned -> the full loop decides (conservative)
 
     total = 0
-    for tier in [t for t, _ in CURRICULUM if t <= max_tier]:
+    tiers = [1] if linear_basis else [t for t, _ in CURRICULUM if t <= max_tier]
+    for tier in tiers:
         cands = _tier_candidates(tier, syms, dim, X_fit, y_fit, X_sel, y_sel,
-                                 X_cert, sigma, band_sel=band_sel)
+                                 X_cert, sigma, band_sel=band_sel,
+                                 linear_basis=linear_basis)
         total += len(cands)
         certifying = []
         for c in sorted(cands, key=lambda z: z.complexity):

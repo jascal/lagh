@@ -165,14 +165,22 @@ determined. ~~(b) the verify track~~ — done, C2: every one of 18 certificates 
 inside its declared band from a fifth, unseen initial condition, and a
 10x-interval-wrong law fails at ~95% of points. It forced the
 initial-condition-noise term into the band and the law-verify / data-verify
-split. Then, both scoped 2026-07-28 after POSITIVE scoping probes and each with its
-own direction doc: **systems of PDEs** (`DIRECTION_PDE_SYSTEMS.md` — the linear
-coupled case already certifies with no factory change) and **state
-certificates**, i.e. inverting for initial conditions (`DIRECTION_PDE_STATE.md`
-— a different KIND of claim from a law, deliberately kept separate; the
-resolution curve measures as sigma*exp(+nu k^2 T), the exact inverse of the
-forward decay). Then (c) variable coefficients and conservation-law form; then
-(d) PDEBench, and only then the traffic case study.
+split. ~~systems of PDEs~~ — done, C3 (`CASE_STUDY_PDE_C3.md`): the whole
+curriculum certifies, linear coupled through **2-D Navier–Stokes vorticity**,
+with a conjoined union-bound α; it added multi-field terms, n-dimensional patch
+geometry, a MEASURED field-error channel for solver-produced fields, and the
+`linear_basis` engine declaration. ~~state certificates~~ — done, C4
+(`CASE_STUDY_PDE_C4.md`): initial conditions inverted mode by mode with
+UNDETERMINED as a first-class outcome, per-mode intervals as exact LP
+projections of the feasible set, and the exponential ill-posedness located where
+it actually lives (back-propagation, not the reading). Conservation-law form
+came free with C3 stage 3 (shallow water certifies `h_t = −(hu)_x` with
+coefficient exactly −1).
+
+**Next (in order):** (d) **PDEBench** — the pre-flight registration is
+`PDEBENCH_READINESS.md` and the loader/declaration is
+`experiments/pde/pdebench.py`; then (c) variable coefficients; then the traffic
+case study.
 
 One general question the ladder raised and did not settle: **should
 interval-parameter certificates be the default under any declared noise**, not

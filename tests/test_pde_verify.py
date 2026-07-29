@@ -29,6 +29,29 @@ def test_forecast_reproduces_an_exact_solution():
     assert np.max(np.abs(got - u)) < 1e-9
 
 
+def test_the_exponential_scheme_agrees_with_the_explicit_one():
+    """The ETD scheme exists because explicit RK45 is diffusion-limited on
+    PDEBench-scale grids; it must be the SAME equation, not a different one."""
+    u = heat()
+    a = integrate(u[:, 0], X, T, {"u_xx": 0.1}, rtol=1e-10)
+    b = integrate(u[:, 0], X, T, {"u_xx": 0.1}, scheme="etd", nsub=32)
+    assert np.max(np.abs(a - b)) < 1e-9
+    # ...including with the nonlinearity, where the two schemes differ in how
+    # they step but not in what they solve
+    u0 = 0.3 * np.sin(X) + 0.1 * np.cos(2 * X)
+    a = integrate(u0, X, T, {"u_xx": 0.2, "u*u_x": -1.0}, rtol=1e-11)
+    b = integrate(u0, X, T, {"u_xx": 0.2, "u*u_x": -1.0}, scheme="etd",
+                  nsub=256)
+    assert np.max(np.abs(a - b)) < 1e-8
+
+
+def test_the_exponential_scheme_declares_its_error_on_a_substep_ladder():
+    u = heat()
+    y, b = solver_bound(u[:, 0], X, T, {"u_xx": 0.1}, scheme="etd", nsub=16)
+    assert isinstance(b, float) and b > 0
+    assert np.max(np.abs(y - u)) <= b + 1e-12
+
+
 def test_solver_bound_is_scalar_and_covers_the_ladder():
     u = heat()
     y, b = solver_bound(u[:, 0], X, T, {"u_xx": 0.1}, rtol=1e-9)

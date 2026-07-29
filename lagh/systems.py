@@ -25,6 +25,21 @@ _NULL_TOL = 1e-6          # singular-direction threshold (relative to largest)
 _SPARSE_DROP = 0.02       # coefficient sparsification threshold (relative)
 
 
+def union_alpha_log10(alphas) -> float | None:
+    """log10 of the union bound over conjoined claims: log10(sum 10^a), which is
+    max + log10(count) to the precision that matters.
+
+    A system certificate conjoins several claims, so its false-certification
+    bound is the SUM of theirs -- dominated by the WEAKEST member. Reporting the
+    strongest, or a product, would make the conjunction look stronger than any
+    of its parts. Shared by the LawSystemBench pass and the PDE-system pass so
+    both report the same currency."""
+    a = [x for x in (alphas or []) if x is not None]
+    if not a:
+        return None
+    return float(max(a) + np.log10(len(a)))
+
+
 @dataclass
 class SystemCertificate:
     equations: dict = field(default_factory=dict)     # target_col -> result dict
@@ -262,7 +277,5 @@ def discover_system(data: dict, *, sigma: float = 0.0, seed: int = 0,
               if e["alpha_log10"] is not None]
     alphas += [iv["alpha_log10"] for iv in cert.invariants
                if iv["alpha_log10"] is not None]
-    if alphas:
-        # union bound in log space: log10(sum 10^a) ~ max + log10(count)
-        cert.alpha_log10_total = float(max(alphas) + np.log10(len(alphas)))
+    cert.alpha_log10_total = union_alpha_log10(alphas)
     return cert
