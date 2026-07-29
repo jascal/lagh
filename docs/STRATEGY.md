@@ -134,3 +134,67 @@ Decision: keep developing lagh against NewtonBench-dev to the readiness bar; bui
 (MCP) so lagh/i-orca become LLM-orchestrated; then a single blind read of a reserved benchmark on
 our schedule. The externally-adjudicated live win remains desirable but is not currently available;
 watch for a new competition (esp. calibration-scored) rather than force a dead one.
+
+---
+
+## Reconnaissance: a third category (added 2026-07-29, after PDEBench)
+
+The taxonomy above has two members: a benchmark is **DEV** (used freely, its
+numbers are dev metrics, never a headline) or **BLIND** (sealed, read once,
+scored). PDEBench fitted neither, and the cost of not noticing that in advance
+was paid in a single long session.
+
+A **RECONNAISSANCE** pass is first contact with a data source whose character is
+not yet known. Its purpose is to characterize the SOURCE, not to score the
+instrument. What makes it a category rather than an excuse is that it carries its
+own registration, and the registration is about the data:
+
+> Before opening the files, state what the source is expected to BE — its error
+> scale and kind, whether its stated laws are expected to hold, what would count
+> as the pass failing — and state what follows from each answer.
+
+`PDEBENCH_READINESS.md` registered three declarations (float32 σ_rep, an
+undeclarable solver error, geometry checks) and all three earned their place. But
+they were declarations about **mechanics** — how to load, what to declare — not
+predictions about the target. Nothing was registered that the first run could
+FALSIFY. So when the truth check fired at 1185× on the opening run, it arrived as
+a surprise to be interpreted rather than as a prediction being cleanly refuted,
+and everything downstream was mid-course correction: the DEV reclassification,
+the pipeline-decode reframing, inventing "report the required declaration" for
+CFD. Each was right; each cost more than it should have.
+
+The single line that was missing:
+
+> **The shipped fields' deviation from their own stated laws will be at or below
+> storage precision.** If it is not, the target is model output whose generating
+> error dominates, the exercise is pipeline decode rather than discovery, and no
+> score is available from it.
+
+That is falsifiable in the first hour, and it was false by four orders of
+magnitude. The whole framing of the pass would have been its *starting* position.
+
+### The gating rule this forces
+
+A reconnaissance pass finds defects — PDEBench found eight — and the temptation
+is to fix them in place and keep going. But **a pass with nothing registered
+cannot tell you whether a change made during it is an improvement**: there is no
+baseline anyone committed to in advance, so "the new number looks better" is not
+evidence. Therefore:
+
+> **An engine change discovered while mining an uncharacterized target is SCOPED
+> to that target's path until it has been validated against the campaigns that
+> predate it.** Prove identity by construction where possible; measure it where
+> not.
+
+Measured on 2026-07-29, and the rule is not decorative. The coherence early exit
+(a 119× speedup on the case that motivated it) was first wired into the main
+`discover` path, where an audit found it could turn an arbitrated winner into a
+structural abstain on an open-ended library — `arbitrate_significance` scores a
+class by its min-complexity representative while the exit tested the member that
+opened the class, and complexity is not dof. Conservative, never a false
+certificate, but a **reach regression**, which is not a Pareto improvement. Gated
+behind `linear_basis`, the change keeps its speedup and every campaign that
+predates it is bit-identical by construction rather than by testing. The one
+change that could NOT be gated (reading a linear candidate's coefficients instead
+of differentiating it symbolically) was validated the other way: the C1 ladder
+re-run bit-identical across all 15 rungs.
