@@ -1,5 +1,14 @@
 # PDEBench readiness
 
+> **Superseded in one respect (2026-07-29): PDEBench is a DEV target, not a
+> blind read.** The pre-flight below is what the first pass ran and it stands as
+> written; what did not survive contact is the assumption that a run against it
+> could be scored. See `CASE_STUDY_PDEBENCH.md` § "Why this is dev and not a
+> read" — the short version is that the band's dominant term has to be chosen
+> per file, choosing it requires the answer, every family costs a convention
+> hunt, and the benchmark's own leaderboard scores forecasting surrogates, so
+> there is no frozen number to be blind against.
+
 **Written 2026-07-28, after C3 (systems) and C4 (state certificates).** This is
 the pre-flight list for pointing the weak-form instrument at PDEBench, and the
 statement of what it can and cannot claim there. It is deliberately written

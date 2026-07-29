@@ -69,11 +69,20 @@ def integrate(u0, x, t_eval, coeffs, *, rtol=1e-10, atol=1e-12,
     c_x = coeffs.get("u_x", 0.0)
     c_xxx = coeffs.get("u_xxx", 0.0)
     c_u = coeffs.get("u", 0.0)
+    # POINTWISE reaction terms: a reaction-diffusion law is u_t = nu u_xx +
+    # rho u (1 - u), whose quadratic part is a plain function of u, not a
+    # divergence. Omitting them does not make the reference solve a slightly
+    # different equation, it makes it solve a different problem (measured: the
+    # deviation came back at 0.875 of the field scale, which is the missing
+    # reaction, not the shipped solver's error).
+    c_u2 = coeffs.get("u^2", 0.0)
+    c_u3 = coeffs.get("u^3", 0.0)
 
     if scheme == "direct":
         def rhs(_, u):
             ux, uxx, uxxx = _spectral_derivs(u, k)
-            return c_xx * uxx + c_uux * u * ux + c_x * ux + c_xxx * uxxx + c_u * u
+            return (c_xx * uxx + c_uux * u * ux + c_x * ux + c_xxx * uxxx
+                    + c_u * u + c_u2 * u ** 2 + c_u3 * u ** 3)
 
         sol = solve_ivp(rhs, (t_eval[0], t_eval[-1]), u0, t_eval=t_eval,
                         method="RK45", rtol=rtol, atol=atol)
@@ -92,10 +101,15 @@ def integrate(u0, x, t_eval, coeffs, *, rtol=1e-10, atol=1e-12,
         lam[-1] = -c_xx * k[-1] ** 2 + c_u
 
     def nonlinear(U):
-        if not c_uux:
+        if not (c_uux or c_u2 or c_u3):
             return np.zeros_like(U)
         u = np.fft.irfft(U, n)
-        return c_uux * ik * np.fft.rfft(0.5 * u * u)
+        out = np.zeros_like(U)
+        if c_uux:
+            out = out + c_uux * ik * np.fft.rfft(0.5 * u * u)
+        if c_u2 or c_u3:
+            out = out + np.fft.rfft(c_u2 * u ** 2 + c_u3 * u ** 3)
+        return out
 
     U = np.fft.rfft(np.asarray(u0, float))
     out = np.empty((n, len(t_eval)))

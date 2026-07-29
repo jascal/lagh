@@ -1,4 +1,11 @@
-# PDEBench — first pass — registration and results
+# PDEBench — DEV — registration and results
+
+> **PDEBench is a DEV target, not a blind read** (decided 2026-07-29, user call,
+> during this pass). Everything below is a dev result and is tagged `empirical`;
+> no score, ranking or win/lose claim is made or is available to be made. The
+> reasons are in "Why this is dev and not a read" below, and they are reasons of
+> KIND — the same session that produced these numbers also produced the evidence
+> that a read is not the right instrument here.
 
 **Run 2026-07-29**, against the published PDEBench data (DaRUS
 `doi:10.18419/darus-2986`), following the pre-flight registered the night before
@@ -74,6 +81,48 @@ reaches on its own exact fields (C1). The certificate is honest and weak, and it
 is weak for a reason that is a property of the benchmark rather than of the
 method.
 
+## Why this is dev and not a read
+
+A blind read freezes SOTA and protocol before download, runs once, and reports
+win, lose or mixed. Four things make that impossible here, and three of them
+were demonstrated by this pass rather than argued in advance:
+
+1. **The band's dominant term is chosen by the analyst, per file.** The declared
+   field error is what holds these certificates to β ± 17%, and it was set after
+   the truth check showed σ_rep alone could not work. A protocol in which the
+   binding parameter is picked once the answer is in view is a dev loop, however
+   carefully each individual step is declared.
+2. **Recovering the truth requires the truth.** The measurement that sets the
+   field error uses the file's own stated law (exactly for advection, via an
+   independent solve otherwise). Using the answer to build the band and then
+   reporting recovery of the answer is not a test of discovery.
+3. **Every family costs a convention hunt.** β is signed as `u_t + β u_x = 0`;
+   Burgers' `Nu0.01` is ν/π, not ν; the reaction–diffusion family did not match
+   `u_t = ν u_xx + ρu(1−u)` at its filename's parameters at all (the field
+   homogenizes by t ≈ 0.25 and the mean then stops moving, which no logistic
+   growth at ρ = 1 does). Those are not discoveries about physics, they are
+   discoveries about a file format. Scoring them would be scoring the analyst.
+4. **There is no SOTA to be blind against.** PDEBench's leaderboard scores
+   forecasting surrogates. Nothing on it answers "does a law certify, and over
+   what domain", so there is no frozen number a read could win or lose against.
+   The honest comparators (PDE-FIND, WSINDy) are not on that board and would
+   have to be run here, which is itself a dev exercise.
+
+The pass is still worth its cost, and what it bought is worth stating plainly:
+three real defects in this program's own code, one hard measurement about the
+benchmark's data (below), and a working end-to-end path from a published file to
+a certificate. Those are dev deliverables and they are exactly what a dev target
+is for.
+
+**What a genuine evaluation would need**, if one is ever wanted: a band rule
+fixed in advance and applied unchanged to every file (for example, "declare the
+field error from an independent solve, refuse where the reference is not clearly
+better"), conventions taken from the benchmark's own metadata rather than
+reverse-engineered per family, abstention counted as a permitted answer rather
+than a failure, and a comparator run under the same rule. That is a different
+project from this one, and it should be registered as such rather than grown out
+of this pass.
+
 ## What this pass does NOT claim
 
 - Not a comparison against PDEBench's leaderboard. That board scores forecasting
@@ -128,11 +177,24 @@ The exponential integrator added for this run does it in 0.09 s
   diagnosed by asking whether the TRUE law sits inside its own band before
   reading anything into the abstain.
 
-## Next
+## Open, and unresolved as of the reclassification
 
-The registered next steps are the remaining 1-D families
-(diffusion–reaction, CFD — the last is non-periodic, so weak-form
-certification runs without the spectral verify track and must say so), then the
-2-D families using the geometry C3 stage 4 exercised. The FNO-as-proposer
-extension registered in `PDEBENCH_READINESS.md` can now be scored against this
-pass's ground truth.
+**1-D reaction–diffusion does not match its filename's parameters.** Loaded and
+geometry-checked cleanly (id 133177, `ReacDiff_Nu0.5_Rho1.0`), but the stated law
+`u_t = 0.5 u_xx + u(1−u)` misses by 73% of the field scale pointwise, an
+unconstrained fit over the library does no better (41%), the spatial content
+collapses to k = 0 by t ≈ 0.25, and the mean then stops moving — which logistic
+growth at ρ = 1 does not do. Either the family is parameterized differently or
+the file is being read wrongly; **no certificate was produced and none is
+claimed.** The truth check refused, which is the correct behaviour and is the
+reason this is recorded as an open question rather than a result.
+
+## Next, as a dev target
+
+Not a queue of families to score. The useful work here is whatever exercises the
+instrument on data it did not generate: the 2-D families (`2D_diff-react` is a
+1000-group layout and is a reaction–diffusion SYSTEM in 2-D, which would exercise
+C3's stage 2 and stage 4 together), and the non-periodic 1-D CFD sets, where
+weak-form certification runs without the spectral verify track and has to say so.
+The FNO-as-proposer extension in `PDEBENCH_READINESS.md` remains the more
+interesting direction, and it does not need a benchmark score to be worth doing.
