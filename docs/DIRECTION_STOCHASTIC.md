@@ -63,6 +63,40 @@ rather than an implementation detail. Three options:
 calibrated, and (3) deferred out of the minimal suite.** A run that cannot state
 its coverage refuses.
 
+### ANSWERED 2026-07-29: what κ means for an intrinsic term
+
+The question option (1) left open — what κ means when the dominant term is
+intrinsic, and how a union bound over n patches enters α — is settled in
+`certify.coverage_factor`, and in full in `STOCHASTIC_CHECKER.md` §1. The short
+form: the tool is the **exponential martingale inequality**, not a Gaussian
+quantile. For any V > 0,
+
+    P( |M_p| ≥ κ√V  and  ⟨M_p⟩ ≤ V )  ≤  2 exp(−κ²/2)
+
+which is pathwise and assumes no Gaussianity, no CLT and no independence.
+Exhaustiveness over n rows costs a union bound, and inverting for a declared
+false-abstain budget δ gives **κ(n, δ) = √(2 ln(2n/δ))**. Four consequences:
+
+* **The continuity is numerical, not rhetorical.** κ(300, 0.05) = **4.334**
+  against the existing constant `KAPPA = 4`. What the constant never had is the
+  budget: κ = 4 over 300 rows buys δ = 0.20 under the martingale bound, 0.019
+  under an exact Gaussian tail — and past ~1491 rows it states **no coverage at
+  all**, which is worth knowing since weak-form runs carry thousands of patches.
+* **κ becomes a function of the run** and is reported with (n, δ). The checker
+  refuses an answer whose κ does not meet its own stated budget at its own row
+  count, which is what makes this answer load-bearing rather than decorative.
+* **The band's scale is measured and never by the candidate.** V bounds
+  ⟨M_p⟩ = ∫φ²f'²b²dt, which depends on `b` — one of the objects being
+  discovered. A candidate that set its own band could widen it at will: the
+  loose-ε failure mode, self-serving. So V comes from realized quadratic
+  variation (a functional of the DATA), with only the φ²f'² weights coming from
+  the test function, and a residual-derived scale is refused as circular.
+* **The union bound enters α through the DISJOINT patch count, and the trade is
+  favourable.** q^h assumes independent held-out rows and overlapping patches
+  share the driving path, so the honest count is the number of patches with
+  disjoint support and it must be stated. Then κ grows like √(2 ln n) — 4.33 at
+  300 rows, 5.08 at 10 000 — while log α gains linearly in h. See S7.
+
 ## Strategic classification: a DEV instrument, not a win vehicle
 
 `STRATEGY.md` separates dev targets from the sealed blind read, and this suite
@@ -139,6 +173,17 @@ invariant discovery as a bonus. **Any confident-wrong dominates the ranking.**
 - **S1.** OU: the drift certifies with intervals containing the truth wherever
   the martingale band is not vacuous, and the interval half-width scales as the
   CLT rate `σ/√(N·T)` — measurable across trajectory count and horizon.
+  **MEASURED 2026-07-29 (`CASE_STUDY_STOCHASTIC_L0.md`): HALF FALSE.** The
+  intervals contain the truth throughout. The width improves with the WINDOW
+  LENGTH — the T half, consistent with `1/√L` though the sweep is single-seed so the
+  exponent is indicative — and **does not improve at all** in the row count: 3.39 at
+  144 rows, 3.39 at 576, on one fixed path set. The reason is the coverage factor
+  itself, and it
+  is structural rather than incidental: an exhaustive per-row band admits a
+  coefficient only if every row accepts it, and `κ(n,δ)² = 2 ln n + 2 ln(2/δ)`
+  grows exactly fast enough to cancel the √n averaging gain. The union bound's
+  cost IS the averaging gain. A reach limit of the exhaustive doctrine under
+  intrinsic noise, not a soundness problem.
 - **S2.** The drift/diffusion asymmetry appears as stated: at fixed sample count,
   shortening Δt at fixed T tightens the DIFFUSION interval and not the drift's;
   extending T at fixed Δt tightens the DRIFT interval and not the diffusion's.
@@ -155,6 +200,20 @@ invariant discovery as a bonus. **Any confident-wrong dominates the ranking.**
   known σ, and a known process-vs-measurement decomposition. The error-provenance
   characterizer (`lagh/errormodel.py`) separates them, scoring P1–P6 of
   `DIRECTION_ERROR_PROVENANCE.md` on more than two cases.
+- **S7 (added 2026-07-29 with the κ answer).** Patch count is a strictly winning
+  resource: the coverage factor costs √(2 ln n) while α's exponent gains linearly
+  in the disjoint held-out count, so certifying over MORE patches tightens α
+  faster than it loosens the band. **AMENDED after Level 0: measurable only where
+  the drift ACCUMULATES.** On a stationary drift the martingale band exceeds the
+  target's own range, so the per-row chance-match `q = min(1, 2ε/range(y))`
+  saturates at 1 and α is vacuous — the significance bound says nothing in the
+  regime where the drift is pure fluctuation. That is itself a result, and it puts
+  S7's test on GBM rather than OU. Measurable by holding Δt and T fixed and
+  varying the patch family alone — the band widens 17% from 300 to 10 000 rows
+  while log α improves ~32× (the per-row chance-fit contribution loses ~3% to the
+  wider band; the row count multiplies by 33). This is the opposite of the usual
+  multiple-comparisons intuition and is the reason the regime is workable; if it
+  fails, the independence discount (`n_disjoint`) is the thing that is wrong.
 
 ## Why this is worth doing now
 
@@ -212,24 +271,63 @@ framing.
      conjectured closure, per the traffic plan) rather than a per-verdict
      record, and is the lowest priority of the five.
 1. Register the certificate-kind decision (above) and the checker's interface.
-   **STATUS 2026-07-29: half done, and its dependency is met.** The
-   certificate-kind decision is registered above (coverage-factor calibration,
-   fallback to almost-sure objects, statistical-certificate class deferred).
-   Two things remain, and the first constrains the second:
-   * **What κ means when the dominant term is INTRINSIC rather than
-     observational, and how a union bound over n patches enters α.** Posed in
-     that section and not answered. A design conversation, not code.
-   * **Freeze the checker interface** against `certify.determination` — the
-     vocabulary step 0 existed to provide, now covering structure, interval,
-     mode and domain. Interval COVERAGE scoring maps directly onto those
-     records; a domain-qualified verdict refuses to conjoin across domains. It
-     is scored against, so it must be frozen before Level 0 tasks exist.
-   One constraint carried in from the PDEBench correction: **a declared error
-   belongs to a CONSUMER, not to a dataset** — this checker will have more than
-   one consumer of "noise intensity", and each must state which quantity it
-   bounds. See `STRATEGY.md`, and `DIRECTION_ERROR_PROVENANCE.md` for what it
-   cost to learn.
+   **DONE 2026-07-29 — `docs/STOCHASTIC_CHECKER.md`, `lagh/stochcheck.py`,
+   `certify.coverage_factor`/`coverage_budget`, 32 tests.** Both halves:
+   * The certificate-kind decision is registered above, and the κ question it
+     left open is answered above (§ *ANSWERED*) and in full in
+     `STOCHASTIC_CHECKER.md` §1. The martingale inequality is itself measured in
+     simulation rather than trusted.
+   * The checker interface is **frozen** against `certify.determination`, with
+     `test_the_interface_is_frozen` as the lock — every vocabulary tuple and
+     dataclass field list asserted verbatim. Component claims travel only in a
+     determination record, so lagh's own verdicts are submissions by
+     construction; five outcomes with `confident-wrong` first in the ranking key;
+     silence is not abstention; a procedural refusal voids credit but not
+     exposure; domain-qualified answers are scored on their own domain.
+   * One hole found and closed while freezing: a key rewarding COVERAGE alone can
+     be topped by submitting [-1e9, 1e9] everywhere — covered on every component
+     with zero confident-wrongs. `certify.vacuous`'s doctrine now applies per
+     component (an interval must be tighter than 2·TAU of the task's coefficient
+     scale to count as a determination), and determinations rank ahead of
+     coverage. A vacuous answer is not wrong, just worth nothing.
+   The constraint carried in from the PDEBench correction — **a declared error
+   belongs to a CONSUMER, not to a dataset** (`STRATEGY.md`,
+   `DIRECTION_ERROR_PROVENANCE.md`) — is discharged as validation: three
+   consumers (`drift-band`, `diffusion-qv`, `observation`), each stating the
+   quantity and units it bounds, and a submission that gives one magnitude two
+   jobs is refused. The declaration audit reports declared/true per consumer and
+   flags a decade either way, so the 3900× over-declaration that took a session
+   to find is now a column in the score sheet.
 2. Level 0 — three systems, mostly existing machinery, calibrate κ.
+   **DONE 2026-07-29 — `docs/CASE_STUDY_STOCHASTIC_L0.md`, `lagh/ito.py`,
+   `experiments/stochastic/`.** The deliverable landed: the band holds on every row
+   in 0/40 replicate failures at every declared δ from 0.5 to 0.01, conservatively
+   (the worst row across 40 runs reached 0.97 of its band at δ = 0.5). Five headline
+   results beyond it, three of them corrections:
+   * **The generator's f-family is not optional.** With `f = x` alone a stationary
+     drift is vacuous at EVERY window size, because `E[a(X)] = 0` under any
+     stationary law. `f = x²/2` makes it accumulate, and the identifiability
+     condition is **θ·L > 2κ(n,δ)²**.
+   * **S1 is half false** (above), and the coverage factor is why.
+   * **One confident-wrong, found by the frozen checker on its first real
+     producer, and fixed.** Realized quadratic variation of a noisily-observed path
+     estimates `[X] + 2nσ_obs²`: conservative in the band's scale, a systematic
+     offset in the Itô correction on the target. One measured quantity, two
+     consumers, safe for one and unsafe for the other — the declaration rule
+     arriving in a new form. Debias + refuse the rows the declaration explains +
+     build the observational Gram (which had been a silent no-op).
+   * **Two defects in code that predates the run**: `invariant_content`'s claim
+     overstated what it computes (a range over the certifying set the SEARCH found
+     is not a bound over the laws that exist — measured excluding a law that
+     certifies), now corrected and joined by `certify.admissible_interval`, an LP
+     bound that does hold; and passing `sigma=0` with a martingale band told the
+     engine the data was clean, producing a false exact rational for a
+     diffusion-scale coefficient and a narrowed rival search.
+   * **The registered headline is NOT met at Level 0.** The drift's symbolic FORM
+     did not certify on any Level 0 system with the declared 4-term library. The
+     abstains are honest — the LP proves the admissible set contains materially
+     different laws — and the output is partial determination with sound covering
+     bounds. Read as reach short of the claim, not the claim met.
 3. The Itô/generator weak form in `lagh/weakform.py` (new terms, same discipline).
 4. Level 1.
 5. Level 2, as the error-provenance testbed.

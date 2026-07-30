@@ -1,0 +1,841 @@
+{
+ "level": 0,
+ "seconds": 151.3,
+ "library": [
+  "1",
+  "x",
+  "x**2",
+  "x**3"
+ ],
+ "A_kappa_calibration": {
+  "ou": {
+   "n_rows": 36,
+   "by_delta": {
+    "0.5": {
+     "kappa": 3.1527173357521288,
+     "n_replicates": 40,
+     "failures": 0,
+     "empirical_rate": 0.0,
+     "declared_delta": 0.5,
+     "holds": true,
+     "max_resid_over_band_median": 0.7062780361559629,
+     "max_resid_over_band_max": 0.9729731922124044
+    },
+    "0.2": {
+     "kappa": 3.4310651499061207,
+     "n_replicates": 40,
+     "failures": 0,
+     "empirical_rate": 0.0,
+     "declared_delta": 0.2,
+     "holds": true,
+     "max_resid_over_band_median": 0.6491250372585532,
+     "max_resid_over_band_max": 0.8941896445505756
+    },
+    "0.05": {
+     "kappa": 3.813764122902738,
+     "n_replicates": 40,
+     "failures": 0,
+     "empirical_rate": 0.0,
+     "declared_delta": 0.05,
+     "holds": true,
+     "max_resid_over_band_median": 0.5841351015332982,
+     "max_resid_over_band_max": 0.8046136690020381
+    },
+    "0.01": {
+     "kappa": 4.214697214511179,
+     "n_replicates": 40,
+     "failures": 0,
+     "empirical_rate": 0.0,
+     "declared_delta": 0.01,
+     "holds": true,
+     "max_resid_over_band_median": 0.5286818804268807,
+     "max_resid_over_band_max": 0.7281910600894581
+    }
+   }
+  }
+ },
+ "B_reach_boundary": {
+  "ou_window_length": [
+   {
+    "L": 4.0,
+    "theta_L": 4.0,
+    "two_kappa_sq": 46.12148951429579,
+    "rows": 2544,
+    "n_disjoint": 1272,
+    "median_signal_to_band": 0.14896485470023912,
+    "verdict": "abstain[noise]",
+    "x_bound": [
+     -4.961436008187464,
+     4.527842566639471
+    ],
+    "x_width": 9.489278574826935,
+    "x_resolved": false
+   },
+   {
+    "L": 16.0,
+    "theta_L": 16.0,
+    "two_kappa_sq": 40.50011928993346,
+    "rows": 624,
+    "n_disjoint": 312,
+    "median_signal_to_band": 0.1720812842419274,
+    "verdict": "abstain[noise]",
+    "x_bound": [
+     -3.6029392692348794,
+     1.4644752285560017
+    ],
+    "x_width": 5.067414497790881,
+    "x_resolved": false
+   },
+   {
+    "L": 64.0,
+    "theta_L": 64.0,
+    "two_kappa_sq": 34.63477101475975,
+    "rows": 144,
+    "n_disjoint": 72,
+    "median_signal_to_band": 0.30367156950469776,
+    "verdict": "abstain[structural]",
+    "x_bound": [
+     -2.9793545742505985,
+     0.4064453014949273
+    ],
+    "x_width": 3.385799875745526,
+    "x_resolved": false
+   },
+   {
+    "L": 128.0,
+    "theta_L": 128.0,
+    "two_kappa_sq": 34.63477101475975,
+    "rows": 144,
+    "n_disjoint": 72,
+    "median_signal_to_band": 0.4868700664675679,
+    "verdict": "abstain[structural]",
+    "x_bound": [
+     -3.6420071756774846,
+     0.17298534679982663
+    ],
+    "x_width": 3.8149925224773114,
+    "x_resolved": false
+   }
+  ],
+  "gbm_diffusion_intensity": [
+   {
+    "b": 0.3,
+    "rows": 80,
+    "median_signal_to_band": 0.275033278488833,
+    "verdict": "abstain[noise]",
+    "law": null,
+    "x_bound": [
+     -4.733367512047423,
+     4.918860005285025
+    ],
+    "x_width": 9.652227517332449,
+    "x_resolved": false,
+    "x_covers_truth": true
+   },
+   {
+    "b": 0.2,
+    "rows": 80,
+    "median_signal_to_band": 0.48998282920429315,
+    "verdict": "abstain[structural]",
+    "law": null,
+    "x_bound": [
+     -3.1600993977809377,
+     3.5627394875833867
+    ],
+    "x_width": 6.722838885364324,
+    "x_resolved": false,
+    "x_covers_truth": true
+   },
+   {
+    "b": 0.1,
+    "rows": 80,
+    "median_signal_to_band": 1.104098819068487,
+    "verdict": "abstain[structural]",
+    "law": null,
+    "x_bound": [
+     -1.404958630885423,
+     2.2590813586912257
+    ],
+    "x_width": 3.664039989576649,
+    "x_resolved": false,
+    "x_covers_truth": true
+   },
+   {
+    "b": 0.05,
+    "rows": 80,
+    "median_signal_to_band": 2.313433088854379,
+    "verdict": "abstain[structural]",
+    "law": null,
+    "x_bound": [
+     -0.45295810572926226,
+     1.5420816553205297
+    ],
+    "x_width": 1.9950397610497919,
+    "x_resolved": false,
+    "x_covers_truth": true
+   },
+   {
+    "b": 0.02,
+    "rows": 80,
+    "median_signal_to_band": 5.554186812467819,
+    "verdict": "abstain[structural]",
+    "law": null,
+    "x_bound": [
+     0.23629192997656676,
+     1.1375852522642511
+    ],
+    "x_width": 0.9012933222876843,
+    "x_resolved": true,
+    "x_covers_truth": true
+   },
+   {
+    "b": 0.01,
+    "rows": 80,
+    "median_signal_to_band": 9.478134107216201,
+    "verdict": "abstain[structural]",
+    "law": null,
+    "x_bound": [
+     0.4506656489415518,
+     1.0321297841913926
+    ],
+    "x_width": 0.5814641352498408,
+    "x_resolved": true,
+    "x_covers_truth": true
+   }
+  ]
+ },
+ "C_S1_scaling": {
+  "by_row_count_fixed_window": [
+   {
+    "n_traj": 2,
+    "rows": 36,
+    "kappa": 3.813764122902738,
+    "x_width": 5.443336785408881
+   },
+   {
+    "n_traj": 4,
+    "rows": 72,
+    "kappa": 3.9913770989797475,
+    "x_width": 3.747572774108506
+   },
+   {
+    "n_traj": 8,
+    "rows": 144,
+    "kappa": 4.161416286239563,
+    "x_width": 3.385799875745526
+   },
+   {
+    "n_traj": 16,
+    "rows": 288,
+    "kappa": 4.324775123460151,
+    "x_width": 3.4036587395767235
+   },
+   {
+    "n_traj": 32,
+    "rows": 576,
+    "kappa": 4.482184091446898,
+    "x_width": 3.3852793665108023
+   }
+  ],
+  "by_window_length_fixed_rows": [
+   {
+    "L": 16.0,
+    "rows": 144,
+    "kappa": 4.161416286239563,
+    "x_width": 6.358420239156974,
+    "width_times_sqrt_L": 25.433680956627896
+   },
+   {
+    "L": 32.0,
+    "rows": 144,
+    "kappa": 4.161416286239563,
+    "x_width": 5.446757024362571,
+    "width_times_sqrt_L": 30.811510619217884
+   },
+   {
+    "L": 64.0,
+    "rows": 144,
+    "kappa": 4.161416286239563,
+    "x_width": 3.385799875745526,
+    "width_times_sqrt_L": 27.086399005964207
+   },
+   {
+    "L": 128.0,
+    "rows": 144,
+    "kappa": 4.161416286239563,
+    "x_width": 3.8149925224773114,
+    "width_times_sqrt_L": 43.16171332511487
+   }
+  ]
+ },
+ "D_tasks_scored": {
+  "tasks": [
+   {
+    "task_id": "L0-ou",
+    "system": "ou",
+    "verdict": "abstain[structural]",
+    "law": null,
+    "rows": 144,
+    "n_disjoint": 72,
+    "rejected": 0,
+    "kappa": 4.161416286239563,
+    "sigma_effective": 0.5770034984419278,
+    "alpha_log10": null,
+    "median_signal_to_band": 0.30367156950469776,
+    "median_martingale_share": 0.9873150245047317,
+    "submission_kind": "abstain",
+    "score": {
+     "confident_wrong": 0,
+     "exact": 0,
+     "covered": 4,
+     "informative": 0,
+     "abstained_correctly": 0,
+     "missed": 0,
+     "resolved": 0,
+     "refusals": [],
+     "abstention": {
+      "offered": true,
+      "accepted": true,
+      "reason": "structural",
+      "detail": "effective relative noise declared to the gates: 0.577 (median band / (KAPPA * median |y|)). The certification band is the martingale band, not this number; this only puts the exactness and parametric gates in their noise regime, where they belong; at least 2 materially different classes certify at tier 1 (clustering stops once two of them retain held-out evidence: arbitration cannot crown a winner",
+      "registered_reason": null,
+      "reason_correct": null,
+      "note": "S4: a Delta-t-unidentifiable drift must abstain with a RESOLUTION reason, not a wide interval"
+     },
+     "declaration_audit": {
+      "drift-band": {
+       "declared": 27.112410389211092,
+       "provenance": "measured",
+       "bounds": "an upper bound on the martingale variance of ONE weak-form row, <M_p> = int phi_p^2 f'(X)^2 b(X)^2 dt; units (row target)^2; consumed as the band eps_p = kappa*sqrt(<M_p>)",
+       "true": null,
+       "ratio": null,
+       "flag": null,
+       "note": "the task states no reference for this consumer, so the magnitude is not auditable here; its provenance still is"
+      }
+     },
+     "components": {
+      "drift:1@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -2.614607853161791,
+       "hi": 2.510551446465839,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x@all": {
+       "outcome": "covered",
+       "truth": -1.0,
+       "lo": -4.483234186451873,
+       "hi": 1.5398897990978146,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x**2@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -2.1125051894642044,
+       "hi": 2.1808029696785916,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x**3@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -0.9781866339690736,
+       "hi": 1.211748039844868,
+       "resolved": false,
+       "informative": false
+      }
+     }
+    },
+    "notes": [
+     "effective relative noise declared to the gates: 0.577 (median band / (KAPPA * median |y|)). The certification band is the martingale band, not this number; this only puts the exactness and parametric gates in their noise regime, where they belong",
+     "at least 2 materially different classes certify at tier 1 (clustering stops once two of them retain held-out evidence: arbitration cannot crown a winner past that point)"
+    ]
+   },
+   {
+    "task_id": "L0-gbm",
+    "system": "gbm",
+    "verdict": "abstain[structural]",
+    "law": null,
+    "rows": 80,
+    "n_disjoint": 40,
+    "rejected": 0,
+    "kappa": 4.017687416608669,
+    "sigma_effective": 0.04549775744572378,
+    "alpha_log10": null,
+    "median_signal_to_band": 5.554186812467819,
+    "median_martingale_share": 0.9984260631027632,
+    "submission_kind": "abstain",
+    "score": {
+     "confident_wrong": 0,
+     "exact": 0,
+     "covered": 4,
+     "informative": 1,
+     "abstained_correctly": 0,
+     "missed": 0,
+     "resolved": 1,
+     "refusals": [],
+     "abstention": {
+      "offered": true,
+      "accepted": true,
+      "reason": "structural",
+      "detail": "effective relative noise declared to the gates: 0.0455 (median band / (KAPPA * median |y|)). The certification band is the martingale band, not this number; this only puts the exactness and parametric gates in their noise regime, where they belong; at least 2 materially different classes certify at tier 1 (clustering stops once two of them retain held-out evidence: arbitration cannot crown a winne",
+      "registered_reason": null,
+      "reason_correct": null,
+      "note": "S4: a Delta-t-unidentifiable drift must abstain with a RESOLUTION reason, not a wide interval"
+     },
+     "declaration_audit": {
+      "drift-band": {
+       "declared": 0.018639865676051713,
+       "provenance": "measured",
+       "bounds": "an upper bound on the martingale variance of ONE weak-form row, <M_p> = int phi_p^2 f'(X)^2 b(X)^2 dt; units (row target)^2; consumed as the band eps_p = kappa*sqrt(<M_p>)",
+       "true": null,
+       "ratio": null,
+       "flag": null,
+       "note": "the task states no reference for this consumer, so the magnitude is not auditable here; its provenance still is"
+      }
+     },
+     "components": {
+      "drift:1@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -0.8064741644563082,
+       "hi": 1.3049744104613095,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x@all": {
+       "outcome": "covered",
+       "truth": 0.8,
+       "lo": 0.007129624487507078,
+       "hi": 1.3244933470238018,
+       "resolved": true,
+       "informative": false
+      },
+      "drift:x**2@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -0.051680224039047734,
+       "hi": 0.08805454737355335,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x**3@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -0.0018905076289242582,
+       "hi": 0.0010927567242088219,
+       "resolved": false,
+       "informative": true
+      }
+     }
+    },
+    "notes": [
+     "effective relative noise declared to the gates: 0.0455 (median band / (KAPPA * median |y|)). The certification band is the martingale band, not this number; this only puts the exactness and parametric gates in their noise regime, where they belong",
+     "at least 2 materially different classes certify at tier 1 (clustering stops once two of them retain held-out evidence: arbitration cannot crown a winner past that point)",
+     "partial determination over 10 consistent laws: required ['x_1'], excluded none"
+    ]
+   },
+   {
+    "task_id": "L0-ode-obs",
+    "system": "ode_obs",
+    "verdict": "abstain[resolution]",
+    "law": null,
+    "rows": 37,
+    "n_disjoint": 37,
+    "rejected": 107,
+    "kappa": 3.8209416029973973,
+    "sigma_effective": 3.3193730689876344,
+    "alpha_log10": null,
+    "median_signal_to_band": 0.07730459920363691,
+    "median_martingale_share": 0.3879161242476048,
+    "submission_kind": "abstain",
+    "score": {
+     "confident_wrong": 0,
+     "exact": 0,
+     "covered": 2,
+     "informative": 0,
+     "abstained_correctly": 0,
+     "missed": 2,
+     "resolved": 0,
+     "refusals": [],
+     "abstention": {
+      "offered": true,
+      "accepted": true,
+      "reason": "resolution",
+      "detail": "105 rows refused because the DECLARED sigma_obs explains a median 99% of their raw quadratic variation (bar 50%): past that the process diffusion is a small difference of two large numbers, and separating process from measurement noise is Level 2's job, not a band's; 107 of 144 (window, f) rows dropped by the resolution gate: the quadrature bound was a median 0.269 of the martingale band against a",
+      "registered_reason": null,
+      "reason_correct": null,
+      "note": "S4: a Delta-t-unidentifiable drift must abstain with a RESOLUTION reason, not a wide interval"
+     },
+     "declaration_audit": {
+      "drift-band": {
+       "declared": 2.874048857092078e-08,
+       "provenance": "measured",
+       "bounds": "an upper bound on the martingale variance of ONE weak-form row, <M_p> = int phi_p^2 f'(X)^2 b(X)^2 dt; units (row target)^2; consumed as the band eps_p = kappa*sqrt(<M_p>)",
+       "true": null,
+       "ratio": null,
+       "flag": null,
+       "note": "the task states no reference for this consumer, so the magnitude is not auditable here; its provenance still is"
+      },
+      "observation": {
+       "declared": 0.001,
+       "provenance": "declared",
+       "bounds": "the measurement error on the observed state, sigma_obs; units [state]; consumed in the L2 channel, where it cancels within one realization",
+       "true": 0.001,
+       "ratio": 1.0,
+       "flag": null
+      }
+     },
+     "components": {
+      "drift:1@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -89.84940575480415,
+       "hi": 90.18574695089194,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x@all": {
+       "outcome": "covered",
+       "truth": -1.0,
+       "lo": -446.9218873081797,
+       "hi": 448.3168684807793,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x**2@all": {
+       "outcome": "missed",
+       "truth": 0.0,
+       "lo": null,
+       "hi": null,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x**3@all": {
+       "outcome": "missed",
+       "truth": 0.0,
+       "lo": null,
+       "hi": null,
+       "resolved": false,
+       "informative": false
+      }
+     }
+    },
+    "notes": [
+     "105 rows refused because the DECLARED sigma_obs explains a median 99% of their raw quadratic variation (bar 50%): past that the process diffusion is a small difference of two large numbers, and separating process from measurement noise is Level 2's job, not a band's",
+     "107 of 144 (window, f) rows dropped by the resolution gate: the quadrature bound was a median 0.269 of the martingale band against a 0.25 bar, so the band would have been a discretization band wearing a coverage statement (Abstain.RESOLUTION territory)",
+     "effective relative noise declared to the gates: 3.32 (median band / (KAPPA * median |y|)). The certification band is the martingale band, not this number; this only puts the exactness and parametric gates in their noise regime, where they belong",
+     "VACUOUS: eps swallows the signal"
+    ]
+   },
+   {
+    "task_id": "L0-null-noise",
+    "system": "pure_noise",
+    "verdict": "abstain[noise]",
+    "law": null,
+    "rows": 104,
+    "n_disjoint": 54,
+    "rejected": 40,
+    "kappa": 4.08246747770397,
+    "sigma_effective": 0.8178425170349672,
+    "alpha_log10": null,
+    "median_signal_to_band": 0.1363791304814617,
+    "median_martingale_share": 0.9627203406266293,
+    "submission_kind": "abstain",
+    "score": {
+     "confident_wrong": 0,
+     "exact": 0,
+     "covered": 2,
+     "informative": 0,
+     "abstained_correctly": 2,
+     "missed": 0,
+     "resolved": 0,
+     "refusals": [],
+     "abstention": {
+      "offered": true,
+      "accepted": true,
+      "reason": "noise",
+      "detail": "40 of 144 (window, f) rows dropped by the resolution gate: the quadrature bound was a median 0.42 of the martingale band against a 0.25 bar, so the band would have been a discretization band wearing a coverage statement (Abstain.RESOLUTION territory); effective relative noise declared to the gates: 0.818 (median band / (KAPPA * median |y|)). The certification band is the martingale band, not this ",
+      "registered_reason": "noise",
+      "reason_correct": true,
+      "note": "S4: a Delta-t-unidentifiable drift must abstain with a RESOLUTION reason, not a wide interval"
+     },
+     "declaration_audit": {
+      "drift-band": {
+       "declared": 27.617847684432512,
+       "provenance": "measured",
+       "bounds": "an upper bound on the martingale variance of ONE weak-form row, <M_p> = int phi_p^2 f'(X)^2 b(X)^2 dt; units (row target)^2; consumed as the band eps_p = kappa*sqrt(<M_p>)",
+       "true": null,
+       "ratio": null,
+       "flag": null,
+       "note": "the task states no reference for this consumer, so the magnitude is not auditable here; its provenance still is"
+      }
+     },
+     "components": {
+      "drift:1@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -127.36849523897352,
+       "hi": 136.16851513383682,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -28.352402611756023,
+       "hi": 26.623152042643216,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x**2@all": {
+       "outcome": "abstained-correctly",
+       "truth": 0.0,
+       "lo": null,
+       "hi": null,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x**3@all": {
+       "outcome": "abstained-correctly",
+       "truth": 0.0,
+       "lo": null,
+       "hi": null,
+       "resolved": false,
+       "informative": false
+      }
+     }
+    },
+    "notes": [
+     "40 of 144 (window, f) rows dropped by the resolution gate: the quadrature bound was a median 0.42 of the martingale band against a 0.25 bar, so the band would have been a discretization band wearing a coverage statement (Abstain.RESOLUTION territory)",
+     "effective relative noise declared to the gates: 0.818 (median band / (KAPPA * median |y|)). The certification band is the martingale band, not this number; this only puts the exactness and parametric gates in their noise regime, where they belong",
+     "VACUOUS: eps swallows the signal"
+    ]
+   },
+   {
+    "task_id": "L0-null-coarse",
+    "system": "coarse_ou",
+    "verdict": "abstain[resolution]",
+    "law": null,
+    "rows": 128,
+    "n_disjoint": 120,
+    "rejected": 1136,
+    "kappa": 4.133015779798948,
+    "sigma_effective": 19.291547222793984,
+    "alpha_log10": null,
+    "median_signal_to_band": 0.011520089344204464,
+    "median_martingale_share": 0.8192399390364049,
+    "submission_kind": "abstain",
+    "score": {
+     "confident_wrong": 0,
+     "exact": 0,
+     "covered": 4,
+     "informative": 0,
+     "abstained_correctly": 0,
+     "missed": 0,
+     "resolved": 0,
+     "refusals": [],
+     "abstention": {
+      "offered": true,
+      "accepted": true,
+      "reason": "resolution",
+      "detail": "1136 of 1264 (window, f) rows dropped by the resolution gate: the quadrature bound was a median 0.85 of the martingale band against a 0.25 bar, so the band would have been a discretization band wearing a coverage statement (Abstain.RESOLUTION territory); effective relative noise declared to the gates: 19.3 (median band / (KAPPA * median |y|)). The certification band is the martingale band, not thi",
+      "registered_reason": "resolution",
+      "reason_correct": true,
+      "note": "S4: a Delta-t-unidentifiable drift must abstain with a RESOLUTION reason, not a wide interval"
+     },
+     "declaration_audit": {
+      "drift-band": {
+       "declared": 0.7215909780722216,
+       "provenance": "measured",
+       "bounds": "an upper bound on the martingale variance of ONE weak-form row, <M_p> = int phi_p^2 f'(X)^2 b(X)^2 dt; units (row target)^2; consumed as the band eps_p = kappa*sqrt(<M_p>)",
+       "true": null,
+       "ratio": null,
+       "flag": null,
+       "note": "the task states no reference for this consumer, so the magnitude is not auditable here; its provenance still is"
+      }
+     },
+     "components": {
+      "drift:1@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -419.9824303813147,
+       "hi": 419.9477407049957,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -2422.4588479648664,
+       "hi": 2422.147077711081,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x**2@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -9502.851401481003,
+       "hi": 9503.243752698141,
+       "resolved": false,
+       "informative": false
+      },
+      "drift:x**3@all": {
+       "outcome": "covered",
+       "truth": 0.0,
+       "lo": -23740.664609083185,
+       "hi": 23740.589507831788,
+       "resolved": false,
+       "informative": false
+      }
+     }
+    },
+    "notes": [
+     "1136 of 1264 (window, f) rows dropped by the resolution gate: the quadrature bound was a median 0.85 of the martingale band against a 0.25 bar, so the band would have been a discretization band wearing a coverage statement (Abstain.RESOLUTION territory)",
+     "effective relative noise declared to the gates: 19.3 (median band / (KAPPA * median |y|)). The certification band is the martingale band, not this number; this only puts the exactness and parametric gates in their noise regime, where they belong",
+     "VACUOUS: eps swallows the signal",
+     "reason RESOLUTION: the gate took 90% of the attempted rows, so the sampling rate is the binding constraint; the 19-row survivors then abstained on 'noise', which is true of them and names the wrong cause"
+    ]
+   }
+  ],
+  "totals": {
+   "n_tasks": 5,
+   "confident_wrong": 0,
+   "exact": 0,
+   "covered": 16,
+   "abstained_correctly": 2,
+   "missed": 2,
+   "resolved": 1,
+   "informative": 1,
+   "invariants": 0,
+   "invalid_certificates": 0,
+   "refused": 0,
+   "exceeded_expectation": 6
+  },
+  "ranking": [
+   [
+    "lagh-ito-L0",
+    {
+     "n_tasks": 5,
+     "confident_wrong": 0,
+     "exact": 0,
+     "covered": 16,
+     "abstained_correctly": 2,
+     "missed": 2,
+     "resolved": 1,
+     "informative": 1,
+     "invariants": 0,
+     "invalid_certificates": 0,
+     "refused": 0,
+     "exceeded_expectation": 6
+    }
+   ]
+  ]
+ },
+ "E_S6_spurious_qv": {
+  "spurious_diffusion_from_observation_noise": [
+   {
+    "dt": 0.004,
+    "rows": 51,
+    "implied_b_squared": 0.0005022284112907991,
+    "predicted_2_sigma_obs_sq_over_dt": 0.0005,
+    "ratio": 1.0044568225815982,
+    "true_b_squared": 0.0
+   },
+   {
+    "dt": 0.002,
+    "rows": 64,
+    "implied_b_squared": 0.0010032478677881609,
+    "predicted_2_sigma_obs_sq_over_dt": 0.001,
+    "ratio": 1.0032478677881609,
+    "true_b_squared": 0.0
+   },
+   {
+    "dt": 0.001,
+    "rows": 71,
+    "implied_b_squared": 0.0019907524059499734,
+    "predicted_2_sigma_obs_sq_over_dt": 0.002,
+    "ratio": 0.9953762029749867,
+    "true_b_squared": 0.0
+   },
+   {
+    "dt": 0.0005,
+    "rows": 72,
+    "implied_b_squared": 0.0039922430771200165,
+    "predicted_2_sigma_obs_sq_over_dt": 0.004,
+    "ratio": 0.9980607692800041,
+    "true_b_squared": 0.0
+   }
+  ],
+  "note": "no process noise exists in this system; every one of these implied diffusions is spurious, and the value scales as 1/dt exactly as predicted. The band it produces is too WIDE, which is the conservative direction"
+ },
+ "F_S7_alpha": {
+  "gbm_alpha_vs_disjoint_count": [
+   {
+    "n_traj": 2,
+    "rows": 20,
+    "n_disjoint": 10,
+    "kappa": 3.6563948713638483,
+    "median_q": 0.0018504363076799876,
+    "h_disjoint": 9,
+    "log10_alpha_at_h": -24.594532729187648,
+    "vacuous": false
+   },
+   {
+    "n_traj": 4,
+    "rows": 40,
+    "n_disjoint": 20,
+    "kappa": 3.841291165279683,
+    "median_q": 0.0019436524658878918,
+    "h_disjoint": 19,
+    "log10_alpha_at_h": -51.516246340534536,
+    "vacuous": false
+   },
+   {
+    "n_traj": 8,
+    "rows": 80,
+    "n_disjoint": 40,
+    "kappa": 4.017687416608669,
+    "median_q": 0.002034549198336824,
+    "h_disjoint": 39,
+    "log10_alpha_at_h": -104.96974034883064,
+    "vacuous": false
+   },
+   {
+    "n_traj": 16,
+    "rows": 160,
+    "n_disjoint": 80,
+    "kappa": 4.186658158805842,
+    "median_q": 0.0020561484120743133,
+    "h_disjoint": 79,
+    "log10_alpha_at_h": -212.26869776438718,
+    "vacuous": false
+   }
+  ],
+  "ou_alpha_is_vacuous": [
+   {
+    "n_traj": 2,
+    "rows": 36,
+    "n_disjoint": 18,
+    "kappa": 3.813764122902738,
+    "median_q": 1.0,
+    "h_disjoint": 17,
+    "log10_alpha_at_h": 0.0,
+    "vacuous": true
+   },
+   {
+    "n_traj": 8,
+    "rows": 144,
+    "n_disjoint": 72,
+    "kappa": 4.161416286239563,
+    "median_q": 1.0,
+    "h_disjoint": 71,
+    "log10_alpha_at_h": 0.0,
+    "vacuous": true
+   }
+  ],
+  "note": "kappa grows like sqrt(log n) while the exponent grows linearly in the disjoint count, so more windows tighten alpha faster than they loosen the band -- S7. On a stationary drift the band exceeds the target's range, q saturates at 1 and alpha is vacuous: the trade is measurable only where the drift accumulates"
+ }
+}

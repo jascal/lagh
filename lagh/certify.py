@@ -38,6 +38,14 @@ class Abstain(str, Enum):
     NUMERICAL = "numerical"    # law undefined/unstable inside its own domain
     RANGE = "range"            # sampled box carries no signal above the floor
     PARAMETRIC = "parametric"  # exact rational params not pinned within the noise band
+    # --- emitted by the stochastic layer only (docs/STOCHASTIC_CHECKER.md).
+    # They live in the ONE abstain vocabulary rather than as loose strings
+    # because the alternative already happened once: pdesystem's
+    # "single-solution" is a bare string no consumer can enumerate.
+    RESOLUTION = "resolution"  # the sampling rate cannot separate the quantity
+                               # at this dt (drift/diffusion asymmetry)
+    COVERAGE = "coverage"      # the run cannot STATE its coverage, so it refuses
+    EXPLORATION = "exploration"  # trajectories never visit enough of state space
 
 
 @dataclass
@@ -82,6 +90,72 @@ def epsilon(y: np.ndarray, *, sigma: float = 0.0, prop: np.ndarray | None = None
     if hard is not None:
         eps = eps + np.asarray(hard, float).ravel()
     return eps
+
+
+def coverage_factor(n_rows: int, delta: float = 0.05) -> float:
+    """The coverage factor an EXHAUSTIVE check needs when the residual is an
+    INTRINSIC martingale rather than an observational error.
+
+    `KAPPA = 4` is a z-anchored constant with an implicit, never-computed
+    false-abstain budget. For a stochastic system that will not do, because the
+    fluctuation is the system: the row residual under the TRUE law is a
+    stochastic integral M_p = int phi_p f'(X) b(X) dW, unbounded, so no finite
+    band holds for every row almost surely. What does hold is the exponential
+    martingale inequality -- for a continuous local martingale and any V > 0,
+
+        P( |M_p| >= kappa*sqrt(V)  AND  <M_p> <= V )  <=  2 exp(-kappa^2/2)
+
+    which is PATHWISE and needs no CLT, no Gaussianity and no independence. It
+    is conditional on an upper bound V for the quadratic variation
+    <M_p> = int phi_p^2 f'^2 b^2 dt, which is the one input that cannot be
+    declared away (see docs/STOCHASTIC_CHECKER.md: it is estimated from realized
+    quadratic variation, i.e. from the DATA, never from the candidate -- a
+    candidate that set its own band could widen it at will).
+
+    Exhaustiveness over n rows then costs a union bound, and inverting for a
+    declared false-abstain budget delta gives
+
+        kappa(n, delta) = sqrt(2 ln(2n/delta)).
+
+    Two consequences worth stating. (i) kappa becomes a FUNCTION OF THE RUN and
+    must be reported with (n, delta); a run that cannot state its coverage
+    refuses (Abstain.COVERAGE). (ii) It grows like sqrt(log n) -- 4.33 at 300
+    rows and 5.08 at 10000, both at delta = 0.05 -- while alpha's exponent grows
+    LINEARLY in the held-out row count. Patch count is therefore a strictly
+    winning resource in the stochastic regime, which is the opposite of the usual
+    multiple-comparisons intuition and is registered as prediction S7.
+
+    The continuity claimed when option (1) was registered is real and now
+    numerical rather than rhetorical: kappa(300, 0.05) = 4.33 against the
+    existing constant 4.
+    """
+    n = max(int(n_rows), 1)
+    if not (0.0 < delta < 1.0):
+        raise ValueError("delta must be a probability in (0, 1)")
+    return float(np.sqrt(2.0 * np.log(2.0 * n / delta)))
+
+
+def coverage_budget(kappa: float, n_rows: int, *, tail: str = "martingale"
+                    ) -> float:
+    """The false-abstain budget a given kappa actually buys over n rows.
+
+    The inverse of `coverage_factor`, and it exists to be applied to the
+    deterministic default: `KAPPA = 4` over 300 points is a 20% budget under the
+    martingale bound and 1.9% under an exact Gaussian tail (the bound is ~10.6x
+    looser at kappa = 4, which is the price of assuming nothing about the law of
+    the residual). Beyond n = e^8/2 ~ 1491 rows the martingale reading of
+    kappa = 4 exceeds 1 and states NO coverage at all -- worth knowing, since
+    weak-form runs routinely carry thousands of patches.
+
+    A return value >= 1 is not clipped: how vacuous it is IS the diagnostic.
+    """
+    n = max(int(n_rows), 1)
+    if tail == "martingale":
+        return float(2.0 * n * np.exp(-0.5 * float(kappa) ** 2))
+    if tail == "gaussian":
+        from math import erfc, sqrt
+        return float(n * erfc(float(kappa) / sqrt(2.0)))
+    raise ValueError("tail must be 'martingale' or 'gaussian'")
 
 
 def band(eps, expr=None) -> np.ndarray:
@@ -425,6 +499,93 @@ def parameter_interval(expr, syms, X: np.ndarray, y: np.ndarray, eps, atom,
     return (min(out), max(out))
 
 
+def admissible_interval(A: np.ndarray, y: np.ndarray, eps: np.ndarray,
+                        *, coeff_max: float = 1e3, iters: int = 4):
+    """The EXACT joint range of each coefficient over every law in a linear
+    vocabulary that is consistent with the data at the declared band.
+
+    This is the sound version of what `invariant_content` estimates, and it exists
+    because that estimate was measured WRONG in the direction that matters
+    (2026-07-29, Itô Level 0): on OU rows where the true drift -5x certifies every
+    row inside its band, the range over the certifying laws the search happened to
+    find was [-0.66, 0] for that coefficient -- excluding a law that certifies. A
+    range over the laws a search FOUND is not a bound over the laws that EXIST,
+    and only the latter can be read as "the truth is in here".
+
+    Here the question is asked directly. The consistent set is the polytope
+
+        P = { c : |y_p - sum_j A_pj c_j| <= eps_p  for every row p }
+
+    and min/max of c_k over P are two linear programs. If the truth lies in the
+    vocabulary and every row's band covers its own residual, the truth is in P --
+    so the returned interval CONTAINS it, which is exactly the claim interval
+    coverage is scored on (docs/STOCHASTIC_CHECKER.md §5).
+
+    `eps` may be an array (a band already fixed) or a callable taking a
+    coefficient-magnitude bound, for a band that grows with the coefficients: the
+    declared `coeff_max` is then verified against the answer and raised until it
+    holds, the same declared-then-checked discipline `weakform.declared_epsilon`
+    uses. Returns (bounds, info) with bounds[k] = (lo, hi), either end None when
+    the coefficient is unbounded in that direction (genuinely unconstrained).
+
+    Needs scipy for the LP; raises rather than falling back, because a silent
+    looser answer here would be a claim nobody asked for.
+    """
+    try:
+        from scipy.optimize import linprog
+    except ImportError as e:                                   # pragma: no cover
+        raise ImportError(
+            "admissible_interval needs scipy for the LP (pip install scipy); "
+            "there is no fallback because a looser answer would be a different "
+            "claim") from e
+    A = np.asarray(A, float)
+    y = np.asarray(y, float).ravel()
+    n, K = A.shape
+    cmax, info = float(coeff_max), {}
+    for _ in range(max(1, iters)):
+        e = np.asarray(eps(cmax) if callable(eps) else eps, float).ravel()
+        A_ub = np.vstack([A, -A])
+        b_ub = np.concatenate([y + e, -y + e])
+        out, worst, failed = [], 0.0, []
+        for k in range(K):
+            c = np.zeros(K)
+            c[k] = 1.0
+            lo = linprog(c, A_ub=A_ub, b_ub=b_ub, bounds=[(None, None)] * K,
+                         method="highs")
+            hi = linprog(-c, A_ub=A_ub, b_ub=b_ub, bounds=[(None, None)] * K,
+                         method="highs")
+            if lo.status == 2 or hi.status == 2:           # infeasible
+                return None, {"infeasible": True, "coeff_max": cmax,
+                              "note": ("no law in the vocabulary fits every row "
+                                       "at this band -- the band or the "
+                                       "vocabulary is wrong, and that is a "
+                                       "finding about the inputs")}
+            # Anything other than a clean optimum (3 = unbounded, but also 1/4 =
+            # iteration limit / numerical trouble) yields None, i.e. UNCONSTRAINED
+            # in that direction. Sound by construction: claiming nothing is the
+            # conservative end of a bound. Reported, never silent.
+            l = float(lo.x[k]) if lo.status == 0 else None
+            h = float(hi.x[k]) if hi.status == 0 else None
+            if lo.status not in (0, 3) or hi.status not in (0, 3):
+                failed.append((k, int(lo.status), int(hi.status)))
+            out.append((l, h))
+            worst = max(worst, abs(l) if l is not None else np.inf,
+                        abs(h) if h is not None else np.inf)
+        info = {"coeff_max": cmax, "max_abs_coefficient": worst,
+                "coeff_max_verified": bool(worst <= cmax)}
+        if failed:
+            info["lp_failed"] = failed
+            info["note"] = (f"{len(failed)} coefficient end(s) did not solve "
+                            "cleanly (badly scaled columns are the usual cause) "
+                            "and are reported UNCONSTRAINED, which claims less "
+                            "rather than more")
+        if not callable(eps) or worst <= cmax or not np.isfinite(worst):
+            return out, info
+        cmax = 4.0 * max(worst, cmax)                     # declared too small
+    info["coeff_max_verified"] = False
+    return out, info
+
+
 def reduce_to_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
                       eps: np.ndarray):
     """Parsimony REPAIR (supersedes minimal-as-veto): simplify identity disguises
@@ -646,16 +807,26 @@ def invariant_content(certifying: list, syms, names=None) -> dict:
     coefficients -- and the truth check knew the stated law sat at 0.003 of its
     band. Something was strongly determined and the verdict threw it away.
 
-    The claim this returns is deliberately about the VOCABULARY, the DATA and the
-    BAND rather than about nature:
+    The claim this returns is about the VOCABULARY, the DATA, the BAND -- and the
+    SEARCH:
 
-        every law in the declared vocabulary consistent with these observations
-        at this declared band has coefficient c_k in [lo, hi]
+        every law THE SEARCH FOUND to be consistent with these observations at
+        this declared band has coefficient c_k in [lo, hi]
 
-    which is checkable by construction, needs no assumption that the truth is in
-    the certifying set, and CANNOT weaken the zero-confident-wrong record: the
-    shared content is a weaker statement than any member that already certifies,
-    and it is reported ALONGSIDE the abstain, never as a certificate.
+    **The search qualifier is load-bearing and was missing until 2026-07-29.**
+    This docstring previously claimed the range covered every law in the
+    vocabulary consistent with the data, and argued it "cannot weaken the
+    zero-confident-wrong record". Both were wrong: a range over the laws a search
+    HAPPENED TO FIND is not a bound over the laws that EXIST, and it can exclude a
+    law that certifies. Measured on Itô Level 0 (OU, `lagh/ito.py`), where the
+    true drift -5x certifies every row inside its band while the range reported
+    here for that coefficient was [-0.66, 0] -- six candidates read, none of them
+    near the truth. Read as "the truth is in here" that is a confident-wrong.
+
+    So this is a REPORT ON THE CERTIFYING SET, useful for seeing what the search
+    agreed on, and it must not be submitted as an interval claim about a
+    coefficient. `admissible_interval` answers the bounding question directly, by
+    LP over the consistent polytope, and is what an interval record should carry.
 
     Two things it reports beyond the intervals, and they are what a reader
     actually wants from an under-determined fit: a term that appears in EVERY
@@ -706,12 +877,15 @@ def invariant_content(certifying: list, syms, names=None) -> dict:
     return {"n_certifying_read": n, "coefficients": out,
             "required_terms": required, "excluded_terms": excluded,
             "tightest": order[:3], "loosest": order[-3:],
-            "claim": ("every law in the declared vocabulary consistent with "
-                      "these observations at this declared band has each "
-                      "coefficient inside the stated range; terms listed as "
-                      "required appear in all of them and terms listed as "
-                      "excluded in none. This is a statement about the "
-                      "vocabulary, the data and the band -- NOT a certificate")}
+            "over": "the certifying set THE SEARCH FOUND",
+            "claim": ("every law the SEARCH FOUND consistent with these "
+                      "observations at this declared band has each coefficient "
+                      "inside the stated range; terms listed as required appear "
+                      "in all of THOSE and terms listed as excluded in none. "
+                      "This is a report on the certifying set -- NOT a "
+                      "certificate, and NOT a bound over every consistent law: "
+                      "use certify.admissible_interval for that (measured "
+                      "2026-07-29: this range excluded a law that certifies)")}
 
 
 def domain_qualifier(predicate: str, *, coverage: float | None = None,
