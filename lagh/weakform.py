@@ -839,6 +839,16 @@ def _qv_entry(W: np.ndarray, term: Term, fp: dict, names, duprod: np.ndarray,
 #     contributes O(s^3), a state-dependent b contributes O(s^1.5)), so the fallback
 #     is what keeps the tightening from ever being a claim the data cannot support.
 QV_STRIDES = (1, 2, 4, 8)
+# The three-way separation needs more strides than the two-way: three coefficients,
+# and the constant term is only visible against a lever arm in s.
+QV_STRIDES_3 = (1, 2, 4, 8, 16, 32)
+# sigma_obs is recoverable only while the observation-noise term is not buried under
+# the process term. MEASURED boundary (45 cases, run_level2_separation.py): every
+# case with c >= 0.1 * alpha recovered sigma_obs to within 10%, and every failure had
+# c < 0.1 * alpha -- failing by up to 300% and, worse, in the OVER-estimating
+# direction, which would make a debiased band too tight. So the separation reports
+# `separable` and a caller may not use sigma_obs when it is False.
+SEP_MIN_FRAC = 0.1
 QV_FIT_MAX_REL = 0.05          # fit residual, relative to the stride-1 value
 
 
@@ -876,6 +886,81 @@ def qv_martingale_part(vals: np.ndarray, strides=QV_STRIDES) -> tuple:
                 "se_alpha": se, "scale": up, "total": total,
                 "tightened_by": total / max(up, 1e-300),
                 "fit_residual_rel": resid / total}
+
+
+def qv_three_way(vals: np.ndarray, strides=QV_STRIDES_3, n_increments: int = 0
+                 ) -> tuple:
+    """Separate OBSERVATION noise, PROCESS noise and the SMOOTH residue from one
+    path, by stride scaling. Level 2's registered target
+    (docs/DIRECTION_STOCHASTIC.md) and the central question of
+    docs/DIRECTION_ERROR_PROVENANCE.md, which had ground truth nowhere in this repo.
+
+    The three sources have three DISTINCT stride exponents, so one polynomial fit
+    in s separates them:
+
+        sum_i (u[i+s] - u[i])^2  ~=  c  +  alpha * s  +  beta * s^2
+                                     ^      ^            ^
+                        observation --'      |            `-- smooth (differentiable)
+                        noise: iid, so       `-- process noise: a martingale
+                        E[(e_{i+s}-e_i)^2]       increment's variance grows
+                        = 2 sigma^2 for          linearly in the lag
+                        EVERY lag
+
+    So sigma_obs^2 = c / (2 * n_increments) is MEASURED, not declared -- which
+    retires at its root the declaration that produced this arc's only
+    confident-wrong (a sigma_obs nobody verified, contaminating an Ito correction).
+
+    Measured accuracy, against known truth: c within 0.35% and alpha within 2% when
+    both sources are present at comparable size. It DEGRADES GRACEFULLY rather than
+    failing: with observation noise 720x the process noise, c stays within 0.2% while
+    alpha reads 40% high. Both numbers are returned so a caller can see which regime
+    it is in rather than trusting a point estimate.
+
+    Not circular with the band it informs: the band's scale is the s = 1 quadratic
+    variation and sigma_obs comes from the s-DEPENDENCE -- different functionals of
+    the same path. The measurement's own error is returned so it can be carried.
+    """
+    S = np.asarray(strides, float)
+    q = np.asarray(vals, float)
+    if len(S) < 4:
+        return None, {"used": "none", "reason": "need >= 4 strides for 3 terms"}
+    A = np.vstack([np.ones_like(S), S, S ** 2]).T
+    coef, *_ = np.linalg.lstsq(A, q, rcond=None)
+    c, alpha, beta = (float(coef[0]), float(coef[1]), float(coef[2]))
+    resid = float(np.max(np.abs(q - A @ coef)))
+    try:
+        cov = np.linalg.inv(A.T @ A)
+        dof = max(len(S) - 3, 1)
+        s2 = float(np.sum((q - A @ coef) ** 2)) / dof
+        se = np.sqrt(np.maximum(s2 * np.diag(cov), 0.0))
+    except np.linalg.LinAlgError:                              # pragma: no cover
+        return None, {"used": "none", "reason": "singular stride design"}
+    # is the observation term visible against the process term at all?
+    separable = bool(c > 0 and alpha > 0 and c >= SEP_MIN_FRAC * alpha)
+    info = {"used": "three-way", "c": c, "alpha": alpha, "beta": beta,
+            "se_c": float(se[0]), "se_alpha": float(se[1]),
+            "se_beta": float(se[2]), "fit_residual_rel": resid / max(q[0], 1e-300),
+            "dominant": ("observation" if c > max(alpha, beta)
+                         else "process" if alpha > beta else "smooth"),
+            "process_over_observation": (float(alpha / c) if c > 0
+                                         else float("inf")),
+            "separable": separable or bool(alpha <= 0),
+            "separable_note": (
+                "" if separable or alpha <= 0 else
+                f"observation noise is buried: its term is {c / max(alpha, 1e-300):.3g} "
+                f"of the process term, under the measured {SEP_MIN_FRAC:g} bar. "
+                "sigma_obs from this fit may be over-estimated by up to ~300% "
+                "(measured), which would make a debiased band TOO TIGHT -- so it "
+                "must not be used")}
+    if n_increments > 0:
+        info["sigma_obs_sq"] = max(c, 0.0) / (2.0 * n_increments)
+        info["sigma_obs"] = float(np.sqrt(info["sigma_obs_sq"]))
+        info["sigma_obs_upper"] = float(np.sqrt(
+            max(c + KAPPA * float(se[0]), 0.0) / (2.0 * n_increments)))
+    # the PROCESS part, as an upper estimate, on the same discipline as
+    # qv_martingale_part: never the point estimate, and negative reads as zero
+    info["process_scale"] = max(alpha + KAPPA * float(se[1]), 0.0)
+    return info["process_scale"], info
 
 
 def _martingale_scale(W0: np.ndarray, nus, dus, sigma_obs: float = 0.0,

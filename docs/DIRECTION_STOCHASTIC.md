@@ -451,7 +451,47 @@ framing.
    length tried (0.49 at L = 4 the least bad), which suggests it needs a different f
    family rather than a different window; the invariants target; and a state-dependent
    b² whose FORM certifies.
-5. Level 2, as the error-provenance testbed.
+5. Level 2, as the error-provenance testbed. **SEPARATION INCREMENT DONE
+   2026-07-30** — scoped to the process-vs-measurement question rather than the full
+   PDMP/regime-switching curriculum, on the reasoning that this is the capability the
+   intended real-data read (highD) will demand first.
+
+   **The three noise sources have three distinct STRIDE exponents, so one polynomial
+   fit separates all three:**
+
+       Σ_i (u[i+s] − u[i])²  ≈  c + α·s + β·s²
+
+   observation noise is iid so `E[(e_{i+s}−e_i)²] = 2σ²` at EVERY lag (constant in
+   s); process noise is a martingale, whose increment variance grows linearly; a
+   smooth drift's squared increment grows as s². So **σ_obs is MEASURED, not
+   declared** — retiring at its root the declaration that produced this arc's only
+   confident-wrong. `weakform.qv_three_way`, `run_level2_separation.py`, 45 cases:
+
+   | | result |
+   |---|---|
+   | σ_obs, separable regime (c ≥ 0.1·α) | median rel err **0.32%**, 14/15 within 10% |
+   | σ_obs, buried | **6 cases REFUSED** — worst error had they been used: **301%** |
+   | process b² | median **1.2%**, **24/24** within 10% |
+   | null: no observation noise | worst spurious σ_obs 2.1e-3 |
+   | null: no process noise | worst spurious b² 1.8e-3 |
+
+   **The refusal bar is the necessary half, not a caveat.** The buried cases fail by
+   OVER-estimating σ_obs, which subtracts too much from the quadratic variation and
+   makes a debiased band too tight — the impostor-admitting direction. The boundary
+   (`SEP_MIN_FRAC = 0.1`) is measured, not chosen.
+
+   This answers `DIRECTION_ERROR_PROVENANCE.md`'s central question, which that
+   document records as having ground truth NOWHERE in the repo. It now has 45 cases.
+
+   **Registered before the highD read**: the mechanism assumes iid observation error,
+   which is why the term is constant in s. Computer-vision tracking error is
+   AUTOCORRELATED across frames, which breaks that signature and will bias `c`. It is
+   testable directly — if the error is correlated to lag τ, the constant term appears
+   only for strides beyond τ, so restricting the fit to s > τ should recover it. That
+   prediction is registered here rather than discovered during the read.
+
+   Still open in Level 2: the PDMP and regime-switching systems, and the jump/switching
+   structure targets.
 
 Level 3, SPDEs, higher dimension, partial observation and non-Markovian noise are
 explicitly out of the minimal suite.

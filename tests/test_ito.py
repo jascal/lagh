@@ -1015,3 +1015,133 @@ def test_the_component_index_convention_carries_a_per_component_drift():
     assert got["truth"] == 1.0 and got["outcome"] == "covered"
     # the components this submission did not speak to are MISSED, not silently ok
     assert score.n_missed >= 6
+
+
+# --------------------------------------- Level 2: separating the two noise sources
+
+def _three_way_sums(u, strides=(1, 2, 4, 8, 16, 32)):
+    return [float(np.sum((u[s:] - u[:-s]) ** 2)) for s in strides]
+
+
+def test_stride_scaling_separates_observation_noise_from_process_noise():
+    """Level 2's registered target, and the central question of
+    docs/DIRECTION_ERROR_PROVENANCE.md -- which had ground truth NOWHERE in this repo
+    until this suite constructed it.
+
+    The three sources have three distinct stride exponents, so one polynomial fit in
+    s separates them: observation noise is CONSTANT in s (iid, so
+    E[(e_{i+s}-e_i)^2] = 2 sigma^2 at every lag), process noise grows LINEARLY (a
+    martingale increment's variance), and a smooth drift grows as s^2.
+
+    So sigma_obs is MEASURED, not declared -- retiring at its root the declaration
+    that produced this arc's only confident-wrong.
+    """
+    from lagh.weakform import qv_three_way
+    n, dt = 200_001, 1e-3
+    t = np.arange(n) * dt
+    rng = np.random.default_rng(7)
+    smooth = np.sin(2 * t) + 0.3 * np.cos(5 * t)
+
+    def case(b, sob):
+        bm = np.r_[0.0, np.cumsum(rng.standard_normal(n - 1) * np.sqrt(dt))]
+        u = smooth + b * bm + (sob * rng.standard_normal(n) if sob else 0.0)
+        return qv_three_way(_three_way_sums(u), n_increments=n - 1)
+
+    # BOTH present at comparable size: both recovered
+    sc, info = case(0.3, 1e-2)
+    assert info["sigma_obs"] == pytest.approx(1e-2, rel=0.05)
+    assert sc == pytest.approx(0.3 ** 2 * t[-1], rel=0.05)
+    assert info["dominant"] in ("observation", "process")
+
+    # observation noise only: the process part reads ~0 against a large smooth part
+    sc0, info0 = case(0.0, 1e-2)
+    assert info0["sigma_obs"] == pytest.approx(1e-2, rel=0.05)
+    assert sc0 < 0.01 * (0.3 ** 2 * t[-1])
+
+    # process noise only: sigma_obs reads ~0, and the process part is an UPPER
+    # estimate so reading slightly high is correct
+    sc1, info1 = case(0.3, 0.0)
+    assert info1["sigma_obs"] < 1e-3
+    assert sc1 >= 0.3 ** 2 * t[-1] * 0.95
+
+    # observation noise dominating 720x: sigma_obs stays accurate, the process part
+    # degrades GRACEFULLY rather than failing, and `dominant` says which regime
+    sc2, info2 = case(0.05, 3e-2)
+    assert info2["sigma_obs"] == pytest.approx(3e-2, rel=0.05)
+    assert info2["dominant"] == "observation"
+    assert 0.5 * 0.05 ** 2 * t[-1] < sc2 < 4 * 0.05 ** 2 * t[-1]
+
+    # too few strides to fit three terms: refuses rather than guessing
+    none, bad = qv_three_way([1.0, 2.0, 3.0], strides=(1, 2, 4), n_increments=10)
+    assert none is None and bad["used"] == "none"
+
+
+def test_the_measured_sigma_obs_agrees_with_a_declared_one():
+    """The bridge between Level 0's declared route and Level 2's measured one: on a
+    system where sigma_obs is known by construction, the measurement recovers it, so
+    the two paths agree and the declaration becomes redundant rather than merely
+    unverified."""
+    from lagh.weakform import qv_three_way
+    theta, sigma_obs, dt, T = 1.0, 1e-3, 1e-3, 320.0
+    n = int(round(T / dt)) + 1
+    t = np.arange(n) * dt
+    rng = np.random.default_rng(5)
+    # deterministic decay observed with error -- NO process noise at all
+    u = np.exp(-theta * t) + sigma_obs * rng.standard_normal(n)
+    sc, info = qv_three_way(_three_way_sums(u), n_increments=n - 1)
+    assert info["sigma_obs"] == pytest.approx(sigma_obs, rel=0.05)
+    assert info["dominant"] == "observation"
+    # and the process part is ~0, which is the truth: this system has none
+    implied_b2 = sc / T
+    assert implied_b2 < 1e-4
+    # the upper estimate is above the point estimate, always
+    assert info["sigma_obs_upper"] >= info["sigma_obs"]
+
+
+def test_the_separation_refuses_when_observation_noise_is_buried():
+    """The guard, and it is the necessary half of the capability rather than a
+    caveat on it.
+
+    MEASURED over 45 cases (`run_level2_separation.py`): every case with
+    c >= 0.1*alpha recovered sigma_obs to within 10% (median 0.3%), and every failure
+    had c < 0.1*alpha -- failing by up to 300% and, crucially, in the OVER-estimating
+    direction. Over-estimating sigma_obs subtracts too much from the quadratic
+    variation, which makes a debiased band TOO TIGHT: the impostor-admitting
+    direction. So the boundary is measured and the fit refuses outside it.
+    """
+    from lagh.weakform import SEP_MIN_FRAC, qv_three_way
+    n, dt, T = 200_001, 1e-3, 200.0
+    t = np.arange(n) * dt
+    rng = np.random.default_rng(21)
+
+    def case(b, sob):
+        dec = np.exp(-1.0 * dt)
+        sd = b * np.sqrt((1.0 - dec ** 2) / 2.0)
+        x = np.empty(n)
+        x[0] = 0.0
+        z = rng.standard_normal(n - 1)
+        for k in range(1, n):
+            x[k] = dec * x[k - 1] + sd * z[k - 1]
+        u = x + (sob * rng.standard_normal(n) if sob else 0.0)
+        return qv_three_way(_three_way_sums(u), n_increments=n - 1)
+
+    # observation noise comparable to the process noise: SEPARABLE, and accurate
+    _, big = case(0.7, 5e-2)
+    assert big["separable"] is True
+    assert big["sigma_obs"] == pytest.approx(5e-2, rel=0.10)
+    assert big["process_over_observation"] < 1.0 / SEP_MIN_FRAC
+
+    # observation noise buried under a large process noise: REFUSED
+    _, buried = case(1.4, 1e-3)
+    assert buried["separable"] is False
+    assert buried["process_over_observation"] > 1.0 / SEP_MIN_FRAC
+    assert "buried" in buried["separable_note"]
+    assert "TOO TIGHT" in buried["separable_note"]
+    # and the refusal is warranted: the measurement it declined is far off
+    assert abs(buried["sigma_obs"] - 1e-3) / 1e-3 > 0.5
+
+    # no process noise at all: nothing can bury the observation term, so a fit with
+    # alpha <= 0 is reported separable rather than refused on a technicality
+    _, nop = case(0.0, 1e-2)
+    assert nop["separable"] is True
+    assert nop["sigma_obs"] == pytest.approx(1e-2, rel=0.10)

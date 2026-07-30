@@ -395,6 +395,46 @@ prediction to match what was built is how a prediction stops being one.
   and is blind to distribution-wide pipeline error, and that asymmetry is exactly
   why it informs the channel and never the magnitude.
 
+## ANSWERED 2026-07-30: the central question now has ground truth
+
+This document's central question — separating process noise from measurement noise —
+is recorded above as scoreable on exactly two cases, with ground truth for the
+separation existing nowhere in the repo. The stochastic suite's Level 2 constructed
+it, and the answer turned out to be a measurement rather than a declaration.
+
+**The three sources have three distinct STRIDE exponents.** Summing squared increments
+over all offsets at lag s,
+
+    Σ_i (u[i+s] − u[i])²  ≈  c + α·s + β·s²
+
+because iid observation error gives `E[(e_{i+s}−e_i)²] = 2σ²` at every lag (constant
+in s), a martingale's increment variance grows linearly in the lag, and a
+differentiable path's squared increment grows as s². One polynomial fit separates all
+three, so σ_obs is measured: median relative error **0.32%** over 45 constructed cases
+(`weakform.qv_three_way`, `experiments/stochastic/run_level2_separation.py`).
+
+Three consequences for this direction specifically:
+
+* **The L1-vs-L2 channel choice can be measured rather than reasoned.** The channel
+  question this document opens with — is the error unstructured/stochastic (L2) or
+  structured/deterministic (L1) — is answered by which stride term dominates, with
+  `dominant` reported per fit.
+* **A declared σ becomes redundant rather than merely unverified.** The confident-wrong
+  the stochastic arc measured came from a σ_obs nobody checked; the measurement
+  retires that declaration at its root.
+* **And it has a stated regime of validity, with a refusal outside it.** σ_obs is
+  recoverable only while its term is at least ~1/10 of the process term. Outside that,
+  the fit OVER-estimates σ_obs by up to 300%, which would tighten a band — so the
+  boundary is measured (`SEP_MIN_FRAC`) and the fit refuses beyond it. That direction
+  matters: over-declaring loses laws, under-declaring admits impostors.
+
+What this does NOT do: it says nothing about a structured error that happens to scale
+linearly in the lag, and nothing about autocorrelated observation error — for which
+the constant-in-s signature is exactly wrong. The second is registered as the expected
+failure on the intended highD read (computer-vision tracking error is correlated
+across frames) with a testable remedy: restrict the fit to strides beyond the
+correlation length.
+
 ## Why this matters beyond PDEBench
 
 Every external data source this program has touched or plans to touch falls on
