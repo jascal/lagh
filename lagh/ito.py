@@ -1170,3 +1170,63 @@ def _relabel(partial, names, qualifier, status):
     if qualifier is not None:
         out["qualifier"] = qualifier
     return out
+
+
+def ito_terms_nd(f: str, libraries: dict, fields, *, field_prefix: str = "") -> dict:
+    """The Itô weak form for a MULTI-DIMENSIONAL state, as `weakform.Term`s.
+
+    Level 1's Van der Pol needs it and Level 2's systems need it more. For
+    dX_i = a_i(X)dt + sum_j b_ij(X)dW_j and a smooth f of the whole state,
+
+        -int phi' f(X) dt = sum_i int phi (df/dx_i) a_i(X) dt
+                          + 1/2 sum_ik int phi (d2f/dx_i dx_k) d[X_i, X_k]  +  M
+
+    so the pieces are: one target, one drift column per (component i, library term
+    g) with the weight df/dx_i, and one CROSS-VARIATION term per Hessian entry.
+    `libraries` maps each field name to its own drift library, so components may be
+    given different vocabularies.
+
+    Two things the scalar case hid. The Hessian's off-diagonal entries appear TWICE
+    in the sum and the returned term carries the factor 2 explicitly rather than
+    relying on a reader to notice. And the martingale declaration is a LIST of
+    (field, df/dx_i) pairs, because <M> = int phi^2 sum_ik nu_i nu_k d[X_i, X_k]
+    collapses to the square of the summed increment -- see
+    `weakform._martingale_scale`.
+
+    Returns {"target", "corrections": [...], "columns": [...], "martingale": [...]}
+    with columns named `<field>:<term>` (the `weakform.FIELD_SEP` convention the PDE
+    systems arc already uses for one row set spanning several fields).
+    """
+    from .weakform import FIELD_SEP, Term
+    fs = [sp.Symbol(str(z)) for z in fields]
+    fe = sp.sympify(f)
+    extra = fe.free_symbols - set(fs)
+    if extra:
+        raise ValueError(f"f {f!r} reads {sorted(map(str, extra))}, not the state "
+                         f"{[str(z) for z in fs]}")
+    nd = len(fs)
+    alpha0 = (0,) * 1                      # time-only geometry: one axis
+    grads = [sp.diff(fe, z) for z in fs]
+    cols, mart = [], []
+    for z, gi in zip(fs, grads):
+        if gi == 0:
+            continue                       # this component does not enter this f
+        mart.append((str(z), str(gi)))
+        for g in libraries.get(str(z), ()):
+            ge = sp.sympify(g)
+            if ge.free_symbols - set(fs):
+                raise ValueError(f"term {g!r} for {z} reads a non-state symbol")
+            cols.append(Term(f"{z}{FIELD_SEP}{g}",
+                             gexpr=str(sp.expand(gi * ge)), alpha=alpha0))
+    corr = []
+    for i, zi in enumerate(fs):
+        for k in range(i, nd):
+            h = sp.diff(fe, zi, sp.Symbol(str(fs[k])))
+            if h == 0:
+                continue
+            # off-diagonal Hessian entries appear twice in sum_ik, hence the 2
+            w = sp.Rational(1, 2) * h * (1 if i == k else 2)
+            corr.append(Term(f"ito:{zi},{fs[k]}", gexpr=str(w), alpha=alpha0,
+                             measure=f"d[{zi},{fs[k]}]"))
+    return {"target": Term(f"target:{f}", gexpr=str(fe), alpha=(1,)),
+            "corrections": corr, "columns": cols, "martingale": mart}

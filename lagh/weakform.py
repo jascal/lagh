@@ -111,16 +111,31 @@ class Term:
     measure: str = "dt"
 
     @property
-    def qv_field(self) -> str | None:
-        """The field whose quadratic variation this term integrates against, or
-        None for an ordinary dt term."""
+    def qv_fields(self) -> tuple | None:
+        """The field(s) whose (co)variation this term integrates against, or None
+        for an ordinary dt term.
+
+        `d[u]` is the quadratic variation of u and `d[u,v]` the CROSS-variation of
+        the pair. The cross form is what multi-dimensional Itô needs: for
+        dX_i = a_i dt + sum_j b_ij dW_j the correction is
+        1/2 sum_ik int phi (d2f/dx_i dx_k) d[X_i, X_k], and the off-diagonal terms
+        are exactly the ones a diagonal-only measure cannot express.
+        """
         m = str(self.measure)
         if m == "dt":
             return None
         if m.startswith("d[") and m.endswith("]") and len(m) > 3:
-            return m[2:-1]
-        raise ValueError(f"term {self.name!r}: measure {m!r} is neither 'dt' nor "
-                         "'d[<field>]'")
+            parts = tuple(p.strip() for p in m[2:-1].split(","))
+            if len(parts) in (1, 2) and all(parts):
+                return parts * 2 if len(parts) == 1 else parts
+        raise ValueError(f"term {self.name!r}: measure {m!r} is neither 'dt', "
+                         "'d[<field>]' nor 'd[<field>,<field>]'")
+
+    @property
+    def qv_field(self) -> str | None:
+        """The first (co)variation field, kept for the scalar callers."""
+        f = self.qv_fields
+        return None if f is None else f[0]
 
     def multi(self, ndim: int) -> tuple:
         """The derivative multi-index over `ndim` axes (space..., time)."""
@@ -327,6 +342,9 @@ class WeakSystem:
     qv: np.ndarray | None = None        # (n_patches,)
     qv_se: np.ndarray | None = None     # (n_patches,)
     qv_obs_share: np.ndarray | None = None
+    # per-patch record of the stride decomposition, when it ran: which scale was
+    # used (martingale part or the total fallback) and by how much it tightened
+    qv_decompose: list | None = None
 
     def normalize(self, by: str = "1", drop: bool = True) -> "WeakSystem":
         """Divide every row by its own `by` integral (default ∫φ), and drop that
@@ -758,12 +776,21 @@ def _qv_se(w: np.ndarray, du: np.ndarray) -> float:
     return float(np.sqrt(2.0 / 3.0 * np.sum(w ** 2 * du ** 4)))
 
 
-def _qv_entry(W: np.ndarray, term: Term, fp: dict, names, du: np.ndarray,
-              sigma_obs: float = 0.0) -> tuple:
+def _qv_entry(W: np.ndarray, term: Term, fp: dict, names, duprod: np.ndarray,
+              sigma_obs: float = 0.0, diagonal: bool = True) -> tuple:
     """(value, |contributions|, se, observation-explained share) for a d[] term.
 
-    The weight array W here carries NO grid spacing (see `Term.measure`), and both
-    it and g are truncated to the increments' length.
+    `duprod` is the increment PRODUCT the measure integrates against: (du)^2 for
+    d[u], and du_i * du_k for the cross measure d[u,v]. The weight array W carries
+    NO grid spacing (see `Term.measure`), and both it and g are truncated to the
+    increments' length.
+
+    The estimator's variance differs between the two cases and both are stated
+    rather than shared. For jointly Gaussian increments with variances v_i, v_k and
+    covariance c, Var(du_i du_k) = v_i v_k + c^2 while
+    E[(du_i du_k)^2] = v_i v_k + 2 c^2 -- so the fourth-moment sum is an UPPER bound
+    on the variance in the cross case and is used as is (conservative), while on the
+    diagonal c = v and the 2/3 factor makes it exact.
 
     `sigma_obs` DEBIASES the estimator, and it is not optional bookkeeping: with a
     field observed as u + e every increment carries Var 2 sigma_obs^2 on top of
@@ -775,22 +802,92 @@ def _qv_entry(W: np.ndarray, term: Term, fp: dict, names, du: np.ndarray,
     direction states.
     """
     w = (W * term.g(fp))[..., :-1]
-    val = float(np.sum(w * du ** 2))
-    se = _qv_se(w, du)
+    val = float(np.sum(w * duprod))
+    fac = 2.0 / 3.0 if diagonal else 1.0
+    se = float(np.sqrt(fac * np.sum(w ** 2 * duprod ** 2)))
     share = 0.0
-    if sigma_obs > 0:
+    if sigma_obs > 0 and diagonal:
+        # observation noise adds 2 sigma^2 to each DIAGONAL increment variance; on
+        # the cross measure independent per-field errors add nothing in expectation,
+        # so there is no bias to remove there (only extra variance, already in `se`)
         bias = float(np.sum(w) * 2.0 * sigma_obs ** 2)
         share = abs(bias) / max(abs(val), 1e-300)
         val = val - bias
         se = float(np.hypot(se, np.sqrt(3.0 * np.sum(w ** 2))
                             * 2.0 * sigma_obs ** 2))
-    return val, float(np.abs(w * du ** 2).sum()), se, share
+    return val, float(np.abs(w * duprod).sum()), se, share
 
 
-def _martingale_scale(W0: np.ndarray, nu: np.ndarray, du: np.ndarray,
-                      sigma_obs: float = 0.0) -> tuple:
+# The martingale part of a realized quadratic variation is separable from the
+# SMOOTH part, and measurably so -- which matters because a component that carries
+# no noise still has a nonzero realized QV (the O(dt) residue of a differentiable
+# path) and banding with it over-declares by ~sqrt(1/dt). Measured on Van der Pol's
+# noise-free x component: residual 1.8e-4 against a band of 0.35.
+#
+# The separation is the STRIDE SCALING. Summing over all offsets at lag s,
+#     sum_i (u[i+s] - u[i])^2  ~=  alpha * s  +  beta * s^2
+# because a martingale increment's variance grows like s while a differentiable
+# path's increment grows like s (so its square like s^2). alpha is therefore the
+# martingale part and beta the smooth residue. Measured to within 0.3% of the truth
+# on mixed paths, and 2000x below the total for a purely smooth one.
+#
+# Two safety rules, because using this SHRINKS a band:
+#   * the returned scale is alpha + LAM_QV * se(alpha), an UPPER estimate, never the
+#     point estimate;
+#   * a poor two-term fit FALLS BACK to the total quadratic variation, which is
+#     always sound. The two-term model is an approximation (a curved path
+#     contributes O(s^3), a state-dependent b contributes O(s^1.5)), so the fallback
+#     is what keeps the tightening from ever being a claim the data cannot support.
+QV_STRIDES = (1, 2, 4, 8)
+QV_FIT_MAX_REL = 0.05          # fit residual, relative to the stride-1 value
+
+
+def qv_martingale_part(vals: np.ndarray, strides=QV_STRIDES) -> tuple:
+    """(scale, info) -- the MARTINGALE part of a stride-indexed QV sum.
+
+    `vals[j]` is the weighted increment-square sum at `strides[j]`. Returns an upper
+    estimate of the martingale part and an info dict recording whether the two-term
+    fit was good enough to use; when it was not, `scale` is the stride-1 total.
+    """
+    S = np.asarray(strides, float)
+    q = np.asarray(vals, float)
+    total = float(q[0])
+    if len(S) < 3 or total <= 0:
+        return total, {"used": "total", "reason": "too few strides"}
+    A = np.vstack([S, S ** 2]).T
+    coef, *_ = np.linalg.lstsq(A, q, rcond=None)
+    resid = float(np.max(np.abs(q - A @ coef)))
+    alpha, beta = float(coef[0]), float(coef[1])
+    # se(alpha) from the fit's own residual through the normal equations
+    try:
+        cov = np.linalg.inv(A.T @ A)
+        dof = max(len(S) - 2, 1)
+        s2 = float(np.sum((q - A @ coef) ** 2)) / dof
+        se = float(np.sqrt(max(s2 * cov[0, 0], 0.0)))
+    except np.linalg.LinAlgError:                              # pragma: no cover
+        return total, {"used": "total", "reason": "singular stride design"}
+    if resid > QV_FIT_MAX_REL * total or alpha < 0:
+        return total, {"used": "total", "reason": "two-term fit poor",
+                       "fit_residual_rel": resid / total, "alpha": alpha}
+    up = alpha + KAPPA * se
+    if up >= total:
+        return total, {"used": "total", "reason": "no tightening available"}
+    return up, {"used": "martingale part", "alpha": alpha, "beta": beta,
+                "se_alpha": se, "scale": up, "total": total,
+                "tightened_by": total / max(up, 1e-300),
+                "fit_residual_rel": resid / total}
+
+
+def _martingale_scale(W0: np.ndarray, nus, dus, sigma_obs: float = 0.0,
+                      fields_for_strides=None) -> tuple:
     """(<M>, se, observation-explained share) for a row whose target functional is
-    the stochastic integral int phi nu dW.
+    the stochastic integral sum_i int phi nu_i dX_i^mart.
+
+    MULTI-FIELD, and the algebra collapses pleasingly. In d dimensions
+    <M> = int phi^2 sum_ik nu_i nu_k d[X_i, X_k], which as a sum over increments is
+    sum_n (phi_n sum_i nu_i,n du_i,n)^2 -- the SQUARE OF THE SUMMED increment, one
+    scalar per sample. No cross terms to enumerate and no d^2 loop; the scalar case
+    is the same formula with one field.
 
     Its variance is int phi^2 nu^2 d[u] -- QUADRATIC in the test function, which
     is why it is not a Term and never could be: the weak form is linear in phi.
@@ -800,17 +897,47 @@ def _martingale_scale(W0: np.ndarray, nu: np.ndarray, du: np.ndarray,
     what lets `certify.coverage_factor` be applied to an intrinsic term without
     letting a candidate widen its own band.
     """
-    w = ((W0 * nu) ** 2)[..., :-1]
-    val = float(np.sum(w * du ** 2))
-    se = _qv_se(w, du)
+    xi = np.zeros_like(np.asarray(dus[0], float))
+    for nu, du in zip(nus, dus):
+        xi = xi + (W0 * nu)[..., :-1] * du
+    xi2 = xi ** 2
+    val = float(np.sum(xi2))
+    se = float(np.sqrt(2.0 / 3.0 * np.sum(xi2 ** 2)))
+    info = None
+    if fields_for_strides is not None:
+        # STRIDE DECOMPOSITION (opt-in): separate the martingale part of this scale
+        # from the smooth residue a differentiable component contributes. See
+        # qv_martingale_part -- it falls back to the total whenever the two-term fit
+        # cannot support the tightening, so the direction is always safe.
+        vals = []
+        for sd in QV_STRIDES:
+            xs = None
+            for nu, u in zip(nus, fields_for_strides):
+                inc = u[..., sd:] - u[..., :-sd]
+                w = (W0 * nu)[..., :-sd]
+                xs = w * inc if xs is None else xs + w * inc
+            vals.append(float(np.sum(xs ** 2)))
+        val, info = qv_martingale_part(vals)
+        # The returned `val` is ALREADY alpha + kappa*se(alpha) -- an upper estimate
+        # of the martingale part that carries its own estimation error. So the
+        # downstream LAM_QV * qv_se inflation, which exists to cover exactly that
+        # error, would double-count it, and `se` is zero here.
+        #
+        # The first version scaled the total's `se` down in proportion to the
+        # tightening. That was arbitrary AND in the band-shrinking direction, which
+        # is the pair of properties this arc keeps finding at the bottom of its
+        # defects. When the fit falls back to the total, so does the error term.
+        se = 0.0 if info.get("used") == "martingale part" else se
     share = 0.0
     if sigma_obs > 0:
-        bias = float(np.sum(w) * 2.0 * sigma_obs ** 2)
+        # each field's observation error inflates its own increment variance by
+        # 2 sigma^2, and the sensitivities enter squared
+        w2 = sum(float(np.sum(((W0 * nu)[..., :-1]) ** 2)) for nu in nus)
+        bias = w2 * 2.0 * sigma_obs ** 2
         share = abs(bias) / max(abs(val), 1e-300)
         val = val - bias
-        se = float(np.hypot(se, np.sqrt(3.0 * np.sum(w ** 2))
-                            * 2.0 * sigma_obs ** 2))
-    return val, se, share
+        se = float(np.hypot(se, np.sqrt(3.0 * w2) * 2.0 * sigma_obs ** 2))
+    return val, se, share, info
 
 
 def _entry(W: np.ndarray, term: Term, fp: dict, names) -> tuple:
@@ -890,8 +1017,8 @@ def build(u, x: np.ndarray, t: np.ndarray, terms: list, patches: list[Patch],
 
 def build_nd(fields, coords, terms: list, patches: list[Patch], *,
              p: int = 8, sigma: float = 0.0, rough: bool = False,
-             martingale: tuple | None = None,
-             sigma_obs: float = 0.0) -> WeakSystem:
+             martingale: tuple | None = None, sigma_obs: float = 0.0,
+             martingale_decompose: bool = False) -> WeakSystem:
     """The factory over arbitrary geometry: `coords` are the axis coordinate
     vectors (space..., TIME LAST) and every field array is shaped accordingly.
 
@@ -948,7 +1075,7 @@ def build_nd(fields, coords, terms: list, patches: list[Patch], *,
     dpsi_one = (bump_derivatives(p, maxo, onesided=True)
                 if any(pa.onesided for pa in patches) else None)
     rows, quad, rnd, l2, l1s, orders, kept, grams = [], [], [], [], [], [], [], []
-    qvs, qv_ses, qv_shares = [], [], []
+    qvs, qv_ses, qv_shares, qv_decomp = [], [], [], []
     rejected = 0
     for pa in patches:
         sub = tuple(pa.idx)
@@ -1009,7 +1136,7 @@ def build_nd(fields, coords, terms: list, patches: list[Patch], *,
                 ords.append(float(r_t))
                 Ws.append(W1)
                 continue
-            if tm.qv_field is not None:
+            if tm.qv_fields is not None:
                 # A d[] TERM DOES NOT REFINE. Subsampling a realized-quadratic-
                 # variation estimator does not evaluate the same integral more
                 # accurately -- it computes a different estimator, over half the
@@ -1019,9 +1146,10 @@ def build_nd(fields, coords, terms: list, patches: list[Patch], *,
                 # term's bound directly.
                 W0 = _tensor(_windows(pa, cs, dpsi, dpsi_one,
                                       tm.multi(ndim))) * tm.sign
-                du = np.diff(fp[tm.qv_field], axis=-1)
-                v_h, absum, se, share = _qv_entry(W0, tm, fp, fnames, du,
-                                                  sigma_obs)
+                fa, fb = tm.qv_fields
+                duprod = np.diff(fp[fa], axis=-1) * np.diff(fp[fb], axis=-1)
+                v_h, absum, se, share = _qv_entry(W0, tm, fp, fnames, duprod,
+                                                  sigma_obs, diagonal=fa == fb)
                 vals.append(v_h)
                 qs.append(max(se, MACHINE_EPS * absum))
                 rs.append(MACHINE_EPS * absum)
@@ -1118,14 +1246,23 @@ def build_nd(fields, coords, terms: list, patches: list[Patch], *,
             rejected += 1
             continue
         if martingale is not None:
-            mf, mg = martingale
+            # one (field, gexpr) pair, or a LIST of them for a multi-field state:
+            # the target's sensitivity to each driving field in turn
+            pairs = ([martingale] if isinstance(martingale[0], str)
+                     else list(martingale))
             W0 = _tensor(_windows(pa, cs, dpsi, dpsi_one, (0,) * ndim))
-            nu = Term("nu", gexpr=mg, alpha=(0,) * ndim).g(fp)
-            v, se, share = _martingale_scale(W0, nu,
-                                             np.diff(fp[mf], axis=-1), sigma_obs)
+            nus = [Term(f"nu{i}", gexpr=mg, alpha=(0,) * ndim).g(fp)
+                   for i, (_, mg) in enumerate(pairs)]
+            dus = [np.diff(fp[mf], axis=-1) for mf, _ in pairs]
+            v, se, share, dec = _martingale_scale(
+                W0, nus, dus, sigma_obs,
+                fields_for_strides=[fp[mf] for mf, _ in pairs]
+                if martingale_decompose else None)
             qvs.append(v)
             qv_ses.append(se)
             qv_shares.append(share)
+            if dec is not None:
+                qv_decomp.append(dec)
         rows.append(vals)
         quad.append(qs)
         rnd.append(rs)
@@ -1144,7 +1281,8 @@ def build_nd(fields, coords, terms: list, patches: list[Patch], *,
                       qv=np.array(qvs, float) if qvs else None,
                       qv_se=np.array(qv_ses, float) if qv_ses else None,
                       qv_obs_share=np.array(qv_shares, float) if qv_shares
-                      else None)
+                      else None,
+                      qv_decompose=qv_decomp or None)
 
 
 # --------------------------------------------------------------------------

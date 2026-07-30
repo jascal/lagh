@@ -616,13 +616,21 @@ def test_a_rough_path_needs_the_deterministic_gates_relaxed():
     assert loose.qv is None
 
 
-def test_a_d_measure_term_states_its_field_and_rejects_junk():
+def test_a_d_measure_term_states_its_fields_and_rejects_junk():
+    """`d[u]` is quadratic variation, `d[u,v]` the CROSS-variation a
+    multi-dimensional Itô correction needs -- the off-diagonal terms a
+    diagonal-only measure cannot express."""
     from lagh.weakform import Term
-    assert Term("a", gexpr="u").qv_field is None
-    assert Term("b", gexpr="1/2", alpha=(0,), measure="d[u]").qv_field == "u"
+    assert Term("a", gexpr="u").qv_fields is None
+    assert Term("b", gexpr="1/2", alpha=(0,), measure="d[u]").qv_fields == ("u", "u")
     assert Term("c", gexpr="1", alpha=(0,), measure="d[rho]").qv_field == "rho"
-    with pytest.raises(ValueError, match="neither 'dt' nor"):
-        Term("d", measure="dW").qv_field
+    assert Term("d", gexpr="1", alpha=(0,),
+                measure="d[x,y]").qv_fields == ("x", "y")
+    assert Term("e", gexpr="1", alpha=(0,),
+                measure="d[ x , y ]").qv_fields == ("x", "y")
+    for junk in ("dW", "d[]", "d[a,b,c]", "d[a,]"):
+        with pytest.raises(ValueError, match="neither 'dt'"):
+            Term("bad", measure=junk).qv_fields
 
 
 @pytest.mark.parametrize("bad", ["y", "x + t", "sin(z)"])
@@ -630,3 +638,248 @@ def test_a_library_term_outside_the_state_is_refused(bad):
     t, X = _ou(T=40.0, n_traj=2)
     with pytest.raises(ValueError):
         build_rows(t, X, ("x", bad), half=2000)
+
+
+# ------------------------------------------------- multi-field Itô (Level 1, 2-D)
+
+def _vdp(mu=1.0, b=0.5, T=100.0, dt=1e-3, n_traj=2, seed=3, substeps=8):
+    """Van der Pol with additive noise on y ONLY:
+        dx = y dt,   dy = (mu(1-x^2)y - x)dt + b dW.
+    The x component is noise-free, which is the point of using it here."""
+    rng = np.random.default_rng(seed)
+    n = int(round(T / dt)) + 1
+    ds = dt / substeps
+    sq = np.sqrt(ds)
+    x = rng.uniform(-2, 2, n_traj)
+    y = rng.uniform(-2, 2, n_traj)
+    X = np.empty((n_traj, n))
+    Y = np.empty((n_traj, n))
+    X[:, 0], Y[:, 0] = x, y
+    for k in range(1, n):
+        for _ in range(substeps):
+            xn = x + y * ds
+            y = y + (mu * (1 - x ** 2) * y - x) * ds \
+                + b * sq * rng.standard_normal(n_traj)
+            x = xn
+        X[:, k], Y[:, k] = x, y
+    return np.arange(n) * dt, X, Y
+
+
+VDP_LIBS = {"x": ("1", "x", "y", "x**2", "x*y", "y**2"),
+            "y": ("1", "x", "y", "x**2", "x*y", "x**2*y")}
+
+
+def _vdp_rows(t, X, Y, f, half, *, mart=True):
+    """(design, qv, column names, n_corrections) for one f, stacked over paths."""
+    from lagh.ito import ito_terms_nd
+    from lagh.weakform import Patch, build_nd
+    it = ito_terms_nd(f, VDP_LIBS, ("x", "y"))
+    terms = [it["target"]] + it["corrections"] + it["columns"]
+    A, qv = [], []
+    for k in range(len(X)):
+        wins = [(c - half, c + half + 1)
+                for c in range(half, len(t) - half - 1, 2 * half)]
+        pas = [Patch(centers=(0.5 * (t[lo] + t[hi - 1]),),
+                     halfwidths=(0.5 * (t[hi - 1] - t[lo]),),
+                     idx=(slice(lo, hi),)) for lo, hi in wins]
+        ws = build_nd({"x": X[k], "y": Y[k]}, [t], terms, pas, p=8, rough=True,
+                      martingale=it["martingale"] if mart else None)
+        if len(ws.A):
+            A.append(ws.A)
+            if ws.qv is not None:
+                qv.append(ws.qv)
+    return (np.vstack(A), np.concatenate(qv) if qv else None,
+            [c.name for c in it["columns"]], len(it["corrections"]))
+
+
+def test_the_multi_field_ito_terms_have_the_right_shape():
+    """Two things the scalar case hid: the Hessian's off-diagonal entries appear
+    TWICE in sum_ik and the term must carry that factor, and the martingale is a
+    LIST of per-field sensitivities."""
+    from lagh.ito import ito_terms_nd
+    # f = x: no second derivative, and only x drives it
+    it = ito_terms_nd("x", VDP_LIBS, ("x", "y"))
+    assert it["corrections"] == []
+    assert it["martingale"] == [("x", "1")]
+    assert [c.name for c in it["columns"]][:3] == ["x:1", "x:x", "x:y"]
+    # f = y^2/2: diagonal Hessian, coefficient 1/2
+    it2 = ito_terms_nd("y**2/2", VDP_LIBS, ("x", "y"))
+    assert [(c.name, c.gexpr, c.measure) for c in it2["corrections"]] == \
+        [("ito:y,y", "1/2", "d[y,y]")]
+    assert it2["martingale"] == [("y", "y")]
+    # f = x*y: OFF-diagonal, so 2 * 1/2 = 1, and BOTH fields drive it
+    it3 = ito_terms_nd("x*y", VDP_LIBS, ("x", "y"))
+    assert [(c.name, c.gexpr, c.measure) for c in it3["corrections"]] == \
+        [("ito:x,y", "1", "d[x,y]")]
+    assert it3["martingale"] == [("x", "y"), ("y", "x")]
+    assert len(it3["columns"]) == 12            # both components' libraries
+    with pytest.raises(ValueError, match="reads"):
+        ito_terms_nd("x*z", VDP_LIBS, ("x", "y"))
+
+
+def test_a_cross_variation_term_computes_the_increment_product():
+    """d[x,y] must be sum_i w_i dx_i dy_i, not either field's own variation."""
+    from lagh.weakform import Patch, Term, build_nd
+    n = 4001
+    t = np.arange(n) * 1e-3
+    rng = np.random.default_rng(0)
+    Xf = np.cumsum(rng.standard_normal(n)) * 1e-2
+    Yf = np.cumsum(rng.standard_normal(n)) * 1e-2
+    pa = Patch(centers=(t[2000],), halfwidths=(t[1500],), idx=(slice(500, 3501),))
+    got = build_nd({"x": Xf, "y": Yf}, [t],
+                   [Term("cross", gexpr="1", alpha=(0,), measure="d[x,y]"),
+                    Term("xx", gexpr="1", alpha=(0,), measure="d[x]")],
+                   [pa], p=8, rough=True)
+    from lagh.weakform import _tensor, _windows, bump_derivatives
+    dpsi = bump_derivatives(8, 0)
+    phi = _tensor(_windows(pa, [t[500:3501]], dpsi, None, (0,)))[:-1]
+    dx, dy = np.diff(Xf[500:3501]), np.diff(Yf[500:3501])
+    assert got.A[0, 0] == pytest.approx(float(np.sum(phi * dx * dy)), rel=1e-12)
+    assert got.A[0, 1] == pytest.approx(float(np.sum(phi * dx * dx)), rel=1e-12)
+    # independent fields: the cross-variation is near zero and the diagonal is not
+    assert abs(got.A[0, 0]) < 0.2 * abs(got.A[0, 1])
+
+
+def test_van_der_pol_covers_its_truth_on_both_test_functions():
+    """The migration's validation: a 2-D state, one row set spanning both
+    components, and the TRUE law inside the band on the deterministic row and the
+    stochastic one alike."""
+    mu, b = 1.0, 0.5
+    t, X, Y = _vdp(mu=mu, b=b, T=100.0)
+    for f, truth in (("x", {"x:y": 1.0}),
+                     ("y**2/2", {"y:y": mu, "y:x**2*y": -mu, "y:x": -1.0})):
+        A, qv, names, ncorr = _vdp_rows(t, X, Y, f, 8000)
+        assert len(A) >= 6 and qv is not None
+        y_t = A[:, 0] - A[:, 1:1 + ncorr].sum(axis=1)
+        c = np.array([truth.get(nm, 0.0) for nm in names])
+        resid = np.abs(y_t - A[:, 1 + ncorr:] @ c)
+        band = 4.0 * np.sqrt(np.maximum(qv, 0.0))
+        assert np.all(resid <= band), f
+    # the NOISELESS row is exact to quadrature, so its martingale band is hugely
+    # conservative -- measured ~2000x. Reach lost, never soundness.
+    A, qv, names, ncorr = _vdp_rows(t, X, Y, "x", 8000)
+    resid = np.abs(A[:, 0] - A[:, 1 + ncorr:] @ np.array(
+        [1.0 if nm == "x:y" else 0.0 for nm in names]))
+    assert np.median(resid) < 1e-2
+    assert np.median(4.0 * np.sqrt(qv)) > 100 * np.median(resid)
+
+
+def test_quadratic_variation_tells_a_driven_component_from_a_noiseless_one():
+    """The multi-dimensional form of the error-provenance question, and it is
+    MEASURABLE rather than declared: a component's realized quadratic variation
+    scales as O(dt) when it carries no noise (a differentiable path has zero
+    quadratic variation, and the estimator sees the O(dt) residue) and as O(1) when
+    it is driven. Halving dt separates them.
+
+    Consequence, stated because it is the next increment's job: for a noiseless
+    component the martingale band built from that residue over-declares by
+    ~sqrt(1/dt). Tightening it needs a DECLARATION that the component is noiseless,
+    and this diagnostic is what would verify such a declaration.
+    """
+    got = {}
+    for dt, sub in ((4e-3, 2), (1e-3, 8)):
+        t, X, Y = _vdp(dt=dt, substeps=sub, T=100.0)
+        half = int(round(8.0 / dt))
+        _, qv_x, _, _ = _vdp_rows(t, X, Y, "x", half)
+        _, qv_y, _, _ = _vdp_rows(t, X, Y, "y**2/2", half)
+        got[dt] = (float(np.median(qv_x)), float(np.median(qv_y)))
+    (x_coarse, y_coarse), (x_fine, y_fine) = got[4e-3], got[1e-3]
+    # the noiseless component's qv FALLS with dt; 4x finer, expect ~4x smaller
+    assert x_fine < x_coarse / 2.0
+    # the driven component's does not
+    assert 0.5 < y_fine / y_coarse < 2.0
+
+
+def test_quadratic_variation_separates_its_martingale_part_from_a_smooth_residue():
+    """A component that carries NO noise still has a nonzero realized QV -- the
+    O(dt) residue of a differentiable path -- and banding with it over-declares by
+    ~sqrt(1/dt). The two parts separate by STRIDE SCALING, because a martingale's
+    increment variance grows like s while a differentiable path's SQUARED increment
+    grows like s^2:
+
+        sum_i (u[i+s] - u[i])^2  ~=  alpha*s + beta*s^2
+
+    alpha is the martingale part. Measured to within 0.3% on mixed paths.
+    """
+    from lagh.weakform import qv_martingale_part
+    n, dt = 200_001, 1e-3
+    t = np.arange(n) * dt
+    rng = np.random.default_rng(0)
+    smooth = np.sin(2 * t) + 0.3 * np.cos(5 * t)
+
+    def sums(u, strides=(1, 2, 4, 8)):
+        return [float(np.sum((u[s:] - u[:-s]) ** 2)) for s in strides]
+
+    # a purely smooth path: the martingale part is ~0, thousands of times below its
+    # own total quadratic variation
+    sc, info = qv_martingale_part(sums(smooth))
+    total = sums(smooth)[0]
+    assert info["used"] == "martingale part"
+    assert sc < total / 500
+
+    # mixed paths: alpha recovers the true martingale part
+    for b in (0.01, 0.05, 0.5):
+        bm = np.r_[0.0, np.cumsum(rng.standard_normal(n - 1) * np.sqrt(dt))]
+        sc, info = qv_martingale_part(sums(smooth + b * bm))
+        assert info["used"] == "martingale part"
+        assert info["alpha"] == pytest.approx(b ** 2 * t[-1], rel=0.05)
+        assert sc >= info["alpha"]          # the returned scale is an UPPER estimate
+
+    # a pure martingale has no smooth part to remove, so no tightening is available
+    # and it falls back to the total -- the safe direction, always
+    bm = np.r_[0.0, np.cumsum(rng.standard_normal(n - 1) * np.sqrt(dt))]
+    sc, info = qv_martingale_part(sums(0.5 * bm))
+    assert sc == pytest.approx(sums(0.5 * bm)[0], rel=1e-12)
+    assert info["used"] == "total"
+    # ...and a design too small to fit falls back too
+    _, bad = qv_martingale_part([1.0, 2.0], strides=(1, 2))
+    assert bad["used"] == "total"
+
+
+def test_the_decomposition_tightens_a_noiseless_row_and_leaves_a_driven_one_alone():
+    """The decisive test, on real 2-D data: the tightening must apply where the
+    component is noise-free and NOT where it is driven, and the truth must still
+    cover in both cases. Measured: 12x tighter on Van der Pol's noiseless x row,
+    unchanged on the driven y row."""
+    from lagh.ito import ito_terms_nd
+    from lagh.weakform import Patch, build_nd
+    mu, b, half = 1.0, 0.5, 8000
+    t, X, Y = _vdp(mu=mu, b=b, T=100.0)
+
+    def run(f, truth, decompose):
+        it = ito_terms_nd(f, VDP_LIBS, ("x", "y"))
+        terms = [it["target"]] + it["corrections"] + it["columns"]
+        names = [c.name for c in it["columns"]]
+        nc = len(it["corrections"])
+        A, qv = [], []
+        for k in range(len(X)):
+            wins = [(c - half, c + half + 1)
+                    for c in range(half, len(t) - half - 1, 2 * half)]
+            pas = [Patch(centers=(0.5 * (t[lo] + t[hi - 1]),),
+                         halfwidths=(0.5 * (t[hi - 1] - t[lo]),),
+                         idx=(slice(lo, hi),)) for lo, hi in wins]
+            ws = build_nd({"x": X[k], "y": Y[k]}, [t], terms, pas, p=8, rough=True,
+                          martingale=it["martingale"],
+                          martingale_decompose=decompose)
+            if len(ws.A):
+                A.append(ws.A)
+                qv.append(ws.qv)
+        A = np.vstack(A)
+        qv = np.concatenate(qv)
+        c = np.array([truth.get(nm, 0.0) for nm in names])
+        resid = np.abs(A[:, 0] - A[:, 1:1 + nc].sum(axis=1) - A[:, 1 + nc:] @ c)
+        band = 4.0 * np.sqrt(np.maximum(qv, 0.0))
+        return float(np.median(band)), bool(np.all(resid <= band))
+
+    # the NOISELESS component: a large tightening, and the truth still covers
+    raw_x, cov_x = run("x", {"x:y": 1.0}, False)
+    dec_x, cov_dx = run("x", {"x:y": 1.0}, True)
+    assert cov_x and cov_dx
+    assert dec_x < raw_x / 5.0
+
+    # the DRIVEN component: nothing to remove, so the band barely moves
+    truth_y = {"y:y": mu, "y:x**2*y": -mu, "y:x": -1.0}
+    raw_y, cov_y = run("y**2/2", truth_y, False)
+    dec_y, cov_dy = run("y**2/2", truth_y, True)
+    assert cov_y and cov_dy
+    assert dec_y > 0.9 * raw_y

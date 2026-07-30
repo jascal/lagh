@@ -301,13 +301,110 @@ falls to 9–29% of the band and **two diffusions certify where one did before**
 distinction `weakform` draws with `field_l1`, and the same lesson: the honest
 propagation is also the powerful one.
 
+## Multi-field Itô: Van der Pol, and a component that carries no noise
+
+The migration Level 1 needed. `lagh.ito.ito_terms_nd` emits the multi-dimensional
+identity in `weakform.Term`, and `build_nd` assembles it — one row set spanning both
+components, which is the same shape `DIRECTION_PDE_SYSTEMS.md` already uses for a
+coupled PDE. For dX_i = a_i dt + Σ_j b_ij dW_j and a smooth f of the whole state:
+
+    -∫φ' f(X) dt = Σ_i ∫φ (∂f/∂x_i) a_i dt
+                 + ½ Σ_ik ∫φ (∂²f/∂x_i∂x_k) d[X_i, X_k]  +  M
+
+Two things the scalar case hid, both of which needed new machinery:
+
+* **Cross-variation.** `Term.measure` gained `d[u,v]`, integrating against
+  `Σ_i w_i Δu_i Δv_i`. The Hessian's off-diagonal entries appear **twice** in Σ_ik,
+  so the emitted term carries that factor 2 explicitly rather than leaving a reader
+  to notice. Its variance estimator differs from the diagonal's and is stated:
+  `Var(du_i du_k) = v_i v_k + c²` while `E[(du_i du_k)²] = v_i v_k + 2c²`, so the
+  fourth-moment sum is an upper bound in the cross case (used as is) and the
+  diagonal's 2/3 factor makes it exact.
+* **A per-field martingale, which collapses.** ⟨M⟩ = ∫φ² Σ_ik ν_i ν_k d[X_i,X_k]
+  is `Σ_n (φ_n Σ_i ν_i,n Δu_i,n)²` — the square of the *summed* increment, one
+  scalar per sample. No d² loop, no cross terms to enumerate, and the scalar case is
+  the same formula with one field.
+
+Validated on **Van der Pol with additive noise**, `dx = y dt`,
+`dy = (μ(1−x²)y − x)dt + b dW`: the true law is inside the band on every row, for
+both the deterministic and the stochastic test function.
+
+### A component's quadratic variation says whether it carries noise
+
+Van der Pol's `x` component has **no noise**, so its weak form is a deterministic
+identity: `−∫φ'x dt = ∫φ y dt` up to quadrature. Measured residual at the truth:
+1.8×10⁻⁴. Its martingale band: 0.35 — **2000× too wide**.
+
+The reason is worth having. A differentiable path has zero quadratic variation, and
+the realized estimator sees the O(Δt) residue instead: `Σ(Δx)² ≈ ∫y²dt·Δt`. So the
+band treats a discretization residue as if it were a martingale variance. Which
+makes the diagnostic measurable:
+
+| Δt | qv, `x` (noiseless) | qv, `y` (driven) |
+|---|---|---|
+| 4×10⁻³ | 2.81×10⁻² | 1.94 |
+| 2×10⁻³ | 1.59×10⁻² | 2.04 |
+| 1×10⁻³ | 6.18×10⁻³ | 1.60 |
+
+**A component's realized quadratic variation scales as O(Δt) when it carries no
+noise and O(1) when it is driven, so halving Δt separates them.** That is the
+multi-dimensional form of the error-provenance question — *which components are
+noise-driven* — and it is measured rather than declared.
+
+The band is conservative here, never unsound: reach lost, not correctness.
+
+### And it needs no declaration at all — the two parts separate
+
+The Δt-scaling test above needs two grids. There is an equivalent test on ONE, and it
+does better than diagnose: it **decomposes**. Summing squared increments over all
+offsets at lag s,
+
+    Σ_i (u[i+s] − u[i])²  ≈  α·s  +  β·s²
+
+because a martingale's increment variance grows like s while a differentiable path's
+*squared* increment grows like s². So **α is the martingale part and β the smooth
+residue**, and two strides suffice. Measured against known truth:
+
+| path | recovered α | true martingale QV |
+|---|---|---|
+| pure smooth | 2.75×10⁻⁴ | 0 (total QV 0.623) |
+| smooth + 0.01·BM | 0.0203 | 0.0200 |
+| smooth + 0.05·BM | 0.5013 | 0.500 |
+| smooth + 0.5·BM | 49.83 | 50.0 |
+
+Within 0.3% on the mixed paths, and ~2000× below the total for a purely smooth one —
+which is exactly the over-declaration factor measured on Van der Pol's x row. **So
+the fifth instance of the recurring pattern did not need a declaration after all: the
+quantity is measurable.**
+
+Because this *shrinks* a band, two safety rules are built in rather than added later:
+the returned scale is `α + κ·se(α)`, an upper estimate and never the point estimate;
+and a poor two-term fit **falls back to the total**, which is always sound. The
+two-term model is an approximation — a curved path contributes O(s³), a
+state-dependent b contributes O(s^1.5) — so the fallback is what stops the tightening
+from ever being a claim the data cannot support.
+
+On Van der Pol, `build_nd(martingale_decompose=True)` does what it should and only
+that:
+
+| row | band, raw total | band, decomposed | truth covers |
+|---|---|---|---|
+| `f = x` (component noise-FREE) | 3.14×10⁻¹ | **2.61×10⁻²** (12× tighter) | yes, 43× margin |
+| `f = y²/2` (component DRIVEN) | 5.056 | 5.048 (unchanged) | yes |
+
+It tightens where there is a smooth residue to remove and leaves a genuinely driven
+row alone. The gain is 12× rather than the full 2000× because the fallback fires on
+some patches and the inflation is deliberately conservative — the safety machinery
+costing reach, which is the trade it exists to make.
+
 ## What is not here
 
-* **Van der Pol with additive noise** — 2-D, and the assembler is still scalar. The
-  migration of `ito.build_rows` onto `build_nd` is the prerequisite and remains
-  Level 1's other half. Multi-dimensional Itô also needs cross-variation
-  `d[u,v]` and a per-field martingale sensitivity list, neither of which exists yet;
-  `Term.measure` covers only the diagonal `d[u]` today.
+* ~~Van der Pol with additive noise.~~ **The multi-field machinery is DONE** and
+  covers its truth (above). What is not done is a certified or scored Van der Pol
+  RUN: the drift identifiability arithmetic (θ·L > 2κ² per component, over a 6- and
+  12-term bivariate library) has not been worked out for it, and `ito.build_rows`
+  still has its own scalar assembler beside `build_nd` — the equality test binds
+  them, and collapsing them is now a tidying job rather than a capability gap.
 * **The invariants target.** Untouched. The checker scores invariants up to affine
   reparametrization already, so this is generator work rather than instrument work.
 * ~~A certified diffusion.~~ **DONE** (above): OU's constant b² certifies, GBM's x²

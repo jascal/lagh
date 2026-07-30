@@ -409,10 +409,25 @@ framing.
      b²'s state dependence identifiable only for a STATIONARY process (OU: bounds
      tighten 2.9×). Where the process grows, the windows already sample different
      state regions and w adds nothing (GBM: marginally wider).
-   Still open in Level 1: Van der Pol (2-D — needs the `build_nd` migration plus
-   cross-variation `d[u,v]` and a per-field martingale list), the invariants target,
-   a diffusion whose FORM certifies rather than merely resolving on a nontrivially
-   state-dependent b², and a checker-scored Level 1 table.
+   **THIRD INCREMENT — MULTI-FIELD ITÔ, and a scored Level 1 table.** S5 holds:
+   zero confident-wrong over four systems, all 28 component bounds covering, two
+   diffusions CERTIFIED. Then the 2-D machinery: `Term.measure` gained
+   cross-variation `d[u,v]`, `build_nd(martingale=)` takes a per-field sensitivity
+   list (⟨M⟩ collapses to the square of the SUMMED increment — no d² loop), and
+   `ito.ito_terms_nd` emits the multi-dimensional identity. Validated on Van der Pol:
+   the truth is inside the band on the deterministic and the stochastic row alike.
+   * **A component's quadratic variation says whether it carries noise.** Van der
+     Pol's `x` is noise-free, so its weak form is a deterministic identity — residual
+     1.8e-4 against a martingale band of 0.35, over-declared 2000×, because a
+     differentiable path's realized QV is the O(Δt) residue rather than zero. Halving
+     Δt halves it while a driven component's stays flat, so **the diagnostic is
+     measurable**: this is the multi-dimensional form of the error-provenance
+     question. Conservative, never unsound.
+   Still open in Level 1: a certified/scored Van der Pol run (its drift
+   identifiability arithmetic over a bivariate library is not worked out), the
+   invariants target, a state-dependent b² whose FORM certifies, and the
+   noiseless-component band tightening — which needs a DECLARATION verified by the
+   Δt-scaling test above, being the fifth instance of the arc's recurring pattern.
 5. Level 2, as the error-provenance testbed.
 
 Level 3, SPDEs, higher dimension, partial observation and non-Markovian noise are
