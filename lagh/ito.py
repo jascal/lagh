@@ -119,7 +119,14 @@ LAM_QV = 4.0
 
 
 def _fderivs(fs):
-    """State test functions f -> (name, f, f', f'') as numpy callables."""
+    """State test functions f -> (name, and f through its third derivative).
+
+    The third derivative is carried because the DIFFUSION columns need it: the
+    sensitivity of 1/2 int phi f'' h dt to a per-sample state error is
+    1/2 phi (f_3 h + f'' h'), and a band that dropped the f_3 part would be tight
+    for a reason nobody stated. It is zero for every f in the default family --
+    which is exactly why it had to be computed rather than assumed.
+    """
     x = sp.Symbol("x")
     out = []
     for nm in fs:
@@ -127,7 +134,7 @@ def _fderivs(fs):
         if e.free_symbols - {x}:
             raise ValueError(f"f {nm!r} reads a symbol other than x")
         out.append((str(nm),) + tuple(
-            sp.lambdify(x, sp.diff(e, x, k), "numpy") for k in (0, 1, 2)))
+            sp.lambdify(x, sp.diff(e, x, k), "numpy") for k in (0, 1, 2, 3)))
     return out
 
 
@@ -372,7 +379,8 @@ def time_windows(t: np.ndarray, *, half: int, n_windows: int = 0,
     return [(c - half, c + half + 1) for c in centres]
 
 
-def _one(t, X, win, fns, fam, dpsi, step: int, sigma_obs: float = 0.0):
+def _one(t, X, win, fns, fam, dpsi, step: int, sigma_obs: float = 0.0,
+         dfns=None):
     """(y, features, corr, qv, qv_se, corr_se, absum) for one (window, f) at grid
     stride `step`, or None when the window cannot be read at that stride."""
     lo, hi = win
@@ -384,8 +392,9 @@ def _one(t, X, win, fns, fam, dpsi, step: int, sigma_obs: float = 0.0):
     s = (tt - tc) / at
     h = float(tt[1] - tt[0])
     phi, dphi = dpsi[0](s), dpsi[1](s) / at
-    _, f0, f1, f2 = fam
+    _, f0, f1, f2, f3 = fam
     fx, f1x, f2x = _at(f0, xx), _at(f1, xx), _at(f2, xx)
+    f3x = _at(f3, xx)
     dX = np.diff(xx)
     dX2, dX4 = dX ** 2, dX ** 4
     # the measured Ito correction, and the band's scale: both realized QV
@@ -428,8 +437,22 @@ def _one(t, X, win, fns, fam, dpsi, step: int, sigma_obs: float = 0.0):
                                  np.sqrt(3.0 * np.sum(w_corr ** 2)) * two_s2))
         qv_se = float(np.hypot(qv_se,
                                np.sqrt(3.0 * np.sum(w_qv ** 2)) * two_s2))
+    if dfns:
+        # THE DIFFUSION IS CLAIMED, NOT MEASURED. b^2 = sum_j d_j h_j(x) goes into
+        # the design matrix as the ordinary dt columns 1/2 int phi f'' h_j dt, so
+        # drift and diffusion are identified JOINTLY from the same rows, and the
+        # target keeps the plain -int phi' f dt with no correction subtracted.
+        #
+        # This also removes the one UNSAFE consumer of realized quadratic
+        # variation: the measured correction was the term where observation-noise
+        # contamination became a systematic offset on the target (the Level 0
+        # confident-wrong). Here realized QV is used only to set the BAND, where
+        # contamination is conservative.
+        corr, corr_se = 0.0, 0.0
     y = -float(np.sum(dphi * fx) * h) - corr
-    feats = np.array([float(np.sum(phi * f1x * _at(g, xx)) * h) for g, _ in fns])
+    feats = np.array([float(np.sum(phi * f1x * _at(g, xx)) * h) for g, _ in fns]
+                     + [0.5 * float(np.sum(phi * f2x * _at(hh, xx)) * h)
+                        for hh, _ in (dfns or [])])
     absum = float(np.sum(np.abs(dphi * fx)) * h)
     # FIRST-ORDER sensitivity of each functional to a per-sample state error, for
     # the observational channel's Gram. The target reads -phi' f(X) so its
@@ -440,21 +463,42 @@ def _one(t, X, win, fns, fam, dpsi, step: int, sigma_obs: float = 0.0):
     nu = [-dphi * f1x * h]
     for g, dgf in fns:
         nu.append(phi * (f2x * _at(g, xx) + f1x * _at(dgf, xx)) * h)
+    for hh, dhf in (dfns or []):
+        nu.append(0.5 * phi * (f3x * _at(hh, xx) + f2x * _at(dhf, xx)) * h)
     NU = np.vstack(nu)
     gram = NU @ NU.T
     return y, feats, corr, qv, qv_se, corr_se, absum, share, gram
 
 
-def build_rows(t, paths, names, *, fs=("x", "x**2/2"), windows=None,
-               half: int = 200, n_windows: int = 0, overlap: float = 0.0,
-               p: int = 8, delta: float = 0.05, sigma_obs: float = 0.0,
-               qv_obs_max: float = 0.5) -> ItoRows:
+def build_rows(t, paths, names, *, fs=("x", "x**2/2"), diff_names=None,
+               windows=None, half: int = 200, n_windows: int = 0,
+               overlap: float = 0.0, p: int = 8, delta: float = 0.05,
+               sigma_obs: float = 0.0, qv_obs_max: float = 0.5) -> ItoRows:
     """Assemble Itô weak-form rows from `paths` (n_traj, n_steps) on grid `t`.
 
     `fs` is the family of state test functions. `("x",)` alone reproduces the
     plain dX form and, per the module docstring, cannot certify a stationary
     drift at any patch size -- `x**2/2` is what makes one identifiable, so it is
     in the default.
+
+    `diff_names` turns the DIFFUSION into a claim instead of a measurement. Given a
+    library {h_j} for b^2, the Itô correction becomes the ordinary dt columns
+    1/2 int phi f''(X) h_j(X) dt and drift and diffusion are identified JOINTLY from
+    the same rows -- the Level 1 target. Two things follow and neither is
+    incidental:
+
+      * **The Delta-t requirement disappears from the diffusion.** Nothing here
+        estimates b from quadratic variation, so the classic dt -> 0 demand applies
+        to the QV estimator and not to this. S2 was registered in the QV picture and
+        is measured against this one.
+      * **The unsafe consumer of realized QV is gone.** The measured correction was
+        the one place where observation-noise contamination became a systematic
+        offset on the TARGET (the Level 0 confident-wrong). With the diffusion in
+        the design matrix, realized QV only sets the BAND, where contamination is
+        conservative.
+
+    Columns are named `drift:<g>` and `diffusion:<h>`, which is what
+    `stochcheck.component` expects.
 
     `sigma_obs` is the DECLARED per-sample measurement error on the state. It is
     not cosmetic: it debiases realized quadratic variation (see `_one`) and it
@@ -467,6 +511,10 @@ def build_rows(t, paths, names, *, fs=("x", "x**2/2"), windows=None,
     t = np.asarray(t, float)
     P = np.atleast_2d(np.asarray(paths, float))
     fns = _term_fns(names)
+    dfns = _term_fns(diff_names) if diff_names else None
+    colnames = ([f"drift:{g}" for g in names]
+                + [f"diffusion:{h}" for h in (diff_names or [])]) \
+        if diff_names else list(names)
     fam = _fderivs(fs)
     dpsi = bump_derivatives(p, 1)
     wins = windows if windows is not None else time_windows(
@@ -479,8 +527,8 @@ def build_rows(t, paths, names, *, fs=("x", "x**2/2"), windows=None,
         X = P[k]
         for win in wins:
             for fa in fam:
-                base = _one(t, X, win, fns, fa, dpsi, 1, sigma_obs)
-                lad = [_one(t, X, win, fns, fa, dpsi, s, sigma_obs)
+                base = _one(t, X, win, fns, fa, dpsi, 1, sigma_obs, dfns)
+                lad = [_one(t, X, win, fns, fa, dpsi, s, sigma_obs, dfns)
                        for s in (2, 4)]
                 if base is None or any(z is None for z in lad):
                     rejected += 1
@@ -542,9 +590,10 @@ def build_rows(t, paths, names, *, fs=("x", "x**2/2"), windows=None,
             f"{med:.3g} of the martingale band against a {QUAD_MAX_FRAC:g} bar, "
             "so the band would have been a discretization band wearing a "
             "coverage statement (Abstain.RESOLUTION territory)")
-    K = 1 + len(names)
-    return ItoRows(np.array(ys), np.array(As) if As else np.zeros((0, len(names))),
-                   list(names), np.array(qvs), np.array(qses), np.array(cses),
+    K = 1 + len(colnames)
+    return ItoRows(np.array(ys),
+                   np.array(As) if As else np.zeros((0, len(colnames))),
+                   list(colnames), np.array(qvs), np.array(qses), np.array(cses),
                    np.array(quads) if quads else np.zeros((0, K)),
                    np.array(trs, int), fnm, wl,
                    np.array(grams) if grams else np.zeros((0, K, K)),

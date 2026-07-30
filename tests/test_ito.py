@@ -289,6 +289,65 @@ def test_the_pure_noise_null_certifies_nothing():
     assert r["abstain"] in ("noise", "structural", "resolution")
 
 
+def test_a_claimed_diffusion_becomes_ordinary_columns():
+    """Level 1's first target. With a library for b^2 the Itô correction stops
+    being a measured value moved to the left and becomes the dt columns
+    1/2 int phi f'' h_j dt, so drift and diffusion are identified JOINTLY.
+
+    Two consequences the test pins down: the columns are named for the frozen
+    checker's component vocabulary, and the measured correction -- the one UNSAFE
+    consumer of realized quadratic variation, and the source of the Level 0
+    confident-wrong -- is gone.
+    """
+    t, X = _ou(T=160.0, n_traj=4)
+    plain = build_rows(t, X, LIB, half=8000)
+    joint = build_rows(t, X, LIB, diff_names=("1", "x**2"), half=8000)
+    assert plain.names == list(LIB)
+    assert joint.names == ["drift:1", "drift:x", "drift:x**2", "drift:x**3",
+                           "diffusion:1", "diffusion:x**2"]
+    assert joint.A.shape[1] == 6 and plain.A.shape[1] == 4
+    # the measured correction is gone, so the target is the plain -int phi' f dt
+    assert np.all(joint.corr_se == 0.0)
+    assert np.any(plain.corr_se > 0.0)
+    # the band still comes from realized QV -- the SAFE consumer -- unchanged
+    assert np.allclose(joint.qv, plain.qv)
+    # and the diffusion columns are zero for f = x, where f'' vanishes
+    fx = np.array(joint.fname) == "x"
+    assert np.allclose(joint.A[fx][:, 4:], 0.0)
+    assert not np.allclose(joint.A[~fx][:, 4:], 0.0)
+
+
+def test_the_admissible_functional_bounds_the_law_not_just_its_coefficients():
+    """`admissible_interval` bounds one coefficient; this bounds any LINEAR
+    FUNCTIONAL of them, which is what a reader actually wants -- the drift AS A
+    FUNCTION. Both must cover, and the functional bound must be no wider than the
+    coefficient bound implies."""
+    from lagh.certify import admissible_functional
+    t, X = _ou(T=320.0, n_traj=4)
+    rows = build_rows(t, X, LIB, half=16000)
+    band = _band(rows)
+    e0 = band.martingale() + LAM_QV * rows.corr_se + rows.quad[:, 0]
+    q = rows.quad[:, 1:].sum(axis=1)
+    eps = lambda c: e0 + c * q                               # noqa: E731
+    # a(x) at three states, as functionals of (c_1, c_x, c_x2, c_x3)
+    xs = np.array([-0.5, 0.0, 0.5])
+    W = np.array([[1.0, x0, x0 ** 2, x0 ** 3] for x0 in xs])
+    fun, info = admissible_functional(rows.A, rows.y, eps, W, coeff_max=20.0)
+    assert info["n_functionals"] == 3
+    for x0, (lo, hi) in zip(xs, fun):
+        true_a = -1.0 * x0                       # OU drift -theta x, theta = 1
+        assert lo is not None and hi is not None and lo <= true_a <= hi
+    # picking out one coordinate must reproduce admissible_interval exactly
+    one = np.zeros((1, 4))
+    one[0, 1] = 1.0
+    got, _ = admissible_functional(rows.A, rows.y, eps, one, coeff_max=20.0)
+    ref, _ = admissible_interval(rows.A, rows.y, eps, coeff_max=20.0)
+    assert got[0][0] == pytest.approx(ref[LIB.index("x")][0], rel=1e-9)
+    assert got[0][1] == pytest.approx(ref[LIB.index("x")][1], rel=1e-9)
+    with pytest.raises(ValueError, match="columns"):
+        admissible_functional(rows.A, rows.y, eps, np.zeros((1, 9)))
+
+
 def test_the_term_vocabulary_reproduces_the_hand_rolled_rows():
     """Step 3's validation criterion, and the bridge between two assemblers.
 

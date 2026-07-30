@@ -586,6 +586,56 @@ def admissible_interval(A: np.ndarray, y: np.ndarray, eps: np.ndarray,
     return out, info
 
 
+def admissible_functional(A: np.ndarray, y: np.ndarray, eps, W: np.ndarray,
+                          *, coeff_max: float = 1e3):
+    """The joint range of arbitrary LINEAR FUNCTIONALS of the coefficients over the
+    consistent polytope -- `admissible_interval` with the coordinate directions
+    replaced by the rows of `W`.
+
+    It exists because per-component bounds can badly understate what the data
+    determined. Measured on the Itô double well (Level 1): with drift x - x^3 the
+    two columns are collinear over the visited range, so each coefficient's joint
+    bound is many times its own value while their COMBINATION is pinned. Asking for
+    the range of a(x_0) = sum_k c_k g_k(x_0) is one more LP per query point and
+    answers the question a reader actually has -- what is the drift, as a function
+    -- rather than the question the monomial basis happens to pose.
+
+    Returns [(lo, hi)] per row of W, either end None when unbounded, and the same
+    `info` dict `admissible_interval` returns.
+    """
+    try:
+        from scipy.optimize import linprog
+    except ImportError as e:                                   # pragma: no cover
+        raise ImportError("admissible_functional needs scipy for the LP") from e
+    A = np.asarray(A, float)
+    y = np.asarray(y, float).ravel()
+    W = np.atleast_2d(np.asarray(W, float))
+    K = A.shape[1]
+    if W.shape[1] != K:
+        raise ValueError(f"W has {W.shape[1]} columns, the design has {K}")
+    e = np.asarray(eps(coeff_max) if callable(eps) else eps, float).ravel()
+    A_ub = np.vstack([A, -A])
+    b_ub = np.concatenate([y + e, -y + e])
+    out, failed = [], []
+    for i in range(len(W)):
+        lo = linprog(W[i], A_ub=A_ub, b_ub=b_ub, bounds=[(None, None)] * K,
+                     method="highs")
+        hi = linprog(-W[i], A_ub=A_ub, b_ub=b_ub, bounds=[(None, None)] * K,
+                     method="highs")
+        if lo.status == 2 or hi.status == 2:
+            return None, {"infeasible": True, "coeff_max": coeff_max}
+        out.append((float(W[i] @ lo.x) if lo.status == 0 else None,
+                    float(W[i] @ hi.x) if hi.status == 0 else None))
+        if lo.status not in (0, 3) or hi.status not in (0, 3):
+            failed.append((i, int(lo.status), int(hi.status)))
+    info = {"coeff_max": coeff_max, "n_functionals": len(W)}
+    if failed:
+        info["lp_failed"] = failed
+        info["note"] = ("some functionals did not solve cleanly and are reported "
+                        "UNCONSTRAINED, which claims less rather than more")
+    return out, info
+
+
 def reduce_to_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
                       eps: np.ndarray):
     """Parsimony REPAIR (supersedes minimal-as-veto): simplify identity disguises

@@ -363,7 +363,34 @@ framing.
    Level 1 (Van der Pol, 2-D) and Level 2 (up to 3-D) require, and `build_nd`
    already has that geometry. So the migration is sequenced as the first act of
    Level 1, driven by a requirement rather than by tidiness.
-4. Level 1.
+4. Level 1. **FIRST INCREMENT DONE 2026-07-29 —
+   `docs/CASE_STUDY_STOCHASTIC_L1.md`.** The diffusion became a CLAIM:
+   `build_rows(diff_names=...)` puts b² in the design matrix as ordinary dt columns
+   (`½∫φf''h_j dt`), so drift and diffusion are identified jointly and the measured
+   Itô correction — the one unsafe consumer of realized quadratic variation —
+   disappears. `certify.admissible_functional` bounds any linear functional of the
+   coefficients, i.e. the drift AS A FUNCTION. Three findings:
+   * **The drift and the diffusion want OPPOSITE noise intensities.** The drift's
+     signal-to-band goes as 1/b and the diffusion's as b, because the thing the
+     diffusion measures IS the noise. Measured on GBM across b ∈ [0.02, 2]: the two
+     relative widths move monotonically in opposite directions and neither is
+     determined at the crossover. A structural tension between two Level 1 targets.
+   * **S2 was registered in the wrong picture and should be re-registered before it
+     is scored.** The Δt/T asymmetry is real but lives in WHICH ESTIMATOR is used:
+     the weak form for the drift, realized quadratic variation for the diffusion
+     (relative error √(2/m)). In the weak form the diffusion barely depends on Δt.
+     So the next increment certifies b² from quadratic variation — regressing
+     b²(x) on the local realized QV, which the `measure="d[u]"` terms already
+     express — rather than from the design matrix.
+   * **A bistable system hides its own drift**: the wells sit where the drift
+     vanishes, so the process spends its time exactly where the drift carries least
+     information. Confirmed as a statement about the drift FUNCTION, not just its
+     coefficients. And multiplicative noise vanishing at the origin DISCONNECTS the
+     state space (zero well-crossings measured), making the registered third null a
+     property of a system rather than a null.
+   Still open in Level 1: Van der Pol (2-D — needs the `build_nd` migration plus
+   cross-variation `d[u,v]` and a per-field martingale list), the invariants target,
+   a certified diffusion, and a checker-scored Level 1 table.
 5. Level 2, as the error-provenance testbed.
 
 Level 3, SPDEs, higher dimension, partial observation and non-Markovian noise are
