@@ -329,6 +329,40 @@ framing.
      different laws — and the output is partial determination with sound covering
      bounds. Read as reach short of the claim, not the claim met.
 3. The Itô/generator weak form in `lagh/weakform.py` (new terms, same discipline).
+   **DONE 2026-07-29 for the vocabulary; the assembler migration is deliberately
+   deferred.** What landed, all of it opt-in so no campaign predating it changes:
+   * **`Term.measure`.** `"dt"` is every deterministic term; `"d[<field>]"`
+     integrates against that field's REALIZED QUADRATIC VARIATION. That single
+     addition is what lets the Itô correction be a library term — because
+     `b² dt IS d[u]`, so the term can be written down without modelling the
+     diffusion at all. `lagh.ito.ito_terms(f, library)` emits the whole identity
+     (target, correction, drift columns) in that vocabulary.
+   * **The martingale scale is NOT a term, and cannot be.** `∫φ²f'²d[u]` is
+     QUADRATIC in the test function while the weak form is linear in it. It belongs
+     where `noise_l2` belongs — a per-patch scale a coverage factor multiplies —
+     and `build_nd(martingale=(field, gexpr))` measures it into `WeakSystem.qv`.
+     The only difference from `noise_l2` is that one multiplies a DECLARED sigma
+     and this one is measured, which is the whole of §1c.
+   * **`build_nd(rough=True)`** relaxes the three deterministic resolution gates,
+     each for a stated reason: a Brownian path is aliased by construction, its
+     quadrature converges at O(h) so the observed ladder order sits near 1, and a
+     bound relative to the term's own scale is the wrong comparison when the band
+     is made of the martingale. The bound is declared and the CALLER gates on it,
+     because only the caller knows the coverage factor.
+   * **A `d[]` term does not refine.** Subsampling a realized-QV estimator computes
+     a different estimator rather than resolving the same integral, so its declared
+     bound is its own statistical spread and its ladder order is reported as NaN.
+   Validated to machine precision against the hand-rolled assembler
+   (`test_the_term_vocabulary_reproduces_the_hand_rolled_rows`, rel ≤ 1e-12 on the
+   target, every column, the martingale scale and the correction's bound), and all
+   55 weakform-dependent tests are unchanged.
+
+   **What is deferred and why.** `ito.build_rows` keeps its own scalar assembler;
+   the equality test is the bridge that stops the two drifting. Delegating it onto
+   `build_nd` buys nothing until MULTI-FIELD state is needed — which is exactly what
+   Level 1 (Van der Pol, 2-D) and Level 2 (up to 3-D) require, and `build_nd`
+   already has that geometry. So the migration is sequenced as the first act of
+   Level 1, driven by a requirement rather than by tidiness.
 4. Level 1.
 5. Level 2, as the error-provenance testbed.
 

@@ -1,8 +1,13 @@
 """The Itô weak form: certified drift discovery from SDE trajectories.
 
-Level 0 of `docs/DIRECTION_STOCHASTIC.md`, and the staging ground for step 3
-(which folds these terms into `weakform.py`'s Term vocabulary). The enabling
-identity is the one the PDE arc already built, one dimension down. For
+Level 0 of `docs/DIRECTION_STOCHASTIC.md`. Step 3 landed the VOCABULARY in
+`weakform.py` -- `Term(measure="d[u]")` plus `build_nd(rough=, martingale=)`, with
+`ito_terms` below emitting the identity in it and a machine-precision equality test
+binding the two. The assembler here stays scalar-only on purpose: delegating it to
+`build_nd` buys nothing until multi-field state is needed, which is Level 1's
+requirement, so the migration is sequenced there.
+
+The enabling identity is the one the PDE arc already built, one dimension down. For
 dX = a(X)dt + b(X)dW, a compactly supported test function phi on a time window and
 a smooth state function f,
 
@@ -142,6 +147,56 @@ def _term_fns(names):
         out.append((sp.lambdify(x, e, "numpy"),
                     sp.lambdify(x, sp.diff(e, x), "numpy")))
     return out
+
+
+def ito_terms(f: str, library, *, field: str = "u") -> dict:
+    """The Itô weak form for one state test function f, as `weakform.Term`s.
+
+    Step 3 of `docs/DIRECTION_STOCHASTIC.md`: the identity this module assembles by
+    hand, expressed in the vocabulary of record. Returns
+
+        {"target": Term, "correction": Term, "columns": [Term...],
+         "martingale": (field, gexpr)}
+
+    where, with u the state field,
+
+        target      (-1)^1 int (d_t phi) f(u)         == -int phi' f(u) dt
+        correction  int phi (f''(u)/2) d[u]           == 1/2 int phi f'' b^2 dt
+        columns     int phi f'(u) g_k(u) dt           the drift library
+        martingale  the declared structure of the row's own noise, f'(u)
+
+    and the row is `y = target - correction`. Two of the three are ordinary dt
+    terms; the correction is the one lagh could not previously express, and it is a
+    `measure="d[u]"` term precisely because b^2 dt IS d[u] -- so the diffusion never
+    has to be modelled to write the drift's equation down.
+
+    The martingale scale int phi^2 f'^2 d[u] is NOT among them, and cannot be: it is
+    quadratic in the test function while the weak form is linear in it. It is
+    returned as a declaration for `build_nd(martingale=...)`, which measures it and
+    puts it beside `noise_l2` -- the same kind of object, differing only in that
+    `noise_l2` multiplies a declared sigma and this one is measured.
+
+    `tests/test_ito.py::test_the_term_vocabulary_reproduces_the_hand_rolled_rows`
+    checks this against `build_rows` to machine precision. That test is the bridge
+    between the two assemblers and is what keeps them from drifting apart.
+    """
+    from .weakform import Term
+    u, x = sp.Symbol(field), sp.Symbol("x")
+    fe = sp.sympify(f).xreplace({x: u})
+    if fe.free_symbols - {u}:
+        raise ValueError(f"f {f!r} reads a symbol other than the state")
+    f1, f2 = sp.diff(fe, u), sp.diff(fe, u, 2)
+    cols = []
+    for g in library:
+        ge = sp.sympify(g).xreplace({x: u})
+        if ge.free_symbols - {u}:
+            raise ValueError(f"term {g!r} reads a symbol other than the state")
+        cols.append(Term(str(g), gexpr=str(sp.expand(f1 * ge)), alpha=(0,)))
+    return {"target": Term(f"target:{f}", gexpr=str(fe), alpha=(1,)),
+            "correction": Term(f"ito:{f}", gexpr=str(f2 / 2), alpha=(0,),
+                               measure=f"d[{field}]"),
+            "columns": cols,
+            "martingale": (field, str(f1))}
 
 
 def _at(fn, v):

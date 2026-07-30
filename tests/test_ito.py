@@ -289,6 +289,80 @@ def test_the_pure_noise_null_certifies_nothing():
     assert r["abstain"] in ("noise", "structural", "resolution")
 
 
+def test_the_term_vocabulary_reproduces_the_hand_rolled_rows():
+    """Step 3's validation criterion, and the bridge between two assemblers.
+
+    `ito_terms` expresses the Itô weak form in `weakform.Term`, so `build_nd` can
+    assemble it with the ladder, roundoff and Gram machinery the PDE arc already
+    has -- and the multi-field geometry Level 1 needs. If the two agree to machine
+    precision on the same window then the vocabulary really does express the same
+    identity; if they ever stop agreeing, one of them has drifted.
+    """
+    from lagh.ito import ito_terms
+    from lagh.weakform import Patch, build_nd
+
+    dt, half = 1e-3, 8000
+    t, X = _ou(theta=1.0, b=1.4, T=40.0, dt=dt, n_traj=1, seed=0)
+    rows = build_rows(t, X, LIB, half=half, fs=("x**2/2",))
+    assert len(rows.y) >= 1
+
+    it = ito_terms("x**2/2", LIB)
+    terms = [it["target"], it["correction"]] + it["columns"]
+    lo, _ = rows.windows[0]
+    i0 = int(round(lo / dt))
+    i1 = i0 + 2 * half + 1
+    pa = Patch(centers=(0.5 * (t[i0] + t[i1 - 1]),),
+               halfwidths=(0.5 * (t[i1 - 1] - t[i0]),), idx=(slice(i0, i1),))
+    ws = build_nd({"u": X[0]}, [t], terms, [pa], p=8, rough=True,
+                  martingale=it["martingale"])
+    assert ws.rejected == 0, "a rough path must survive the deterministic gates"
+
+    # the target carries the measured Itô correction subtracted, as build_rows does
+    assert ws.A[0, 0] - ws.A[0, 1] == pytest.approx(rows.y[0], rel=1e-12)
+    for k, g in enumerate(LIB):
+        assert ws.A[0, 2 + k] == pytest.approx(rows.A[0, k], rel=1e-12), g
+    assert ws.qv[0] == pytest.approx(rows.qv[0], rel=1e-12)
+    assert ws.qv_se[0] == pytest.approx(rows.qv_se[0], rel=1e-12)
+    # the correction's declared bound IS its estimator's own sd, not a ladder
+    # difference: subsampling a realized-QV estimator changes it rather than
+    # refining it
+    assert ws.quad[0, 1] == pytest.approx(rows.corr_se[0], rel=1e-12)
+    assert np.isnan(ws.order[0, 1])
+    assert ws.quad[0, 0] == pytest.approx(rows.quad[0, 0], rel=1e-12)
+
+
+def test_a_rough_path_needs_the_deterministic_gates_relaxed():
+    """Both of weakform's resolution gates ask the wrong question of a Brownian
+    path: it is aliased by construction, and its quadrature converges at O(h) so
+    the observed ladder order sits near 1. Without `rough=True` every patch is
+    dropped -- which is the honest default for a smooth field."""
+    from lagh.ito import ito_terms
+    from lagh.weakform import Patch, build_nd
+
+    dt, half = 1e-3, 8000
+    t, X = _ou(theta=1.0, b=1.4, T=40.0, dt=dt, n_traj=1, seed=0)
+    it = ito_terms("x**2/2", LIB)
+    terms = [it["target"], it["correction"]] + it["columns"]
+    pa = Patch(centers=(0.5 * (t[half] + t[3 * half]),),
+               halfwidths=(0.5 * (t[3 * half] - t[half]),),
+               idx=(slice(half, 3 * half + 1),))
+    strict = build_nd({"u": X[0]}, [t], terms, [pa], p=8)
+    assert strict.rejected == 1 and len(strict.A) == 0
+    loose = build_nd({"u": X[0]}, [t], terms, [pa], p=8, rough=True)
+    assert loose.rejected == 0 and len(loose.A) == 1
+    # ...and no martingale declaration means no measured scale, rather than a zero
+    assert loose.qv is None
+
+
+def test_a_d_measure_term_states_its_field_and_rejects_junk():
+    from lagh.weakform import Term
+    assert Term("a", gexpr="u").qv_field is None
+    assert Term("b", gexpr="1/2", alpha=(0,), measure="d[u]").qv_field == "u"
+    assert Term("c", gexpr="1", alpha=(0,), measure="d[rho]").qv_field == "rho"
+    with pytest.raises(ValueError, match="neither 'dt' nor"):
+        Term("d", measure="dW").qv_field
+
+
 @pytest.mark.parametrize("bad", ["y", "x + t", "sin(z)"])
 def test_a_library_term_outside_the_state_is_refused(bad):
     t, X = _ou(T=40.0, n_traj=2)

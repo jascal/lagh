@@ -81,18 +81,46 @@ FIELD_SEP = ":"          # system term names are "<field>:<term>" (u:u_xx, v:u)
 
 @dataclass(frozen=True)
 class Term:
-    """One divergence-form library term: (-1)^|alpha| int (d^alpha phi) g.
+    """One divergence-form library term: (-1)^|alpha| int (d^alpha phi) g dmu.
 
     `gexpr` is a pointwise function of ONE OR MORE named fields; the symbols it
     is written in ARE the fields it reads (`u*v` reads u and v). `ax`/`at` are
     the 1-D+t convenience form of the derivative multi-index; `alpha` states it
     in full for n-D geometry (space axes first, TIME LAST).
+
+    `measure` is the dmu above and is `"dt"` for every deterministic term -- the
+    Lebesgue quadrature every campaign through the PDE arc uses. `"d[<field>]"`
+    integrates against that field's REALIZED QUADRATIC VARIATION along the last
+    axis instead, summing (d^alpha phi) g (Delta field)^2. It exists for the Itô
+    weak form (`lagh/ito.py`, docs/DIRECTION_STOCHASTIC.md step 3): the Itô
+    correction 1/2 int phi f'' b^2 dt IS 1/2 int phi f'' d[u], so the one term
+    lagh could not previously express becomes a library term like any other, and
+    the field's diffusion never has to be modelled to write it down.
+
+    Two properties of a d[] term that follow from what it is, not from choice:
+    it carries NO grid-spacing factor (the squared increment is the measure), and
+    it does not refine under the quadrature ladder (subsampling changes the
+    estimator rather than resolving it), so its error is statistical and declared
+    separately. Both are handled in `build_nd`.
     """
     name: str
     ax: int = 0
     at: int = 0
     gexpr: str = "u"
     alpha: tuple | None = None
+    measure: str = "dt"
+
+    @property
+    def qv_field(self) -> str | None:
+        """The field whose quadratic variation this term integrates against, or
+        None for an ordinary dt term."""
+        m = str(self.measure)
+        if m == "dt":
+            return None
+        if m.startswith("d[") and m.endswith("]") and len(m) > 3:
+            return m[2:-1]
+        raise ValueError(f"term {self.name!r}: measure {m!r} is neither 'dt' nor "
+                         "'d[<field>]'")
 
     def multi(self, ndim: int) -> tuple:
         """The derivative multi-index over `ndim` axes (space..., time)."""
@@ -290,6 +318,15 @@ class WeakSystem:
     order: np.ndarray | None = None     # (n_patches, n_terms) observed ladder order
     rejected: int = 0                   # patches dropped as unresolved
     gram: np.ndarray | None = None      # (n_patches, n_terms, n_terms) noise Gram
+    # THE MARTINGALE SCALE, when `build_nd(martingale=...)` declared one: the
+    # measured int phi^2 nu^2 d[field] per patch, its estimator's own sd, and the
+    # share of it a declared sigma_obs explains. It sits beside `noise_l2` because
+    # it is the same KIND of object -- a per-patch scale a coverage factor
+    # multiplies -- and apart from it because that one multiplies a DECLARED sigma
+    # while this one is measured (docs/STOCHASTIC_CHECKER.md §1c).
+    qv: np.ndarray | None = None        # (n_patches,)
+    qv_se: np.ndarray | None = None     # (n_patches,)
+    qv_obs_share: np.ndarray | None = None
 
     def normalize(self, by: str = "1", drop: bool = True) -> "WeakSystem":
         """Divide every row by its own `by` integral (default ∫φ), and drop that
@@ -326,7 +363,12 @@ class WeakSystem:
             order=self.order[:, keep],
             rejected=self.rejected,
             gram=(self.gram / (w ** 2)[:, None, None])[:, keep][:, :, keep]
-            if self.gram is not None else None)
+            if self.gram is not None else None,
+            # the martingale VARIANCE scales by the square of the row scaling,
+            # exactly as the Gram does -- it is a variance, not an amplitude
+            qv=self.qv / w ** 2 if self.qv is not None else None,
+            qv_se=self.qv_se / w ** 2 if self.qv_se is not None else None,
+            qv_obs_share=self.qv_obs_share)
 
     def det(self, field_err: float = 0.0) -> np.ndarray:
         """The DETERMINISTIC per-entry error: quadrature + roundoff, plus a
@@ -708,6 +750,69 @@ def aliasing_ratio(u_patch: np.ndarray, patch: Patch, coords, dpsi,
     return max(0.0, hi) / tot
 
 
+# A weighted realized-QV estimator's own standard deviation, self-normalized.
+# Var(sum w (du)^2) = sum w^2 Var((du)^2) = 2 sum w^2 (b^2 dt)^2, and
+# E[(du)^4] = 3 (b^2 dt)^2, so the estimate below needs no knowledge of b -- the
+# same property that makes the VALUE computable without modelling the diffusion.
+def _qv_se(w: np.ndarray, du: np.ndarray) -> float:
+    return float(np.sqrt(2.0 / 3.0 * np.sum(w ** 2 * du ** 4)))
+
+
+def _qv_entry(W: np.ndarray, term: Term, fp: dict, names, du: np.ndarray,
+              sigma_obs: float = 0.0) -> tuple:
+    """(value, |contributions|, se, observation-explained share) for a d[] term.
+
+    The weight array W here carries NO grid spacing (see `Term.measure`), and both
+    it and g are truncated to the increments' length.
+
+    `sigma_obs` DEBIASES the estimator, and it is not optional bookkeeping: with a
+    field observed as u + e every increment carries Var 2 sigma_obs^2 on top of
+    b^2 dt, so E[sum w (du_obs)^2] = sum w (b^2 dt + 2 sigma_obs^2) -- a bias that
+    DIVERGES as dt -> 0. Measured as a confident-wrong when it was left in
+    (docs/CASE_STUDY_STOCHASTIC_L0.md): the contamination is conservative wherever
+    this quantity sets a BAND and a systematic offset wherever it sits on a
+    TARGET, which is the same one-quantity-two-consumers rule the error-provenance
+    direction states.
+    """
+    w = (W * term.g(fp))[..., :-1]
+    val = float(np.sum(w * du ** 2))
+    se = _qv_se(w, du)
+    share = 0.0
+    if sigma_obs > 0:
+        bias = float(np.sum(w) * 2.0 * sigma_obs ** 2)
+        share = abs(bias) / max(abs(val), 1e-300)
+        val = val - bias
+        se = float(np.hypot(se, np.sqrt(3.0 * np.sum(w ** 2))
+                            * 2.0 * sigma_obs ** 2))
+    return val, float(np.abs(w * du ** 2).sum()), se, share
+
+
+def _martingale_scale(W0: np.ndarray, nu: np.ndarray, du: np.ndarray,
+                      sigma_obs: float = 0.0) -> tuple:
+    """(<M>, se, observation-explained share) for a row whose target functional is
+    the stochastic integral int phi nu dW.
+
+    Its variance is int phi^2 nu^2 d[u] -- QUADRATIC in the test function, which
+    is why it is not a Term and never could be: the weak form is linear in phi.
+    It belongs exactly where `noise_l2` belongs, and is the same kind of object:
+    a per-patch scale the band multiplies by a coverage factor. The difference is
+    that `noise_l2` multiplies a DECLARED sigma and this one is MEASURED, which is
+    what lets `certify.coverage_factor` be applied to an intrinsic term without
+    letting a candidate widen its own band.
+    """
+    w = ((W0 * nu) ** 2)[..., :-1]
+    val = float(np.sum(w * du ** 2))
+    se = _qv_se(w, du)
+    share = 0.0
+    if sigma_obs > 0:
+        bias = float(np.sum(w) * 2.0 * sigma_obs ** 2)
+        share = abs(bias) / max(abs(val), 1e-300)
+        val = val - bias
+        se = float(np.hypot(se, np.sqrt(3.0 * np.sum(w ** 2))
+                            * 2.0 * sigma_obs ** 2))
+    return val, se, share
+
+
 def _entry(W: np.ndarray, term: Term, fp: dict, names) -> tuple:
     """(value, sum|contributions|, ||w g'||_2, ||w g'||_1) for one weight array.
 
@@ -784,7 +889,9 @@ def build(u, x: np.ndarray, t: np.ndarray, terms: list, patches: list[Patch],
 
 
 def build_nd(fields, coords, terms: list, patches: list[Patch], *,
-             p: int = 8, sigma: float = 0.0) -> WeakSystem:
+             p: int = 8, sigma: float = 0.0, rough: bool = False,
+             martingale: tuple | None = None,
+             sigma_obs: float = 0.0) -> WeakSystem:
     """The factory over arbitrary geometry: `coords` are the axis coordinate
     vectors (space..., TIME LAST) and every field array is shaped accordingly.
 
@@ -805,6 +912,26 @@ def build_nd(fields, coords, terms: list, patches: list[Patch], *,
     `sigma` is ONE declared field-noise scale for every field. Per-field scales
     that differ must be declared at the largest (conservative) -- an unequal
     declaration would need per-field Gram blocks and is not claimed here.
+
+    Three arguments serve the Itô weak form (docs/DIRECTION_STOCHASTIC.md step 3)
+    and are inert at their defaults, so no campaign predating them changes:
+
+    `rough=True` SKIPS THE ALIASING GATE, and it has to. That gate drops a patch
+    whose windowed field has energy near Nyquist, because a smooth field with such
+    energy is under-resolved. A Brownian-driven path has energy at every frequency
+    BY CONSTRUCTION -- the gate would reject every patch, and it would be answering
+    the wrong question. The refinement ladder still applies (the path is fixed
+    data, so subsampling it is a genuine coarser rule) and it is what decides
+    whether the quadrature converged.
+
+    `martingale=(field, gexpr)` declares that the target functional of these rows
+    is the stochastic integral int phi (gexpr) dW driven by `field` -- so its
+    variance int phi^2 gexpr^2 d[field] can be MEASURED per patch and returned as
+    `qv`/`qv_se`. It is a declaration about the STRUCTURE of the row, not about any
+    magnitude: the magnitude comes from the data.
+
+    `sigma_obs` is the declared per-sample measurement error on the fields, and it
+    debiases every quadratic-variation quantity (see `_qv_entry`).
     """
     fields, shape = _as_fields(fields)
     coords = [np.asarray(c, float) for c in coords]
@@ -821,14 +948,15 @@ def build_nd(fields, coords, terms: list, patches: list[Patch], *,
     dpsi_one = (bump_derivatives(p, maxo, onesided=True)
                 if any(pa.onesided for pa in patches) else None)
     rows, quad, rnd, l2, l1s, orders, kept, grams = [], [], [], [], [], [], [], []
+    qvs, qv_ses, qv_shares = [], [], []
     rejected = 0
     for pa in patches:
         sub = tuple(pa.idx)
         cs = [c[s] for c, s in zip(coords, sub)]
         fp = {k: v[sub] for k, v in fields.items()}
         vals, qs, rs, ls, l1v, ords, Ws = [], [], [], [], [], [], []
-        ok = all(aliasing_ratio(fp[f], pa, cs, dpsi, sigma, dpsi_one)
-                 <= ALIAS_MAX for f in fnames)
+        ok = rough or all(aliasing_ratio(fp[f], pa, cs, dpsi, sigma, dpsi_one)
+                          <= ALIAS_MAX for f in fnames)
         if not ok:
             rejected += 1
             continue
@@ -881,6 +1009,32 @@ def build_nd(fields, coords, terms: list, patches: list[Patch], *,
                 ords.append(float(r_t))
                 Ws.append(W1)
                 continue
+            if tm.qv_field is not None:
+                # A d[] TERM DOES NOT REFINE. Subsampling a realized-quadratic-
+                # variation estimator does not evaluate the same integral more
+                # accurately -- it computes a different estimator, over half the
+                # increments -- so the ladder would report a "truncation error"
+                # that is really the estimator's own statistical spread. That
+                # spread is what `_qv_entry` returns, and it is declared as the
+                # term's bound directly.
+                W0 = _tensor(_windows(pa, cs, dpsi, dpsi_one,
+                                      tm.multi(ndim))) * tm.sign
+                du = np.diff(fp[tm.qv_field], axis=-1)
+                v_h, absum, se, share = _qv_entry(W0, tm, fp, fnames, du,
+                                                  sigma_obs)
+                vals.append(v_h)
+                qs.append(max(se, MACHINE_EPS * absum))
+                rs.append(MACHINE_EPS * absum)
+                # a d[] term carries no first-order sensitivity to a declared
+                # field noise the way a dt term does: its contamination is the
+                # 2 sigma_obs^2 bias `_qv_entry` has already removed, and what is
+                # left sits in `se`. Zero here keeps the L1/L2 channels from
+                # double-counting it.
+                ls.append(0.0)
+                l1v.append(0.0)
+                ords.append(float("nan"))
+                Ws.append(np.zeros_like(W0))
+                continue
             ladder = []
             for step in (1, 2, 4):
                 sc = [c[::step] for c in cs]
@@ -917,8 +1071,26 @@ def build_nd(fields, coords, terms: list, patches: list[Patch], *,
                 # ladder is not converging and no declared bound would be honest.
                 r = np.log2(d2 / d1) if d2 > 0 and d1 > 0 else 0.0
                 if not np.isfinite(r) or r < MIN_LADDER_ORDER:
-                    ok = False
-                    break
+                    if not rough:
+                        ok = False
+                        break
+                    # A ROUGH PATH IS NOT EXPECTED TO BE IN THE ASYMPTOTIC REGIME:
+                    # the integrand is Holder-1/2, the quadrature converges at
+                    # O(h) rather than spectrally, and the observed order sits near
+                    # 1. Dropping the patch would drop every patch. The RAW ladder
+                    # difference stands as the declared bound instead -- strictly
+                    # larger than any Richardson estimate, so the direction is
+                    # conservative -- and whether it is small enough to use is the
+                    # CALLER's decision, because only the caller knows the coverage
+                    # factor the martingale band will carry.
+                    vals.append(v_h)
+                    qs.append(max(d1, round_h))
+                    rs.append(round_h)
+                    ls.append(w2)
+                    l1v.append(wl1)
+                    ords.append(float(r))
+                    Ws.append(W_h)
+                    continue
                 # |e_h| <= d1 / (2^r - 1) holds when the error really shrinks by
                 # 2^r per refinement. The ORDER USED IS CAPPED (measured reason:
                 # for the exponentially-convergent bump quadrature the coarse
@@ -927,9 +1099,14 @@ def build_nd(fields, coords, terms: list, patches: list[Patch], *,
                 # rejects true laws). The observed order is recorded separately.
                 r_used = float(np.clip(r, MIN_LADDER_ORDER, MAX_TRUSTED_ORDER))
                 q = d1 / (2.0 ** r_used - 1.0)
-                if q > UNRESOLVED_REL * scale:
+                if q > UNRESOLVED_REL * scale and not rough:
                     ok = False                 # resolved, but too coarsely to use
                     break
+                # rough: the bound stands and the caller gates on it. A relative
+                # bar against the term's OWN scale is the wrong test here -- the
+                # martingale, not the quadrature, is what the band is made of, so
+                # the comparison that matters is against the martingale scale and
+                # the caller is the one holding it.
             vals.append(v_h)
             qs.append(max(q, round_h))
             rs.append(round_h)
@@ -940,6 +1117,15 @@ def build_nd(fields, coords, terms: list, patches: list[Patch], *,
         if not ok:
             rejected += 1
             continue
+        if martingale is not None:
+            mf, mg = martingale
+            W0 = _tensor(_windows(pa, cs, dpsi, dpsi_one, (0,) * ndim))
+            nu = Term("nu", gexpr=mg, alpha=(0,) * ndim).g(fp)
+            v, se, share = _martingale_scale(W0, nu,
+                                             np.diff(fp[mf], axis=-1), sigma_obs)
+            qvs.append(v)
+            qv_ses.append(se)
+            qv_shares.append(share)
         rows.append(vals)
         quad.append(qs)
         rnd.append(rs)
@@ -954,7 +1140,11 @@ def build_nd(fields, coords, terms: list, patches: list[Patch], *,
                       noise_l2=np.array(l2, float),
                       field_l1=np.array(l1s, float),
                       order=np.array(orders, float), rejected=rejected,
-                      gram=np.array(grams, float) if grams else None)
+                      gram=np.array(grams, float) if grams else None,
+                      qv=np.array(qvs, float) if qvs else None,
+                      qv_se=np.array(qv_ses, float) if qv_ses else None,
+                      qv_obs_share=np.array(qv_shares, float) if qv_shares
+                      else None)
 
 
 # --------------------------------------------------------------------------
