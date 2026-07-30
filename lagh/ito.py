@@ -602,6 +602,318 @@ def build_rows(t, paths, names, *, fs=("x", "x**2/2"), diff_names=None,
                    len(wins) * len(P) * len(fam), notes)
 
 
+# ---------------------------------------------------------------------------
+# The DIFFUSION, from quadratic variation (docs/CASE_STUDY_STOCHASTIC_L1.md)
+# ---------------------------------------------------------------------------
+# Measured 2026-07-29: putting b^2 in the drift's design matrix gives a joint bound
+# 2000x the truth, because the diffusion's signal-to-band goes as b while the
+# drift's goes as 1/b -- the thing the diffusion measures IS the noise. Realized
+# quadratic variation determines the same b^2 to ~1.4% on the same data. So the
+# diffusion gets its own weak form, with the SAME discipline and a different target:
+#
+#     int phi w(X) d[X]  =  sum_j d_j int phi w(X) h_j(X) dt
+#
+# the left side observable as sum_i (phi w)_i (dX_i)^2 and the right side ordinary
+# dt columns. `w` is a family of state weights and plays exactly the role f plays
+# for the drift: one row per (window, w), all sharing the coefficients d_j.
+
+# The declared bound on |a(x)| used for the drift-leakage term below. Declared,
+# then VERIFIED against a drift certificate when one exists -- the same
+# declared-then-checked discipline weakform.declared_epsilon uses for coeff_max.
+DRIFT_MAX_DEFAULT = 10.0
+
+
+@dataclass
+class QvRows:
+    """Quadratic-variation rows: one per (trajectory, window, w)."""
+    y: np.ndarray                     # int phi w d[X], debiased for sigma_obs
+    A: np.ndarray                      # int phi w h_j dt
+    names: list
+    var: np.ndarray                    # Var of the y estimator, MEASURED
+    lam: np.ndarray                    # int |phi w| dt, for the flat leakage bound
+    leak: np.ndarray | None = None     # int |phi w| env(X)^2 dt, when an envelope
+                                       # for |a(x)| was supplied (the tight bound)
+    traj: np.ndarray = None
+    wname: list = field(default_factory=list)
+    windows: list = field(default_factory=list)
+    dt: float = 0.0
+    sigma_obs_built: float = 0.0
+    notes: list = field(default_factory=list)
+
+    @property
+    def n_trajectories(self) -> int:
+        return int(len(np.unique(self.traj)))
+
+    def n_disjoint(self) -> int:
+        total = 0
+        for tr in np.unique(self.traj):
+            wins = sorted({self.windows[i]
+                           for i in np.where(self.traj == tr)[0]},
+                          key=lambda z: z[1])
+            end = -np.inf
+            for lo, hi in wins:
+                if lo >= end:
+                    total += 1
+                    end = hi
+        return total
+
+
+@dataclass
+class QvBand:
+    """The band for a quadratic-variation row.
+
+        kappa * sqrt(Var)              the estimator's own fluctuation. Var is
+                                       MEASURED from the FOURTH moment of the
+                                       increments: E[(dX)^4] = 3 (b^2 dt)^2 while
+                                       Var((dX)^2) = 2 (b^2 dt)^2, so
+                                       Var = (2/3) sum (phi w)^2 (dX)^4 needs no
+                                       knowledge of b -- the same property that
+                                       made the martingale scale measurable.
+        + dt * drift_max^2 * lam       DRIFT LEAKAGE, deterministic, coefficient 1.
+                                       E[(dX)^2] = b^2 dt + a^2 dt^2, so the drift
+                                       biases this estimator at O(dt) exactly as the
+                                       diffusion biased the drift's -- the same
+                                       coupling, the other way round. `drift_max` is
+                                       declared and must be verified.
+        + machine
+
+    kappa comes from `certify.coverage_factor` as everywhere else, and the
+    justification differs in one stated way: the increments (phi w)((dX)^2 - E) are
+    martingale differences with CHI-SQUARE tails rather than a continuous
+    martingale, so the applicable inequality is Bernstein's, whose sub-exponential
+    correction is a factor 1/(1 + c*kappa/sqrt(Var)) inside the exponent with
+    c ~ max_i (phi w)_i b^2 dt. That correction is O(sqrt(dt/L)) -- negligible when
+    a window holds many increments -- and `report` returns its measured size rather
+    than asserting it is small.
+    """
+    var: np.ndarray
+    lam: np.ndarray
+    n_rows_declared: int
+    dt: float
+    delta: float = 0.05
+    drift_max: float = DRIFT_MAX_DEFAULT
+    y: np.ndarray | None = None
+    max_term: np.ndarray | None = None      # max_i |phi w|_i (dX_i)^2, for the
+                                            # Bernstein correction's scale c
+    leak: np.ndarray | None = None          # POINTWISE leakage, when an envelope
+                                            # for |a(x)| was supplied
+
+    def __post_init__(self):
+        self.kappa = coverage_factor(self.n_rows_declared, self.delta)
+
+    def bernstein_correction(self) -> np.ndarray:
+        """c*kappa/sqrt(Var) per row: how far the chi-square tails move the bound
+        away from the Gaussian-like reading. Reported, never assumed away."""
+        if self.max_term is None:
+            return np.zeros(len(self.var))
+        return (self.max_term * self.kappa
+                / np.maximum(np.sqrt(np.maximum(self.var, 0.0)), 1e-300))
+
+    def __call__(self, expr=None) -> np.ndarray:
+        eps = self.kappa * np.sqrt(np.maximum(self.var, 0.0))
+        # POINTWISE leakage where an envelope was supplied, the flat bound
+        # otherwise. The difference is large and it is the same distinction
+        # weakform draws with `field_l1`: sum_i |w_i| a(X_i)^2 dt^2 bounded by the
+        # envelope AT X_i, rather than by its worst value anywhere in the visited
+        # range. A process spends its time where its own drift is small -- most of
+        # all a bistable one, whose wells sit at a(x) = 0 -- so the flat bound
+        # over-declares by the square of a ratio that can be an order of magnitude.
+        if self.leak is not None:
+            eps = eps + self.dt * self.leak
+        else:
+            eps = eps + self.dt * self.drift_max ** 2 * self.lam
+        if self.y is not None:
+            eps = eps + MACHINE_REL * np.abs(self.y)
+        return eps
+
+
+def build_qv_rows(t, paths, diff_names, *, ws=("1", "x", "x**2"), windows=None,
+                  half: int = 200, n_windows: int = 0, overlap: float = 0.0,
+                  p: int = 8, delta: float = 0.05, sigma_obs: float = 0.0,
+                  qv_obs_max: float = 0.5, drift_envelope=None) -> QvRows:
+    """Assemble quadratic-variation rows for the DIFFUSION.
+
+    `ws` is the family of state weights, playing the role f plays for the drift.
+    What it buys depends on the process, and this was MEASURED after being asserted
+    wrongly: the w-family supplies state variation when the process is STATIONARY,
+    where every window sees the same state distribution -- on OU the joint bounds
+    tighten 2.9-5.6x going from `("1",)` to `("1", "x", "x**2")`. When the process
+    is NON-STATIONARY the windows already sample different state regions and w adds
+    nothing: on GBM, whose state grows exponentially, the same change left the
+    bounds marginally WIDER (0.0079 -> 0.0083 on the x^2 coefficient), because the
+    extra rows cost a little kappa and bought no new information.
+    """
+    t = np.asarray(t, float)
+    P = np.atleast_2d(np.asarray(paths, float))
+    hfns = _term_fns(diff_names)
+    wfns = _term_fns(ws)
+    dpsi = bump_derivatives(p, 0)
+    wins = windows if windows is not None else time_windows(
+        t, half=half, n_windows=n_windows, overlap=overlap)
+    ys, As, vs, lams, lks, trs, wn, wl = [], [], [], [], [], [], [], []
+    rejected, obs_hits = 0, []
+    dt = float(t[1] - t[0])
+    for k in range(len(P)):
+        X = P[k]
+        for lo, hi in wins:
+            tt, xx = t[lo:hi], X[lo:hi]
+            if len(tt) < 5:
+                rejected += 1
+                continue
+            tc = 0.5 * (tt[0] + tt[-1])
+            at = 0.5 * (tt[-1] - tt[0])
+            phi = dpsi[0]((tt - tc) / at)
+            dX2 = np.diff(xx) ** 2
+            dX4 = dX2 ** 2
+            for wnm, (wf, _) in zip(ws, wfns):
+                wx = _at(wf, xx)
+                wt = (phi * wx)[:-1]
+                q = float(np.sum(wt * dX2))
+                var = float(2.0 / 3.0 * np.sum(wt ** 2 * dX4))
+                share = 0.0
+                if sigma_obs > 0:
+                    bias = float(np.sum(wt) * 2.0 * sigma_obs ** 2)
+                    share = abs(bias) / max(abs(q), 1e-300)
+                    q = q - bias
+                    var = var + 3.0 * float(np.sum(wt ** 2)) \
+                        * (2.0 * sigma_obs ** 2) ** 2
+                    if share > qv_obs_max:
+                        rejected += 1
+                        obs_hits.append(share)
+                        continue
+                cols = np.array([float(np.sum(phi * wx * _at(hf, xx)) * dt)
+                                 for hf, _ in hfns])
+                ys.append(q)
+                As.append(cols)
+                vs.append(var)
+                aw = np.abs(phi * wx)
+                lams.append(float(np.sum(aw) * dt))
+                if drift_envelope is not None:
+                    env = np.abs(np.asarray(drift_envelope(xx), float))
+                    lks.append(float(np.sum(aw * env ** 2) * dt))
+                trs.append(k)
+                wn.append(wnm)
+                wl.append((float(tt[0]), float(tt[-1])))
+    notes = []
+    if obs_hits:
+        notes.append(
+            f"{len(obs_hits)} rows refused: the declared sigma_obs explains a "
+            f"median {np.median(obs_hits):.0%} of their raw quadratic variation "
+            f"(bar {qv_obs_max:.0%}), so b^2 would be a small difference of two "
+            "large numbers")
+    return QvRows(np.array(ys),
+                  np.array(As) if As else np.zeros((0, len(diff_names))),
+                  [f"diffusion:{h}" for h in diff_names], np.array(vs),
+                  np.array(lams),
+                  np.array(lks) if lks else None,
+                  np.array(trs, int), wn, wl, dt, float(sigma_obs), notes)
+
+
+def certify_diffusion(rows: QvRows, *, delta: float = 0.05,
+                      drift_max: float = DRIFT_MAX_DEFAULT,
+                      sigma_obs: float = 0.0, seed: int = 0,
+                      max_tier: int = 3, holdout: bool = True,
+                      qualifier: dict | None = None) -> dict:
+    """Certify b^2 as a linear law over the declared diffusion library.
+
+    Mirrors `certify_drift`: same engine, same holdout-by-trajectory, and the
+    determination record comes from the joint LP so interval coverage means "the
+    truth is in here".
+    """
+    if abs(float(sigma_obs) - rows.sigma_obs_built) > 0:
+        raise ValueError(
+            f"sigma_obs={sigma_obs!r} declared to certify_diffusion but the rows "
+            f"were built with {rows.sigma_obs_built!r}; it debiases the estimator "
+            "inside build_qv_rows and cannot be applied afterwards")
+    n = len(rows.y)
+    out = {"n_rows": n, "n_trajectories": rows.n_trajectories,
+           "n_disjoint": rows.n_disjoint(), "features": list(rows.names),
+           "ws": sorted(set(rows.wname)), "notes": list(rows.notes)}
+    if n < 6:
+        out.update(certified=False, abstain=Abstain.RANGE.value)
+        out["partial"] = determination([], status=Abstain.RANGE.value,
+                                       note="too few rows", qualifier=qualifier)
+        return out
+    if holdout and rows.n_trajectories < 2:
+        out.update(certified=False, abstain="single-trajectory")
+        out["partial"] = determination([], status="single-trajectory",
+                                       note="nothing was determined",
+                                       qualifier=qualifier)
+        return out
+    mx = None
+    band = QvBand(rows.var, rows.lam, n, rows.dt, delta=delta,
+                  drift_max=drift_max, y=rows.y, max_term=mx,
+                  leak=rows.leak)
+    e_all = band(None)
+    out.update(kappa=band.kappa, delta=delta,
+               median_band=float(np.median(e_all)),
+               median_signal_to_band=float(np.median(
+                   np.abs(rows.y) / np.maximum(e_all, 1e-300))),
+               median_drift_leakage_share=float(np.median(
+                   band.dt * (rows.leak if rows.leak is not None
+                              else band.drift_max ** 2 * rows.lam)
+                   / np.maximum(e_all, 1e-300))),
+               leakage_bound=("pointwise envelope" if rows.leak is not None
+                              else "flat drift_max"),
+               drift_max_declared=drift_max)
+    rng = np.random.default_rng(seed)
+    if holdout:
+        held = np.unique(rows.traj)[-1]
+        tr = rng.permutation(np.where(rows.traj != held)[0])
+        ce = np.where(rows.traj == held)[0]
+    else:
+        idx = rng.permutation(n)
+        b = int(0.8 * n)
+        tr, ce = idx[:b], idx[b:]
+    if len(ce) < 3 or len(tr) < 4:
+        out.update(certified=False, abstain=Abstain.RANGE.value)
+        out["partial"] = determination([], status=Abstain.RANGE.value,
+                                       note="splits too small",
+                                       qualifier=qualifier)
+        return out
+    a = int(0.75 * len(tr))
+    eps_ce = QvBand(rows.var[ce], rows.lam[ce], n, rows.dt, delta=delta,
+                    drift_max=drift_max, y=rows.y[ce],
+                    leak=None if rows.leak is None else rows.leak[ce])
+    sigma_eff = float(np.median(e_all)
+                      / max(KAPPA * np.median(np.abs(rows.y)), 1e-300))
+    out["sigma_effective"] = sigma_eff
+    r = discover(rows.A[tr[:a]], rows.y[tr[:a]], rows.A[tr[a:]], rows.y[tr[a:]],
+                 rows.A[ce], rows.y[ce], sigma=sigma_eff, eps_model=eps_ce,
+                 max_tier=max_tier, declared_basis=True, linear_basis=True,
+                 band_sel=QvBand(rows.var[tr[a:]], rows.lam[tr[a:]], n, rows.dt,
+                                 delta=delta, drift_max=drift_max,
+                                 y=rows.y[tr[a:]],
+                                 leak=None if rows.leak is None
+                                 else rows.leak[tr[a:]])(None))
+    c = r.certificate
+    out.update(certified=bool(c.certified), abstain=c.abstain,
+               alpha_log10=c.alpha_log10, n_cert_rows=int(len(ce)), tier=r.tier)
+    out["notes"] += [str(x)[:220] for x in c.notes][:3]
+    e0 = (band.kappa * np.sqrt(np.maximum(rows.var[ce], 0.0))
+          + MACHINE_REL * np.abs(rows.y[ce]))
+    lp, info = admissible_interval(
+        rows.A[ce], rows.y[ce],
+        lambda cm: e0 + rows.dt * (rows.leak[ce] if rows.leak is not None
+                                   else drift_max ** 2 * rows.lam[ce]),
+        coeff_max=10.0)
+    out["admissible_info"] = info
+    if lp is not None:
+        out["admissible"] = {nm: [v[0], v[1]] for nm, v in zip(rows.names, lp)}
+        out["partial"] = determination(
+            [(nm, v[0], v[1]) for nm, v in zip(rows.names, lp)],
+            status=("certified" if c.certified
+                    else (c.abstain or "structural-abstain")),
+            note=("JOINT bound by LP over every b^2 in the declared library "
+                  "consistent with the held-out quadratic-variation rows at the "
+                  f"declared band, coverage 1-delta={1 - delta:g}"),
+            qualifier=qualifier)
+    if c.certified:
+        out["law"] = _readable(str(r.expr), list(rows.names))
+        out["expr"] = str(r.expr)
+    return out
+
+
 def certify_drift(rows: ItoRows, *, delta: float = 0.05, sigma_obs: float = 0.0,
                   seed: int = 0, max_tier: int = 3, holdout: bool = True,
                   qualifier: dict | None = None) -> dict:

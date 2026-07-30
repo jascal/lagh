@@ -1,0 +1,400 @@
+{
+ "level": 1,
+ "seconds": 38.9,
+ "drift_library": [
+  "1",
+  "x",
+  "x**2",
+  "x**3"
+ ],
+ "diffusion_library": [
+  "1",
+  "x",
+  "x**2"
+ ],
+ "tasks": [
+  {
+   "task_id": "L1-dw-additive",
+   "system": "double_well",
+   "drift": {
+    "verdict": "abstain[noise]",
+    "law": null,
+    "rows": 96,
+    "kappa": 4.062813716030252,
+    "signal_to_band": 0.38065142802008733
+   },
+   "diffusion": {
+    "verdict": "certified",
+    "law": "1805242*[diffusion:1]/924037",
+    "rows": 144,
+    "drift_leakage_share": 0.29083300903906983,
+    "leakage_bound": "pointwise envelope"
+   },
+   "state_range": [
+    -2.7892714349608827,
+    2.7224340412234955
+   ],
+   "state_std": 1.0069707841737776,
+   "drift_envelope_max": 67.39278771714159,
+   "score": {
+    "confident_wrong": 0,
+    "exact": 0,
+    "covered": 7,
+    "informative": 1,
+    "abstained_correctly": 0,
+    "missed": 0,
+    "resolved": 1,
+    "refusals": [],
+    "exceeded_expectation": []
+   },
+   "components": {
+    "drift:1@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -6.905106629001115,
+     "hi": 6.030798757585145,
+     "resolved": false
+    },
+    "drift:x@all": {
+     "outcome": "covered",
+     "truth": 1.0,
+     "lo": -13.677792490199383,
+     "hi": 12.211132608780732,
+     "resolved": false
+    },
+    "drift:x**2@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -4.989468001475916,
+     "hi": 5.670627511399566,
+     "resolved": false
+    },
+    "drift:x**3@all": {
+     "outcome": "covered",
+     "truth": -1.0,
+     "lo": -6.923625220640044,
+     "hi": 6.895058417092466,
+     "resolved": false
+    },
+    "diffusion:1@all": {
+     "outcome": "covered",
+     "truth": 1.9599999999999997,
+     "lo": 1.6983597186948185,
+     "hi": 2.2317473024788694,
+     "resolved": true
+    },
+    "diffusion:x@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -0.08510370616965746,
+     "hi": 0.09523215760693053,
+     "resolved": false
+    },
+    "diffusion:x**2@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -0.1961661504590306,
+     "hi": 0.17137285838343852,
+     "resolved": false
+    }
+   }
+  },
+  {
+   "task_id": "L1-dw-multiplicative",
+   "system": "double_well_mult",
+   "drift": {
+    "verdict": "abstain[noise]",
+    "law": null,
+    "rows": 96,
+    "kappa": 4.062813716030252,
+    "signal_to_band": 0.16327125848513552
+   },
+   "diffusion": {
+    "verdict": "certified",
+    "law": "194104*[diffusion:x**2]/396975",
+    "rows": 144,
+    "drift_leakage_share": 0.10463261281584271,
+    "leakage_bound": "pointwise envelope"
+   },
+   "state_range": [
+    -2.6934952853428586,
+    2.5200885501009753
+   ],
+   "state_std": 0.8761974576841576,
+   "drift_envelope_max": 31.238072211286955,
+   "score": {
+    "confident_wrong": 0,
+    "exact": 0,
+    "covered": 7,
+    "informative": 0,
+    "abstained_correctly": 0,
+    "missed": 0,
+    "resolved": 0,
+    "refusals": [],
+    "exceeded_expectation": [
+     "drift:1",
+     "drift:x",
+     "drift:x**2",
+     "drift:x**3"
+    ]
+   },
+   "components": {
+    "drift:1@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -55.69292929060331,
+     "hi": 56.00415695998147,
+     "resolved": false
+    },
+    "drift:x@all": {
+     "outcome": "covered",
+     "truth": 1.0,
+     "lo": -217.41000000699356,
+     "hi": 206.9090259064523,
+     "resolved": false
+    },
+    "drift:x**2@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -234.41017474269898,
+     "hi": 241.8231472241058,
+     "resolved": false
+    },
+    "drift:x**3@all": {
+     "outcome": "covered",
+     "truth": -1.0,
+     "lo": -78.88174753668487,
+     "hi": 76.46303448004555,
+     "resolved": false
+    },
+    "diffusion:1@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -0.6351824457592258,
+     "hi": 0.4556905397383882,
+     "resolved": false
+    },
+    "diffusion:x@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -1.1485085298933797,
+     "hi": 1.546564180704727,
+     "resolved": false
+    },
+    "diffusion:x**2@all": {
+     "outcome": "covered",
+     "truth": 0.48999999999999994,
+     "lo": -0.3240105890875762,
+     "hi": 1.1173941828577638,
+     "resolved": false
+    }
+   }
+  },
+  {
+   "task_id": "L1-cir",
+   "system": "cir",
+   "drift": {
+    "verdict": "abstain[noise]",
+    "law": null,
+    "rows": 144,
+    "kappa": 4.161416286239563,
+    "signal_to_band": 0.11480678112230526
+   },
+   "diffusion": {
+    "verdict": "abstain[structural]",
+    "law": null,
+    "rows": 216,
+    "drift_leakage_share": 0.08863966249317798,
+    "leakage_bound": "pointwise envelope"
+   },
+   "state_range": [
+    0.0006032280939361397,
+    6.458841141778496
+   ],
+   "state_std": 0.7256988979387949,
+   "drift_envelope_max": 137.07458689120418,
+   "score": {
+    "confident_wrong": 0,
+    "exact": 0,
+    "covered": 7,
+    "informative": 0,
+    "abstained_correctly": 0,
+    "missed": 0,
+    "resolved": 1,
+    "refusals": [],
+    "exceeded_expectation": []
+   },
+   "components": {
+    "drift:1@all": {
+     "outcome": "covered",
+     "truth": 1.0,
+     "lo": -11.048706322619447,
+     "hi": 12.54863105810352,
+     "resolved": false
+    },
+    "drift:x@all": {
+     "outcome": "covered",
+     "truth": -1.0,
+     "lo": -35.59489374441048,
+     "hi": 30.893246822214245,
+     "resolved": false
+    },
+    "drift:x**2@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -20.28123221629291,
+     "hi": 22.989813403616026,
+     "resolved": false
+    },
+    "drift:x**3@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -3.8555567481780266,
+     "hi": 3.380176750314587,
+     "resolved": false
+    },
+    "diffusion:1@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -0.23170703850753577,
+     "hi": 0.32205011253122606,
+     "resolved": false
+    },
+    "diffusion:x@all": {
+     "outcome": "covered",
+     "truth": 1.0,
+     "lo": 0.3107669423850911,
+     "hi": 1.4800489522413582,
+     "resolved": true
+    },
+    "diffusion:x**2@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -0.17391689534010157,
+     "hi": 0.2401839004495262,
+     "resolved": false
+    }
+   }
+  },
+  {
+   "task_id": "L1-gbm-mult",
+   "system": "gbm",
+   "drift": {
+    "verdict": "abstain[noise]",
+    "law": null,
+    "rows": 78,
+    "kappa": 4.011380879648186,
+    "signal_to_band": 0.5836915516264285
+   },
+   "diffusion": {
+    "verdict": "abstain[parametric]",
+    "law": null,
+    "rows": 120,
+    "drift_leakage_share": 0.09138178670201336,
+    "leakage_bound": "pointwise envelope"
+   },
+   "state_range": [
+    0.9460347587845306,
+    239.92251847606025
+   ],
+   "state_std": 39.23220499096698,
+   "drift_envelope_max": 50312.35482222527,
+   "score": {
+    "confident_wrong": 0,
+    "exact": 0,
+    "covered": 7,
+    "informative": 1,
+    "abstained_correctly": 0,
+    "missed": 0,
+    "resolved": 1,
+    "refusals": [],
+    "exceeded_expectation": []
+   },
+   "components": {
+    "drift:1@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -15.587591566906049,
+     "hi": 15.637600329996067,
+     "resolved": false
+    },
+    "drift:x@all": {
+     "outcome": "covered",
+     "truth": 0.8,
+     "lo": -9.278464867518498,
+     "hi": 11.25727768283351,
+     "resolved": false
+    },
+    "drift:x**2@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -1.4709247101459504,
+     "hi": 1.377153167219489,
+     "resolved": false
+    },
+    "drift:x**3@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -0.046146205646459514,
+     "hi": 0.0482576831269336,
+     "resolved": false
+    },
+    "diffusion:1@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -0.11915540140968547,
+     "hi": 0.09987185810793339,
+     "resolved": false
+    },
+    "diffusion:x@all": {
+     "outcome": "covered",
+     "truth": 0.0,
+     "lo": -0.06520037798124487,
+     "hi": 0.07473066402108106,
+     "resolved": false
+    },
+    "diffusion:x**2@all": {
+     "outcome": "covered",
+     "truth": 0.04000000000000001,
+     "lo": 0.03342657239321881,
+     "hi": 0.04686948754350119,
+     "resolved": true
+    }
+   }
+  }
+ ],
+ "totals": {
+  "n_tasks": 4,
+  "confident_wrong": 0,
+  "exact": 0,
+  "covered": 28,
+  "abstained_correctly": 0,
+  "missed": 0,
+  "resolved": 3,
+  "informative": 2,
+  "invariants": 0,
+  "invalid_certificates": 0,
+  "refused": 0,
+  "exceeded_expectation": 4
+ },
+ "ranking": [
+  [
+   "lagh-ito-L1",
+   {
+    "n_tasks": 4,
+    "confident_wrong": 0,
+    "exact": 0,
+    "covered": 28,
+    "abstained_correctly": 0,
+    "missed": 0,
+    "resolved": 3,
+    "informative": 2,
+    "invariants": 0,
+    "invalid_certificates": 0,
+    "refused": 0,
+    "exceeded_expectation": 4
+   }
+  ]
+ ],
+ "note": "expectations are CALIBRATED from Level 0 and the Level 1 increments, not registered blind -- see level1_tasks"
+}

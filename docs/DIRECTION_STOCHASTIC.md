@@ -388,9 +388,31 @@ framing.
      coefficients. And multiplicative noise vanishing at the origin DISCONNECTS the
      state space (zero well-crossings measured), making the registered third null a
      property of a system rather than a null.
+   **SECOND INCREMENT DONE — the diffusion certified from quadratic variation.**
+   `build_qv_rows` / `certify_diffusion`: the same weak form with the target
+   `∫φ w(X) d[X] = Σ_j d_j ∫φ w h_j dt`, the band's scale again MEASURED (from the
+   fourth moment of the increments, since `Var((ΔX)²) = (2/3)E[(ΔX)⁴]`).
+   * **2600× tighter, and OU's diffusion CERTIFIES** — b² = 1.9603 against a truth
+     of 1.96, joint bound [1.855, 2.097], resolved. GBM's x² coefficient resolves at
+     0.21 relative width against 532 inside the drift's design matrix. Both routes
+     cover; only this one is worth having. **The first certified diffusion in the
+     arc.**
+   * **The coupling runs both ways.** The drift's band needed the diffusion via
+     ⟨M⟩; this estimator needs the DRIFT, because `E[(ΔX)²] = b²Δt + a²Δt²`. That
+     O(Δt) drift leakage is a deterministic band term against a declared bound on
+     |a| (0.3% of the band on GBM, 22% on OU at `drift_max = 5`).
+   * **A caveat stated rather than assumed:** these increments have CHI-SQUARE
+     tails, so the applicable inequality is Bernstein's, not the continuous-
+     martingale bound. The sub-exponential correction is O(√(Δt/L)) and
+     `QvBand.bernstein_correction` reports its measured size.
+   * **A claim I asserted and the measurement changed:** the w-family is what makes
+     b²'s state dependence identifiable only for a STATIONARY process (OU: bounds
+     tighten 2.9×). Where the process grows, the windows already sample different
+     state regions and w adds nothing (GBM: marginally wider).
    Still open in Level 1: Van der Pol (2-D — needs the `build_nd` migration plus
    cross-variation `d[u,v]` and a per-field martingale list), the invariants target,
-   a certified diffusion, and a checker-scored Level 1 table.
+   a diffusion whose FORM certifies rather than merely resolving on a nontrivially
+   state-dependent b², and a checker-scored Level 1 table.
 5. Level 2, as the error-provenance testbed.
 
 Level 3, SPDEs, higher dimension, partial observation and non-Markovian noise are

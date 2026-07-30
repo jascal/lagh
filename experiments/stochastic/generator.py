@@ -75,6 +75,83 @@ def ode_obs_paths(*, theta: float, sigma_obs: float, T: float, dt: float,
     return t, truth[None, :] + sigma_obs * rng.standard_normal((n_traj, n))
 
 
+def sde_path(drift, vol, x0, *, T: float, dt: float, seed: int = 0,
+             substeps: int = 8):
+    """Substepped Euler-Maruyama, OBSERVED on the `dt` grid.
+
+    For a system with no exact transition. The substeps are not a nicety: the
+    scheme's own weak error is O(dt_sim), and a run must not confuse the
+    GENERATOR's bias with the instrument's band. Simulating at dt/substeps and
+    observing on the dt grid puts the scheme's error `substeps` times below the
+    quadrature bound the instrument declares for that grid.
+    """
+    rng = np.random.default_rng(seed)
+    n = int(round(T / dt)) + 1
+    ds = dt / max(int(substeps), 1)
+    sq = np.sqrt(ds)
+    x = np.asarray(x0, float).copy()
+    out = np.empty((len(x), n))
+    out[:, 0] = x
+    for k in range(1, n):
+        for _ in range(substeps):
+            x = x + drift(x) * ds + vol(x) * sq * rng.standard_normal(len(x))
+        out[:, k] = x
+    return np.arange(n) * dt, out
+
+
+def double_well_paths(*, theta: float = 1.0, b: float = 1.4, T: float = 400.0,
+                      dt: float = 1e-3, n_traj: int = 8, seed: int = 0,
+                      multiplicative: bool = False, substeps: int = 8):
+    """dX = theta(X - X^3) dt + b dW, or b X dW when `multiplicative`.
+
+    The multiplicative variant is kept because of what it does rather than what it
+    is: b(x) = b x vanishes at the origin, so the origin is unreachable and every
+    trajectory is TRAPPED in one well (measured: zero well-crossings over T = 400
+    across 8 trajectories, against ~21000 for the additive case). The registered
+    third null -- trajectories that do not visit enough of state space -- arriving
+    as a property of a system.
+    """
+    x0 = np.array([-1.0, 1.0] * (n_traj // 2) + [1.0] * (n_traj % 2))
+    return sde_path(lambda x: theta * (x - x ** 3),
+                    (lambda x: b * x) if multiplicative
+                    else (lambda x: b * np.ones_like(x)),
+                    x0, T=T, dt=dt, seed=seed, substeps=substeps)
+
+
+def cir_paths(*, theta: float, m: float, b: float, T: float, dt: float,
+              n_traj: int, seed: int = 0, x0: float | None = None):
+    """EXACT CIR transition: dX = theta(m - X)dt + b sqrt(X) dW, so b^2(x) = b^2 x.
+
+    The Level 1 system with a genuinely STATE-DEPENDENT diffusion, and exact rather
+    than schemed so a verdict is the instrument's. The transition is a scaled
+    noncentral chi-square:
+
+        X_{t+dt} = ncx2(df = 4 theta m / b^2, nc = c X_t e^{-theta dt}) / c,
+        c = 4 theta / (b^2 (1 - e^{-theta dt}))
+
+    The 4 in `c` is load-bearing and was wrong once: with a 2 there the stationary
+    mean comes out at 2m instead of m. `tests/test_ito.py` checks both stationary
+    moments (mean m, variance m b^2 / 2 theta) for exactly that reason -- an exact
+    sampler with a wrong constant is a silent generator bug, and the instrument
+    would have been blamed for it.
+
+    The Feller condition 2 theta m >= b^2 keeps X strictly positive; above it the
+    boundary is attainable and the sampler still works, but sqrt(X) can reach 0.
+    """
+    from scipy.stats import ncx2
+    rng = np.random.default_rng(seed)
+    n = int(round(T / dt)) + 1
+    c = 4.0 * theta / (b ** 2 * (1.0 - np.exp(-theta * dt)))
+    d = 4.0 * theta * m / b ** 2
+    X = np.empty((n_traj, n))
+    X[:, 0] = m if x0 is None else x0
+    dec = np.exp(-theta * dt)
+    for k in range(1, n):
+        X[:, k] = ncx2.rvs(df=d, nc=c * X[:, k - 1] * dec, size=n_traj,
+                           random_state=rng) / c
+    return np.arange(n) * dt, X
+
+
 def brownian_paths(*, b: float, T: float, dt: float, n_traj: int,
                    seed: int = 0):
     """dX = b dW: the null with no drift at all."""
@@ -210,3 +287,88 @@ def paths_for(task: Task, **over):
         t, X = brownian_paths(b=b, T=T, dt=dt, n_traj=n_traj, seed=seed)
         return t, X, {"b": b}
     raise ValueError(f"unknown system {task.system!r}")
+
+
+# ------------------------------------------------------------- the L1 suite
+# The diffusion library, registered alongside the drift library above. Both are
+# part of every Level 1 task's declared vocabulary, so a task's truth lists every
+# term of both -- zeros included.
+DIFF_LIBRARY = ("1", "x", "x**2")
+
+
+def _l1_task(task_id, system, drift, diff, expect_drift, expect_diff, sampling,
+             *, null=False, null_reason="", declarations=()):
+    truth = {component("drift", g): drift.get(g, 0.0) for g in LIBRARY}
+    truth.update({component("diffusion", h): diff.get(h, 0.0)
+                  for h in DIFF_LIBRARY})
+    exp = {component("drift", g): expect_drift.get(g, "interval")
+           for g in LIBRARY}
+    exp.update({component("diffusion", h): expect_diff.get(h, "interval")
+                for h in DIFF_LIBRARY})
+    return Task(task_id=task_id, level=1, system=system, state_dim=1,
+                truth=truth, expectation=exp, sampling=sampling,
+                declarations=tuple(declarations), null=null,
+                null_reason=null_reason)
+
+
+def level1_tasks(*, seed: int = 0) -> list:
+    """Four systems, drift AND diffusion scored per component.
+
+    **The expectations here are CALIBRATED, not blind.** Level 0 and the two Level 1
+    increments probed these systems first, so the registered expectation per
+    component reflects what the instrument was measured to manage rather than a
+    prediction made in ignorance. That is stated because it changes what the scored
+    table is evidence FOR: it tests zero-confident-wrong (S5) and exercises the
+    frozen checker on the diffusion path, and it is NOT a blind test of the
+    expectations. A genuinely blind Level 1 would need systems nobody has probed.
+    """
+    return [
+        _l1_task("L1-dw-additive", "double_well",
+                 {"x": 1.0, "x**3": -1.0}, {"1": 1.4 ** 2},
+                 # the wells sit where the drift vanishes, so the drift is expected
+                 # to stay an interval; the constant diffusion should resolve
+                 {"x": "interval", "x**3": "interval"},
+                 {"1": "interval", "x": "interval", "x**2": "interval"},
+                 {"dt": 1e-3, "T": 400.0, "n_traj": 8, "seed": seed,
+                  "sigma_obs": 0.0, "substeps": 8, "b": 1.4, "theta": 1.0}),
+        _l1_task("L1-dw-multiplicative", "double_well_mult",
+                 {"x": 1.0, "x**3": -1.0}, {"x**2": 0.7 ** 2},
+                 # b(x) = b x vanishes at the origin: the state space DISCONNECTS
+                 # and each trajectory sees one well only
+                 {g: "abstain" for g in LIBRARY},
+                 {"1": "interval", "x": "interval", "x**2": "interval"},
+                 {"dt": 1e-3, "T": 400.0, "n_traj": 8, "seed": seed + 1,
+                  "sigma_obs": 0.0, "substeps": 8, "b": 0.7, "theta": 1.0}),
+        _l1_task("L1-cir", "cir",
+                 {"1": 1.0, "x": -1.0}, {"x": 1.0 ** 2},
+                 {"1": "interval", "x": "interval"},
+                 {"1": "interval", "x": "interval", "x**2": "interval"},
+                 {"dt": 1e-3, "T": 200.0, "n_traj": 6, "seed": seed + 2,
+                  "sigma_obs": 0.0, "b": 1.0, "theta": 1.0, "m": 1.0}),
+        _l1_task("L1-gbm-mult", "gbm",
+                 {"x": 0.8}, {"x**2": 0.2 ** 2},
+                 {"x": "interval"},
+                 {"1": "interval", "x": "interval", "x**2": "interval"},
+                 {"dt": 1e-4, "T": 6.0, "n_traj": 8, "seed": seed + 3,
+                  "sigma_obs": 0.0, "b": 0.2, "mu": 0.8}),
+    ]
+
+
+def l1_paths(task: Task):
+    """Simulate the trajectories a Level 1 task describes."""
+    s = task.sampling
+    if task.system == "double_well":
+        return double_well_paths(theta=s["theta"], b=s["b"], T=s["T"],
+                                 dt=s["dt"], n_traj=s["n_traj"], seed=s["seed"],
+                                 substeps=s["substeps"])
+    if task.system == "double_well_mult":
+        return double_well_paths(theta=s["theta"], b=s["b"], T=s["T"],
+                                 dt=s["dt"], n_traj=s["n_traj"], seed=s["seed"],
+                                 multiplicative=True, substeps=s["substeps"])
+    if task.system == "cir":
+        return cir_paths(theta=s["theta"], m=s["m"], b=s["b"], T=s["T"],
+                         dt=s["dt"], n_traj=s["n_traj"], seed=s["seed"])
+    if task.system == "gbm":
+        return gbm_paths(mu=s["mu"], b=s["b"], T=s["T"], dt=s["dt"],
+                         n_traj=s["n_traj"], seed=s["seed"])
+    raise ValueError(f"unknown Level 1 system {task.system!r}")

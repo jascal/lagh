@@ -30,6 +30,17 @@ def _ou(theta=1.0, b=1.4, T=320.0, dt=1e-3, n_traj=4, seed=0, x0=0.0):
     return t, X
 
 
+def _gbm(mu=0.8, b=0.2, T=6.0, dt=1e-4, n_traj=8, seed=1, s0=1.0):
+    """EXACT GBM: S_t = s0 exp((mu - b^2/2) t + b W_t). No scheme, so a failure
+    here is the instrument's."""
+    rng = np.random.default_rng(seed)
+    n = int(round(T / dt)) + 1
+    t = np.arange(n) * dt
+    dW = rng.standard_normal((n_traj, n - 1)) * np.sqrt(dt)
+    W = np.concatenate([np.zeros((n_traj, 1)), np.cumsum(dW, axis=1)], axis=1)
+    return t, s0 * np.exp((mu - 0.5 * b ** 2) * t[None, :] + b * W)
+
+
 def _band(rows, delta=0.05):
     return ItoBand(rows.qv, rows.qv_se, rows.corr_se, rows.quad, len(rows.y),
                    delta=delta, y=rows.y, feat_names=list(rows.names))
@@ -287,6 +298,198 @@ def test_the_pure_noise_null_certifies_nothing():
     r = certify_drift(rows, delta=0.05, seed=0)
     assert r["certified"] is False
     assert r["abstain"] in ("noise", "structural", "resolution")
+
+
+def test_the_diffusion_certifies_from_quadratic_variation():
+    """Level 1's second increment, and the reason for it.
+
+    Putting b^2 in the DRIFT's design matrix gives a joint bound hundreds of times
+    the truth, because the diffusion's signal-to-band goes as b while the drift's
+    goes as 1/b. Quadratic variation is the efficient estimator for it, and the
+    same weak-form discipline applies with a different target:
+
+        int phi w(X) d[X] = sum_j d_j int phi w(X) h_j(X) dt
+
+    On OU, where b^2 is the constant 1.96, that CERTIFIES.
+    """
+    from lagh.ito import build_qv_rows, certify_diffusion
+    t, X = _ou(theta=1.0, b=1.4, T=320.0, dt=1e-3, n_traj=6)
+    rows = build_qv_rows(t, X, ("1", "x", "x**2"), half=16000)
+    assert len(rows.y) >= 12 and rows.n_trajectories == 6
+    r = certify_diffusion(rows, delta=0.05, drift_max=5.0, seed=0)
+    truth = {"diffusion:1": 1.96, "diffusion:x": 0.0, "diffusion:x**2": 0.0}
+    # every bound covers, and the constant is ESTABLISHED AS PRESENT
+    for nm, comp in r["partial"]["components"].items():
+        lo, hi = comp["lo"], comp["hi"]
+        assert (lo is None or lo <= truth[nm]) and (hi is None or truth[nm] <= hi)
+    const = r["partial"]["components"]["diffusion:1"]
+    assert const["resolved"] is True
+    assert const["hi"] - const["lo"] < 0.5 * 1.96      # determined, not just bounded
+    # the drift LEAKS into this estimator at O(dt) -- E[(dX)^2] = b^2 dt + a^2 dt^2
+    # -- so the declared bound on |a| is a real term in the band, not decoration
+    assert 0.0 < r["median_drift_leakage_share"] < 1.0
+    assert r["drift_max_declared"] == 5.0
+    loose = certify_diffusion(rows, delta=0.05, drift_max=50.0, seed=0)
+    assert loose["median_band"] > r["median_band"]      # a looser declaration
+    assert loose["median_drift_leakage_share"] > r["median_drift_leakage_share"]
+
+
+def test_quadratic_variation_beats_the_design_matrix_for_the_diffusion():
+    """The measurement that redirected Level 1, as a regression test: the same
+    truth, the same data, two estimators, orders of magnitude apart."""
+    from lagh.certify import admissible_interval
+    from lagh.ito import build_qv_rows, certify_diffusion
+    b = 0.2
+    t, S = _gbm(mu=0.8, b=b)
+
+    # (a) the diffusion inside the DRIFT's design matrix
+    joint = build_rows(t, S, LIB, diff_names=("1", "x", "x**2"), half=5000)
+    band = _band(joint)
+    e0 = band.martingale() + LAM_QV * joint.corr_se + joint.quad[:, 0]
+    q = joint.quad[:, 1:].sum(axis=1)
+    bb, _ = admissible_interval(joint.A, joint.y, lambda c: e0 + c * q,
+                                coeff_max=30.0)
+    lo_j, hi_j = bb[joint.names.index("diffusion:x**2")]
+    rel_joint = (hi_j - lo_j) / b ** 2
+
+    # (b) the same coefficient from quadratic variation
+    qv = build_qv_rows(t, S, ("1", "x", "x**2"), half=5000)
+    r = certify_diffusion(qv, delta=0.05, drift_max=2.0, seed=0)
+    lo_q, hi_q = r["admissible"]["diffusion:x**2"]
+    rel_qv = (hi_q - lo_q) / b ** 2
+
+    assert lo_j <= b ** 2 <= hi_j and lo_q <= b ** 2 <= hi_q   # both COVER
+    assert rel_joint > 100                                     # and one is useless
+    assert rel_qv < 1.0
+    assert rel_joint / rel_qv > 500                            # measured ~2600x
+    assert not (lo_j <= 0.0 <= hi_j) is False                  # joint: unresolved
+    assert not (lo_q <= 0.0 <= hi_q)                           # qv: RESOLVED
+
+
+def test_the_w_family_helps_a_stationary_process_and_not_a_growing_one():
+    """A claim first asserted and then measured, which changed it. The w-family
+    supplies state variation when every window sees the same state distribution;
+    when the process is non-stationary the windows already provide it and w only
+    costs a little kappa."""
+    from lagh.ito import build_qv_rows, certify_diffusion
+    DIFF = ("1", "x", "x**2")
+
+    def width(t, X, half, ws, dmax, key):
+        rows = build_qv_rows(t, X, DIFF, half=half, ws=ws)
+        r = certify_diffusion(rows, delta=0.05, drift_max=dmax, seed=0)
+        lo, hi = r["admissible"][key]
+        return hi - lo
+
+    # the DIRECTION is the finding; the magnitude is configuration-dependent (2.9x
+    # at T = 640 with the same parameters, 1.25x here), so only the sign is asserted
+    t, X = _ou(theta=1.0, b=1.4, T=320.0, dt=1e-3, n_traj=8)
+    one = width(t, X, 16000, ("1",), 5.0, "diffusion:1")
+    many = width(t, X, 16000, ("1", "x", "x**2"), 5.0, "diffusion:1")
+    assert many < one, "a stationary process is helped by the w-family"
+
+    t2, S = _gbm(mu=0.8, b=0.2)
+    one2 = width(t2, S, 5000, ("1",), 2.0, "diffusion:x**2")
+    many2 = width(t2, S, 5000, ("1", "x", "x**2"), 2.0, "diffusion:x**2")
+    assert many2 > one2, "a growing process gets nothing from the w-family"
+    assert many2 < 1.2 * one2                       # and loses only a little
+
+
+def _cir(theta=1.0, m=1.0, b=1.0, T=200.0, dt=1e-3, n_traj=6, seed=11):
+    """EXACT CIR: dX = theta(m - X)dt + b sqrt(X) dW, b^2(x) = b^2 x."""
+    from scipy.stats import ncx2
+    rng = np.random.default_rng(seed)
+    n = int(round(T / dt)) + 1
+    c = 4.0 * theta / (b ** 2 * (1.0 - np.exp(-theta * dt)))
+    d = 4.0 * theta * m / b ** 2
+    X = np.empty((n_traj, n))
+    X[:, 0] = m
+    dec = np.exp(-theta * dt)
+    for k in range(1, n):
+        X[:, k] = ncx2.rvs(df=d, nc=c * X[:, k - 1] * dec, size=n_traj,
+                           random_state=rng) / c
+    return np.arange(n) * dt, X
+
+
+def test_the_cir_sampler_reproduces_its_own_stationary_moments():
+    """A generator check, and it earned its place: the scale factor
+    4 theta / (b^2 (1 - e^-theta dt)) was written with a 2, which puts the
+    stationary mean at 2m instead of m -- an exact sampler with a wrong constant,
+    which the instrument would have been blamed for. Stationary mean m, variance
+    m b^2 / 2 theta."""
+    theta, m, b = 1.0, 1.0, 0.8
+    _, X = _cir(theta=theta, m=m, b=b, T=200.0)
+    assert X.mean() == pytest.approx(m, rel=0.05)
+    assert X.var() == pytest.approx(m * b ** 2 / (2 * theta), rel=0.10)
+    assert X.min() > 0.0                       # Feller 2 theta m / b^2 = 3.1 > 1
+
+
+def test_a_state_dependent_diffusion_resolves_once_the_state_spreads():
+    """The diffusion's counterpart to the drift's theta*L > 2 kappa^2: the FORM of
+    a state-dependent b^2 is identifiable in proportion to the state's RELATIVE
+    SPREAD, because that is what separates {1, x, x^2} from each other.
+
+    Measured on CIR (b^2 = b^2 x), sd/mean rising with b: at 0.55 the x coefficient
+    straddles zero, and by 0.71 it is RESOLVED. Every bound covers throughout.
+    """
+    from lagh.ito import build_qv_rows, certify_diffusion
+    DIFF = ("1", "x", "x**2")
+    got = []
+    for b in (0.8, 1.0):
+        t, X = _cir(theta=1.0, m=1.0, b=b, T=200.0)
+        rows = build_qv_rows(t, X, DIFF, half=8000, ws=DIFF)
+        r = certify_diffusion(rows, delta=0.05, drift_max=3.0, seed=0)
+        ad = r["admissible"]
+        for nm, (lo, hi) in ad.items():
+            tv = b ** 2 if nm == "diffusion:x" else 0.0
+            assert lo <= tv <= hi, (b, nm)      # covers at every spread
+        lo, hi = ad["diffusion:x"]
+        got.append((float(X.std() / X.mean()), not (lo <= 0.0 <= hi)))
+    (spread_lo, res_lo), (spread_hi, res_hi) = got
+    assert spread_lo < spread_hi
+    assert res_lo is False and res_hi is True
+
+
+def test_the_drift_leakage_bound_is_pointwise_not_flat():
+    """The diffusion's band needs a bound on |a| because E[(dX)^2] = b^2 dt + a^2
+    dt^2. Bounding a^2 by its worst value ANYWHERE in the visited range over-declares
+    by the square of a ratio, and that flat bound was measured to destroy the
+    diffusion's precision entirely on Level 1 -- every task abstained on vacuity.
+
+    The honest bound is pointwise: sum_i |w_i| env(X_i)^2 dt, with env evaluated at
+    the states the process actually visited. Same distinction weakform draws with
+    `field_l1`, and it is what made two diffusion certificates possible.
+    """
+    from lagh.ito import QvBand, build_qv_rows, certify_diffusion
+    t, X = _ou(theta=1.0, b=1.4, T=320.0, dt=1e-3, n_traj=6)
+    DIFF = ("1", "x", "x**2")
+    env_max = 50.0                     # a wide envelope, as an undetermined drift gives
+
+    flat = build_qv_rows(t, X, DIFF, half=16000, ws=DIFF)
+    assert flat.leak is None
+    tight = build_qv_rows(t, X, DIFF, half=16000, ws=DIFF,
+                          drift_envelope=lambda z: np.minimum(np.abs(z) * 1.0,
+                                                              env_max))
+    assert tight.leak is not None and np.all(tight.leak > 0)
+
+    def band(rows):
+        return QvBand(rows.var, rows.lam, len(rows.y), rows.dt, delta=0.05,
+                      drift_max=env_max, y=rows.y, leak=rows.leak)(None)
+    # the pointwise bound is strictly tighter, because the process lives where its
+    # own drift is small relative to the envelope's worst case
+    assert np.all(band(tight) < band(flat))
+    assert np.median(band(flat) / band(tight)) > 5.0
+
+    # and the tighter band is what lets the constant diffusion certify
+    r_t = certify_diffusion(tight, delta=0.05, drift_max=env_max, seed=0)
+    r_f = certify_diffusion(flat, delta=0.05, drift_max=env_max, seed=0)
+    assert r_t["leakage_bound"] == "pointwise envelope"
+    assert r_f["leakage_bound"] == "flat drift_max"
+    assert r_t["median_signal_to_band"] > r_f["median_signal_to_band"]
+    # BOTH still cover -- the flat bound was over-declared, never unsound
+    for r in (r_t, r_f):
+        c = r["partial"]["components"]["diffusion:1"]
+        assert c["lo"] <= 1.96 <= c["hi"]
+    assert r_t["partial"]["components"]["diffusion:1"]["resolved"] is True
 
 
 def test_a_claimed_diffusion_becomes_ordinary_columns():
