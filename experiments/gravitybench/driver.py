@@ -66,7 +66,6 @@ def solve_instance(observe_native, maxtime_native, task, units,
                                    per_request=per_request)
     state = system_id(obs)
     tw = Twin(state, maxtime_si)
-    val = tw.validate(obs)
-    ans = tw.answer(task)
+    ans, val, refusal = tw.gated_answer(task, obs)
     return {"answer": ans, "state": state, "twin_validation": val,
-            "n_obs_used": used["n"], "period_est": P0}
+            "refusal": refusal, "n_obs_used": used["n"], "period_est": P0}

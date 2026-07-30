@@ -112,8 +112,8 @@ def solve(df, task, units, variant, variant_epoch_fix=False):
         n_used = used["n"]
     state = system_id(obs)
     tw = Twin(state, float(obs["time"].max()))
-    ans = tw.answer(task)
-    return ans, tw.validate(obs), n_used, state
+    ans, val, refusal = tw.gated_answer(task, obs)
+    return ans, val, n_used, state, refusal
 
 
 def main(argv=None):
@@ -152,11 +152,17 @@ def main(argv=None):
                        "variant": variant, "units": list(units)}
                 try:
                     signal.alarm(300)
-                    ans, val, n_used, state = solve(df, task, units, variant)
+                    ans, val, n_used, state, refusal = solve(
+                        df, task, units, variant)
                     rec.update(answer=(bool(ans) if isinstance(ans, (bool, np.bool_))
                                        else (float(ans) if ans is not None else None)),
                                twin_validation=float(val), n_obs=n_used,
-                               alpha_fit=state.get("p_raw"))
+                               alpha_fit=state.get("p_raw"),
+                               # an ABSTAIN is not a failure to answer: it is
+                               # the verdict, and it scores the same as a wrong
+                               # answer here, so it has to be visible as its own
+                               # thing in the journal
+                               refusal=refusal)
                 except TimeoutError:
                     rec.update(answer=None, error="timeout")
                 except Exception as e:                          # noqa: BLE001

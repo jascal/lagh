@@ -17,6 +17,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from experiments.gravitybench.integrator import G_SI, TwoBody, make_circularish  # noqa: E402
 from experiments.gravitybench.driver import AU_M, YR_S, solve_instance  # noqa: E402
+from experiments.gravitybench.twin import TWIN_VALIDATION_MAX  # noqa: E402
 
 OUT = Path("experiments/results/gravitybench_battery.jsonl")
 
@@ -132,6 +133,20 @@ def main():
     print(f"\nBATTERY: {len(rows)} cases, {len(bad)} above 15% worst-error")
     for r in bad:
         print("  FAIL", r["case"], r.get("errors", r.get("error")))
+    # The battery deliberately scores the RAW answers -- it exists to measure how
+    # accurate the twin is, and gating it would hide the errors it is here to
+    # find. What it reports instead is what the shipped gate would have done, so
+    # the two numbers stay visible side by side: accuracy, and how much of the
+    # inaccuracy the instrument can detect on its own.
+    gated = [r for r in rows
+             if (r.get("twin_validation") is None
+                 or r["twin_validation"] > TWIN_VALIDATION_MAX)]
+    survive = [r for r in bad if r not in gated]
+    print(f"  under the twin-validation gate (> {TWIN_VALIDATION_MAX:g}): "
+          f"{len(gated)} of {len(rows)} cases ABSTAIN, and "
+          f"{len(survive)} case(s) above 15% still answer wrong")
+    for r in survive:
+        print("    WRONG AND UNGATED", r["case"], r.get("twin_validation"))
     return 0
 
 

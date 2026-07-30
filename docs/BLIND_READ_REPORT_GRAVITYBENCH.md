@@ -15,6 +15,15 @@ dataset itself.
 > allowed, and they stand as run. Any post-fix score is a DEV number, reported
 > as such and never as the read — a read cannot be re-taken because the code
 > improved, or it was never a read.
+>
+> A second post-read change, same day: the twin now **abstains** when it fails
+> its own validation (`TWIN_VALIDATION_MAX = 0.05`, bar set on the synthetic
+> battery). The read below emitted 9 wrong budgeted answers and 26 wrong full
+> answers; the gate would have turned 4 and 17 of those into abstains, at a cost
+> of 7 and 12 answers that were right anyway. Since abstain and wrong score the
+> same here, that is a score reduction (94.66 → 91.26 budgeted, DEV) bought for a
+> 44–65% cut in wrong answers submitted — the trade this program makes elsewhere
+> and had not been making here.
 
 ## Scorecard vs the frozen baselines
 

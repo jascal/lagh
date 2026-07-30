@@ -3,7 +3,8 @@
 
 **One-sentence claim.** A symbolic law discoverer that returns either a
 machine-checked certificate carrying a stated significance bound, or a
-machine-readable refusal — never a confident wrong answer — and whose
+machine-readable refusal — never a confident wrong LAW (see §1 for what that
+covers and what it does not) — and whose
 deterministic observation-planning agent nearly doubled LLM-agent SOTA on a
 sealed benchmark without a single LLM call.
 
@@ -13,8 +14,19 @@ sealed benchmark without a single LLM call.
 
 lagh (`github.com/jascal/lagh`) discovers exact symbolic laws from data. Its
 product definition is an invariant, not a metric: **zero confident-wrong
-submissions**, inherited from a predecessor's 114-task record and preserved
-through every capability added since. Architecture:
+certifications**, inherited from a predecessor's 114-task record and preserved
+through every capability added since.
+
+**Read that scope exactly.** The invariant covers CERTIFICATES — claims carrying
+an α — and it is pre-registered as covering only those
+(`DIRECTION_OUTPUT_POLICY.md`, 2026-07-23: "Track A — certified… this is the only
+track the zero-wrong claim covers"). On accuracy-scored benchmarks, where an
+abstention scores exactly the same as a wrong answer, lagh also submits Track B
+best-fit values that carry no certificate and no such guarantee. §3.2's
+Gravity-Bench astronomer is entirely Track B — it never calls the certified
+engine on any of its 50 task types — and it submitted 35 wrong numeric answers
+across 412 scored instances. Those are wrong conjectures, not confident-wrongs,
+and the distinction is the reason the term is reserved. Architecture:
 
 - **A fixed honesty core** (`certify.py`): exhaustive per-point certification
   under a four-term epsilon model; null-law vacuity; functional-coherence
@@ -94,6 +106,14 @@ benchmark's own thesis about planning, demonstrated by an instrument.
 Both figures are the read as executed on 2026-07-27 (code at `cf54706`) and are
 not restated: a mass-estimate bug found on 2026-07-29 means current `master`
 scores differently, and that number is DEV, not a read.
+
+The phrase "prediction-validated" above is now enforced rather than described:
+the twin **abstains** when its own reconstruction error exceeds a bar set on the
+synthetic battery, so no answer is emitted from a model that does not reproduce
+its fitting data. It costs score on a benchmark where abstain and wrong score
+alike (94.66 → 91.26% budgeted, DEV) and cuts wrong answers by 44–65%. It
+does not eliminate them — 5 budgeted and 9 full survive with good validation,
+which bounds what this diagnostic can see.
 
 ### 3.3 The distillation loop (LLM → grammar)
 A bounded LLM proposer, verified by the sound checker, produced 19 certificates

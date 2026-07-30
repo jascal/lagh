@@ -16,6 +16,24 @@ from experiments.gravitybench import astronomer as ast
 
 DAY = 86400.0
 
+# The twin ABSTAINS above this reconstruction error. Registered 2026-07-29 from
+# the SYNTHETIC BATTERY ALONE, before the benchmark effect was measured: across
+# 43 dev cases the 42 whose worst answer error is <= 15% all validate at
+# <= 0.0231, and the one that fails (drag, 17.3%) validates at 1.7562 -- a 76x
+# gap with nothing in it. 0.05 sits 2.2x above the worst passing dev case and
+# 35x below the failing one, and is the bar `test_twin_end_to_end` already used
+# for the same quantity.
+#
+# It gates EVERY task, not only the trajectory-derived ones. The narrower
+# reading is defensible -- masses and the exponent come from fits rather than
+# from integrating, so a bad trajectory is only indirect evidence against them
+# -- and it was rejected: this pipeline's claim is "every answer traceable to a
+# fitted, PREDICTION-VALIDATED model", and a twin that cannot reproduce the
+# observations it was fitted from has not validated anything it emits. The
+# price is answers that would have been right anyway (measured: 7 of 13 gated
+# budget instances), which is the price of not being right by luck.
+TWIN_VALIDATION_MAX = 0.05
+
 
 # ---------------------------------------------------------------- system id
 
@@ -182,6 +200,28 @@ class Twin:
         self.rel = R2 - R1
         self.vrel = V2 - V1
         self.sep = np.sqrt((self.rel ** 2).sum(1))
+
+    def gated_answer(self, task, obs, *, max_validation=TWIN_VALIDATION_MAX):
+        """The answer, or an ABSTAIN when the twin failed its own validation.
+
+        Returns (answer, validation, refusal). `answer` is None exactly when
+        `refusal` is set, so a caller cannot read a number without having been
+        told the model behind it does not reproduce the data.
+
+        This is the gate the instrument was already computing and not using:
+        `validate` was recorded next to every answer in the read journal and
+        never consulted. Two wrong answers in that journal
+        (max_velocity_star1 and max_angular_velocity_star1 on
+        9p6_M_3p1_M_Proper_Motion2) came from a twin validating at 0.62 -- 62%
+        reconstruction error -- and a third, earlier, from one at 4.09.
+        """
+        v = self.validate(obs)
+        if not np.isfinite(v) or v > max_validation:
+            return None, v, (f"twin validation {v:.4g} > {max_validation:g}: "
+                             "the fitted model does not reproduce the "
+                             "observations it was fitted from, so no answer "
+                             "read off it is validated")
+        return self.answer(task), v, None
 
     # ---- validation (predictions-as-harness) ----
     def validate(self, obs_holdout):

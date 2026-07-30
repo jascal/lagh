@@ -106,3 +106,28 @@ if __name__ == "__main__":
     test_drag_tau(); print("drag ok")
     test_twin_end_to_end(); print("twin ok")
     test_twin_modified_gravity(); print("twin modgrav ok")
+
+
+def test_the_twin_gate_abstains_instead_of_answering_from_a_bad_fit():
+    """A twin that cannot reproduce the observations it was fitted from must
+    return no answer at all.
+
+    The read journal recorded `twin_validation` beside every answer and never
+    consulted it, so two wrong answers came out of a twin sitting at 0.62 --
+    62% reconstruction error. The gate exists so a caller cannot read a number
+    without having been told the model behind it does not fit; this checks both
+    directions, because a gate that abstains on everything is also useless."""
+    from experiments.gravitybench.twin import (TWIN_VALIDATION_MAX, Twin,
+                                               system_id)
+    tb, P_true = make_circularish(m1=2e30, m2=1e30, a=1.5e11, ecc=0.3)
+    obs, _ = _run(tb, 4.0 * P_true)
+    tw = Twin(system_id(obs), 4.0 * P_true)
+
+    ans, val, refusal = tw.gated_answer("period", obs)
+    assert refusal is None and ans is not None
+    assert val <= TWIN_VALIDATION_MAX
+    assert abs(ans - P_true) / P_true < 0.03
+
+    # the same twin, held to a bar it cannot meet: no answer, and a reason
+    ans, val, refusal = tw.gated_answer("period", obs, max_validation=val / 2)
+    assert ans is None and refusal is not None and "does not reproduce" in refusal

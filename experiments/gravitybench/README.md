@@ -120,7 +120,47 @@ threshold (2.2% and 0.4% error) and the new ones land outside (6.3% and 8.6%).
 Nothing about that scenario got worse except the luck. **The instrument already
 computes the number that would have flagged it** — `twin_validation` is
 recorded per instance and never gates the answer. Gating on it would convert
-both of these from confident-wrong to abstain, and is the registered follow-up.
+both of these from a wrong answer to an abstain, and is the registered
+follow-up. (Wrong ANSWERS: this pipeline is Track B of
+`docs/DIRECTION_OUTPUT_POLICY.md` and emits no certificates, so nothing here is
+a confident-wrong in this program's sense of the term — a false claim carrying
+an alpha. It never calls the certified engine at all.)
+
+### The gate, built 2026-07-29
+
+`Twin.gated_answer` returns `(answer, validation, refusal)` with `answer = None`
+exactly when `refusal` is set, so a caller cannot read a number without being
+told the model behind it does not fit. `TWIN_VALIDATION_MAX = 0.05`.
+
+**The bar comes from the synthetic battery alone and was fixed before the
+benchmark effect was measured.** Across the 43 dev cases, the 42 whose worst
+answer error is ≤ 15% all validate at ≤ 0.0231; the one that fails (drag, 17.3%)
+validates at 1.7562. A 76× gap with nothing in it. 0.05 sits 2.2× above the
+worst passing dev case, 35× below the failing one, and is the bar
+`test_twin_end_to_end` already used for the same quantity. Under it the dev
+battery abstains on 1 of 43 cases and **no wrong answer survives**.
+
+It gates **every** task. The narrower reading — gate only the answers read off
+the integrated trajectory, since masses and the exponent come from fits — is
+defensible and was rejected: this pipeline's claim is "every answer traceable to
+a fitted, *prediction-validated* model", and a twin that cannot reproduce its own
+fitting data has validated nothing it emits.
+
+**It costs score, and that is the trade being made.** Abstain scores the same as
+wrong here, so the gate can only lose points:
+
+| variant | DEV score | | wrong answers submitted | |
+|---|---|---|---|---|
+| | ungated | gated | ungated | gated |
+| budgeted | 94.66% | **91.26%** | 9 | **5** |
+| full | 86.89% | **81.07%** | 26 | **9** |
+
+13 of 206 budgeted instances abstain (7 of them would have been right) and 30 of
+206 full instances (12 would have been right). Confident-wrongs fall 44% and
+65%. The gate does **not** eliminate them: 5 and 9 survive with good validation,
+which is the honest limit — those errors are invisible to this diagnostic, and
+a twin reproducing its observations is necessary for a right answer, not
+sufficient.
 
 The other post-read DEV path, `dev_full_retest.py` (native-cadence epoch
 triplets), is **byte-identical before and after** — still 189/206 = 91.75%, so
