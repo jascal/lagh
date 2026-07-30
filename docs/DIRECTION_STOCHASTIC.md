@@ -212,6 +212,23 @@ framing.
      conjectured closure, per the traffic plan) rather than a per-verdict
      record, and is the lowest priority of the five.
 1. Register the certificate-kind decision (above) and the checker's interface.
+   **STATUS 2026-07-29: half done, and its dependency is met.** The
+   certificate-kind decision is registered above (coverage-factor calibration,
+   fallback to almost-sure objects, statistical-certificate class deferred).
+   Two things remain, and the first constrains the second:
+   * **What κ means when the dominant term is INTRINSIC rather than
+     observational, and how a union bound over n patches enters α.** Posed in
+     that section and not answered. A design conversation, not code.
+   * **Freeze the checker interface** against `certify.determination` — the
+     vocabulary step 0 existed to provide, now covering structure, interval,
+     mode and domain. Interval COVERAGE scoring maps directly onto those
+     records; a domain-qualified verdict refuses to conjoin across domains. It
+     is scored against, so it must be frozen before Level 0 tasks exist.
+   One constraint carried in from the PDEBench correction: **a declared error
+   belongs to a CONSUMER, not to a dataset** — this checker will have more than
+   one consumer of "noise intensity", and each must state which quantity it
+   bounds. See `STRATEGY.md`, and `DIRECTION_ERROR_PROVENANCE.md` for what it
+   cost to learn.
 2. Level 0 — three systems, mostly existing machinery, calibrate κ.
 3. The Itô/generator weak form in `lagh/weakform.py` (new terms, same discipline).
 4. Level 1.
