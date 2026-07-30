@@ -445,16 +445,87 @@ way. What the decomposition buys is **precision**: the same certified law, with 
 coefficient pinned to ±3% instead of ±20%. A 6.7× tighter interval, not a certificate
 that would otherwise not exist. The test says so in its name.
 
+### Van der Pol in the scored task set, and what the component index is for
+
+`experiments/stochastic/run_level1_vdp.py` → `stochastic_level1_vdp.json`. A separate
+runner from the scalar one because the shape of the CLAIM differs: a 2-D system has one
+drift equation **per component**, and the frozen interface's answers to that —
+`part[index]:term`, and several submissions per task — were both in the interface from
+the freeze with no producer until now. Each equation is submitted on its own, with its
+own coverage statement; the checker scores the union.
+
+| part | verdict | signal/band |
+|---|---|---|
+| `drift[0]` (x, noise-free) | **CERTIFIED** | 38.7 |
+| `drift[1]` (y, driven) | `ABSTAIN[noise]` | 0.11 |
+| `diffusion[0]` (x) | `ABSTAIN[noise]` | 0.02 |
+| `diffusion[1]` (y) | `ABSTAIN[structural]` | 2.77 |
+
+**Zero confident-wrong across 18 components**, all covering, 6 informative, 2
+resolved:
+
+| component | bound | truth | |
+|---|---|---|---|
+| `drift[0]:y` | [0.9827, 1.0177] | 1.0 | **resolved**, ±1.8% |
+| `drift[0]:1` | [−0.049, +0.049] | 0 | informative |
+| `drift[0]:x` | [−0.034, +0.034] | 0 | informative |
+| `diffusion[1]:1` | [0.1230, 0.3689] | 0.25 | **resolved** |
+| `drift[1]:x` | [−13.3, +14.2] | −1.0 | covered, vacuous |
+
+So the x equation is not merely certified — its **form** is determined: `y` present at
+±1.8%, the other five terms excluded to ±0.05. And the y component's constant
+diffusion resolves at 0.25.
+
+Two verdicts worth reading carefully rather than as failures:
+
+* **`diffusion[0]` abstains on vacuity, and that is correct.** The x component carries
+  no noise, so its quadratic-variation target is ~0 and the ZERO diffusion law
+  certifies. "There is no diffusion here" comes out as *vacuity* rather than as a
+  certified zero — at this band, zero and small-nonzero are genuinely
+  indistinguishable, and saying so is the honest form of that answer.
+* **`exceeded_expectation` fires on all six `drift[1]` components.** Their registered
+  expectation was `abstain` (measured vacuous) and they returned covering bounds
+  instead. Recorded as a finding about the expectation, never as credit.
+
+### Why the driven equation resists, characterized
+
+Worth isolating rather than leaving as "vacuous at every window we tried". Two claims,
+measured:
+
+**The drift signal for `f = y²/2` IS the Itô correction.** At stationarity the
+generator identity gives `E[∂_y f · a_y] = −E[y ∂_x f] − ½b²E[∂²_yy f]`, which for
+f = y²/2 is exactly **−b²/2**. Measured drift-signal mean −0.5809 against a predicted
+−b²/2·∫φ = −0.5990 — three digits. **So that row's mean content is the diffusion, not
+the drift.** The drift's own structure (μ, the x²y term) is visible only in the
+row-to-row FLUCTUATION, and the martingale swamps it: drift signal / martingale sd is
+**0.49** there against **396** for the noise-free equation.
+
+That also says what would fix it, and why it is not simply "a longer window":
+signal/martingale-sd ∝ b·√L, so the shortfall against κ ≈ 4 is 8× and closing it needs
+b and L together (b → 2 and L → 4× would do it). But what gets identified that way is
+still the b²/2 content — **the diffusion again**. Identifying the drift's *structure*
+on a driven component needs the fluctuation, and no window length changes that.
+
+The promising alternative is `f = x·y`, whose stationary balance gives
+`E[x·a_y] = −E[y²]` — of order 4 here, 32× the b²/2 = 0.125 that f = y²/2 offers. It
+measured *worse* (signal/band 0.015 at L = 16) and I have not isolated why. That is the
+open problem, stated as a mechanism rather than as a failed configuration.
+
+**A claim of mine the measurement corrected, again.** I asserted the target is
+mean-zero for a stationary process because ∫φ′ = 0. It is not: the raw −∫φ′f dt is
+mean-zero, but the target carries the measured Itô correction subtracted, whose mean is
+−½b²∫φ. Measured target mean −0.5913 against −0.5990. The corrected version is what
+makes the whole picture consistent — target and drift signal have the *same* nonzero
+mean, which is the identity holding in expectation.
+
 ## What is not here
 
-* ~~Van der Pol with additive noise.~~ **DONE** (above): the multi-field machinery
-  works, the identifiability arithmetic is measured per equation, and `dx = y dt`
-  certifies. What is still open is Van der Pol inside the SCORED task set — the
-  checker's `drift[i]:term` component convention exists for per-component drifts and
-  is not yet wired — and the driven equation, which needs a configuration where its
-  own cancellation does not dominate. `ito.build_rows` also still has its scalar
-  assembler beside `build_nd`; the equality test binds them and collapsing them is
-  now tidying, not a capability gap.
+* ~~Van der Pol with additive noise.~~ **DONE**, including the scored task (above).
+  What is still open is the DRIVEN equation at a configuration whose own cancellation
+  does not dominate — every window length tried leaves it vacuous (0.49 at L = 4 is
+  the least bad), so it may need a different f family rather than a different window.
+  `ito.build_rows` also still has its scalar assembler beside `build_nd`; the
+  equality test binds them and collapsing them is tidying, not a capability gap.
 * **The invariants target.** Untouched. The checker scores invariants up to affine
   reparametrization already, so this is generator work rather than instrument work.
 * ~~A certified diffusion.~~ **DONE** (above): OU's constant b² certifies, GBM's x²

@@ -437,10 +437,20 @@ framing.
    over a 6-term bivariate library — while the DRIVEN equation is vacuous at the same
    configuration (median signal/band 32 against 0.12). **In a partially-driven system
    the noise-free components' equations are far more determinable.**
-   Still open in Level 1: Van der Pol inside the SCORED task set (the checker's
-   `drift[i]:term` convention exists for per-component drifts and is not yet wired),
-   the driven equation at a configuration its own cancellation does not dominate, the
-   invariants target, and a state-dependent b² whose FORM certifies.
+   **SIXTH INCREMENT — Van der Pol SCORED**, and the first producer for the frozen
+   interface's component INDEX: a 2-D system has one drift equation per component, so
+   `part[index]:term` plus several submissions per task (both in the interface since
+   the freeze) is what expresses it. Zero confident-wrong across 18 components, all
+   covering, 6 informative, 2 resolved — `drift[0]:y` at [0.9827, 1.0177] with the
+   other five terms of that equation excluded to ±0.05, so its FORM is determined, and
+   `diffusion[1]:1` resolved at [0.123, 0.369] against 0.25. `diffusion[0]` abstains on
+   vacuity, correctly: the x component carries no noise, so zero and small-nonzero are
+   genuinely indistinguishable at that band and vacuity is the honest form of "there is
+   none".
+   Still open in Level 1: the DRIVEN Van der Pol equation, vacuous at every window
+   length tried (0.49 at L = 4 the least bad), which suggests it needs a different f
+   family rather than a different window; the invariants target; and a state-dependent
+   b² whose FORM certifies.
 5. Level 2, as the error-provenance testbed.
 
 Level 3, SPDEs, higher dimension, partial observation and non-Markovian noise are

@@ -372,3 +372,75 @@ def l1_paths(task: Task):
         return gbm_paths(mu=s["mu"], b=s["b"], T=s["T"], dt=s["dt"],
                          n_traj=s["n_traj"], seed=s["seed"])
     raise ValueError(f"unknown Level 1 system {task.system!r}")
+
+
+def vdp_paths(*, mu: float = 1.0, b: float = 0.5, T: float = 200.0,
+              dt: float = 1e-3, n_traj: int = 4, seed: int = 0,
+              substeps: int = 8):
+    """Van der Pol with additive noise on y ONLY:
+        dx = y dt,   dy = (mu(1 - x^2) y - x) dt + b dW.
+
+    The x component carries NO noise, which is why this system is here rather than
+    only for being 2-D: its x equation is a deterministic weak-form identity, and
+    measuring how much more determinable that makes it is the point.
+    """
+    rng = np.random.default_rng(seed)
+    n = int(round(T / dt)) + 1
+    ds = dt / max(int(substeps), 1)
+    sq = np.sqrt(ds)
+    x = rng.uniform(-2, 2, n_traj)
+    y = rng.uniform(-2, 2, n_traj)
+    X = np.empty((n_traj, n))
+    Y = np.empty((n_traj, n))
+    X[:, 0], Y[:, 0] = x, y
+    for k in range(1, n):
+        for _ in range(substeps):
+            xn = x + y * ds
+            y = y + (mu * (1 - x ** 2) * y - x) * ds \
+                + b * sq * rng.standard_normal(n_traj)
+            x = xn
+        X[:, k], Y[:, k] = x, y
+    return np.arange(n) * dt, X, Y
+
+
+# Van der Pol's per-component drift libraries, registered here with the systems.
+VDP_LIBRARIES = {"x": ("1", "x", "y", "x**2", "x*y", "y**2"),
+                 "y": ("1", "x", "y", "x**2", "x*y", "x**2*y")}
+VDP_FIELDS = ("x", "y")
+
+
+def vdp_task(*, mu: float = 1.0, b: float = 0.5, seed: int = 10) -> Task:
+    """Van der Pol as a scored task, using the frozen `part[index]:term` convention.
+
+    Component INDEX is what makes a per-component drift expressible: `drift[0]:y` is
+    the y term of the x component's drift. The convention was in the interface from
+    the freeze and this is the first producer to need it.
+
+    Expectations are CALIBRATED (measured per equation first), like the rest of
+    Level 1: the noise-free x equation certifies, the driven y equation is vacuous at
+    this configuration.
+    """
+    truth, exp = {}, {}
+    for i, fld in enumerate(VDP_FIELDS):
+        for g in VDP_LIBRARIES[fld]:
+            truth[component("drift", g, i)] = 0.0
+            # the driven component is measured vacuous here; the noise-free one is
+            # measured determinable
+            exp[component("drift", g, i)] = "interval" if i == 0 else "abstain"
+    truth[component("drift", "y", 0)] = 1.0                     # dx = y dt
+    truth[component("drift", "y", 1)] = mu                      # dy = mu y ...
+    truth[component("drift", "x**2*y", 1)] = -mu                #      - mu x^2 y ...
+    truth[component("drift", "x", 1)] = -1.0                    #      - x
+    for i in range(2):
+        for h in ("1", "x", "x**2"):
+            truth[component("diffusion", h, i)] = 0.0
+            exp[component("diffusion", h, i)] = "interval"
+    truth[component("diffusion", "1", 1)] = b ** 2              # (bb^T)_yy = b^2
+    return Task(task_id="L1-vdp", level=1, system="vdp", state_dim=2,
+                truth=truth, expectation=exp,
+                sampling={"dt": 1e-3, "T": 200.0, "n_traj": 4, "seed": seed,
+                          "sigma_obs": 0.0, "substeps": 8, "mu": mu, "b": b},
+                declarations=(Declaration(Consumer.DIFFUSION_QV, b ** 2,
+                                          provenance="declared",
+                                          note="(bb^T)_yy is the constant b^2; the "
+                                               "x component carries no noise"),))

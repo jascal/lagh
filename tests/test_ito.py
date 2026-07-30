@@ -953,3 +953,65 @@ def test_the_stride_decomposition_tightens_that_certificate_by_seven_fold():
     assert out[False][3] and out[True][3]            # and covering either way
     assert out[True][1] > 5 * out[False][1]          # ~8x the signal-to-band
     assert out[True][2] < out[False][2] / 5.0        # ~6.7x tighter bound
+
+
+def test_the_component_index_convention_carries_a_per_component_drift():
+    """The frozen interface's `part[index]:term` convention, and the first producer
+    to need it. A 2-D system has one drift equation PER COMPONENT, so the columns
+    `build_rows_nd` names `<field>:<term>` re-key to `drift[i]:<term>` and the
+    checker scores them against a truth spanning both components.
+
+    Asserted here rather than only in the runner because the mapping is the whole
+    point: without the index a per-component drift cannot be expressed at all.
+    """
+    from lagh.ito import build_rows_nd
+    from lagh.stochcheck import (Coverage, Submission, Task, component,
+                                 score_task, validate_submission, validate_task)
+    mu, b = 1.0, 0.5
+    truth, exp = {}, {}
+    for i, fld in enumerate(("x", "y")):
+        for g in VDP_LIBS[fld]:
+            truth[component("drift", g, i)] = 0.0
+            exp[component("drift", g, i)] = "interval" if i == 0 else "abstain"
+        for h in ("1", "x", "x**2"):
+            truth[component("diffusion", h, i)] = 0.0
+            exp[component("diffusion", h, i)] = "interval"
+    truth[component("drift", "y", 0)] = 1.0
+    truth[component("drift", "y", 1)] = mu
+    truth[component("drift", "x**2*y", 1)] = -mu
+    truth[component("drift", "x", 1)] = -1.0
+    truth[component("diffusion", "1", 1)] = b ** 2
+    task = Task(task_id="L1-vdp", level=1, system="vdp", state_dim=2,
+                truth=truth, expectation=exp)
+    assert validate_task(task) == []
+    # both components' drifts and both diffusions are expressible, zeros included
+    assert task.truth["drift[0]:y"] == 1.0
+    assert task.truth["drift[1]:x**2*y"] == -1.0
+    assert task.truth["diffusion[1]:1"] == b ** 2
+    assert len(task.truth) == 18
+
+    t, X, Y = _vdp(mu=mu, b=b, T=100.0, n_traj=3)
+    rows = build_rows_nd(t, {"x": X, "y": Y}, VDP_LIBS, "x", half=8000)
+    r = certify_drift(rows, delta=0.05, seed=0)
+    rec = dict(r["partial"])
+    rec["components"] = {f"drift[0]:{k.split(':', 1)[1]}": v
+                         for k, v in rec["components"].items()}
+    for key in ("exact", "interval", "unconstrained"):
+        rec[key] = [f"drift[0]:{k.split(':', 1)[1]}" for k in rec.get(key, [])]
+    sub = Submission(task_id=task.task_id,
+                     kind="answer" if r.get("certified") else "abstain",
+                     abstain=None if r.get("certified") else "noise",
+                     record=rec,
+                     coverage=Coverage(kappa=r["kappa"], delta=0.05,
+                                       n_rows=r["n_rows"],
+                                       n_disjoint=r["n_disjoint"]),
+                     submission_id="drift-x")
+    assert validate_submission(task, sub) == []
+    score = score_task(task, [sub])
+    # ZERO confident-wrong, and the x equation's own components are scored
+    assert score.n_confident_wrong == 0
+    assert "drift[0]:y@all" in score.components
+    got = score.components["drift[0]:y@all"]
+    assert got["truth"] == 1.0 and got["outcome"] == "covered"
+    # the components this submission did not speak to are MISSED, not silently ok
+    assert score.n_missed >= 6

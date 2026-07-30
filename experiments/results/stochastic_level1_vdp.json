@@ -1,0 +1,237 @@
+{
+ "task": "L1-vdp",
+ "state_dim": 2,
+ "seconds": 8.6,
+ "parts": [
+  {
+   "part": "drift[0] (x)",
+   "f": "x",
+   "verdict": "certified",
+   "law": "192859*[x:y]/192852",
+   "rows": 48,
+   "signal_to_band": 38.74448746477121,
+   "alpha_log10": -14.518072496184386
+  },
+  {
+   "part": "drift[1] (y)",
+   "f": "y**2/2",
+   "verdict": "abstain[noise]",
+   "law": null,
+   "rows": 48,
+   "signal_to_band": 0.10885717425411268,
+   "alpha_log10": null
+  },
+  {
+   "part": "diffusion[0] (x)",
+   "verdict": "abstain[noise]",
+   "law": null,
+   "rows": 144,
+   "signal_to_band": 0.017108843696085542
+  },
+  {
+   "part": "diffusion[1] (y)",
+   "verdict": "abstain[structural]",
+   "law": null,
+   "rows": 144,
+   "signal_to_band": 2.7700849881752516
+  }
+ ],
+ "score": {
+  "confident_wrong": 0,
+  "exact": 0,
+  "covered": 18,
+  "informative": 6,
+  "abstained_correctly": 0,
+  "missed": 0,
+  "resolved": 2,
+  "reach": [
+   "diffusion[0]:1",
+   "diffusion[0]:x",
+   "diffusion[0]:x**2",
+   "diffusion[1]:1",
+   "diffusion[1]:x",
+   "diffusion[1]:x**2",
+   "drift[0]:1",
+   "drift[0]:x",
+   "drift[0]:x**2",
+   "drift[0]:x*y",
+   "drift[0]:y",
+   "drift[0]:y**2",
+   "drift[1]:1",
+   "drift[1]:x",
+   "drift[1]:x**2",
+   "drift[1]:x**2*y",
+   "drift[1]:x*y",
+   "drift[1]:y"
+  ],
+  "refusals": [],
+  "exceeded_expectation": [
+   "drift[1]:1",
+   "drift[1]:x",
+   "drift[1]:y",
+   "drift[1]:x**2",
+   "drift[1]:x*y",
+   "drift[1]:x**2*y"
+  ]
+ },
+ "components": {
+  "drift[0]:1@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -0.049306760560432074,
+   "hi": 0.04880990469281336,
+   "resolved": false,
+   "informative": true
+  },
+  "drift[0]:x@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -0.03382737167238194,
+   "hi": 0.033661561754732436,
+   "resolved": false,
+   "informative": true
+  },
+  "drift[0]:y@all": {
+   "outcome": "covered",
+   "truth": 1.0,
+   "lo": 0.9826614347602382,
+   "hi": 1.0176464713850317,
+   "resolved": true,
+   "informative": true
+  },
+  "drift[0]:x**2@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -0.1021623233654861,
+   "hi": 0.10292972198091511,
+   "resolved": false,
+   "informative": false
+  },
+  "drift[0]:x*y@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -0.35666294479267774,
+   "hi": 0.35927903904405645,
+   "resolved": false,
+   "informative": false
+  },
+  "drift[0]:y**2@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -0.09420658662456667,
+   "hi": 0.09371215614882644,
+   "resolved": false,
+   "informative": false
+  },
+  "drift[1]:1@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -20.386234614020807,
+   "hi": 18.731678817074638,
+   "resolved": false,
+   "informative": false
+  },
+  "drift[1]:x@all": {
+   "outcome": "covered",
+   "truth": -1.0,
+   "lo": -13.268524075209806,
+   "hi": 14.231496113022981,
+   "resolved": false,
+   "informative": false
+  },
+  "drift[1]:y@all": {
+   "outcome": "covered",
+   "truth": 1.0,
+   "lo": -6.135865992779836,
+   "hi": 5.8382888119183285,
+   "resolved": false,
+   "informative": false
+  },
+  "drift[1]:x**2@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -16.432202536471408,
+   "hi": 18.285395474949077,
+   "resolved": false,
+   "informative": false
+  },
+  "drift[1]:x*y@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -1.9101100199158134,
+   "hi": 1.9301183935924717,
+   "resolved": false,
+   "informative": false
+  },
+  "drift[1]:x**2*y@all": {
+   "outcome": "covered",
+   "truth": -1.0,
+   "lo": -5.658382159183925,
+   "hi": 5.841294278066699,
+   "resolved": false,
+   "informative": false
+  },
+  "diffusion[0]:1@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -0.14952816394936227,
+   "hi": 0.15251641985780126,
+   "resolved": false,
+   "informative": false
+  },
+  "diffusion[0]:x@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -0.03691374981140278,
+   "hi": 0.0372267852937572,
+   "resolved": false,
+   "informative": true
+  },
+  "diffusion[0]:x**2@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -0.05997458975987064,
+   "hi": 0.05969839441134672,
+   "resolved": false,
+   "informative": false
+  },
+  "diffusion[1]:1@all": {
+   "outcome": "covered",
+   "truth": 0.25,
+   "lo": 0.12302601923386848,
+   "hi": 0.3688714480199234,
+   "resolved": true,
+   "informative": false
+  },
+  "diffusion[1]:x@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -0.04476098939514021,
+   "hi": 0.04273619860900485,
+   "resolved": false,
+   "informative": true
+  },
+  "diffusion[1]:x**2@all": {
+   "outcome": "covered",
+   "truth": 0.0,
+   "lo": -0.026135059822177002,
+   "hi": 0.030692003893588924,
+   "resolved": false,
+   "informative": true
+  }
+ },
+ "totals": {
+  "n_tasks": 1,
+  "confident_wrong": 0,
+  "exact": 0,
+  "covered": 18,
+  "abstained_correctly": 0,
+  "missed": 0,
+  "resolved": 2,
+  "informative": 6,
+  "invariants": 0,
+  "invalid_certificates": 0,
+  "refused": 0,
+  "exceeded_expectation": 6
+ }
+}
