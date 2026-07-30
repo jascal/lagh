@@ -397,14 +397,64 @@ row alone. The gain is 12× rather than the full 2000× because the fallback fir
 some patches and the inflation is deliberately conservative — the safety machinery
 costing reach, which is the trade it exists to make.
 
+## Van der Pol certified — the arc's first certified DRIFT
+
+`ito.build_rows_nd` completes the step-3 migration: it packs multi-field Itô rows into
+the same `ItoRows` the scalar path produces, so `certify_drift` — with its coherence,
+significance, parsimony, holdout and admissible-bound machinery — applies to a 2-D
+state with no further work. That was the point of putting the vocabulary in
+`weakform` rather than growing a second assembler.
+
+**Identifiability first, per equation**, because Van der Pol on its limit cycle is
+stationary in the long run and that is what made stationary drifts vacuous:
+
+| test function | L = 4 | L = 16 | L = 64 |
+|---|---|---|---|
+| `f = x` (component **noise-free**) | 9.0 | **32.2** | 3.9 |
+| `f = y²/2` (component driven) | 0.49 | 0.12 | 0.24 |
+| `f = x·y` (both) | 0.56 | 0.015 | 0.001 |
+
+(median \|target\|/band). The split is stark and it is the one the QV decomposition
+predicts: with the O(Δt) residue removed from the noise-free row's band, that
+equation carries 30× more signal than its band, while the driven equation's own
+cancellation leaves it vacuous.
+
+So:
+
+> **`dx = y dt` CERTIFIES** — coefficient recovered as 1.0000, joint bound
+> [0.9700, 1.0303] (±3%), resolved, α ≤ 10⁻¹⁵, over a declared 6-term bivariate
+> library. The arc's first certified **drift**.
+
+The driven equation abstains on vacuity at the same configuration, and every one of
+its bounds covers the truth. **In a partially-driven system the noise-free components'
+equations are far more determinable than the driven ones** — which is obvious in
+hindsight and was not obvious enough to state before the machinery could measure it.
+
+### What the decomposition actually buys here — a claim I had to correct
+
+I expected to find the certificate *depends* on the stride decomposition. It does
+not. Measured:
+
+| | certified | signal/band | `x:y` bound | width |
+|---|---|---|---|---|
+| raw total band | yes | 3.6 | [0.797, 1.202] | 0.405 |
+| decomposed | yes | 29.1 | [0.970, 1.030] | **0.060** |
+
+Even the un-decomposed band leaves signal-to-band at 3.6, so the law certifies either
+way. What the decomposition buys is **precision**: the same certified law, with its
+coefficient pinned to ±3% instead of ±20%. A 6.7× tighter interval, not a certificate
+that would otherwise not exist. The test says so in its name.
+
 ## What is not here
 
-* ~~Van der Pol with additive noise.~~ **The multi-field machinery is DONE** and
-  covers its truth (above). What is not done is a certified or scored Van der Pol
-  RUN: the drift identifiability arithmetic (θ·L > 2κ² per component, over a 6- and
-  12-term bivariate library) has not been worked out for it, and `ito.build_rows`
-  still has its own scalar assembler beside `build_nd` — the equality test binds
-  them, and collapsing them is now a tidying job rather than a capability gap.
+* ~~Van der Pol with additive noise.~~ **DONE** (above): the multi-field machinery
+  works, the identifiability arithmetic is measured per equation, and `dx = y dt`
+  certifies. What is still open is Van der Pol inside the SCORED task set — the
+  checker's `drift[i]:term` component convention exists for per-component drifts and
+  is not yet wired — and the driven equation, which needs a configuration where its
+  own cancellation does not dominate. `ito.build_rows` also still has its scalar
+  assembler beside `build_nd`; the equality test binds them and collapsing them is
+  now tidying, not a capability gap.
 * **The invariants target.** Untouched. The checker scores invariants up to affine
   reparametrization already, so this is generator work rather than instrument work.
 * ~~A certified diffusion.~~ **DONE** (above): OU's constant b² certifies, GBM's x²

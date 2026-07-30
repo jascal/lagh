@@ -1230,3 +1230,74 @@ def ito_terms_nd(f: str, libraries: dict, fields, *, field_prefix: str = "") -> 
                              measure=f"d[{zi},{fs[k]}]"))
     return {"target": Term(f"target:{f}", gexpr=str(fe), alpha=(1,)),
             "corrections": corr, "columns": cols, "martingale": mart}
+
+
+def build_rows_nd(t, fields, libraries, f, *, windows=None, half: int = 200,
+                  overlap: float = 0.0, p: int = 8, delta: float = 0.05,
+                  decompose: bool = True, sigma_obs: float = 0.0) -> ItoRows:
+    """Multi-field Itô rows, as an `ItoRows` the existing `certify_drift` consumes.
+
+    This completes the step-3 migration: `weakform.build_nd` assembles the terms
+    `ito_terms_nd` emits, and the result is packed into the same structure the
+    scalar path produces -- so the coherence, significance, parsimony, holdout and
+    admissible-bound machinery all apply to a multi-dimensional state with no
+    further work. That was the point of putting the vocabulary in `weakform` rather
+    than growing a second assembler.
+
+    `fields` is a dict of name -> (n_traj, n_steps) arrays; `libraries` maps each
+    field to its own drift library. `decompose` turns on the stride separation of
+    the martingale scale (`weakform.qv_martingale_part`), which is what makes a
+    NOISE-FREE component's row band its quadrature rather than an O(dt) residue.
+
+    Column names are `<field>:<term>`, which `stochcheck.component` reads as the
+    drift of that component.
+    """
+    from .weakform import Patch, build_nd
+    t = np.asarray(t, float)
+    names = sorted(fields)
+    P = {k: np.atleast_2d(np.asarray(v, float)) for k, v in fields.items()}
+    n_traj = len(next(iter(P.values())))
+    it = ito_terms_nd(f, libraries, names)
+    nc = len(it["corrections"])
+    terms = [it["target"]] + it["corrections"] + it["columns"]
+    cols = [c.name for c in it["columns"]]
+    wins = windows if windows is not None else time_windows(
+        t, half=half, overlap=overlap)
+    ys, As, qvs, qses, cses, quads, trs, wl = [], [], [], [], [], [], [], []
+    rejected = 0
+    for k in range(n_traj):
+        fp = {nm: P[nm][k] for nm in names}
+        pas = [Patch(centers=(0.5 * (t[lo] + t[hi - 1]),),
+                     halfwidths=(0.5 * (t[hi - 1] - t[lo]),),
+                     idx=(slice(lo, hi),)) for lo, hi in wins]
+        ws = build_nd(fp, [t], terms, pas, p=p, rough=True,
+                      martingale=it["martingale"], sigma_obs=sigma_obs,
+                      martingale_decompose=decompose)
+        rejected += ws.rejected
+        if not len(ws.A):
+            continue
+        # the target carries the MEASURED Itô correction subtracted, exactly as the
+        # scalar path does; the corrections' declared bounds become its error
+        ys.append(ws.A[:, 0] - ws.A[:, 1:1 + nc].sum(axis=1))
+        As.append(ws.A[:, 1 + nc:])
+        qvs.append(ws.qv)
+        qses.append(ws.qv_se)
+        cses.append(ws.quad[:, 1:1 + nc].sum(axis=1) if nc else
+                    np.zeros(len(ws.A)))
+        quads.append(np.column_stack([ws.quad[:, 0], ws.quad[:, 1 + nc:]]))
+        trs.append(np.full(len(ws.A), k, int))
+        wl += [(float(t[lo]), float(t[hi - 1])) for lo, hi in wins][:len(ws.A)]
+    if not ys:
+        return ItoRows(np.zeros(0), np.zeros((0, len(cols))), cols, np.zeros(0),
+                       np.zeros(0), np.zeros(0), np.zeros((0, 1 + len(cols))),
+                       np.zeros(0, int), [], [], None, None, float(sigma_obs),
+                       float(t[1] - t[0]), rejected, len(wins) * n_traj, [])
+    return ItoRows(np.concatenate(ys), np.vstack(As), cols,
+                   np.concatenate(qvs), np.concatenate(qses),
+                   np.concatenate(cses), np.vstack(quads),
+                   np.concatenate(trs), [f] * len(np.concatenate(ys)), wl,
+                   None, None, float(sigma_obs), float(t[1] - t[0]), rejected,
+                   len(wins) * n_traj,
+                   [f"multi-field Ito for f = {f} over fields {names}; "
+                    f"martingale scale "
+                    f"{'stride-decomposed' if decompose else 'raw total'}"])

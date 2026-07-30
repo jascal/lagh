@@ -423,11 +423,24 @@ framing.
      Δt halves it while a driven component's stays flat, so **the diagnostic is
      measurable**: this is the multi-dimensional form of the error-provenance
      question. Conservative, never unsound.
-   Still open in Level 1: a certified/scored Van der Pol run (its drift
-   identifiability arithmetic over a bivariate library is not worked out), the
-   invariants target, a state-dependent b² whose FORM certifies, and the
-   noiseless-component band tightening — which needs a DECLARATION verified by the
-   Δt-scaling test above, being the fifth instance of the arc's recurring pattern.
+   * **The noiseless-component band needed NO declaration** — the fifth instance of
+     the recurring pattern turned out to be measurable. The martingale part of a
+     realized QV separates from the smooth residue by stride scaling
+     (`Σ(u[i+s]−u[i])² ≈ α·s + β·s²`, α accurate to 0.3%), so
+     `build_nd(martingale_decompose=True)` tightens a noise-free row 12.5× with
+     coverage intact. Safety is intrinsic: it returns α + κ·se(α) and falls back to
+     the total on a poor fit.
+   **FOURTH/FIFTH INCREMENTS also gave the arc's first certified DRIFT.**
+   `ito.build_rows_nd` packs multi-field rows into the `ItoRows` `certify_drift`
+   already consumes, so the 2-D case inherits every gate. On Van der Pol
+   **`dx = y dt` certifies** at coefficient 1.0000, bound [0.970, 1.030], α ≤ 1e-15,
+   over a 6-term bivariate library — while the DRIVEN equation is vacuous at the same
+   configuration (median signal/band 32 against 0.12). **In a partially-driven system
+   the noise-free components' equations are far more determinable.**
+   Still open in Level 1: Van der Pol inside the SCORED task set (the checker's
+   `drift[i]:term` convention exists for per-component drifts and is not yet wired),
+   the driven equation at a configuration its own cancellation does not dominate, the
+   invariants target, and a state-dependent b² whose FORM certifies.
 5. Level 2, as the error-provenance testbed.
 
 Level 3, SPDEs, higher dimension, partial observation and non-Markovian noise are

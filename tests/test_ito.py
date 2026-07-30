@@ -883,3 +883,73 @@ def test_the_decomposition_tightens_a_noiseless_row_and_leaves_a_driven_one_alon
     dec_y, cov_dy = run("y**2/2", truth_y, True)
     assert cov_y and cov_dy
     assert dec_y > 0.9 * raw_y
+
+
+def test_the_noise_free_component_of_van_der_pol_certifies_its_drift():
+    """The migration completing itself, and the arc's first certified DRIFT.
+
+    `build_rows_nd` packs multi-field Itô rows into the same `ItoRows` the scalar
+    path produces, so `certify_drift` -- with all its coherence, significance,
+    parsimony, holdout and admissible-bound machinery -- applies to a 2-D state with
+    no further work. That was the point of putting the vocabulary in `weakform`.
+
+    Van der Pol's x component carries no noise, so `dx = y dt` is a deterministic
+    weak-form identity; with the stride decomposition removing the O(dt) residue from
+    its band, it certifies. Its y component is driven and is vacuous at this
+    configuration -- the split the identifiability measurement predicted.
+    """
+    from lagh.ito import build_rows_nd
+    mu = 1.0
+    t, X, Y = _vdp(mu=mu, b=0.5, T=200.0, n_traj=4)
+
+    # the NOISE-FREE equation: certifies, with the coefficient resolved
+    rows = build_rows_nd(t, {"x": X, "y": Y}, VDP_LIBS, "x", half=8000)
+    assert rows.names == ["x:1", "x:x", "x:y", "x:x**2", "x:x*y", "x:y**2"]
+    assert len(rows.y) >= 12
+    r = certify_drift(rows, delta=0.05, seed=0)
+    assert r["certified"] is True, r.get("abstain")
+    assert "x:y" in r["law"]
+    comp = r["partial"]["components"]
+    assert comp["x:y"]["resolved"] is True
+    assert comp["x:y"]["lo"] <= 1.0 <= comp["x:y"]["hi"]
+    assert comp["x:y"]["hi"] - comp["x:y"]["lo"] < 0.2      # measured ~0.06
+    for nm, c in comp.items():                              # and every bound covers
+        tv = 1.0 if nm == "x:y" else 0.0
+        assert (c["lo"] is None or c["lo"] <= tv) and \
+               (c["hi"] is None or tv <= c["hi"]), nm
+    assert r["alpha_log10"] < -5
+
+    # the DRIVEN equation: vacuous here, and its bounds still cover
+    rows_y = build_rows_nd(t, {"x": X, "y": Y}, VDP_LIBS, "y**2/2", half=8000)
+    ry = certify_drift(rows_y, delta=0.05, seed=0)
+    assert ry["certified"] is False
+    truth_y = {"y:y": mu, "y:x**2*y": -mu, "y:x": -1.0}
+    for nm, c in ry["partial"]["components"].items():
+        tv = truth_y.get(nm, 0.0)
+        assert (c["lo"] is None or c["lo"] <= tv) and \
+               (c["hi"] is None or tv <= c["hi"]), nm
+
+
+def test_the_stride_decomposition_tightens_that_certificate_by_seven_fold():
+    """What the decomposition buys, measured rather than assumed.
+
+    It was tempting to claim the certificate depends on it. It does not -- the
+    noise-free equation certifies either way at this configuration, because even the
+    un-decomposed band leaves signal-to-band at 3.6. What the decomposition buys is
+    PRECISION: the certified coefficient's joint bound narrows 6.7x, from +-20% of
+    the truth to +-3%. Same law, a far better interval.
+    """
+    from lagh.ito import build_rows_nd
+    t, X, Y = _vdp(mu=1.0, b=0.5, T=200.0, n_traj=4)
+    out = {}
+    for dec in (False, True):
+        rows = build_rows_nd(t, {"x": X, "y": Y}, VDP_LIBS, "x", half=8000,
+                             decompose=dec)
+        r = certify_drift(rows, delta=0.05, seed=0)
+        c = r["partial"]["components"]["x:y"]
+        out[dec] = (r["certified"], r["median_signal_to_band"],
+                    c["hi"] - c["lo"], c["lo"] <= 1.0 <= c["hi"])
+    assert out[False][0] and out[True][0]            # certified either way
+    assert out[False][3] and out[True][3]            # and covering either way
+    assert out[True][1] > 5 * out[False][1]          # ~8x the signal-to-band
+    assert out[True][2] < out[False][2] / 5.0        # ~6.7x tighter bound
