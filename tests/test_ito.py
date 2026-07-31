@@ -1145,3 +1145,49 @@ def test_the_separation_refuses_when_observation_noise_is_buried():
     _, nop = case(0.0, 1e-2)
     assert nop["separable"] is True
     assert nop["sigma_obs"] == pytest.approx(1e-2, rel=0.10)
+
+
+def test_the_separation_refuses_when_the_PROCESS_term_is_buried():
+    """The OTHER half of the guard, added after a real instrument exercised it.
+
+    `separable` / SEP_MIN_FRAC guards one direction only -- observation buried under
+    process. A 200 kHz QPD record whose detection noise was 162x the process term
+    passed it trivially (separable=True, dominant="observation") while alpha was wrong
+    by 5.4e4x, because alpha was fitting the noise's own stride structure rather than
+    the process (docs/PROPOSAL_STOCHASTIC_REAL.md F1).
+
+    The symmetric test needs no second ratio constant: a process term smaller than its
+    OWN kappa-sigma is not resolved. That self-calibrates to how well the stride design
+    constrains alpha, which a fixed ratio cannot.
+    """
+    from lagh.weakform import qv_three_way
+    n, dt, T = 200_001, 1e-3, 200.0
+    rng = np.random.default_rng(31)
+
+    def case(b, sob):
+        bm = np.r_[0.0, np.cumsum(rng.standard_normal(n - 1) * np.sqrt(dt))]
+        u = b * bm + (sob * rng.standard_normal(n) if sob else 0.0)
+        return qv_three_way(_three_way_sums(u), n_increments=n - 1)
+
+    # both terms present at comparable size: the process IS resolved and accurate
+    sc, ok = case(0.3, 1e-2)
+    assert ok["process_resolved"] is True
+    assert ok["process_note"] == ""
+    assert ok["process_significance"] > 1.0
+    assert sc == pytest.approx(0.3 ** 2 * T, rel=0.10)
+
+    # process buried under a large observation noise: REFUSED as a point estimate,
+    # while the returned scale stays an UPPER bound -- sound for a band either way
+    sc2, buried = case(2e-3, 3e-1)
+    assert buried["process_resolved"] is False
+    assert buried["process_significance"] < 1.0
+    assert "NOT resolved" in buried["process_note"]
+    assert "IID" in buried["process_note"]          # the domain, stated
+    assert sc2 >= 2e-3 ** 2 * T                     # still conservative
+    # and the refusal is warranted: the point estimate it declined is far off
+    assert abs(buried["alpha"] / (2e-3 ** 2 * T) - 1.0) > 0.5
+
+    # the guard does not fire on the documented graceful-degradation case, so it
+    # narrows nothing that was already working
+    _, grace = case(0.05, 3e-2)
+    assert grace["process_resolved"] is True

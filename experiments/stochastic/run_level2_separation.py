@@ -92,6 +92,8 @@ def main():
                                    abs(b2_hat - b2_true) / b2_true),
                     "dominant": info.get("dominant"),
                     "separable": info.get("separable"),
+                    "process_resolved": info.get("process_resolved"),
+                    "process_significance": info.get("process_significance"),
                     "process_over_observation": info.get(
                         "process_over_observation"),
                     "fit_residual_rel": info.get("fit_residual_rel"),
@@ -130,6 +132,12 @@ def main():
                                                for r in with_proc])),
             "worst_rel_err": float(np.max([r["b2_rel_err"] for r in with_proc])),
             "within_10pct": int(sum(r["b2_rel_err"] < 0.10 for r in with_proc)),
+            # the symmetric guard added 2026-07-30 (tweezers C0, F1): does it fire on
+            # any case this run already recovered? If it does, it costs capability.
+            "resolved": int(sum(bool(r["process_resolved"]) for r in with_proc)),
+            "recovered_but_flagged_unresolved": int(sum(
+                r["b2_rel_err"] < 0.10 and not r["process_resolved"]
+                for r in with_proc)),
         },
         # THE NULLS, in both directions: a rate is meaningless without them
         "null_no_observation_noise": {

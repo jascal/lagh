@@ -21,3 +21,6 @@ experiments/catalysis/raw/
 data/pdebench/
 .claude/settings.local.json
 .claude/*.tmp.*
+
+# real-data stochastic read: 1.1 GB HDF5 per bead, never committed
+experiments/tweezers/data/

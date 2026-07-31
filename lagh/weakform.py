@@ -848,6 +848,12 @@ QV_STRIDES_3 = (1, 2, 4, 8, 16, 32)
 # c < 0.1 * alpha -- failing by up to 300% and, worse, in the OVER-estimating
 # direction, which would make a debiased band too tight. So the separation reports
 # `separable` and a caller may not use sigma_obs when it is False.
+#
+# That bar is ONE-DIRECTIONAL. The reverse case -- the PROCESS term buried under the
+# observation term -- passes it trivially, and a real 200 kHz QPD record (the tweezers
+# C0) exercised exactly that: separable=True with alpha wrong by 5.4e4x. The symmetric
+# guard is `process_resolved` in qv_three_way, which tests alpha against its OWN
+# kappa-sigma rather than against a second ratio constant.
 SEP_MIN_FRAC = 0.1
 QV_FIT_MAX_REL = 0.05          # fit residual, relative to the stride-1 value
 
@@ -957,6 +963,30 @@ def qv_three_way(vals: np.ndarray, strides=QV_STRIDES_3, n_increments: int = 0
         info["sigma_obs"] = float(np.sqrt(info["sigma_obs_sq"]))
         info["sigma_obs_upper"] = float(np.sqrt(
             max(c + KAPPA * float(se[0]), 0.0) / (2.0 * n_increments)))
+    # ---- the SYMMETRIC guard (added 2026-07-30, docs/PROPOSAL_STOCHASTIC_REAL.md F1).
+    # SEP_MIN_FRAC above guards ONE direction -- observation buried under process --
+    # and passes TRIVIALLY when the reverse holds. On a real 200 kHz QPD record whose
+    # detection noise was 162x the process term, this function returned
+    # separable=True, dominant="observation", and an alpha wrong by 5.4e4x.
+    # The test is the fit's OWN standard error at the coverage factor the rest of the
+    # machinery uses: a process term smaller than its own kappa-sigma is not resolved.
+    # No new constant is introduced, and the bar self-calibrates to how well the
+    # stride design constrains alpha -- which a fixed ratio bar cannot do.
+    resolved = bool(alpha > KAPPA * float(se[1]))
+    info["process_resolved"] = resolved
+    info["process_significance"] = (float(alpha / (KAPPA * float(se[1])))
+                                    if se[1] > 0 else float("inf"))
+    info["process_note"] = ("" if resolved else
+                            f"process term NOT resolved: alpha = {alpha:.4g} against "
+                            f"its own {KAPPA}-sigma error "
+                            f"{KAPPA * float(se[1]):.4g}. The returned scale is still "
+                            f"a sound UPPER bound for a band, but alpha must NOT be "
+                            f"read as a point estimate of the process -- measured on "
+                            f"a real QPD record where doing so was wrong by 5.4e4x. "
+                            f"DOMAIN: the graceful degradation this function "
+                            f"documents (720x observation noise -> alpha 40% high) "
+                            f"was measured under IID observation error and does not "
+                            f"transfer to correlated error.")
     # the PROCESS part, as an upper estimate, on the same discipline as
     # qv_martingale_part: never the point estimate, and negative reads as zero
     info["process_scale"] = max(alpha + KAPPA * float(se[1]), 0.0)

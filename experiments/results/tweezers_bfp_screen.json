@@ -1,0 +1,285 @@
+{
+ "candidate": "LUMICKS C-Trap / Pylake force calibration",
+ "record": "zenodo 14726586",
+ "license": "CC-BY-4.0",
+ "detection": "back-focal-plane interferometry",
+ "rows": [
+  {
+   "file": "passive_calibration.h5",
+   "channel": "Force 1x",
+   "label": "passive, deep in cell",
+   "fs_hz": 78125.0,
+   "n_samples": 1252644,
+   "duration_s": 16.0338432,
+   "answer_key": {
+    "kappa_pN_per_nm": 0.1287225353482303,
+    "gamma_kg_per_s": 4.101757616306441e-08,
+    "fc_hz": 499.4646125979549,
+    "Rd_um_per_V": 4.5418947253217645,
+    "T_C": 25.0,
+    "viscosity_Pa_s": 0.00089,
+    "bead_diameter_um": 4.89,
+    "diode_alpha": 0.41703416787845804,
+    "diode_f_hz": 8113.027225352045
+   },
+   "expected": {
+    "thermal_rms_nm": 5.654988884528279,
+    "b2_nm2_per_s": 200714.20003636144,
+    "theta_per_s": 3138.2287153316147,
+    "tau_c_samples": 24.894616386092363,
+    "per_sample_step_nm": 1.6028542542806026
+   },
+   "observed": {
+    "position_rms_nm": 10.20827112013558,
+    "increment_rms_nm": 0.8699158273178265,
+    "rms_over_thermal": 1.805179696827489
+   },
+   "short": {
+    "strides": [
+     1,
+     2,
+     3,
+     4,
+     6,
+     8
+    ],
+    "c": -1265190.161879626,
+    "alpha": 2081583.3076247387,
+    "beta": 21117.39296071149,
+    "separable": false,
+    "process_resolved": true,
+    "process_significance": 4.693505947102354,
+    "sigma_obs_nm": 0.0,
+    "b2_nm2_per_s": 129824.3522566529,
+    "b2_over_truth": 0.6468119955296331
+   },
+   "long": {
+    "strides": [
+     1,
+     2,
+     4,
+     8,
+     16,
+     32
+    ],
+    "c": -2016533.7660023086,
+    "alpha": 2570108.6005644156,
+    "beta": -28162.370784779072,
+    "separable": false,
+    "process_resolved": true,
+    "process_significance": 11.567986415300568,
+    "sigma_obs_nm": 0.0,
+    "b2_nm2_per_s": 160292.73633937092,
+    "b2_over_truth": 0.7986118386757501
+   }
+  },
+  {
+   "file": "passive_calibration.h5",
+   "channel": "Force 1y",
+   "label": "passive, orthogonal axis",
+   "fs_hz": 78125.0,
+   "n_samples": 1252644,
+   "duration_s": 16.0338432,
+   "answer_key": {
+    "kappa_pN_per_nm": 0.13523512620264866,
+    "gamma_kg_per_s": 4.101757616306441e-08,
+    "fc_hz": 524.7345364641319,
+    "Rd_um_per_V": 4.889305783616283,
+    "T_C": 25.0,
+    "viscosity_Pa_s": 0.00089,
+    "bead_diameter_um": 4.89,
+    "diode_alpha": 0.41561151101213084,
+    "diode_f_hz": 8398.670338755108
+   },
+   "expected": {
+    "thermal_rms_nm": 5.517143662894411,
+    "b2_nm2_per_s": 200714.20003636144,
+    "theta_per_s": 3297.004329681125,
+    "tau_c_samples": 23.695752928403337,
+    "per_sample_step_nm": 1.6028542542806026
+   },
+   "observed": {
+    "position_rms_nm": 5.295323081938384,
+    "increment_rms_nm": 0.892768295605406,
+    "rms_over_thermal": 0.959794307614666
+   },
+   "short": {
+    "strides": [
+     1,
+     2,
+     3,
+     4,
+     6,
+     8
+    ],
+    "c": -1329394.0363803452,
+    "alpha": 2196380.246513068,
+    "beta": 18292.63902152093,
+    "separable": false,
+    "process_resolved": true,
+    "process_significance": 4.837118654877966,
+    "sigma_obs_nm": 0.0,
+    "b2_nm2_per_s": 136984.0168147003,
+    "b2_over_truth": 0.6824829373800371
+   },
+   "long": {
+    "strides": [
+     1,
+     2,
+     4,
+     8,
+     16,
+     32
+    ],
+    "c": -2081041.5096106778,
+    "alpha": 2682139.814398651,
+    "beta": -30395.23428952517,
+    "separable": false,
+    "process_resolved": true,
+    "process_significance": 11.91475901666816,
+    "sigma_obs_nm": 0.0,
+    "b2_nm2_per_s": 167279.90793864388,
+    "b2_over_truth": 0.8334233846351649
+   }
+  },
+  {
+   "file": "noise_floor.h5",
+   "channel": "Force 1x",
+   "label": "record with a noise floor",
+   "fs_hz": 100000.0,
+   "n_samples": 1000139,
+   "duration_s": 10.00139,
+   "answer_key": {
+    "kappa_pN_per_nm": 0.24406665180623605,
+    "gamma_kg_per_s": 3.8490227705104496e-08,
+    "fc_hz": 1009.2019817721023,
+    "Rd_um_per_V": 5.688216412345384,
+    "T_C": 22.58,
+    "viscosity_Pa_s": 0.000941,
+    "bead_diameter_um": 4.34,
+    "diode_alpha": 0.4074557886886479,
+    "diode_f_hz": 14299.627228954105
+   },
+   "expected": {
+    "thermal_rms_nm": 4.090111159765262,
+    "b2_nm2_per_s": 212157.39844316492,
+    "theta_per_s": 6341.003063846993,
+    "tau_c_samples": 15.77037560037567,
+    "per_sample_step_nm": 1.4565623860417545
+   },
+   "observed": {
+    "position_rms_nm": 4.005767068638308,
+    "increment_rms_nm": 0.9000041334922871,
+    "rms_over_thermal": 0.9793785332886175
+   },
+   "short": {
+    "strides": [
+     1,
+     2,
+     3,
+     4,
+     6,
+     8
+    ],
+    "c": 123690.16607112247,
+    "alpha": 678841.4599552851,
+    "beta": 7793.890605619433,
+    "separable": true,
+    "process_resolved": true,
+    "process_significance": 2.543777521039533,
+    "sigma_obs_nm": 0.24866955903712376,
+    "b2_nm2_per_s": 67874.71141064243,
+    "b2_over_truth": 0.319926205301888
+   },
+   "long": {
+    "strides": [
+     1,
+     2,
+     4,
+     8,
+     16,
+     32
+    ],
+    "c": -106111.40584686772,
+    "alpha": 832297.5407023645,
+    "beta": -6482.642611987511,
+    "separable": false,
+    "process_resolved": true,
+    "process_significance": 10.731164974480592,
+    "sigma_obs_nm": 0.0,
+    "b2_nm2_per_s": 83218.18674227927,
+    "b2_over_truth": 0.3922473944012501
+   }
+  },
+  {
+   "file": "near_surface_active_calibration.h5",
+   "channel": "Force 1x",
+   "label": "ACTIVE: nanostage driven, independent displacement standard",
+   "fs_hz": 78125.0,
+   "n_samples": 764373,
+   "duration_s": 9.7839744,
+   "answer_key": {
+    "kappa_pN_per_nm": 0.11941037598751927,
+    "gamma_kg_per_s": 9.821372617358556e-09,
+    "fc_hz": 1935.0402774950164,
+    "Rd_um_per_V": 4.567619002314173,
+    "T_C": 20.0,
+    "viscosity_Pa_s": 0.001002,
+    "bead_diameter_um": 1.04,
+    "diode_alpha": 0.45100523496184003,
+    "diode_f_hz": 11684.361562063437
+   },
+   "expected": {
+    "thermal_rms_nm": 5.821910941486487,
+    "b2_nm2_per_s": 824196.9226066356,
+    "theta_per_s": 12158.216640357397,
+    "tau_c_samples": 6.425695668283756,
+    "per_sample_step_nm": 3.248033344866542
+   },
+   "observed": {
+    "position_rms_nm": 10.534385947350502,
+    "increment_rms_nm": 1.7327465902228758,
+    "rms_over_thermal": 1.8094378380616034
+   },
+   "short": {
+    "strides": [
+     1,
+     2,
+     3,
+     4,
+     6,
+     8
+    ],
+    "c": -2726312.543149184,
+    "alpha": 5034677.70119743,
+    "beta": -154462.8902382738,
+    "separable": false,
+    "process_resolved": true,
+    "process_significance": 8.85831826217278,
+    "sigma_obs_nm": 0.0,
+    "b2_nm2_per_s": 514584.10410368914,
+    "b2_over_truth": 0.6243460634095144
+   },
+   "long": {
+    "strides": [
+     1,
+     2,
+     4,
+     8,
+     16,
+     32
+    ],
+    "c": -126611.39460020934,
+    "alpha": 3776725.3582788566,
+    "beta": -72887.83705592598,
+    "separable": false,
+    "process_resolved": true,
+    "process_significance": 3.1006738013630213,
+    "sigma_obs_nm": 0.0,
+    "b2_nm2_per_s": 386011.3696003596,
+    "b2_over_truth": 0.46834847232812493
+   }
+  }
+ ],
+ "seconds": 0.5
+}

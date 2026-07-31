@@ -1,0 +1,509 @@
+{
+ "campaign": "stochastic-real (optical tweezers)",
+ "stage": "C0",
+ "artifact": {
+  "record": "3333905",
+  "doi": "10.5281/zenodo.3333905",
+  "file": "calibration_optical_tweezers_07-02-2013_bead_1.zip",
+  "url": "https://zenodo.org/records/3333905/files/calibration_optical_tweezers_07-02-2013_bead_1.zip?download=1",
+  "bytes": 296323677,
+  "sha256": "8ede4bef9a07493973ee7351e59d5f7cdd5bd046bc63b9e80a5ee6b35f86899e",
+  "license": "CC-0",
+  "cite": "Skidmore, B., Rajasekharan, V., & Farrell, B. (2019). Calibration of the temporal and displacement characteristics of an optical tweezers [Data set]. Zenodo. https://doi.org/10.5281/zenodo.3333905  (CC-0)"
+ },
+ "answer_key_scoring_only": {
+  "beta_pNs_per_nm": 3.91e-05,
+  "gain": 10.0,
+  "power_mW": 90.0,
+  "k_pN_per_nm": -0.10092080184166075,
+  "inv_tau_per_s": -2581.0946762573076,
+  "inv_tau_sd_per_s": 128.31205199532832,
+  "qpd_slope_V_per_V_per_nm": -0.00026284460449437733,
+  "per_amplitude": {
+   "800": {
+    "k_pN_per_nm": -0.10470604110461468,
+    "inv_tau_per_s": -2677.9038645681503
+   },
+   "-800": {
+    "k_pN_per_nm": -0.09857608916295836,
+    "inv_tau_per_s": -2521.127600075661
+   },
+   "500": {
+    "k_pN_per_nm": -0.10651789295011066,
+    "inv_tau_per_s": -2724.2427864478427
+   },
+   "-500": {
+    "k_pN_per_nm": -0.09388318414895926,
+    "inv_tau_per_s": -2401.1044539375766
+   }
+  }
+ },
+ "expected_from_ou": {
+  "thermal_var_nm2": 40.78846896161622,
+  "thermal_rms_nm": 6.38658507824144,
+  "b2_nm2_per_s": 210557.80017902813,
+  "tau_c_s": 0.0003874325142733783,
+  "tau_c_samples": 77.48650285467565,
+  "per_sample_brownian_step_nm": 1.026055067184574
+ },
+ "provenance": {
+  "k_is_derived_from_inv_tau": {
+   "max_dev_from_1": 0.0,
+   "finding": "spring_constant is DERIVED as (1/tau)*beta to machine precision, so the answer key carries ONE independent drift measurement, not two"
+  },
+  "dark_channels_are_scalars": {
+   "values": {
+    "sum_signal_darkness": 0.0002614,
+    "x_signal_darkness": -0.0001891,
+    "y_signal_darkness": -0.000588
+   },
+   "finding": "'signal in darkness' is a mean already subtracted in real time, not a dark time series -- the proposal's R7 measured null is NOT available in this container"
+  }
+ },
+ "per_amplitude": {
+  "800": {
+   "n_samples": 10456000,
+   "duration_s": 52.28,
+   "sum_mean_V": 0.0019102355348467866,
+   "sum_rel_sd": 0.044507555029554426,
+   "n_flat_segments": 1307,
+   "ladder": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    8,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64
+   ],
+   "sums_flat_nm2": [
+    84210136559972.75,
+    74990397304979.62,
+    75471131054163.4,
+    82892356221520.2,
+    83412333478770.66,
+    76220484542614.55,
+    72885748470282.6,
+    83649984429805.48,
+    81313293058647.73,
+    68298158681292.25,
+    80027565341275.05,
+    77181411349081.88
+   ],
+   "full": {
+    "c": 97169560064467.08,
+    "alpha": 621622583035.6328,
+    "beta": -31187538602.87584,
+    "se_c": 5231425562638.174,
+    "se_alpha": 1033123919192.9033,
+    "dominant": "observation",
+    "separable": true,
+    "process_over_observation": 0.006397297493404496,
+    "sigma_obs": 2155.595821720202,
+    "b2_nm2_per_s": 11890255987.67469,
+    "b2_over_truth": 56470.27076444057
+   },
+   "flat": {
+    "c": 78981471187791.12,
+    "alpha": 486638156539.18964,
+    "beta": -25117592123.465572,
+    "se_c": 4243657106730.8755,
+    "se_alpha": 838055250776.747,
+    "dominant": "observation",
+    "separable": true,
+    "process_over_observation": 0.006161421776787739,
+    "sigma_obs": 2156.0217593607945,
+    "b2_nm2_per_s": 11456374705.17779,
+    "b2_over_truth": 54409.64284123853
+   },
+   "flat_s_ge_4": {
+    "c": 77604675898275.98,
+    "alpha": 715261366913.0386,
+    "beta": -31083383626.951202,
+    "se_c": 10398634159465.215,
+    "se_alpha": 1541894470608.5994,
+    "dominant": "observation",
+    "separable": true,
+    "process_over_observation": 0.009216730288914567,
+    "sigma_obs": 2137.147390785553,
+    "b2_nm2_per_s": 16838593771.126797,
+    "b2_over_truth": 79971.36062786405
+   },
+   "storage_floor": {
+    "lsb_volts": 3.215999999999896e-06,
+    "n_unique_in_slice": 2445,
+    "fraction_of_gaps_on_lattice": 0.0020458265139116204,
+    "sigma_rep_volts": 9.283792328568883e-07,
+    "sigma_rep_nm": 1.8490107274734715
+   }
+  },
+  "-800": {
+   "n_samples": 10226000,
+   "duration_s": 51.13,
+   "sum_mean_V": 0.0018367712944713475,
+   "sum_rel_sd": 0.046392411276809306,
+   "n_flat_segments": 1278,
+   "ladder": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    8,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64
+   ],
+   "sums_flat_nm2": [
+    89057194317402.17,
+    79353846191931.72,
+    79785814158523.98,
+    87672089586651.16,
+    88191574389463.4,
+    80554277947619.22,
+    77102711485664.19,
+    88442289687878.88,
+    86051817188487.2,
+    72321037977926.83,
+    84614723351324.95,
+    81716948822014.98
+   ],
+   "full": {
+    "c": 102851813826908.5,
+    "alpha": 640488883972.2037,
+    "beta": -32394223357.524803,
+    "se_c": 5520511469028.511,
+    "se_alpha": 1090213819644.9713,
+    "dominant": "observation",
+    "separable": true,
+    "process_over_observation": 0.006227297897245605,
+    "sigma_obs": 2242.5290904335807,
+    "b2_nm2_per_s": 12526674828.323954,
+    "b2_over_truth": 59492.808234475604
+   },
+   "flat": {
+    "c": 83562077889272.7,
+    "alpha": 504129665404.73694,
+    "beta": -26177216517.74673,
+    "se_c": 4484963919184.41,
+    "se_alpha": 885709534838.5126,
+    "dominant": "observation",
+    "separable": true,
+    "process_over_observation": 0.006032995805498689,
+    "sigma_obs": 2242.6810444377365,
+    "b2_nm2_per_s": 12137466363.4221,
+    "b2_over_truth": 57644.34446552035
+   },
+   "flat_s_ge_4": {
+    "c": 82099143687830.08,
+    "alpha": 746507174141.2638,
+    "beta": -32498022058.61753,
+    "se_c": 11049148036195.178,
+    "se_alpha": 1638351729725.7598,
+    "dominant": "observation",
+    "separable": true,
+    "process_over_observation": 0.009092752257925461,
+    "sigma_obs": 2222.9628794458376,
+    "b2_nm2_per_s": 17972966754.334026,
+    "b2_over_truth": 85358.82659798115
+   }
+  },
+  "500": {
+   "n_samples": 10176000,
+   "duration_s": 50.88,
+   "sum_mean_V": 0.002128839828779776,
+   "sum_rel_sd": 0.040549292834191564,
+   "n_flat_segments": 1272,
+   "ladder": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    8,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64
+   ],
+   "sums_flat_nm2": [
+    65910313131508.64,
+    58729643696854.76,
+    59107163503419.49,
+    64922347731373.46,
+    65335557612912.72,
+    59713632154571.54,
+    57097319134306.69,
+    65535012443694.08,
+    63695069964652.41,
+    53592700552140.55,
+    62619801702153.34,
+    60562087333071.94
+   ],
+   "full": {
+    "c": 76106435831613.39,
+    "alpha": 486980446365.51605,
+    "beta": -24307398148.241238,
+    "se_c": 4084529288587.517,
+    "se_alpha": 806630020088.7704,
+    "dominant": "observation",
+    "separable": true,
+    "process_over_observation": 0.00639867628859887,
+    "sigma_obs": 1933.7803591864676,
+    "b2_nm2_per_s": 9571156571.649294,
+    "b2_over_truth": 45456.195702611614
+   },
+   "flat": {
+    "c": 61835968800640.47,
+    "alpha": 384425783408.5283,
+    "beta": -19656401061.125893,
+    "se_c": 3310940280200.243,
+    "se_alpha": 653858409631.8734,
+    "dominant": "observation",
+    "separable": true,
+    "process_over_observation": 0.006216863596783279,
+    "sigma_obs": 1933.77237979932,
+    "b2_nm2_per_s": 9299123933.442871,
+    "b2_over_truth": 44164.233885119575
+   },
+   "flat_s_ge_4": {
+    "c": 60787280748966.81,
+    "alpha": 559459469102.5739,
+    "beta": -24230145779.589664,
+    "se_c": 8125926843698.078,
+    "se_alpha": 1204900708759.276,
+    "dominant": "observation",
+    "separable": true,
+    "process_over_observation": 0.009203561373521102,
+    "sigma_obs": 1917.3046531158338,
+    "b2_nm2_per_s": 13533126973.93744,
+    "b2_over_truth": 64272.74108311738
+   }
+  },
+  "-500": {
+   "n_samples": 10466000,
+   "duration_s": 52.330000000000005,
+   "sum_mean_V": 0.0020182392780985093,
+   "sum_rel_sd": 0.042904939069748786,
+   "n_flat_segments": 1308,
+   "ladder": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    8,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64
+   ],
+   "sums_flat_nm2": [
+    75471318391570.98,
+    67202861982780.22,
+    67652655762273.45,
+    74285497347654.97,
+    74759174849133.52,
+    68293275068209.7,
+    65347586213104.94,
+    74973369230174.83,
+    72963533384290.03,
+    61344348481539.92,
+    71670967527406.92,
+    69311766743930.5
+   ],
+   "full": {
+    "c": 87130011766628.88,
+    "alpha": 547011083877.3149,
+    "beta": -27514454791.04952,
+    "se_c": 4682552596011.434,
+    "se_alpha": 924730177634.1509,
+    "dominant": "observation",
+    "separable": true,
+    "process_over_observation": 0.0062781018019651205,
+    "sigma_obs": 2040.2271534549438,
+    "b2_nm2_per_s": 10453106896.184116,
+    "b2_over_truth": 49644.83332983292
+   },
+   "flat": {
+    "c": 70788976522933.88,
+    "alpha": 431915198364.7017,
+    "beta": -22251901928.680283,
+    "se_c": 3805457660774.634,
+    "se_alpha": 751517781482.0161,
+    "dominant": "observation",
+    "separable": true,
+    "process_over_observation": 0.006101447140216413,
+    "sigma_obs": 2040.362196960523,
+    "b2_nm2_per_s": 10160319886.255037,
+    "b2_over_truth": 48254.30298766495
+   },
+   "flat_s_ge_4": {
+    "c": 69558005208054.15,
+    "alpha": 636442683258.612,
+    "beta": -27589773308.936676,
+    "se_c": 9328846561355.438,
+    "se_alpha": 1383267908989.4768,
+    "dominant": "observation",
+    "separable": true,
+    "process_over_observation": 0.009149812179848397,
+    "sigma_obs": 2022.5441530649077,
+    "b2_nm2_per_s": 14971599229.795624,
+    "b2_over_truth": 71104.46260868001
+   }
+  }
+ },
+ "primary_800": {
+  "per_sample_sd_nm": 2159.247693737148,
+  "noise_over_thermal_rms": 338.0911186940144,
+  "var_flat_nm2": 4662350.6029091915,
+  "acf_lags_1_to_12": [
+   -0.06314866028129458,
+   0.05304913257211134,
+   0.046824336102826825,
+   -0.04691108154217257,
+   0.2487626307716435,
+   -0.05369342835605004,
+   0.06637625368356621,
+   0.03658715119361541,
+   -0.043375299445515124,
+   0.2431646641759695,
+   -0.05512498617453977,
+   0.07798293038378695
+  ],
+  "periodic_line": {
+   "lag5": 0.2487626307716435,
+   "lag10": 0.2431646641759695,
+   "finding": "the observation error carries a PERIODIC component (40 kHz at this rate), not a decaying correlation"
+  },
+  "block_sweep": [
+   {
+    "m": 1,
+    "avg_window_s": 5e-06,
+    "var_block_nm2": 4662350.6029091915,
+    "m_times_var": 4662350.6029091915,
+    "ou_predicted_nm2": 40.78846896161622,
+    "excess_over_ou": 114305.60453977012
+   },
+   {
+    "m": 2,
+    "avg_window_s": 1e-05,
+    "var_block_nm2": 2185463.3918434754,
+    "m_times_var": 4370926.783686951,
+    "ou_predicted_nm2": 40.78846896161622,
+    "excess_over_ou": 53580.42229778457
+   },
+   {
+    "m": 5,
+    "avg_window_s": 2.5e-05,
+    "var_block_nm2": 915065.6682575186,
+    "m_times_var": 4575328.341287592,
+    "ou_predicted_nm2": 40.78846896161622,
+    "excess_over_ou": 22434.42059859213
+   },
+   {
+    "m": 10,
+    "avg_window_s": 5e-05,
+    "var_block_nm2": 574261.8114317779,
+    "m_times_var": 5742618.1143177785,
+    "ou_predicted_nm2": 40.78846896161622,
+    "excess_over_ou": 14079.023460581078
+   },
+   {
+    "m": 50,
+    "avg_window_s": 0.00025,
+    "var_block_nm2": 301947.9837321364,
+    "m_times_var": 15097399.186606819,
+    "ou_predicted_nm2": 40.78846896161622,
+    "excess_over_ou": 7402.77807476135
+   },
+   {
+    "m": 100,
+    "avg_window_s": 0.0005,
+    "var_block_nm2": 266107.1043984368,
+    "m_times_var": 26610710.439843677,
+    "ou_predicted_nm2": 40.78846896161622,
+    "excess_over_ou": 6524.076808297353
+   },
+   {
+    "m": 500,
+    "avg_window_s": 0.0025,
+    "var_block_nm2": 232227.0080696146,
+    "m_times_var": 116113504.0348073,
+    "ou_predicted_nm2": 12.642223266528497,
+    "excess_over_ou": 18369.15890296432
+   },
+   {
+    "m": 1000,
+    "avg_window_s": 0.005,
+    "var_block_nm2": 214093.55153204,
+    "m_times_var": 214093551.53204,
+    "ou_predicted_nm2": 6.321111633264248,
+    "excess_over_ou": 33869.6045811615
+   },
+   {
+    "m": 5000,
+    "avg_window_s": 0.025,
+    "var_block_nm2": 110433.98147584025,
+    "m_times_var": 552169907.3792013,
+    "ou_predicted_nm2": 1.2642223266528498,
+    "excess_over_ou": 87353.29154344619
+   },
+   {
+    "m": 20000,
+    "avg_window_s": 0.1,
+    "var_block_nm2": 7933.036436708517,
+    "m_times_var": 158660728.73417035,
+    "ou_predicted_nm2": 0.31605558166321246,
+    "excess_over_ou": 25100.130790165662
+   },
+   {
+    "m": 100000,
+    "avg_window_s": 0.5,
+    "var_block_nm2": 214.6789458335797,
+    "m_times_var": 21467894.583357967,
+    "ou_predicted_nm2": 0.0632111163326425,
+    "excess_over_ou": 3396.221397259497
+   }
+  ],
+  "theta_ar_per_s": null,
+  "theta_ar_note": "AR(1) refused: lag-1 autocorrelation is -0.063 < 0, so the record has no recoverable OU relaxation -- the noise, not the bead, sets it",
+  "theta_external_per_s": 2581.0946762573076
+ },
+ "verdict": {
+  "read": "REFUSED for the diffusion / process-noise target",
+  "reasons": [
+   "per-sample detection noise is 338x the bead's whole thermal rms (6.39 nm), and 2104x the per-sample Brownian step",
+   "averaging cannot close the gap: m*Var[block mean] RISES with m rather than staying flat, so the noise is not white -- and the process would need ~1e5 samples of averaging against a correlation time of only 77 samples",
+   "detection is FLUORESCENCE from a photon-starved bead (sum channel 1.91 mV), not back-focal-plane interferometry; the authors recover their signal by averaging ~750 IDENTICAL driven responses, which a Brownian path by definition does not admit"
+  ],
+  "survives": "the DRIVEN read: a deterministic relaxation observed through a stochastic channel is Level 0's third rung, and theta has an external answer (1/tau) this record can be scored against"
+ },
+ "checker_guard_gap": {
+  "reported_by_qv_three_way": {
+   "separable": true,
+   "dominant": "observation"
+  },
+  "b2_error_factor": 54409.64284123853,
+  "c_over_alpha": 162.3002021655707,
+  "finding": "qv_three_way reported separable=True and handed back a b^2 wrong by 5.44e+04x. SEP_MIN_FRAC guards ONE direction -- observation buried under process -- and passes trivially when the reverse holds. The measured graceful degradation (720x observation noise -> alpha 40% high) was established under IID observation error; this record's error is correlated (periodic line at lag 5), and at only 162x the alpha estimate is wrong by 4-5 orders of magnitude. A symmetric bar gating the b^2 consumer is the missing guard."
+ },
+ "amendment": {
+  "target": "DIRECTION_STOCHASTIC.md:486 / proposal R2",
+  "registered": "computer-vision tracking error is autocorrelated to some lag tau, so restricting the fit to strides s > tau recovers c",
+  "measured": "this instrument's error is PERIODIC (lag-5 and lag-10 both ~0.25), which has no finite correlation length -- s > tau has nothing to step past. The registered mitigation is inadequate for periodic error and the prediction needs re-registering in that form."
+ },
+ "seconds": 3.9
+}
