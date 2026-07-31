@@ -308,6 +308,89 @@ framing.
      drift is vacuous at EVERY window size, because `E[a(X)] = 0` under any
      stationary law. `f = x²/2` makes it accumulate, and the identifiability
      condition is **θ·L > 2κ(n,δ)²**.
+
+     **AMENDED 2026-07-30 — the f-family has a price, and it is only visible on a
+     real instrument** (`CASE_STUDY_TWEEZERS_C1.md` §3). A nonlinear f imports the
+     quadratic variation: `d(x²/2) = x dx + ½d[x]`, so with `f = x²/2` the identity
+     reads `θ ≈ b²/(2⟨x²⟩)` for a stationary path — **the drift is determined
+     through b²**. Every real instrument anti-alias-filters before storage, which
+     destroys quadratic variation, and that bias lands on the drift. Measured on a
+     C-Trap bead: b² 0.554 of truth, weak-form θ 0.539 — the same factor.
+
+     **The trade is structural, not a tuning failure.** For a stationary scalar
+     diffusion a single-time Itô weak form either fails to accumulate (f linear ⇒
+     `E[f'a] = E[a] = 0`) or imports `d[X]` (f nonlinear ⇒ `f'' ≠ 0`). There is no
+     b²-free accumulating f. So the fix leaves the single-time form:
+     **`ito.build_lag_rows`** — state-weighted Itô increments at a lag,
+     `y = Σφ w(X_i)(X_{i+h} − X_i)`, whose left-endpoint sum IS the Itô integral and
+     forms no quadratic-variation term at all, while `w = x` supplies the
+     accumulation `f = x²/2` was adopted for.
+
+     Measured (`run_lagform.py`, an OU matched to the bead, 23 kHz anti-alias
+     stand-in reproducing the instrument's b² attenuation at 0.539 against the real
+     0.554):
+
+     | | θ / truth |
+     |---|---|
+     | single-time weak form, filtered | **0.533** |
+     | lagged form, lag 32, inverted | **0.981** |
+     | the real bead, Force 1y, lag 16, inverted | **0.980** (single-time: 0.341) |
+
+     The lag turns an UNKNOWN instrument bias into a KNOWN estimator bias:
+     `θ_apparent(h) = (1 − e^{−θh})/h` exactly for a linear drift, which inverts to
+     within 1% across the ladder, while the filter's own effect
+     (filtered/clean) decays to under 2% from lag 16 on. Force 1x stays broken at
+     0.448, correctly — C1's ACF gate had already flagged it as carrying a
+     low-frequency contaminant, and a better estimator does not rescue a corrupted
+     axis.
+
+     **The h-columns were built, and they fix the ESTIMATE but not the
+     CERTIFICATE.** `build_lag_rows(bias_names=, bias_orders=, generator_max=)` puts
+     the conditional-mean bias into the design instead of bounding it in `quad`,
+     with order k carrying `h^k/(k+1)!` — the exact expansion of `(1−e^{−z})/z` —
+     and rescaled by `rate^k` so a search does not have to span θ and θ² at once.
+     Measured (`run_lagform.py`):
+
+     | bias orders | clean | filtered |
+     |---|---|---|
+     | none | 0.743 | 0.731 |
+     | 1 | 0.946 | 0.913 |
+     | 2 | **0.989** | 0.933 |
+     | 3 | 0.990 | 0.928 |
+
+     Order 3 = order 2, so the expansion has CONVERGED and what remains on the
+     filtered arm is the measurement channel rather than the estimator.
+
+     **It still does not certify, and the reason is structural rather than
+     statistical.** Signal-to-band is not the obstacle: it scales as √L exactly as
+     Level 0's window-length finding predicts (0.96 → 2.27 → 4.07 for 5× and 15×
+     windows) and reaches **6.97** at 14 trajectories × 9 s — where the joint
+     admissible interval is still unbounded. The cause is DEGENERACY. With `w = x`,
+     the drift column `∫φx²dt` and every bias column are the SAME integral times a
+     scalar function of h, so the columns are near-parallel and the admissible set is
+     a long thin ridge, unbounded in the compensating direction however good the band
+     is. More data does not help; it is a rank problem, not a noise problem.
+
+     **And the ridge exists because the fit throws away a constraint it has.** The
+     bias coefficients are not free: `La = a a' + ½b²a''` is DETERMINED by the drift
+     (and the diffusion). Fitting them as independent parameters discards that and
+     manufactures the degeneracy. Two honest routes out, neither of them more columns:
+
+     * **Constrain the bias coefficients to the drift's** — the correct model, but
+       nonlinear in the coefficients, so it leaves `certify_drift`'s linear contract
+       and needs its own band treatment.
+     * **Invert the h-dependence outside the fit**, which is what already works:
+       `θ = −ln(1 − θ_app h)/h` recovers **0.980 on the real bead** (single-time
+       form: 0.341) and 0.981 in simulation. It is a measured point estimate with a
+       measured operating window, not a certificate.
+
+     So the b²-free drift is, at this stage, a **scored estimator and not a certified
+     one**, and the next lever is neither columns nor data: signal-to-band is
+     `∫φ w a dt / κ√(∫φ²w²b²dt)`, a ratio maximisable over `(φ, w)` that nothing has
+     yet been chosen to optimise — `w = x` came from wanting accumulation and the
+     bump φ came from the PDE arc. Failing that, the registered fallback is option 3
+     of the certificate-kind decision (a distinct statistical-certificate class),
+     which two independent estimators have now hit the same wall without.
    * **S1 is half false** (above), and the coverage factor is why.
    * **One confident-wrong, found by the frozen checker on its first real
      producer, and fixed.** Realized quadratic variation of a noisily-observed path

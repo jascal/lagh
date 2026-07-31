@@ -88,6 +88,7 @@ sampling rate substitutes for it.
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -621,6 +622,219 @@ def build_rows(t, paths, names, *, fs=("x", "x**2/2"), diff_names=None,
 # then VERIFIED against a drift certificate when one exists -- the same
 # declared-then-checked discipline weakform.declared_epsilon uses for coeff_max.
 DRIFT_MAX_DEFAULT = 10.0
+
+
+def _term_fns2(names):
+    """Drift library terms -> (g, g', g''), analytic. The second derivative is
+    needed for the lagged form's O(h^2) bias bound."""
+    x = sp.Symbol("x")
+    out = []
+    for nm in names:
+        e = sp.sympify(nm)
+        out.append((sp.lambdify(x, e, "numpy"),
+                    sp.lambdify(x, sp.diff(e, x), "numpy"),
+                    sp.lambdify(x, sp.diff(e, x, 2), "numpy")))
+    return out
+
+
+def build_lag_rows(t, paths, names, *, lags=(8, 16, 32), ws=("x",), windows=None,
+                   half: int = 200, n_windows: int = 0, overlap: float = 0.0,
+                   p: int = 8, drift_envelope=None, drift_max: float = 0.0,
+                   b2_max: float = 0.0, bias_names=None, bias_orders: int = 1,
+                   offset: bool = False, generator_max: float = 0.0) -> ItoRows:
+    """The b^2-FREE drift form: state-weighted Ito increments at a LAG.
+
+    WHY THIS EXISTS (docs/CASE_STUDY_TWEEZERS_C1.md §3). `build_rows` reaches a
+    stationary drift through the f-family, and Level 0 measured that `f = x` alone is
+    vacuous there while `f = x^2/2` accumulates. But a nonlinear f imports the
+    quadratic variation: `d(x^2/2) = x dx + (1/2)d[x]`, so the target carries a
+    high-frequency object. On a real instrument -- whose anti-alias filter destroys a
+    quarter of the quadratic variation before storage -- that attenuation lands
+    directly on the drift. Measured on a C-Trap bead: b^2 read 0.554 of truth and the
+    weak-form theta read 0.539, the same factor, while the same data gave theta to
+    0.8% through an estimator that never touches b^2.
+
+    THE TRADE IS STRUCTURAL, not a tuning failure. For a stationary scalar diffusion,
+    a single-time Ito weak form either fails to accumulate (f linear, so
+    E[f'(X)a(X)] = E[a(X)] = 0) or imports d[X] (f nonlinear, so f'' != 0). There is
+    no b^2-free accumulating f. So this leaves the single-time form.
+
+    WHAT REPLACES IT. Weight by the state and difference at a LAG h:
+
+        y   = sum_i phi_i w(X_i) (X_{i+h} - X_i)          <- Ito, LEFT endpoint
+        A_j = h sum_i phi_i w(X_i) g_j(X_i)
+
+    Three properties:
+
+    * **No Ito correction exists to import.** The left-endpoint sum IS the Ito
+      integral; `sum phi w dX = sum phi w d(W(x)) - (1/2) sum phi w' d[X]` is the
+      identity the chain-rule route uses, and this side of it never forms the
+      quadratic-variation term. b^2 appears in NO column and on NO target.
+    * **It accumulates.** With w = x and a = -theta x the design column is
+      `h sum phi x^2`, whose mean is h*Var > 0 -- the same accumulation `f = x^2/2`
+      bought, obtained without f''.
+    * **The lag steps past the detector.** A filter with time constant tau distorts
+      increments only for h <~ tau, so a ladder starting above it reads the process
+      rather than the instrument. This is `DIRECTION_STOCHASTIC.md`'s registered
+      `s > tau` discipline used constructively rather than diagnostically.
+
+    THE COST, stated rather than hidden. `E[X_{t+h} - X_t | X_t = x]` is
+    `h a(x) + (h^2/2)(a a' + b^2 a''/2) + O(h^3)`, so a single lag is biased at
+    O(theta*h) -- 17% at h = 8 on the C-Trap bead. That bias is DETERMINISTIC and
+    goes in `quad`, the band channel whose coefficient is 1 and which is weighted by
+    the candidate's own coefficients; bounding it needs an envelope for |a| and an
+    UPPER bound for b^2. The b^2 upper bound is not the circularity coming back: an
+    attenuated instrument reports LESS quadratic variation than the truth, so a bound
+    taken from the instrument's own calibration is conservative in the safe
+    direction, and it enters a band rather than an estimate.
+
+    Increments are NON-OVERLAPPING (strided by `lags`) so the martingale terms are
+    independent and `qv` is their realized variance -- measured, as everywhere else.
+
+    ## bias_names: fitting the O(h) bias instead of bounding it
+
+    Bounding the conditional-mean bias in `quad` is sound but wide -- it inflates the
+    band by the bias's whole size, and the joint intervals do not resolve. Fitting it
+    is better, and it stays inside `certify_drift`'s LINEAR contract, exactly as
+    `diff_names` put b^2 into the design rather than measuring it.
+
+    Because the strided sums carry their own 1/h, the columns come out h-INDEPENDENT
+    at leading order,
+
+        A_j = h sum_strided phi w g_j  ~  int phi w g_j dt
+        E[y] = int phi w a dt  +  (h/2) int phi w (La) dt  +  O(h^2)
+
+    so the bias enters as a column set scaled by h/2 over a second library for
+    `La = a a' + b^2 a''/2`. Two consequences worth stating:
+
+    * **A single lag cannot do this.** At one h the bias column is exactly h/2 times
+      its drift column -- perfectly collinear. The LADDER is what identifies them,
+      so `lags` becomes load-bearing rather than a tuning choice, and a caller
+      passing one lag with `bias_names` set is told so.
+    * **The residual drops two orders.** With the h term fitted, `quad` carries only
+      O(h^2), whose bound needs a RATE scale (`generator_max`, units 1/s) rather than
+      another amplitude declaration; the ACF decay rate this arc already measures for
+      its axis gate is a functional of the data and is the intended source.
+    """
+    t = np.asarray(t, float)
+    P = np.atleast_2d(np.asarray(paths, float))
+    fns = _term_fns2(names)
+    bnames = list(bias_names) if bias_names else []
+    _rate = float(generator_max) if generator_max > 0 else 1.0
+    if bnames and generator_max <= 0:
+        raise ValueError("bias_names needs generator_max (a rate, 1/s): it sets the "
+                         "column scaling that keeps the fitted bias coefficients "
+                         "comparable to the drift's, and the residual bound")
+    bfns = _term_fns2(bnames) if bnames else []
+    if bnames and len(set(lags)) < 2:
+        raise ValueError(
+            "bias_names needs at least two distinct lags: at one lag the bias "
+            "column is exactly h/2 times its drift column and the two are collinear")
+    wfns = _term_fns(ws)
+    dpsi = bump_derivatives(p, 0)
+    wins = windows if windows is not None else time_windows(
+        t, half=half, n_windows=n_windows, overlap=overlap)
+    dt = float(t[1] - t[0])
+    ys, As, qvs, qses, quads, trs, fnames, wl = [], [], [], [], [], [], [], []
+    rejected = attempted = 0
+    for k in range(len(P)):
+        X = P[k]
+        for lo, hi in wins:
+            tt, xx = t[lo:hi], X[lo:hi]
+            tc, at = 0.5 * (tt[0] + tt[-1]), 0.5 * (tt[-1] - tt[0])
+            for lag in lags:
+                for (wf, _), wn in zip(wfns, ws):
+                    attempted += 1
+                    idx = np.arange(0, len(xx) - lag, lag)
+                    if len(idx) < 5:
+                        rejected += 1
+                        continue
+                    phi = dpsi[0]((tt[idx] - tc) / at)
+                    wx = np.asarray(wf(xx[idx]), float) * np.ones(len(idx))
+                    xi = xx[idx]
+                    dXh = xx[idx + lag] - xi
+                    hh = lag * dt
+                    pw = phi * wx
+                    ys.append(float(np.sum(pw * dXh)))
+                    cols = [hh * float(np.sum(pw * np.asarray(g(xi), float)))
+                            for g, _, _ in fns]
+                    # the O(h) conditional-mean bias, FITTED: same integrals, scaled
+                    # by h/2. Collinear with the drift columns at any single lag.
+                    # order k carries h^k/(k+1)!, the expansion of the exact
+                    # scalar factor (1 - exp(-z))/z = sum_k (-z)^k/(k+1)!
+                    for kk in range(1, bias_orders + 1):
+                        # rate^kk keeps the FITTED coefficient O(|a|): the natural
+                        # coefficient of L^k a is a^(k) ~ rate^k * a, and a search
+                        # that must span theta and theta^2 at once resolves neither
+                        sc = (hh * _rate) ** kk / math.factorial(kk + 1)
+                        cols += [sc * hh
+                                 * float(np.sum(pw * np.asarray(m(xi), float)))
+                                 for m, _, _ in bfns]
+                    if offset:
+                        # THE MEASUREMENT-CHANNEL COLUMN. Anything that removes
+                        # variance from the stored signal -- an anti-alias filter,
+                        # iid observation error -- shifts E[w(X)(X_{t+h}-X_t)] by a
+                        # constant DEFICIT, independent of h. In this row that
+                        # constant multiplies sum(phi) rather than h*sum(phi), so it
+                        # carries h^-1: a scaling no term of the drift expansion has,
+                        # which is exactly why the ladder can separate it.
+                        cols.append(dt * float(np.sum(phi)))
+                    As.append(cols)
+                    wq = pw ** 2
+                    qvs.append(float(np.sum(wq * dXh ** 2)))
+                    qses.append(float(np.sqrt(2.0 / 3.0
+                                              * np.sum(wq ** 2 * dXh ** 4))))
+                    # the O(h^2) conditional-mean bias, per unit |c_j|
+                    env = (np.asarray(drift_envelope(xi), float)
+                           if drift_envelope is not None
+                           else np.full(len(xi), float(drift_max)))
+                    apw = np.abs(pw)
+                    row = [0.0]
+                    for _, dg, d2g in fns:
+                        if bnames:
+                            # the h term is FITTED, so what is left is O(h^2), whose
+                            # size is the h term times another factor of h*rate
+                            # after fitting orders 1..K the leading residual
+                            # is term m = K+2 of  sum_m (h^m/m!) L^(m-1) a,
+                            # bounded by h^(K+2)/(K+2)! * rate^(K+1) * |a|
+                            kr = bias_orders
+                            row.append(hh ** (kr + 2) / math.factorial(kr + 2)
+                                       * generator_max ** (kr + 1)
+                                       * float(np.sum(apw * env)))
+                        else:
+                            row.append(0.5 * hh ** 2 * float(np.sum(
+                                apw * (env * np.abs(np.asarray(dg(xi), float)
+                                                    * np.ones(len(xi)))
+                                       + 0.5 * b2_max * np.abs(
+                                           np.asarray(d2g(xi), float)
+                                           * np.ones(len(xi)))))))
+                    row += [0.0] * (len(bfns) * bias_orders)   # these ARE the fit
+                    if offset:
+                        row.append(0.0)
+                    quads.append(row)
+                    trs.append(k)
+                    fnames.append(f"w={wn}|h={lag}")
+                    wl.append((lo, hi))
+    allnames = list(names) + [f"h{kk}:{m}" for kk in range(1, bias_orders + 1)
+                              for m in bnames] + (["off"] if offset else [])
+    if not ys:
+        return ItoRows(np.zeros(0), np.zeros((0, len(allnames))), allnames,
+                       np.zeros(0), np.zeros(0), np.zeros(0),
+                       np.zeros((0, 1 + len(allnames))), np.zeros(0, int), [], [],
+                       None, None, 0.0, dt, rejected, attempted,
+                       ["lagged Ito form: no admissible window"])
+    note = (f"lagged Ito form, b^2-free target; lags={list(lags)}, ws={list(ws)}; "
+            + (f"conditional-mean bias FITTED to order {bias_orders} over "
+               f"{bnames} (columns h1:*..), residual in quad at "
+               f"generator_max={generator_max:g}/s"
+               if bnames else
+               f"O(h) bias BOUNDED in quad with "
+               f"{'derived' if drift_envelope is not None else 'declared'} |a| "
+               f"envelope and b2_max={b2_max:g}"))
+    return ItoRows(np.array(ys), np.array(As), allnames, np.array(qvs),
+                   np.array(qses), np.zeros(len(ys)), np.array(quads),
+                   np.array(trs, int), fnames, wl, None, None, 0.0, dt,
+                   rejected, attempted, [note])
 
 
 @dataclass

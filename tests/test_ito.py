@@ -1147,6 +1147,111 @@ def test_the_separation_refuses_when_observation_noise_is_buried():
     assert nop["sigma_obs"] == pytest.approx(1e-2, rel=0.10)
 
 
+def test_the_lagged_form_is_b2_free_and_steps_past_a_detector_filter():
+    """The b^2-free drift form, against the failure that motivated it.
+
+    A real trapped bead (docs/CASE_STUDY_TWEEZERS_C1.md §3) read its drift 46% low
+    because `f = x^2/2` determines theta through b^2, and the instrument's anti-alias
+    filter destroys a quarter of the quadratic variation before storage. Here the
+    filter is applied by us, so the truth is known.
+
+    `build_lag_rows` has no quadratic variation on its target at all -- the
+    left-endpoint Ito sum IS the Ito integral -- so the filter reaches it only through
+    the increments at lags shorter than the filter's own time constant. Stepping the
+    lag past it recovers the drift. What remains is the estimator's OWN bias,
+    `theta_apparent = (1 - exp(-theta h))/h`, which is a KNOWN function and inverts.
+    Turning an unknown instrument bias into a known estimator bias is the point.
+    """
+    from lagh.ito import build_lag_rows, build_rows
+    theta, b2, dt, n, ntraj = 3297.0, 2.007e5, 1.28e-5, 120_000, 3
+    rng = np.random.default_rng(11)
+    dec = np.exp(-theta * dt)
+    sd = np.sqrt(b2 * (1 - dec ** 2) / (2 * theta))
+    X = np.empty((ntraj, n))
+    X[:, 0] = rng.standard_normal(ntraj) * np.sqrt(b2 / (2 * theta))
+    z = rng.standard_normal((ntraj, n - 1))
+    for k in range(1, n):
+        X[:, k] = dec * X[:, k - 1] + sd * z[:, k - 1]
+    t = np.arange(n) * dt
+
+    def boxcar(A, m=2):                      # numpy-only detector low-pass
+        c = np.cumsum(np.pad(A, ((0, 0), (m, 0)), mode="edge"), axis=1)
+        return (c[:, m:] - c[:, :-m]) / m
+
+    Xf = boxcar(X)
+    lib = ("1", "x")
+
+    def theta_ls(rows):
+        c, *_ = np.linalg.lstsq(rows.A, rows.y, rcond=None)
+        return -float(c[list(rows.names).index("x")])
+
+
+    # the filter destroys quadratic variation, which is the mechanism
+    assert (np.diff(Xf, axis=1).std() / np.diff(X, axis=1).std()) ** 2 < 0.8
+
+    # SINGLE-TIME FORM: fine on clean data, materially biased by the filter
+    clean_single = theta_ls(build_rows(t, X, lib, half=5000)) / theta
+    filt_single = theta_ls(build_rows(t, Xf, lib, half=5000)) / theta
+    assert 0.9 < clean_single < 1.1
+    assert filt_single < 0.85 * clean_single          # the bias lands on the DRIFT
+
+    # LAGGED FORM: the filter's effect on it shrinks as the lag steps past the
+    # filter, which the single-time form has no knob to do
+    def lag_theta(D, lag):
+        return theta_ls(build_lag_rows(t, D, lib, lags=(lag,), ws=("x",), half=5000))
+
+    near = lag_theta(Xf, 1) / lag_theta(X, 1)
+    far = lag_theta(Xf, 32) / lag_theta(X, 32)
+    assert near < 0.6                                  # inside the filter: biased
+    assert far > 0.95                                  # past it: not
+    assert far > near
+
+    # and the estimator's own bias inverts analytically on the filtered data.
+    # A moving-average filter is the harder case: unlike a phase-shifting low-pass,
+    # whose effect on the lag-h increment vanishes with h, an average leaves a
+    # residual offset at every lag -- so this recovers ~0.9 rather than ~0.98, and
+    # the bar is set where the measurement puts it.
+    h = 16 * dt
+    a = lag_theta(Xf, 16)
+    recovered = -np.log(1 - a * h) / h / theta
+    assert 0.85 < recovered < 1.15
+    assert abs(recovered - 1) < 0.5 * abs(filt_single - 1)   # much better
+
+    # the rows carry no Ito correction at all -- that IS b^2-free
+    rows = build_lag_rows(t, X, lib, lags=(8, 16), ws=("x",), half=5000)
+    assert np.all(rows.corr_se == 0.0)
+    assert "b^2-free" in rows.notes[0]
+
+    # THE h-COLUMNS fix the point estimate: the conditional-mean bias is fitted
+    # rather than bounded, order k carrying h^k/(k+1)! from (1-exp(-z))/z
+    rate = 1.3 * theta
+    plain = theta_ls(build_lag_rows(t, X, lib, lags=(8, 12, 16, 24), ws=("x",),
+                                    half=5000)) / theta
+    fitted = theta_ls(build_lag_rows(
+        t, X, lib, lags=(8, 12, 16, 24), ws=("x",), half=5000, bias_names=("x",),
+        bias_orders=2, generator_max=rate,
+        drift_envelope=lambda z: rate * np.abs(z))) / theta
+    assert abs(fitted - 1) < abs(plain - 1)          # strictly closer to truth
+    assert 0.95 < fitted < 1.05
+
+    # two guards, both of which cost a real debugging session to learn:
+    # one lag makes the bias column exactly h/2 times its drift column
+    with pytest.raises(ValueError, match="two distinct lags"):
+        build_lag_rows(t, X, lib, lags=(8,), ws=("x",), half=5000,
+                       bias_names=("x",), generator_max=rate)
+    # and without a rate the fitted bias coefficient is O(theta^2) against the
+    # drift's O(theta), which no single search resolves
+    with pytest.raises(ValueError, match="generator_max"):
+        build_lag_rows(t, X, lib, lags=(8, 16), ws=("x",), half=5000,
+                       bias_names=("x",))
+
+    # the holdout unit survives the extra columns -- a shadowed loop variable once
+    # collapsed every row onto one trajectory and `certify_drift` bailed
+    many = build_lag_rows(t, X, lib, lags=(8, 16), ws=("x",), half=5000,
+                          bias_names=("x",), generator_max=rate)
+    assert many.n_trajectories == ntraj
+
+
 def test_the_separation_refuses_when_the_PROCESS_term_is_buried():
     """The OTHER half of the guard, added after a real instrument exercised it.
 
