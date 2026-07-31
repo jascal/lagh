@@ -71,6 +71,14 @@ than inferred:
 
 ## 3. The property that decides it: the circularity is broken
 
+> **AMENDED 2026-07-30 by C1** (`CASE_STUDY_TWEEZERS_C1.md` §1). This section is
+> right about the *fluorescence* record and right in principle about the C-Trap, but
+> the break lives in the **active** record only. On the C-Trap's PASSIVE record the
+> displacement scale `Rd` is *defined* as `sqrt((k_B T/gamma_0)/D_volts)` — verified
+> identically on 8 calibration items — so b² there is circular by construction. C1
+> ran on the passive record and found it. Read §3 as a property of a *driven*
+> calibration, never of a passive one.
+
 Optical-trap calibration is normally circular for our purposes — the volts→nm
 scale and the trap stiffness are both derived from the *same Brownian
 statistics* we would be certifying, by equipartition or by a Lorentzian fit to

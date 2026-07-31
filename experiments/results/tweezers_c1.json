@@ -1,0 +1,596 @@
+{
+ "campaign": "stochastic-real (C-Trap)",
+ "stage": "C1",
+ "artifact": {
+  "record": "14726586",
+  "doi": "10.5281/zenodo.14726586",
+  "file": "passive_calibration.h5",
+  "bytes": 10815190,
+  "sha256": "e99315e08ba1d149fbd66941db76c190d0dfe194ee936d55c378699ccb69d0e8",
+  "license": "CC-BY-4.0",
+  "cite": "LUMICKS. Pylake tutorial dataset: Force calibration. Zenodo. https://doi.org/10.5281/zenodo.14726586"
+ },
+ "circularity_audit": {
+  "rows": [
+   {
+    "channel": "Force 1x",
+    "item": "5",
+    "Rd_stored_um_per_V": 9.113884166338554,
+    "Rd_implied_um_per_V": 9.113884166338554,
+    "rel_dev": 0.0
+   },
+   {
+    "channel": "Force 1x",
+    "item": "6",
+    "Rd_stored_um_per_V": 4.5418947253217645,
+    "Rd_implied_um_per_V": 4.5418947253217645,
+    "rel_dev": 0.0
+   },
+   {
+    "channel": "Force 1y",
+    "item": "5",
+    "Rd_stored_um_per_V": 9.859144575124722,
+    "Rd_implied_um_per_V": 9.859144575124722,
+    "rel_dev": 0.0
+   },
+   {
+    "channel": "Force 1y",
+    "item": "6",
+    "Rd_stored_um_per_V": 4.889305783616283,
+    "Rd_implied_um_per_V": 4.889305783616283,
+    "rel_dev": 0.0
+   },
+   {
+    "channel": "Force 2x",
+    "item": "5",
+    "Rd_stored_um_per_V": 7.552111374279783,
+    "Rd_implied_um_per_V": 7.552111374279783,
+    "rel_dev": 0.0
+   },
+   {
+    "channel": "Force 2x",
+    "item": "6",
+    "Rd_stored_um_per_V": 3.3502472952410014,
+    "Rd_implied_um_per_V": 3.3502472952410014,
+    "rel_dev": 0.0
+   },
+   {
+    "channel": "Force 2y",
+    "item": "5",
+    "Rd_stored_um_per_V": 8.01065916889,
+    "Rd_implied_um_per_V": 8.01065916889,
+    "rel_dev": 0.0
+   },
+   {
+    "channel": "Force 2y",
+    "item": "6",
+    "Rd_stored_um_per_V": 3.457336362738776,
+    "Rd_implied_um_per_V": 3.457336362738776,
+    "rel_dev": 0.0
+   }
+  ],
+  "worst_rel_dev": 0.0,
+  "verdict": "Rd IS defined by the thermal motion (max deviation 0.0e+00) -- b^2 against 2 k_B T / gamma_0 is CIRCULAR on a passively calibrated record"
+ },
+ "axes": [
+  {
+   "channel": "Force 1x",
+   "deconvolved": false,
+   "meta": {
+    "fs_hz": 78125.0,
+    "n": 1252644,
+    "duration_s": 16.0338432,
+    "applied_item": "5",
+    "derived_item": "6",
+    "same_item": false,
+    "naive_kappa_route_error": -0.047539364400534856
+   },
+   "answer_key": {
+    "kappa_pN_per_nm": 0.1287225353482303,
+    "gamma_kg_per_s": 4.101757616306441e-08,
+    "fc_hz": 499.4646125979549,
+    "err_fc_hz": 6.087496284621689,
+    "T_C": 25.0,
+    "diode_alpha": 0.41703416787845804,
+    "diode_f_hz": 8113.027225352045
+   },
+   "truth": {
+    "theta_per_s": 3138.2287153316147,
+    "b2_nm2_per_s": 200714.20003636144,
+    "two_pi_fc": 3138.2287153316142
+   },
+   "deconvolution": null,
+   "observed": {
+    "position_rms_nm": 6.500567864068845,
+    "increment_rms_nm": 0.9133345657385854,
+    "expected_increment_nm": 1.6028542542806026
+   },
+   "psd_band": {
+    "fit_range_hz": [
+     100.0,
+     23000.0
+    ],
+    "nyquist_hz": 39062.5,
+    "psd_ratio_in_band": 1.0175642140164018,
+    "psd_ratio_above_band": 0.8029527281411896,
+    "qv_weighted_ratio": 0.941163366621779,
+    "model_qv_fraction_above_fit_band": 0.24289620976041656,
+    "psd_ratio_near_nyquist": 0.0019354436313999785
+   },
+   "theta_acf": {
+    "theta_per_s": 125.22251165365,
+    "theta_true": 3138.2287153316147,
+    "ratio": 0.03990228979866364,
+    "acf_lag1": 0.9963667510704434,
+    "clean": false
+   },
+   "three_way": {
+    "c": -1394663.226426424,
+    "alpha": 2294588.292151854,
+    "separable": false,
+    "process_resolved": true,
+    "process_significance": 4.693327447961356,
+    "sigma_obs": 0.0
+   },
+   "drift": {
+    "n_rows": 624,
+    "kappa_cov": 4.500006627213645,
+    "certified": false,
+    "law": null,
+    "abstain": "noise",
+    "median_signal_to_band": 0.10686976861802039,
+    "alpha": null,
+    "components": {
+     "1": {
+      "kind": "interval",
+      "lo": -16271.602155829252,
+      "hi": 19350.61163769543,
+      "span": 35622.21379352469,
+      "resolved": false
+     },
+     "x": {
+      "kind": "interval",
+      "lo": -5735.844904203413,
+      "hi": 4282.21947143635,
+      "span": 10018.064375639762,
+      "resolved": false
+     },
+     "x**2": {
+      "kind": "interval",
+      "lo": -406.23997016450926,
+      "hi": 360.0304017556246,
+      "span": 766.2703719201338,
+      "resolved": false
+     },
+     "x**3": {
+      "kind": "interval",
+      "lo": -24.884084598569576,
+      "hi": 24.473622349033676,
+      "span": 49.35770694760325,
+      "resolved": false
+     }
+    },
+    "theta_interval": [
+     -4282.21947143635,
+     5735.844904203413
+    ],
+    "covers_theta": true
+   },
+   "diffusion": {
+    "n_rows": 312,
+    "certified": false,
+    "law": null,
+    "abstain": "parametric",
+    "median_signal_to_band": 1.1221324582195562,
+    "components": {
+     "diffusion:1": {
+      "kind": "interval",
+      "lo": 19047.088225741376,
+      "hi": 119068.90781338995,
+      "span": 100021.81958764857,
+      "resolved": true
+     }
+    },
+    "circular": true,
+    "circular_note": "Rd is defined by D, so this compares our estimator to the instrument's PSD fit, NOT the physics to a measurement",
+    "b2_interval": [
+     19047.088225741376,
+     119068.90781338995
+    ],
+    "covers_b2": false,
+    "b2_mid_over_truth": 0.34406134696526247
+   }
+  },
+  {
+   "channel": "Force 1x",
+   "deconvolved": true,
+   "meta": {
+    "fs_hz": 78125.0,
+    "n": 1252644,
+    "duration_s": 16.0338432,
+    "applied_item": "5",
+    "derived_item": "6",
+    "same_item": false,
+    "naive_kappa_route_error": -0.047539364400534856
+   },
+   "answer_key": {
+    "kappa_pN_per_nm": 0.1287225353482303,
+    "gamma_kg_per_s": 4.101757616306441e-08,
+    "fc_hz": 499.4646125979549,
+    "err_fc_hz": 6.087496284621689,
+    "T_C": 25.0,
+    "diode_alpha": 0.41703416787845804,
+    "diode_f_hz": 8113.027225352045
+   },
+   "truth": {
+    "theta_per_s": 3138.2287153316147,
+    "b2_nm2_per_s": 200714.20003636144,
+    "two_pi_fc": 3138.2287153316142
+   },
+   "deconvolution": {
+    "a": 0.5207483516022455,
+    "pole": 0.3118368032490162
+   },
+   "observed": {
+    "position_rms_nm": 6.576269875733367,
+    "increment_rms_nm": 1.1991953042975392,
+    "expected_increment_nm": 1.6028542542806026
+   },
+   "psd_band": {
+    "fit_range_hz": [
+     100.0,
+     23000.0
+    ],
+    "nyquist_hz": 39062.5,
+    "psd_ratio_in_band": 1.051588787375186,
+    "psd_ratio_above_band": 2.1216449242457784,
+    "qv_weighted_ratio": 1.6839608101326538,
+    "model_qv_fraction_above_fit_band": 0.24289620976041656,
+    "psd_ratio_near_nyquist": 0.005360730122353605
+   },
+   "theta_acf": {
+    "theta_per_s": 124.88209903898891,
+    "theta_true": 3138.2287153316147,
+    "ratio": 0.03979381694803997,
+    "acf_lag1": 0.9936623322242227,
+    "clean": false
+   },
+   "three_way": {
+    "c": -1233607.8680641977,
+    "alpha": 3089127.2307183906,
+    "separable": false,
+    "process_resolved": true,
+    "process_significance": 17.709671785227258,
+    "sigma_obs": 0.0
+   },
+   "drift": {
+    "n_rows": 624,
+    "kappa_cov": 4.500006627213645,
+    "certified": false,
+    "law": null,
+    "abstain": "noise",
+    "median_signal_to_band": 0.12892989123133186,
+    "alpha": null,
+    "components": {
+     "1": {
+      "kind": "interval",
+      "lo": -22186.66441003352,
+      "hi": 29291.524937946233,
+      "span": 51478.18934797976,
+      "resolved": false
+     },
+     "x": {
+      "kind": "interval",
+      "lo": -13089.937050704626,
+      "hi": 6097.193464117513,
+      "span": 19187.13051482214,
+      "resolved": false
+     },
+     "x**2": {
+      "kind": "interval",
+      "lo": -621.2113996742536,
+      "hi": 714.0433545985345,
+      "span": 1335.254754272788,
+      "resolved": false
+     },
+     "x**3": {
+      "kind": "interval",
+      "lo": -39.03496642200198,
+      "hi": 58.896683301840035,
+      "span": 97.93164972384201,
+      "resolved": false
+     }
+    },
+    "theta_interval": [
+     -6097.193464117513,
+     13089.937050704626
+    ],
+    "covers_theta": true
+   },
+   "diffusion": {
+    "n_rows": 312,
+    "certified": false,
+    "law": null,
+    "abstain": "parametric",
+    "median_signal_to_band": 1.6782009475951605,
+    "components": {
+     "diffusion:1": {
+      "kind": "interval",
+      "lo": 62391.01843365921,
+      "hi": 170240.44746648835,
+      "span": 107849.42903282914,
+      "resolved": true
+     }
+    },
+    "circular": true,
+    "circular_note": "Rd is defined by D, so this compares our estimator to the instrument's PSD fit, NOT the physics to a measurement",
+    "b2_interval": [
+     62391.01843365921,
+     170240.44746648835
+    ],
+    "covers_b2": false,
+    "b2_mid_over_truth": 0.5795092371591147
+   }
+  },
+  {
+   "channel": "Force 1y",
+   "deconvolved": false,
+   "meta": {
+    "fs_hz": 78125.0,
+    "n": 1252644,
+    "duration_s": 16.0338432,
+    "applied_item": "5",
+    "derived_item": "6",
+    "same_item": false,
+    "naive_kappa_route_error": -0.019942182661033758
+   },
+   "answer_key": {
+    "kappa_pN_per_nm": 0.13523512620264866,
+    "gamma_kg_per_s": 4.101757616306441e-08,
+    "fc_hz": 524.7345364641319,
+    "err_fc_hz": 6.2976745978578785,
+    "T_C": 25.0,
+    "diode_alpha": 0.41561151101213084,
+    "diode_f_hz": 8398.670338755108
+   },
+   "truth": {
+    "theta_per_s": 3297.004329681125,
+    "b2_nm2_per_s": 200714.20003636144,
+    "two_pi_fc": 3297.0043296811245
+   },
+   "deconvolution": null,
+   "observed": {
+    "position_rms_nm": 5.341995191558895,
+    "increment_rms_nm": 0.910933254657699,
+    "expected_increment_nm": 1.6028542542806026
+   },
+   "psd_band": {
+    "fit_range_hz": [
+     100.0,
+     23000.0
+    ],
+    "nyquist_hz": 39062.5,
+    "psd_ratio_in_band": 0.9994271599510157,
+    "psd_ratio_above_band": 0.7769595348073255,
+    "qv_weighted_ratio": 0.9248126591844311,
+    "model_qv_fraction_above_fit_band": 0.24238659360525763,
+    "psd_ratio_near_nyquist": 6.0237681939013836e-05
+   },
+   "theta_acf": {
+    "theta_per_s": 3323.4242650282627,
+    "theta_true": 3297.004329681125,
+    "ratio": 1.0080133153327382,
+    "acf_lag1": 0.9857876138068092,
+    "clean": true
+   },
+   "three_way": {
+    "c": -1384041.6970788809,
+    "alpha": 2286662.960628603,
+    "separable": false,
+    "process_resolved": true,
+    "process_significance": 4.836828023583803,
+    "sigma_obs": 0.0
+   },
+   "drift": {
+    "n_rows": 624,
+    "kappa_cov": 4.500006627213645,
+    "certified": false,
+    "law": null,
+    "abstain": "noise",
+    "median_signal_to_band": 0.2521528380288456,
+    "alpha": null,
+    "components": {
+     "1": {
+      "kind": "interval",
+      "lo": -34563.45114342874,
+      "hi": 33582.78531911802,
+      "span": 68146.23646254676,
+      "resolved": false
+     },
+     "x": {
+      "kind": "interval",
+      "lo": -16265.397019546815,
+      "hi": 12754.167583762332,
+      "span": 29019.564603309147,
+      "resolved": false
+     },
+     "x**2": {
+      "kind": "interval",
+      "lo": -1095.377693857388,
+      "hi": 1099.901699222954,
+      "span": 2195.279393080342,
+      "resolved": false
+     },
+     "x**3": {
+      "kind": "interval",
+      "lo": -162.31713866051413,
+      "hi": 175.69131528947898,
+      "span": 338.0084539499931,
+      "resolved": false
+     }
+    },
+    "theta_interval": [
+     -12754.167583762332,
+     16265.397019546815
+    ],
+    "covers_theta": true
+   },
+   "diffusion": {
+    "n_rows": 312,
+    "certified": false,
+    "law": null,
+    "abstain": "noise",
+    "median_signal_to_band": 1.4197581064555531,
+    "components": {
+     "diffusion:1": {
+      "kind": "interval",
+      "lo": 26667.446175677276,
+      "hi": 105120.18285166477,
+      "span": 78452.73667598749,
+      "resolved": true
+     }
+    },
+    "circular": true,
+    "circular_note": "Rd is defined by D, so this compares our estimator to the instrument's PSD fit, NOT the physics to a measurement",
+    "b2_interval": [
+     26667.446175677276,
+     105120.18285166477
+    ],
+    "covers_b2": false,
+    "b2_mid_over_truth": 0.3282967249040361
+   }
+  },
+  {
+   "channel": "Force 1y",
+   "deconvolved": true,
+   "meta": {
+    "fs_hz": 78125.0,
+    "n": 1252644,
+    "duration_s": 16.0338432,
+    "applied_item": "5",
+    "derived_item": "6",
+    "same_item": false,
+    "naive_kappa_route_error": -0.019942182661033758
+   },
+   "answer_key": {
+    "kappa_pN_per_nm": 0.13523512620264866,
+    "gamma_kg_per_s": 4.101757616306441e-08,
+    "fc_hz": 524.7345364641319,
+    "err_fc_hz": 6.2976745978578785,
+    "T_C": 25.0,
+    "diode_alpha": 0.41561151101213084,
+    "diode_f_hz": 8398.670338755108
+   },
+   "truth": {
+    "theta_per_s": 3297.004329681125,
+    "b2_nm2_per_s": 200714.20003636144,
+    "two_pi_fc": 3297.0043296811245
+   },
+   "deconvolution": {
+    "a": 0.5089216790225013,
+    "pole": 0.3010476909502897
+   },
+   "observed": {
+    "position_rms_nm": 5.425035229407914,
+    "increment_rms_nm": 1.1810453983044533,
+    "expected_increment_nm": 1.6028542542806026
+   },
+   "psd_band": {
+    "fit_range_hz": [
+     100.0,
+     23000.0
+    ],
+    "nyquist_hz": 39062.5,
+    "psd_ratio_in_band": 1.032669563361777,
+    "psd_ratio_above_band": 2.0160712523491444,
+    "qv_weighted_ratio": 1.6273638081975932,
+    "model_qv_fraction_above_fit_band": 0.24238659360525763,
+    "psd_ratio_near_nyquist": 0.00016407161554535778
+   },
+   "theta_acf": {
+    "theta_per_s": 3333.6579774566235,
+    "theta_true": 3297.004329681125,
+    "ratio": 1.0111172580046455,
+    "acf_lag1": 0.9767905290262754,
+    "clean": true
+   },
+   "three_way": {
+    "c": -1224308.9950808028,
+    "alpha": 3024765.5129657043,
+    "separable": false,
+    "process_resolved": true,
+    "process_significance": 18.428822162017788,
+    "sigma_obs": 0.0
+   },
+   "drift": {
+    "n_rows": 624,
+    "kappa_cov": 4.500006627213645,
+    "certified": false,
+    "law": null,
+    "abstain": "noise",
+    "median_signal_to_band": 0.3127772857053019,
+    "alpha": null,
+    "components": {
+     "1": {
+      "kind": "interval",
+      "lo": -53847.99466150816,
+      "hi": 51505.362868517586,
+      "span": 105353.35753002574,
+      "resolved": false
+     },
+     "x": {
+      "kind": "interval",
+      "lo": -33168.49262124581,
+      "hi": 29270.23360340578,
+      "span": 62438.72622465159,
+      "resolved": false
+     },
+     "x**2": {
+      "kind": "interval",
+      "lo": -1693.9003320568302,
+      "hi": 1762.4404755369442,
+      "span": 3456.340807593774,
+      "resolved": false
+     },
+     "x**3": {
+      "kind": "interval",
+      "lo": -346.848368907746,
+      "hi": 340.9202710479384,
+      "span": 687.7686399556844,
+      "resolved": false
+     }
+    },
+    "theta_interval": [
+     -29270.23360340578,
+     33168.49262124581
+    ],
+    "covers_theta": true
+   },
+   "diffusion": {
+    "n_rows": 312,
+    "certified": false,
+    "law": null,
+    "abstain": "noise",
+    "median_signal_to_band": 2.040525280636224,
+    "components": {
+     "diffusion:1": {
+      "kind": "interval",
+      "lo": 67660.55168643575,
+      "hi": 154781.72399004112,
+      "span": 87121.17230360537,
+      "resolved": true
+     }
+    },
+    "circular": true,
+    "circular_note": "Rd is defined by D, so this compares our estimator to the instrument's PSD fit, NOT the physics to a measurement",
+    "b2_interval": [
+     67660.55168643575,
+     154781.72399004112
+    ],
+    "covers_b2": false,
+    "b2_mid_over_truth": 0.5541269019236785
+   }
+  }
+ ],
+ "seconds": 5.9
+}
