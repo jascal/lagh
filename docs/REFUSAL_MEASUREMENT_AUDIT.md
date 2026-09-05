@@ -44,20 +44,31 @@ consumers and does not recover a measurement by itself.
 ## Shipped measurement and registered result
 
 `lagh.refusal.residual_measurement`, used at both exhaustive residual failures
-in public `verify`, retains y minus the fitted candidate and epsilon on each
-checked row. Original supplied-row indices survive finite-row filtering. The
-partial determination record reports the envelope over all per-row discrepancy
-intervals, explicitly conditional on the declared error model. This is neither
-a fitted common offset nor a confidence interval for a physical parameter.
-The candidate remains uncertified. Cause is `unresolved`; no new candidate is
-fit and no gate threshold changes. Nonfinite measurement arithmetic omits the
-diagnostic while preserving the refusal.
+in public `verify`, retains y minus the fitted candidate and epsilon on checked
+rows. The measurement names the fitted candidate and original supplied-row
+indices. At most 64 rows are returned, ordered by descending absolute residual
+minus epsilon, with total checked, measurable, exceeding, invalid and elided
+counts. The maximum band excess is computed over ALL measurable rows, not the
+sample. Finite rows survive undefined neighbors; invalid alignment or unavailable
+measurements carry an explicit omission reason. Scalar bands broadcast; callable
+bands are explicitly unsupported here until evaluated by a caller.
+
+PR review rejected the original partial determination: its signed union hull
+could hide a detected discrepancy and its generic predicate composed unrelated
+records. **That partial record is removed**, not reinterpreted as a parameter
+interval. This payload is an empirical diagnostic (`evidence: empirical`), with
+unresolved attribution, no new coverage claim and no composable determination.
+The top-level `law` behavior predating this PR is restored: split residual
+refusals do not gain a `law` field; candidate identity lives inside measurement.
+The full-domain path still reevaluates the same candidate after `check`; a shared
+checker residual API is deferred to a separately tested core change.
 
 Artifact: `experiments/results/refusal_measurements.json`, reproduced by
 `.venv/bin/python -m experiments.run_refusal_measurements`.
 
 Registered P1 and P2 met: omitted-quadratic case refuses on 20 certification
-rows; the training-only mismatch refuses on all 100 finite supplied rows.
+rows; the training-only mismatch checks all 100 finite supplied rows, reports
+both exceeding rows first and elides 36 of the remaining rows.
 P3 control retains `2*x_0`; validation results are recorded in the registration.
 P4 attribution stays unresolved. Observational equivalence of additive
 instrument error and an additive omitted contribution is an argument about the

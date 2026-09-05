@@ -36,3 +36,22 @@ control certified `2*x_0`. Targeted tests: `test_refusal.py` 3 passed;
 remains explicitly unattributed; no physical attribution experiment was run.
 No kill criterion fired. Full research program and full-suite validation are
 not claimed by this bounded result. See `REFUSAL_MEASUREMENT_AUDIT.md`.
+
+## Review amendment — registered before revised execution
+
+Claude's PR review found that the partial union hull can hide a detected
+nonzero discrepancy and falsely compose unrelated datasets. Remove `partial`
+entirely; ship only empirical measurements. Preserve the original top-level
+`law` behavior. Predictions: finite rows survive an undefined neighbor; malformed
+index alignment reports an omission; scalar epsilon broadcasts; at most 64 rows
+are returned, prioritizing largest band exceedances, with complete counts and
+maximum excess over every measurable row. The measurement names its candidate.
+The fixed full-domain fixture must assert its intended gate/domain, so a changed
+split fails the experiment instead of silently changing its meaning.
+
+Revised execution: 7 focused measurement tests, 55 public-surface tests, and
+10 MCP verify/server tests passed (7 unrelated MCP tests deselected). Public
+surface retains two empty-array warnings. Ruff F,E9 and diff whitespace checks
+passed. The 20,000-row synthetic diagnostic returned 64 rows, counted all 100
+misses and 19,936 elisions, and serialized below 6,000 characters. Fixture
+artifact regenerated; clean control unchanged. No partial determination ships.

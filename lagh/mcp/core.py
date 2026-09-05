@@ -264,6 +264,10 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
       * SIGNIFICANCE: alpha = |H| q^h over the held-out rows, dof-discounted,
         must be <= 1e-6 or the certificate demotes -> NOISE abstain.
 
+    Residual failures carry a bounded empirical measurement naming the candidate,
+    checked domain and original row indices, with complete counts and explicit
+    omissions. This diagnostic makes no attribution or partial determination.
+
     The domain a certificate claims is the FULL supplied dataset
     (`domain_size`), and the response says how many rows were held out for
     the bound (`n_certification`). A rational form can certify `pinned`; a
@@ -344,9 +348,10 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
     if miss:
         return _abstain("verify", Abstain.STRUCTURAL.value,
                         f"declared form refuted: {miss}/{len(yc)} certification "
-                        "points exceed eps", law=str(scaled),
+                        "points exceed eps",
                         **residual_measurement(yc, pred, eps_c, checked_indices,
-                            domain="certification rows of supplied dataset"))
+                            domain="certification rows of supplied dataset",
+                            candidate=scaled))
     # 3) the exact-coefficient gate (sigma-scaled under noise, as in discovery)
     ok, gated = float_pinned(scaled, syms, Xc, yc, eps_c, float(sigma))
     if not ok:
@@ -374,7 +379,8 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
                         law=str(scaled),
                         **residual_measurement(y, eval_expr(scaled, syms, X),
                             eps_full, finite_indices,
-                            domain="all finite rows of supplied dataset"))
+                            domain="all finite rows of supplied dataset",
+                            candidate=scaled))
     # 6) significance: |H| = 1 (the declared form), h = held-out rows - dof
     alpha_log10 = significance_log10(scaled, yc, eps_c, 1)
     if alpha_log10 > ALPHA_CERT_MAX_LOG10:

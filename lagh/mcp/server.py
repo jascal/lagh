@@ -70,6 +70,13 @@ def build_server():
         `x_0**E`) can only certify `consistent` -- it fits, but the constant is not
         identifiable from finite data. Use this for hypothesis-checking, including
         irrational/known-constant forms you have an a-priori reason to believe.
+
+        A residual refusal may include `measurement`: an empirical diagnostic
+        naming the fitted candidate and checked domain, with at most 64 signed
+        residuals, epsilon bands and original row indices. Counts include all
+        checked, invalid and elided rows; largest band exceedances come first.
+        Attribution is unresolved. No parameter interval or partial determination
+        is claimed. `measurement_omitted` explains unavailable diagnostics.
         """
         return core.verify(X, y, form, sigma=sigma)
 

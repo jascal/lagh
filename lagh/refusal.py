@@ -1,37 +1,57 @@
-"""Measurements retained from failed checks; no causal attribution or new gates."""
+"""Bounded measurements from failed checks; no attribution or determination."""
 import numpy as np
 
-from .certify import determination, domain_qualifier
+MAX_RESIDUAL_ROWS = 64
 
 
-def residual_measurement(y, pred, eps, row_indices, *, domain):
-    """Signed y-pred and declared epsilon envelopes on the checked rows only.
+def residual_measurement(y, pred, eps, row_indices, *, domain, candidate):
+    """Report a bounded sample and aggregate counts on already checked rows.
 
-    Envelopes are conditional on the supplied error model and the fitted candidate;
-    they are not confidence intervals for an omitted physical parameter. No refit.
-    Return no diagnostic if finite arithmetic cannot represent the measurement.
+    Accept evaluated predictions and scalar/row epsilon only. Callable bands must
+    be resolved by the caller for the checked candidate. Invalid input reports an
+    omission, never a determination. Undefined rows do not discard finite peers.
     """
+    def omitted(reason):
+        return {"measurement_omitted": reason}
+
     if pred is None:
-        return {}
-    y, pred, eps = (np.asarray(v, float).ravel() for v in (y, pred, eps))
-    if not (y.shape == pred.shape == eps.shape) or not len(y):
-        return {}
+        return omitted("prediction unavailable")
+    if callable(eps):
+        return omitted("band must be evaluated for the checked candidate")
+    try:
+        y, pred = (np.asarray(v, float).ravel() for v in (y, pred))
+        eps = np.broadcast_to(np.asarray(eps, float), y.shape)
+        indices = np.asarray(row_indices)
+        if (y.shape != pred.shape or indices.shape != y.shape
+                or indices.dtype.kind not in "iu" or np.any(indices < 0)
+                or len(np.unique(indices)) != len(indices)):
+            return omitted("invalid row alignment")
+        if not len(y):
+            return omitted("no checked rows")
+    except (TypeError, ValueError, OverflowError):
+        return omitted("invalid arrays or band shape")
     with np.errstate(over="ignore", invalid="ignore"):
         residual = y - pred
-        lo, hi = residual - eps, residual + eps
-    if np.any(eps < 0) or not np.all(np.isfinite([residual, lo, hi])):
-        return {}
-    partial = determination(
-        [("row_discrepancy_envelope", float(lo.min()), float(hi.max()))],
-        status="refuted-form", qualifier=domain_qualifier(domain),
-        note="envelope over checked rows, conditional on declared epsilon; "
-             "not a common offset estimate or a parameter confidence interval")
+        excess = np.abs(residual) - eps
+    valid = np.isfinite(residual) & np.isfinite(eps) & (eps >= 0) & np.isfinite(excess)
+    available = np.flatnonzero(valid)
+    # Stable order breaks ties by checked-row order, with misses before agreement.
+    chosen = available[np.argsort(-excess[available], kind="stable")[:MAX_RESIDUAL_ROWS]]
+    invalid_count = int((~valid).sum())
+    if not len(available):
+        return {**omitted("no finite residuals with valid bands"),
+                "measurement_invalid_rows": invalid_count}
     return {"measurement": {
-        "tag": "empirical", "quantity": "observation-minus-candidate",
-        "row_indices": [int(i) for i in row_indices],
-        "residual": residual.tolist(), "epsilon": eps.tolist(),
-        "domain": domain, "attribution": "unresolved",
+        "evidence": "empirical", "quantity": "observation-minus-candidate",
+        "candidate": str(candidate), "domain": str(domain),
+        "row_indices": [int(i) for i in indices[chosen]],
+        "residual": residual[chosen].tolist(), "epsilon": eps[chosen].tolist(),
+        "n_checked": len(y), "n_measurable": len(available),
+        "n_exceeding": int(np.sum(excess[available] > 0)),
+        "max_band_excess": float(excess[available].max()),
+        "n_invalid": invalid_count, "n_elided": len(available) - len(chosen),
+        "selection": "up to 64 rows, descending absolute residual minus epsilon",
+        "attribution": "unresolved",
         "extra_observable": "independent instrument calibration or a controlled "
                             "intervention separating the proposed physical causes",
-        "uncertainty": "declared epsilon envelope; no additional coverage claim"},
-        "partial": partial}
+        "uncertainty": "declared epsilon envelope; no additional coverage claim"}}
