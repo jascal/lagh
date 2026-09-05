@@ -29,6 +29,7 @@ from ..certify import (Abstain, check, epsilon, float_pinned, pinned, sample_box
 from ..characterize import characterize
 from ..engine import ALPHA_CERT_MAX_LOG10, Result, discover
 from ..formparse import FormError, parse_form
+from ..refusal import residual_measurement
 from ..passive import discover_passive
 
 # nameable constants a free-fit exponent might be reaching for (fit's diagnosis)
@@ -263,6 +264,10 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
       * SIGNIFICANCE: alpha = |H| q^h over the held-out rows, dof-discounted,
         must be <= 1e-6 or the certificate demotes -> NOISE abstain.
 
+    Residual failures carry a bounded empirical measurement naming the candidate,
+    checked domain and original row indices, with complete counts and explicit
+    omissions. This diagnostic makes no attribution or partial determination.
+
     The domain a certificate claims is the FULL supplied dataset
     (`domain_size`), and the response says how many rows were held out for
     the bound (`n_certification`). A rational form can certify `pinned`; a
@@ -281,6 +286,7 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
         return _abstain("verify", "bad-request", str(e)[:200])
     m = np.isfinite(yr) & np.all(np.isfinite(Xr), axis=1)
     X, y = Xr[m], yr[m]
+    finite_indices = np.flatnonzero(m)
     se_full = None
     if se is not None:
         se_full = np.asarray(se, float).ravel()
@@ -300,6 +306,7 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
                         f"only {n} finite points; too thin to certify")
     if n < 15:
         Xf, yf, Xc, yc, se_c = X, y, X, y, se_full
+        checked_indices = finite_indices
         mode_note = ("tiny-data mode: scale refit and exhaustive check on all "
                      "points; refit exposure bounded by the stated dof-discounted "
                      "alpha")
@@ -307,6 +314,7 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
         i = np.random.default_rng(0).permutation(n)
         a, b = int(0.6 * n), int(0.8 * n)
         Xf, yf, Xc, yc = X[i[:a]], y[i[:a]], X[i[b:]], y[i[b:]]
+        checked_indices = finite_indices[i[b:]]
         se_c = None if se_full is None else se_full[i[b:]]
         mode_note = (f"scale refit on {len(Xf)} rows, exhaustively checked on "
                      f"{len(Xc)} held-out rows, then re-checked on all {n} "
@@ -340,7 +348,10 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
     if miss:
         return _abstain("verify", Abstain.STRUCTURAL.value,
                         f"declared form refuted: {miss}/{len(yc)} certification "
-                        "points exceed eps")
+                        "points exceed eps",
+                        **residual_measurement(yc, pred, eps_c, checked_indices,
+                            domain="certification rows of supplied dataset",
+                            candidate=scaled))
     # 3) the exact-coefficient gate (sigma-scaled under noise, as in discovery)
     ok, gated = float_pinned(scaled, syms, Xc, yc, eps_c, float(sigma))
     if not ok:
@@ -365,7 +376,11 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
                         f"{full['nmiss']}/{n} rows exceed eps ({full['nuncov']} "
                         "undefined) -- rows outside the certification split "
                         "contradict it, so no full-domain claim is possible",
-                        law=str(scaled))
+                        law=str(scaled),
+                        **residual_measurement(y, eval_expr(scaled, syms, X),
+                            eps_full, finite_indices,
+                            domain="all finite rows of supplied dataset",
+                            candidate=scaled))
     # 6) significance: |H| = 1 (the declared form), h = held-out rows - dof
     alpha_log10 = significance_log10(scaled, yc, eps_c, 1)
     if alpha_log10 > ALPHA_CERT_MAX_LOG10:
