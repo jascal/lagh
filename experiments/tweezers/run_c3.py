@@ -34,7 +34,9 @@ from lagh.instrument import (attribute_deviation, axis_gate,             # noqa:
                              gate_record, local_drag, realized_diffusion,
                              retention)
 
-OUT = Path("experiments/results/tweezers_c3.json")
+# The published C3 snapshot belongs to commit 489bd97. Current classifiers
+# may change diagnostics; never overwrite that historical artifact on rerun.
+OUT = Path("experiments/results/tweezers_c3_current.json")
 ACF = {"min_lag": 8, "max_lag": 200}
 
 

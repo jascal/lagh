@@ -138,3 +138,56 @@ held-out PSD prediction agreed within 0.87%. R-C3 stays open.
 Ruff F,E9 and whitespace checks pass. Figure and final numeric artifact generated
 from the script. See CASE_STUDY_TWEEZERS_C4.md for domains, measured amendments,
 uncertainty limits and retained failed initial artifacts.
+
+## PR #13 review correction — registered before revised execution
+
+The pre-review C4 artifact is preserved in commit ca424ca. Withdraw the claim
+that unfiltered decimation independently validates aliasing or Retention._full:
+equal-lag increments are a subsample consistency check, and the trained native-
+band PSD comparison tests half-to-half spectral repeatability only. The discarded
+spectral integral is a counterfactual truncation, not observed above-Nyquist power.
+
+The original 40–48 kHz test overlaps the acquisition rolloff (~43 kHz, identified
+in review), while the subtracted model omits that transfer. The previous rejection
+cannot determine detector-floor whiteness. New exploratory passband tests are
+20–30 and 40–43 kHz, unchanged 10% bar; 30–40 kHz is training-band repeatability
+ONLY, never ANDed into validation. Report 43–45, 45–48, 48–50 kHz separately as
+rolloff diagnostics. This is a newly registered protocol, not a rescue of the
+original prediction. Predict unresolved detector whiteness and null sigma_obs,
+regardless of the composite thermal+floor passband test. The transfer is not
+independently known, so do not treat Retention.measured (clipped from this noisy
+PSD) as an independent correction. The old test-set inclusion is a protocol
+violation; disjoint temporal halves are not reuse of the same observations, but
+the former 'none of these test bands fits its correction' wording is withdrawn.
+
+Remove theta<1 from admission of the free-theta signature; separate and report
+the existing 0.08 variance-materiality floor from the 0.08 residual tolerance.
+Test behavior on both sides of theta=1 and the materiality boundary; no hysteresis
+is asserted without an estimator uncertainty model. Restore axis_gate on each
+half before interpretation. Report apparent/thermal/calibration theta ratios
+and half-to-half spread. If apparent theta is unstable beyond the tolerance,
+label the slow signature as compatibility, not identified physical cause; keep
+window-specific covariance diagnostics, never a promoted law certificate.
+
+Guard missing ACF, empty strides, failed thermal fits and negative sensitivity
+subtractions. Validate diode provenance with explicit exceptions under python -O.
+Name the excess as a within-window, sample-mean-removed statistic, not population
+variance; explicitly report the unbounded/unknown slow-process mean-removal bias.
+Show thermal-clipping sensitivity by removing that attenuation as an alternative
+subtraction; do not call the narrow thermal-fit range total uncertainty. Reuse
+observed covariance across sensitivity models. Predict that these domain limits
+survive even if the numeric 2.402 mV summary changes little.
+
+C3 remains a historical frozen artifact from its recorded commit; add an explicit
+current-classifier replay artifact rather than overwrite its stage-unit-assuming
+analysis or promise byte-identical reexecution with a changed classifier. R-C3
+stays open; no new stage unit or drive frequency.
+
+
+Revised validation: 25 C4 tests and 21 instrument tests passed, each file in
+its own process. New checks cover training-band exclusion from validation,
+rolloff exclusion, absent ACF/empty strides/failed fits, unresolved sensitivity,
+stiffness increases, free-theta admission, mean-removal matching, explicit diode
+provenance under python -O, direct voltage conversion, and unresolved plotting.
+Ruff F,E9 and diff whitespace checks passed. The revised real-data artifact and
+figure were regenerated; no full-suite or new certified-physics claim is made.

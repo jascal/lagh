@@ -96,3 +96,135 @@ def test_independent_slow_process_attributes_from_actual_observations():
     ratios = (apparent/theta, d['plateau']/(2*theta), float(x.var()))
     assert attribute_deviation(*ratios)['verdict'] == 'slow-contaminant'
     assert abs(ratios[1]-1) < .08
+
+
+@pytest.mark.parametrize('theta', [.999, 1., 1.001])
+def test_free_theta_does_not_gate_slow_signature(theta):
+    a = attribute_deviation(theta, 1., 3.)
+    assert a['verdict'] == 'slow-contaminant'
+    assert a['slow_contaminant_admission']['theta_used_for_admission'] is False
+
+
+def test_materiality_is_reported_and_independent_of_residual_tolerance():
+    a = attribute_deviation(.5, 1., 1.079, tol=.04)
+    b = attribute_deviation(.5, 1., 1.081, tol=.04)
+    assert not a['slow_contaminant_admission']['admitted']
+    assert b['slow_contaminant_admission']['admitted']
+    assert a['slow_contaminant_admission']['variance_floor'] == .08
+    assert a['slow_contaminant_admission']['distance_to_floor'] < 0
+    assert b['slow_contaminant_admission']['distance_to_floor'] > 0
+    assert attribute_deviation(.5, 1., 1.06, contaminant_variance_floor=.02)['verdict'] == 'slow-contaminant'
+
+
+def test_stiffness_increase_still_has_coverage():
+    assert attribute_deviation(1.4, 1., 1/1.4)['verdict'] == 'stiffness'
+
+
+def test_noise_training_repeatability_cannot_vote_in_validation():
+    from experiments.tweezers.run_c4 import floor_comparison
+    fr = np.arange(0, 50001, 100.)
+    thermal = np.ones_like(fr)*1e-13
+    train, held = thermal+2e-13, thermal+2e-13
+    held[(fr >= 30000) & (fr < 40000)] += 1e-12
+    # Simulate a stopband as well: neither it nor the training band may vote.
+    held[fr >= 43000] = 0
+    n = floor_comparison(fr, train, held, thermal)
+    assert n['passband_model_passed']
+    assert n['training_band_repeatability']['excess_over_train_floor'] > 2
+    assert [b['band_hz'] for b in n['passband_validation']] == [[20000.,30000.], [40000.,43000.]]
+    assert n['sigma_obs_V'] is None and n['detector_whiteness'] == 'unresolved'
+    held[(fr >= 20000) & (fr < 30000)] += 1e-12
+    assert not floor_comparison(fr, train, held, thermal)['passband_model_passed']
+
+
+def test_unresolved_subtractions_are_counted_in_sensitivity():
+    from experiments.tweezers.run_c4 import sensitivity_summary
+    r = sensitivity_summary([{'rms_V': 2.}, {'verdict': 'unresolved', 'reason': 'negative excess'}])
+    assert r['rms_V_range'] == [2., 2.] and r['n_unresolved'] == 1
+    assert r['verdict'] == 'partly-unresolved'
+    assert sensitivity_summary([{'reason': 'fit failed'}])['rms_V_range'] is None
+
+
+def test_mean_removal_matches_the_thermal_estimator():
+    fs, n = 100., 32
+    fr = np.linspace(0, fs/2, 33)
+    ret = Retention(fr, np.full_like(fr, 2/fs), np.ones_like(fr),
+                    np.ones_like(fr), fs, 1., 1., (1., 20.), 1., 10.)
+    x = np.tile([-1., 1.], n//2)
+    a = covariance_measurement(x, fs, ret)
+    b = covariance_measurement(x+100., fs, ret)
+    assert a['thermal_mean_removal_V2'] == pytest.approx(1/n)
+    assert a['thermal_retained_variance_V2'] == pytest.approx(1-1/n)
+    assert a['recorded_excess_variance_V2'] == b['recorded_excess_variance_V2']
+    assert a['population_variance'] is None
+    assert 'unknown' in a['uncertainty']
+
+
+@pytest.mark.parametrize('failure', ['acf', 'stride', 'fit'])
+def test_axis_gate_survives_unresolved_paths(monkeypatch, failure):
+    from experiments.tweezers import run_c4 as campaign
+    x = np.arange(128.)
+    de = {'D (V^2/s)': 1., 'fc (Hz)': 1.}
+    fr = np.linspace(0, 50, 65)
+    ret = Retention(fr, np.ones_like(fr), np.ones_like(fr), np.ones_like(fr),
+                    100., 1., 1e9 if failure == 'stride' else 1., (1,20), 1., 10.)
+    monkeypatch.setattr(campaign, 'read_axis', lambda *_: (x, de, {'fs_hz': 100.}))
+    def fake_fit(*args):
+        if failure == 'fit':
+            raise ValueError('no spectral bins')
+        return ret
+    monkeypatch.setattr(campaign, 'fit', fake_fit)
+    calls = []
+    def gate(*args, **kwargs):
+        calls.append(kwargs)
+        return {'passed': False, 'theta_acf': None if failure == 'acf' else 1.,
+                'ratio': None if failure == 'acf' else 1.}
+    monkeypatch.setattr(campaign, 'axis_gate', gate)
+    r = campaign.contaminated_axis(None, 'Force 1x')
+    assert len(calls) == 2
+    assert all(h['law_certificate'] is False and 'reason' in h for h in r['halves'])
+
+
+def test_diode_provenance_is_checked_with_python_optimization():
+    import subprocess
+    script = '''
+from experiments.tweezers.run_c4 import validate_diode_model
+cal = {'Trap sum power (V)': 0., 'alpha': .9, 'f_diode (Hz)': 10.,
+       'Diode alpha max': .5, 'Diode alpha delta': .1, 'Diode alpha rate': 1.,
+       'Diode frequency max': 11., 'Diode frequency delta': 1., 'Diode frequency rate': 1.}
+try:
+    validate_diode_model(cal)
+except ValueError:
+    print('refused')
+else:
+    raise RuntimeError('provenance check vanished')
+'''
+    result = subprocess.run([sys.executable, '-O', '-c', script],
+                            cwd=Path(__file__).resolve().parents[1],
+                            capture_output=True, text=True, check=True)
+    assert result.stdout.strip() == 'refused'
+
+
+def test_plot_keeps_unresolved_covariance_visible(tmp_path):
+    from experiments.tweezers.plot_c4 import plot
+    r = {'passive': {'Force 1x': {'halves': [{}, {'reason': 'no ACF'}]}},
+         'noise_floor': {'Force 1x': {'verdict': 'unresolved'}}}
+    path = tmp_path/'unresolved.png'
+    plot(r, path)
+    assert path.stat().st_size > 0
+
+
+def test_voltage_adapter_uses_applied_response_directly(monkeypatch):
+    from experiments.tweezers import adapter
+    class Dataset:
+        attrs = {'Sample rate (Hz)': 10., 'Start time (ns)': 100, 'Stop time (ns)': 200}
+        def __getitem__(self, key):
+            return np.array([2., 4., 6.])
+    cal = {'conversion_start': 0, 'voltage_start': 100,
+           'Rf_transform': 2., 'Rd (um/V)': 3., 'item': 'test'}
+    monkeypatch.setattr(adapter, 'bfp_calibrations', lambda *_: [cal])
+    f = {'Force HF/Force 1x': Dataset()}
+    _, volts, _, _, _ = adapter.bfp_voltage(f, 'Force 1x')
+    _, nm, _, _, _ = adapter.bfp_position_nm(f, 'Force 1x')
+    np.testing.assert_array_equal(volts, [1., 2., 3.])
+    np.testing.assert_array_equal(nm, [3000., 6000., 9000.])

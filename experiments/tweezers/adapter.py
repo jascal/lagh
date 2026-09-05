@@ -134,8 +134,8 @@ def bfp_calibrations(f, channel: str) -> list:
     return sorted(out, key=lambda r: r["conversion_start"])
 
 
-def bfp_position_nm(f, channel: str):
-    """(t, x_nm, applied, derived, meta) for one high-frequency force channel.
+def bfp_voltage(f, channel: str):
+    """(t, volts, applied, derived, meta) for one high-frequency force channel.
 
     THE UNIT CHAIN IS NOT ONE CALIBRATION (C1 provenance finding). The stored pN
     values were produced with whichever calibration was ACTIVE at acquisition
@@ -154,14 +154,19 @@ def bfp_position_nm(f, channel: str):
     inside = [c for c in cals if t0 <= c["voltage_start"] <= t1]
     derived = inside[-1] if inside else applied
     volts = d[()] / applied["Rf_transform"]
-    x_nm = volts * derived["Rd (um/V)"] * 1e3
-    t = np.arange(len(x_nm)) / fs
-    meta = {"fs_hz": fs, "n": len(x_nm), "duration_s": len(x_nm) / fs,
+    t = np.arange(len(volts)) / fs
+    meta = {"fs_hz": fs, "n": len(volts), "duration_s": len(volts) / fs,
             "applied_item": applied["item"], "derived_item": derived["item"],
             "same_item": applied["item"] == derived["item"],
             "naive_kappa_route_error": float(
                 applied["Rf_transform"] / derived["Rf_transform"] - 1.0)}
-    return t, x_nm, applied, derived, meta
+    return t, volts, applied, derived, meta
+
+
+def bfp_position_nm(f, channel: str):
+    """Position via applied force-to-volts and derived volts-to-nm calibrations."""
+    t, volts, applied, derived, meta = bfp_voltage(f, channel)
+    return t, volts * derived["Rd (um/V)"] * 1e3, applied, derived, meta
 
 
 def diode_deconvolve(u, alpha: float, f_diode: float, dt: float):

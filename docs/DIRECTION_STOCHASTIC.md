@@ -646,25 +646,22 @@ which agree with each other and with the calibration's own Rd to 2%. A second dr
 frequency would determine Rd and f_c together and is what the next record should carry.
 
 
-## C4 follow-up, 2026-09-05: attribution is scoped; noise must pass its own model
+## C4 follow-up and PR #13 correction, 2026-09-05
 
-Pre-execution predictions and measured amendments: `TWEEZERS_C4_REGISTRATION.md`.
-Result: `CASE_STUDY_TWEEZERS_C4.md`, `experiments/results/tweezers_c4.json`.
-All empirical; no new certificates. Slow contamination passes on passive 1x's
-second half after thermal-rate short-lag inversion (diffusion ratio 1.059),
-with 2.402 mV recorded excess RMS and no covariance 1/e crossing by 0.5 s.
-Its late level shift kills a stationary single-timescale interpretation. The
-new signature overlaps a stiffness decrease, so those triples now refuse.
-A first-run spurious 3.8% control excess motivated requiring material excess
-at the existing 8% tolerance; the original failure artifact is retained.
+Registration: `TWEEZERS_C4_REGISTRATION.md`; revised result:
+`CASE_STUDY_TWEEZERS_C4.md`. The second-half slow signature is compatible at
+b² ratio 1.059, but unstable theta precludes identifying a unique physical cause.
+The 2.402 mV excess RMS is sample-mean-removed and window-specific; population
+uncertainty is unknown. Axis gates are retained and no law certificate is added.
 
-The 100 kHz noise-floor file has a pre-calibrated diode at a different stored
-power: evaluate the stored model at Diagnostics power. Its 30–40 kHz residual
-is repeatable, but all four axes reject a white floor; no iid sigma_obs is
-measured or propagated. Held-out unfiltered 100→50 kHz decimation is predicted
-within 0.87% by retaining aliases; Nyquist truncation discards 13–25% of the
-shortest-lag content. Cross-record sampling-rate causality remains open because
-the other acquisitions differ in bead, power and detector settings.
+The original whiteness test overlapped an anti-alias stopband without modeling
+that transfer. Its detector-whiteness rejection is withdrawn. New exploratory
+20–30 and 40–43 kHz composite-model validation is separated from 30–40 kHz
+training-band repeatability and >43 kHz rolloff. Whiteness and sigma_obs remain
+unresolved. Native-band PSD predictions within 0.87% establish temporal spectral
+repeatability, not alias validation or evidence for Retention._full. The
+13–25% counterfactual truncation fractions are arithmetic, not a second
+acquisition measurement. Cross-record fs-only causality remains open.
 
-**R-C3 remains open.** No stage length is declared by either experiment, no
-second drive frequency is supplied, and the 13% discrepancy is not resolved.
+The current classifier replay is separate from C3's frozen historical artifact.
+**R-C3 remains open:** no stage unit or second drive frequency is supplied.
