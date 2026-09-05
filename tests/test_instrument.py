@@ -403,14 +403,16 @@ def test_the_three_ratios_name_the_drag_and_only_the_drag(drag):
         a["hypotheses"]["drag"]["max_residual"]
 
 
-def test_the_three_ratios_tell_a_stiffness_change_from_a_drag_change():
+def test_stiffness_and_slow_contamination_are_ambiguous_without_another_observable():
     """The same timescale deficit, two different causes: only the diffusion and
     the variance tell them apart, and both are read in the detector's own units."""
     c = 0.70
     _, volts, _ = bead(drag_over_bulk=1.0, kappa_pN_nm=c * KAPPA_REF_PN, driven=False)
     th_r, d_r, v_r, _ = _ratios(volts)
     a = attribute_deviation(th_r, d_r, v_r)
-    assert a["verdict"] == "stiffness"
+    assert a["verdict"] == "unattributed"
+    assert a["hypotheses"]["stiffness"]["max_residual"] <= a["tol"]
+    assert a["hypotheses"]["slow-contaminant"]["max_residual"] <= a["tol"]
     assert abs(a["hypotheses"]["stiffness"]["value"] / c - 1) < 0.10
     assert abs(th_r / c - 1) < 0.10 and abs(d_r - 1) < 0.10      # D did NOT move
 

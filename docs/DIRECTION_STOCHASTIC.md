@@ -644,3 +644,27 @@ the stage's amplitude is declared in a length unit.** On this file it does not, 
 and that is where the remaining disagreement is localised — not in the thermal ratios,
 which agree with each other and with the calibration's own Rd to 2%. A second drive
 frequency would determine Rd and f_c together and is what the next record should carry.
+
+
+## C4 follow-up, 2026-09-05: attribution is scoped; noise must pass its own model
+
+Pre-execution predictions and measured amendments: `TWEEZERS_C4_REGISTRATION.md`.
+Result: `CASE_STUDY_TWEEZERS_C4.md`, `experiments/results/tweezers_c4.json`.
+All empirical; no new certificates. Slow contamination passes on passive 1x's
+second half after thermal-rate short-lag inversion (diffusion ratio 1.059),
+with 2.402 mV recorded excess RMS and no covariance 1/e crossing by 0.5 s.
+Its late level shift kills a stationary single-timescale interpretation. The
+new signature overlaps a stiffness decrease, so those triples now refuse.
+A first-run spurious 3.8% control excess motivated requiring material excess
+at the existing 8% tolerance; the original failure artifact is retained.
+
+The 100 kHz noise-floor file has a pre-calibrated diode at a different stored
+power: evaluate the stored model at Diagnostics power. Its 30–40 kHz residual
+is repeatable, but all four axes reject a white floor; no iid sigma_obs is
+measured or propagated. Held-out unfiltered 100→50 kHz decimation is predicted
+within 0.87% by retaining aliases; Nyquist truncation discards 13–25% of the
+shortest-lag content. Cross-record sampling-rate causality remains open because
+the other acquisitions differ in bead, power and detector settings.
+
+**R-C3 remains open.** No stage length is declared by either experiment, no
+second drive frequency is supplied, and the 13% discrepancy is not resolved.

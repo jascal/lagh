@@ -144,3 +144,12 @@ Zero confident-wrong. Nothing here is `proved`.
 A **second drive frequency** determines Rd and f_c together with no appeal to the ACF,
 and their consistency tests both. A **declared stage unit** would settle it outright.
 Neither is in this file, and no claim here rests on the stage channel.
+
+
+## C4 follow-up
+
+`CASE_STUDY_TWEEZERS_C4.md` attributes passive 1x's second-half deviation to
+slow additive contamination under an independently fitted thermal model,
+while rejecting a stationary whole-record interpretation. Its measured
+noise-floor residual does not validate a scalar iid sigma_obs. R-C3 and the
+13% stage-amplitude discrepancy remain open; no stage unit was introduced.

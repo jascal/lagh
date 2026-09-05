@@ -240,3 +240,22 @@ def dark(f) -> dict:
     proposal's R7 null is therefore not available in this container as written."""
     g = f["measurement_datum"]["mean_background_signal_in_darkness"]
     return {k: float(g[k][()]) for k in g}
+
+
+def bfp_diode_at_power(calibration: dict, power) -> dict:
+    """Producer's pre-calibrated diode model evaluated at measured sum volts.
+
+    Pylake DiodeCalibrationModel: max - delta exp(-rate * mean(power)).
+    Recorded diode values belong to the calibration's power, not necessarily
+    the acquisition's. Do not infer this correction if the model is absent.
+    """
+    values = np.asarray(power, float)
+    if not values.size or not np.all(np.isfinite(values)):
+        raise ValueError('finite nonempty diagnostic power required')
+    voltage = max(float(np.mean(values)), 0.0)
+    def evaluate(name):
+        return float(calibration[f'Diode {name} max']
+                     - calibration[f'Diode {name} delta']
+                     * np.exp(-calibration[f'Diode {name} rate'] * voltage))
+    return {'alpha': evaluate('alpha'), 'f_diode (Hz)': evaluate('frequency'),
+            'power_V': voltage, 'source': 'pre-calibrated model at recorded diagnostic power'}
