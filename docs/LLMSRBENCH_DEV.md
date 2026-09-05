@@ -246,3 +246,22 @@ certificates, zero structurally wrong). The gap is entirely conjecture-side;
 synth is a grammar/term problem, not an epsilon problem. Next (no-LLM per user
 directive): mine the 19 verified forms into grammar capabilities; census the
 synth novel terms; build the residual-structure gate.
+
+## Re-verification under the gated `verify` (2026-09-04)
+
+jascal/lagh#4 found that the MCP `verify` tool -- the checker behind every
+`llm-verified` certificate above -- ran none of the gates discovery runs on its own
+winner (vacuity, the coefficient gate, the parametric gate, a full-data check, the
+significance bound). A changed gate means a re-scored ledger, so all 19 v1
+`llm-verified` certificates were re-verified with the gated tool on the same
+SUB_CAP subsample at the same declared σ_rep = 1e-4, from the stored forms and
+with no LLM call (`experiments/reverify_gated_verify.py`, artifact
+`experiments/results/reverify_gated_verify.json`).
+
+**19/19 stand**, and each now carries a significance bound: α ≤ 1e-632 … 1e-391
+(the certificates were previously issued without one). Two honest observations,
+both pre-existing behaviour of the σ > 0 regime rather than effects of the gates:
+three forms carry a near-unit rational scale (`343080/343081`, `407605/407606`) and
+two a Float coefficient (`4.3416…`) that the parametric gate accepts at σ_rep —
+structure is what these certificates claim, and coefficients under declared noise
+are noise-limited, as the README states. Tag: empirical (re-scored artifact).
