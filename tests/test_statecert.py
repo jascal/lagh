@@ -180,3 +180,31 @@ def test_the_partial_record_says_the_same_thing_as_the_modes_dict():
             assert rec["kind"] in ("interval", "exact")
             assert rec["lo"] == m["interval"][0]
             assert rec["hi"] == m["interval"][1]
+
+
+def test_marginal_intervals_are_not_a_joint_claim_and_the_inner_box_is():
+    """jascal/lagh#5: two correlated modes. Each marginal projection contains
+    the truth and each endpoint is attainable, but their CORNER violates the
+    band at 2x -- so the certificate must not say every combination reproduces
+    the observations. The inner box must, at every corner."""
+    import itertools
+    B = np.tile([[1., 1.], [1., -1.]], (10, 1))
+    y = B @ np.array([1., 2.])
+    eps = np.full(len(y), .1)
+    c = certify_state(B, y, eps, ["a", "b"])
+    assert c.certified
+    for lab, truth in (("a", 1.0), ("b", 2.0)):
+        lo, hi = c.modes[lab]["interval"]
+        assert lo <= truth <= hi
+    corner = np.array([c.modes[k]["interval"][1] for k in ("a", "b")])
+    assert np.max(np.abs(B @ corner - y) / eps) > 1.5       # the marginal box overclaims
+    for pt in itertools.product(*[c.inner_box[k] for k in ("a", "b")]):
+        assert np.max(np.abs(B @ np.array(pt) - y) / eps) <= 1 + 1e-9
+    assert np.max(np.abs(B @ np.array(c.feasible_center) - y) / eps) <= 1 + 1e-9
+    for lab in ("a", "b"):                                   # inner box inside the projection
+        (ilo, ihi), (mlo, mhi) = c.modes[lab]["inner_interval"], c.modes[lab]["interval"]
+        assert mlo - 1e-12 <= ilo <= ihi <= mhi + 1e-12
+    assert "MARGINAL" in c.partial["note"] and "inner_box" in c.partial["note"]
+    assert not any("every initial condition whose amplitudes lie" in n for n in c.notes)
+    J = c.joint_constraint
+    assert np.allclose(J["B"], B) and np.allclose(J["eps"], eps) and J["labels"] == ["a", "b"]

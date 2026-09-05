@@ -27,11 +27,24 @@ design matrix is exact and only the target is noisy.
 
 What a state certificate says, and how it differs from a law certificate:
 
-* CLAIM. Over the stated observation window and patch family, every initial
-  condition whose mode coefficients lie in the reported intervals reproduces the
-  observations within the declared band. Modes outside the reported set are NOT
-  determined -- they are named, not silently dropped. An ill-posed inversion's
-  honest output is a resolution statement.
+* CLAIM. Over the stated observation window and patch family, the reported
+  per-mode intervals are MARGINAL projections of the feasible set of initial
+  conditions {a : |B a - y| <= eps}: each is the exact range of that mode over
+  every state consistent with the observations, so the true state's amplitude
+  lies in it, and each endpoint is attained by SOME feasible state. A
+  combination of endpoints is NOT guaranteed feasible -- the projections'
+  Cartesian product generally contains states that violate the band (measured,
+  jascal/lagh#5: two correlated modes, the upper-endpoint corner at 2x the
+  band; this module used to claim every such combination). The JOINT guarantee
+  is carried separately: `inner_box`, an axis-aligned box centred on the LP
+  feasible centre, every point of which reproduces the observations within
+  the band (a triangle-inequality bound, see `_inner_box`), and the constraint
+  itself (`joint_constraint`) for a consumer that needs to construct valid
+  states. The inner box is NOT claimed to contain the truth, and the marginal
+  intervals are NOT claimed to be jointly feasible: two claims, kept apart.
+  Modes outside the reported set are NOT determined -- they are named, not
+  silently dropped. An ill-posed inversion's honest output is a resolution
+  statement.
 * DOMAIN. The observation window and the basis. It says nothing about other
   times, other solutions, or modes above the reported cut.
 * ALPHA. With a fixed basis and a known law there is no search: |H| = 1, so
@@ -112,13 +125,17 @@ def _feasible_center(B, y, eps):
 
 
 def _mode_bounds(B, y, eps, j):
-    """The exact JOINT interval for mode j: min and max of a_j over the whole
-    feasible set {a : |B a - y| <= eps}, by two linear programs.
+    """The exact MARGINAL interval for mode j: min and max of a_j over the
+    whole feasible set {a : |B a - y| <= eps}, by two linear programs -- the
+    projection of the feasible set onto that axis.
 
     This is the honest resolution statement, and it differs from bisecting one
     coefficient with the others HELD FIXED (certify.parameter_interval), which
     answers a conditional question and is necessarily narrower. Both are
-    reported; where they differ the joint one is the claim.
+    reported; where they differ the projection is the claim. What the
+    projection is NOT is a joint guarantee: its endpoints are attained by
+    different feasible states, and a point of the product of projections need
+    not be feasible at all (`_inner_box` is the jointly feasible box).
 
     Returns (lo, hi), or None when the projection is unbounded -- which is
     exactly what UNDETERMINED means."""
@@ -139,6 +156,41 @@ def _mode_bounds(B, y, eps, j):
     return (min(out), max(out))
 
 
+def _inner_box(B, y, eps, a, ref):
+    """The largest box a +- t*ref inside the feasible set {a' : |B a' - y| <= eps},
+    in closed form. For any a' with |a'_j - a_j| <= w_j,
+
+        |B_i a' - y_i|  <=  |B_i a - y_i| + sum_j |B_ij| w_j,
+
+    so with w = t*ref every point of the box is feasible as soon as
+
+        t  <=  min_i (eps_i - |B_i a - y_i|) / sum_j |B_ij| ref_j.
+
+    That is a JOINT guarantee -- the one the marginal projections do not give
+    (jascal/lagh#5) -- and it is proved by the triangle inequality rather than
+    by a solver, so it has no failure mode to fall back from. `ref` sets the
+    box's proportions: the marginal half-widths, so the box is shaped like the
+    projection it sits inside (and can never exceed it), or the declared
+    amp_max for a mode whose projection is unbounded. `a` is the LP feasible
+    centre (max slack), the natural centre. Returns (lo, hi, t), or None when
+    `a` is itself outside the band -- which certify_state has already ruled
+    out before calling this."""
+    B = np.asarray(B, float)
+    a = np.asarray(a, float)
+    ref = np.maximum(np.asarray(ref, float), 0.0)
+    room = np.asarray(eps, float) - np.abs(B @ a - np.asarray(y, float))
+    if np.any(room < 0):
+        return None
+    load = np.abs(B) @ ref
+    with np.errstate(divide="ignore", invalid="ignore"):
+        ratio = np.where(load > 0, room / np.where(load > 0, load, 1.0), np.inf)
+    t = float(np.min(ratio)) if ratio.size else 1.0
+    if not np.isfinite(t):
+        t = 1.0        # no row loads the box: the reference widths are feasible
+    w = t * ref
+    return a - w, a + w, t
+
+
 @dataclass
 class StateCertificate:
     certified: bool
@@ -157,6 +209,14 @@ class StateCertificate:
     amp_max_declared: float | None = None
     amp_max_certified: float | None = None
     slack: float | None = None                  # LP margin inside the band
+    # THE JOINT SIDE of the claim (jascal/lagh#5). `modes[*]["interval"]` is a
+    # MARGINAL projection and guarantees nothing about combinations; these do:
+    feasible_center: list | None = None         # one state that certifies (LP centre)
+    inner_box: dict = field(default_factory=dict)   # label -> [lo, hi]: EVERY state
+                                                # in this box certifies
+    inner_scale: float | None = None            # inner box = centre +- scale*ref
+    joint_constraint: dict | None = None        # {B, y, eps, labels}: the band
+                                                # itself, for building valid states
     # PARTIAL DETERMINATION in the shared vocabulary (`certify.determination`),
     # keyed by MODE LABEL. `modes` above stays as it is -- it carries the
     # conditional interval and the fitted value, which the shared record does
@@ -230,6 +290,10 @@ def backpropagate(cert: StateCertificate, kind: str, t0: float, *, nu=0.1,
     gain, so the widths are unchanged; that is reported rather than recomputed,
     and no per-mode box claim is made for it (a rotation does not map a box to a
     box).
+
+    What is carried back is the MARGINAL interval of each mode (a diagonal map
+    sends a projection to a projection); it inherits the marginal semantics --
+    the true amplitude lies in it, combinations are not jointly guaranteed.
 
     A mode is RESOLVED when its back-propagated interval EXCLUDES ZERO -- a
     threshold-free criterion: below it the certificate cannot even determine
@@ -340,7 +404,7 @@ def certify_state(B, y, eps, labels, *, window=(), amp_max: float = 10.0,
             "or the declared law/basis is wrong for this data")
         return cert
     for jj, lab in enumerate(labels):
-        iv = _mode_bounds(B, y, eps, jj)            # the JOINT projection
+        iv = _mode_bounds(B, y, eps, jj)            # the MARGINAL projection
         others = y - (B @ a - B[:, jj] * a[jj])     # ...and the conditional one
         cond = parameter_interval(sp.Float(a[jj]) * syms[0], [syms[0]],
                                   B[:, [jj]], others, eps, sp.Float(a[jj]),
@@ -362,25 +426,50 @@ def certify_state(B, y, eps, labels, *, window=(), amp_max: float = 10.0,
                            float(0.5 * (iv[1] - iv[0]))}
         if iv is None:
             cert.undetermined.append(lab)
+    # the JOINT claim, kept apart from the marginal one: a box every point of
+    # which certifies, shaped like the projections and centred on the LP
+    # centre; plus the band itself for a consumer that builds states
+    ref = np.array([m["half_width"] if m["half_width"] is not None
+                    else float(amp_max) for m in cert.modes.values()])
+    ib = _inner_box(B, y, eps, a, ref)
+    for jj, lab in enumerate(labels):
+        cert.modes[lab]["inner_interval"] = (
+            None if ib is None else [float(ib[0][jj]), float(ib[1][jj])])
+        if ib is not None:
+            cert.inner_box[lab] = cert.modes[lab]["inner_interval"]
+    cert.inner_scale = None if ib is None else float(ib[2])
+    cert.feasible_center = [float(v) for v in a]
+    cert.joint_constraint = {
+        "form": "|B a - y| <= eps, row-wise; a indexed as `labels`",
+        "B": np.asarray(B, float).tolist(), "y": np.asarray(y, float).tolist(),
+        "eps": np.asarray(eps, float).tolist(), "labels": list(labels)}
     cert.partial = determination(
         [(lab, None if m["interval"] is None else m["interval"][0],
           None if m["interval"] is None else m["interval"][1])
          for lab, m in cert.modes.items()],
         status="state",
-        note="joint projections over the feasible set of initial conditions: "
-             "every state whose amplitudes lie in these intervals reproduces "
-             "the observations within the declared band")
+        note="MARGINAL projections of the feasible set of initial conditions: "
+             "each interval is the exact range of that mode over every state "
+             "consistent with the observations, so the true amplitude lies in "
+             "it and each endpoint is attained by some feasible state; a "
+             "COMBINATION of endpoints is not guaranteed feasible -- the "
+             "jointly guaranteed box is `inner_box`, and the band itself is "
+             "`joint_constraint`")
     cert.certified = True
     # |H| = 1: fixed basis, known law, no search over forms. This is a pure
     # chance-agreement bound and is NOT comparable with a law certificate's
     # alpha, which is corrected for the candidate space it searched.
     cert.alpha_log10 = significance_log10(expr, y, eps, 1)
     cert.notes.append(
-        f"state certificate over window {tuple(window)}: every initial "
-        f"condition whose amplitudes lie in the reported intervals reproduces "
-        f"the observations within the declared band; "
-        f"{len(cert.undetermined)} of {dof} modes are UNDETERMINED "
-        f"({', '.join(cert.undetermined) or 'none'}) and are not claimed")
+        f"state certificate over window {tuple(window)}: the per-mode intervals "
+        "are MARGINAL projections of the feasible set (the true amplitude of "
+        "each mode lies in its interval; combinations of endpoints are NOT "
+        "guaranteed feasible); every state in the reported inner box "
+        f"(centre +- {cert.inner_scale if cert.inner_scale is not None else 'n/a'}"
+        " x the marginal half-widths) reproduces the observations within the "
+        f"declared band; {len(cert.undetermined)} of {dof} modes are "
+        f"UNDETERMINED ({', '.join(cert.undetermined) or 'none'}) and are not "
+        "claimed")
     if info:
         cert.notes.append(f"assembly: {info}")
     return cert
