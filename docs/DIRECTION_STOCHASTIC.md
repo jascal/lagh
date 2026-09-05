@@ -578,3 +578,38 @@ framing.
 
 Level 3, SPDEs, higher dimension, partial observation and non-Markovian noise are
 explicitly out of the minimal suite.
+
+## Registered 2026-09-05: the instrument as declared inputs (C2, `lagh/instrument.py`)
+
+C1 on the C-Trap (`CASE_STUDY_TWEEZERS_C1.md`) measured that `f = x²/2` — adopted at
+Level 0 for identifiability, since a stationary drift is vacuous under `f = x` —
+determines θ THROUGH b², so on a band-limited instrument the diffusion's attenuation
+lands on the drift (measured: b² 0.554, θ 0.539 of truth on the same axis). That
+coupling is registered here alongside the identifiability reason: on a real record
+`f = x²/2` is only usable with the band loss declared, and the b²-free lagged form
+(`ito.build_lag_rows`, commit 14511a5) is the drift estimator for real data — a
+SCORED estimator, not a certified one, its ridge stated there.
+
+Three declared inputs precede any real-data claim, in this order
+(`CASE_STUDY_TWEEZERS_C2.md`):
+
+1. **`instrument.axis_gate`** — the record's ACF timescale against the calibration's
+   2πf_c within a factor 1.25. Scale-free, read beyond the detector's filter. An axis
+   that fails is refused before anything is estimated.
+2. **`instrument.band_loss`** — the fraction of the process's quadratic variation the
+   record holds: r_nyquist (geometric, full-band denominator) × r_diode (the
+   instrument's declared detector model) × r_antialias (measured above the fit
+   ceiling). Enters `build_qv_rows(band_loss=(r, r_se))` the way `sigma_obs` does;
+   its uncertainty sits in the band at coefficient 1. Measured on the C-Trap: 0.32,
+   and the corrected diffusion reads 1.01–1.02 of truth on both axes (raw: 0.32).
+3. **`instrument.drive_scale`** — on an active record, Rd from the stage drive with
+   the fluid-drag transfer f_d/√(f_d²+f_c²): the one displacement scale that does not
+   pass through the thermal motion. Measured: 3.755 stage-units/V against a stored
+   4.568 µm/V that is defined from D on that file too.
+
+Prediction R-C2 (registered before the active axes were gated): a near-surface record
+will fail the gate on BOTH axes by a common factor, because its drag is
+frequency-dependent and the calibration's fit range does not resolve that — measured
+0.692 and 0.697. The question of which of the two drag readings (1.48 from the scale
+ratio, 2.0 from the declared-loss QV) is right needs the height above the surface,
+which the file does not carry: **open**.
