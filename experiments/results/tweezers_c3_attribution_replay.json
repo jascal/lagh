@@ -1,0 +1,258 @@
+{
+  "evidence": "empirical",
+  "source": {
+    "file": "tweezers_c3.json",
+    "bytes": 13710,
+    "sha256": "c81d52bb265f1b07032606de8feb348266c968b4267ec82158a5e4b4b7dfe482"
+  },
+  "method": "current classifier on frozen C3 ratios; no data or stage rerun",
+  "axes": {
+    "passive/Force 1x": {
+      "historical": {
+        "verdict": "unattributed",
+        "hypotheses": {
+          "drag": {
+            "parameter": "F",
+            "value": 7.810673571804834,
+            "max_residual": 5.912913172783924
+          },
+          "stiffness": {
+            "parameter": "c",
+            "value": 0.06984321258884409,
+            "max_residual": 0.7348288924709538
+          },
+          "scale": {
+            "parameter": "s",
+            "value": 0.7385949734039836,
+            "max_residual": 1.0711649615833394
+          }
+        },
+        "ranked": [
+          "stiffness",
+          "scale",
+          "drag"
+        ],
+        "tol": 0.08,
+        "note": "no single change of drag, stiffness or scale explains the three ratios: stiffness leaves 73.5%, scale leaves 107.1%, drag leaves 591.3%"
+      },
+      "current": {
+        "verdict": "unattributed",
+        "hypotheses": {
+          "drag": {
+            "parameter": "F",
+            "value": 7.810673571804834,
+            "max_residual": 5.912913172783924
+          },
+          "stiffness": {
+            "parameter": "c",
+            "value": 0.06984321258884409,
+            "max_residual": 0.7348288924709538
+          },
+          "scale": {
+            "parameter": "s",
+            "value": 0.7385949734039836,
+            "max_residual": 1.0711649615833394
+          },
+          "slow-contaminant": {
+            "parameter": "v",
+            "value": 2.796662520237528,
+            "max_residual": 0.1149402021179925,
+            "unpredicted": [
+              "apparent_theta"
+            ],
+            "note": "excess variance in reference-variance units; not a timescale"
+          }
+        },
+        "ranked": [
+          "slow-contaminant",
+          "stiffness",
+          "scale",
+          "drag"
+        ],
+        "tol": 0.08,
+        "ratios": [
+          0.01852040203557042,
+          0.8850597978820075,
+          3.796662520237528
+        ],
+        "slow_contaminant_admission": {
+          "variance_excess": 2.796662520237528,
+          "variance_floor": 0.08,
+          "distance_to_floor": 2.716662520237528,
+          "admitted": true,
+          "theta_used_for_admission": false,
+          "note": "declared materiality boundary, no uncertainty or hysteresis model"
+        },
+        "note": "no unique signature passes: slow-contaminant leaves 11.5%, stiffness leaves 73.5%, scale leaves 107.1%, drag leaves 591.3%"
+      }
+    },
+    "passive/Force 1y": {
+      "historical": {
+        "verdict": "consistent",
+        "ratios": [
+          1.011376077220373,
+          1.016167584870299,
+          1.0171851964451917
+        ],
+        "tol": 0.08,
+        "note": "all three ratios are 1 within tolerance: the record agrees with its calibration and there is nothing to attribute"
+      },
+      "current": {
+        "verdict": "consistent",
+        "ratios": [
+          1.011376077220373,
+          1.016167584870299,
+          1.0171851964451917
+        ],
+        "tol": 0.08,
+        "slow_contaminant_admission": {
+          "variance_excess": 0.017185196445191675,
+          "variance_floor": 0.08,
+          "distance_to_floor": -0.06281480355480833,
+          "admitted": false,
+          "theta_used_for_admission": false,
+          "note": "declared materiality boundary, no uncertainty or hysteresis model"
+        },
+        "note": "all three ratios are 1 within tolerance: the record agrees with its calibration and there is nothing to attribute"
+      }
+    },
+    "active/Force 1x": {
+      "historical": {
+        "verdict": "drag",
+        "hypotheses": {
+          "drag": {
+            "parameter": "F",
+            "value": 1.348078260827493,
+            "max_residual": 0.058431555092954356
+          },
+          "stiffness": {
+            "parameter": "c",
+            "value": 0.83201914475783,
+            "max_residual": 0.21485896935742022
+          },
+          "scale": {
+            "parameter": "s",
+            "value": 1.0590688937176438,
+            "max_residual": 0.2991547799611627
+          }
+        },
+        "ranked": [
+          "drag",
+          "stiffness",
+          "scale"
+        ],
+        "tol": 0.08,
+        "note": "drag: F = 1.348 explains all three ratios to 5.8%, while stiffness leaves 21.5%"
+      },
+      "current": {
+        "verdict": "drag",
+        "hypotheses": {
+          "drag": {
+            "parameter": "F",
+            "value": 1.348078260827493,
+            "max_residual": 0.058431555092954356
+          },
+          "stiffness": {
+            "parameter": "c",
+            "value": 0.83201914475783,
+            "max_residual": 0.21485896935742022
+          },
+          "scale": {
+            "parameter": "s",
+            "value": 1.0590688937176438,
+            "max_residual": 0.2991547799611627
+          }
+        },
+        "ranked": [
+          "drag",
+          "stiffness",
+          "scale"
+        ],
+        "tol": 0.08,
+        "ratios": [
+          0.7008452200388373,
+          0.7851410306425798,
+          1.012407786377551
+        ],
+        "slow_contaminant_admission": {
+          "variance_excess": 0.012407786377550911,
+          "variance_floor": 0.08,
+          "distance_to_floor": -0.06759221362244909,
+          "admitted": false,
+          "theta_used_for_admission": false,
+          "note": "declared materiality boundary, no uncertainty or hysteresis model"
+        },
+        "note": "drag: F = 1.348 matches its predicted ratios to 5.8%, while stiffness leaves 21.5%"
+      }
+    },
+    "active/Force 1y": {
+      "historical": {
+        "verdict": "drag",
+        "hypotheses": {
+          "drag": {
+            "parameter": "F",
+            "value": 1.3587518913966063,
+            "max_residual": 0.04193661893482687
+          },
+          "stiffness": {
+            "parameter": "c",
+            "value": 0.8399156559863304,
+            "max_residual": 0.2331663892928516
+          },
+          "scale": {
+            "parameter": "s",
+            "value": 1.068286940004907,
+            "max_residual": 0.2936522977267605
+          }
+        },
+        "ranked": [
+          "drag",
+          "stiffness",
+          "scale"
+        ],
+        "tol": 0.08,
+        "note": "drag: F = 1.359 explains all three ratios to 4.2%, while stiffness leaves 23.3%"
+      },
+      "current": {
+        "verdict": "drag",
+        "hypotheses": {
+          "drag": {
+            "parameter": "F",
+            "value": 1.3587518913966063,
+            "max_residual": 0.04193661893482687
+          },
+          "stiffness": {
+            "parameter": "c",
+            "value": 0.8399156559863304,
+            "max_residual": 0.2331663892928516
+          },
+          "scale": {
+            "parameter": "s",
+            "value": 1.068286940004907,
+            "max_residual": 0.2936522977267605
+          }
+        },
+        "ranked": [
+          "drag",
+          "stiffness",
+          "scale"
+        ],
+        "tol": 0.08,
+        "ratios": [
+          0.7063477022732395,
+          0.7668336107071484,
+          1.0012607309187938
+        ],
+        "slow_contaminant_admission": {
+          "variance_excess": 0.001260730918793751,
+          "variance_floor": 0.08,
+          "distance_to_floor": -0.07873926908120625,
+          "admitted": false,
+          "theta_used_for_admission": false,
+          "note": "declared materiality boundary, no uncertainty or hysteresis model"
+        },
+        "note": "drag: F = 1.359 matches its predicted ratios to 4.2%, while stiffness leaves 23.3%"
+      }
+    }
+  }
+}

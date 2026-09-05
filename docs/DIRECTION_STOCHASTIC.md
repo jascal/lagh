@@ -644,3 +644,24 @@ the stage's amplitude is declared in a length unit.** On this file it does not, 
 and that is where the remaining disagreement is localised — not in the thermal ratios,
 which agree with each other and with the calibration's own Rd to 2%. A second drive
 frequency would determine Rd and f_c together and is what the next record should carry.
+
+
+## C4 follow-up and PR #13 correction, 2026-09-05
+
+Registration: `TWEEZERS_C4_REGISTRATION.md`; revised result:
+`CASE_STUDY_TWEEZERS_C4.md`. The second-half slow signature is compatible at
+b² ratio 1.059, but unstable theta precludes identifying a unique physical cause.
+The 2.402 mV excess RMS is sample-mean-removed and window-specific; population
+uncertainty is unknown. Axis gates are retained and no law certificate is added.
+
+The original whiteness test overlapped an anti-alias stopband without modeling
+that transfer. Its detector-whiteness rejection is withdrawn. New exploratory
+20–30 and 40–43 kHz composite-model validation is separated from 30–40 kHz
+training-band repeatability and >43 kHz rolloff. Whiteness and sigma_obs remain
+unresolved. Native-band PSD predictions within 0.87% establish temporal spectral
+repeatability, not alias validation or evidence for Retention._full. The
+13–25% counterfactual truncation fractions are arithmetic, not a second
+acquisition measurement. Cross-record fs-only causality remains open.
+
+The current classifier replay is separate from C3's frozen historical artifact.
+**R-C3 remains open:** no stage unit or second drive frequency is supplied.

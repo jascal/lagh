@@ -19,7 +19,9 @@ Three tools, in the order C1 says to apply them:
   the instrument's distortions; a slow contaminant below the calibration's fit
   floor shows up here and nowhere else (measured: one axis at 4% of its
   nominal timescale, 1.9x thermal variance, invisible to a 100 Hz-floored PSD
-  fit). Gate first; nothing below is claimed on an axis that fails.
+  fit). Gate first; stochastic law claims still refuse on a failed axis.
+  Separate C3/C4 diagnostics retain the gate and report deviations, never
+  upgrading its failure to a law certificate.
 
 * `band_loss` -- the fraction of the process's quadratic variation the RECORD
   can contain, as a product of three declared or measured factors:
@@ -553,35 +555,51 @@ def realized_diffusion(x, dt: float, theta: float, ret: Retention, *,
 
 
 ATTRIBUTION_TOL = 0.08
+CONTAMINANT_VARIANCE_FLOOR = 0.08  # separate materiality declaration, C4 control failure
 
 
 def attribute_deviation(theta_ratio: float, diffusion_ratio: float,
-                        variance_ratio: float, *, tol: float = ATTRIBUTION_TOL) -> dict:
+                        variance_ratio: float, *, tol: float = ATTRIBUTION_TOL,
+                        contaminant_variance_floor: float = CONTAMINANT_VARIANCE_FLOOR) -> dict:
     """WHICH single quantity moved, from three ratios that need no length scale.
 
     A record deviating from its calibration deviates in a signature, because the
-    three observables respond differently to the three things that could be
-    wrong. Writing each ratio as (record / calibration's expectation):
+    three observables respond differently to the candidate causes. Each ratio
+    is (record / calibration's expectation):
 
         drag       gamma -> F gamma      (theta, D, Var) = (1/F, 1/F, 1)
         stiffness  kappa -> c kappa      (theta, D, Var) = (c,   1,   1/c)
         scale      Rd    -> s Rd         (theta, D, Var) = (1,   1/s^2, 1/s^2)
+        slow-contaminant  added variance v  (free, 1, 1+v), v > materiality floor
 
     -- because theta = kappa/gamma, D = kB T/(gamma Rd^2) and Var = kB T/(kappa
     Rd^2), all read in the DETECTOR's units so that no length is assumed. Each
-    hypothesis carries one free parameter, fitted from the triple in log space;
-    the largest residual decides. A record that no single change explains gets
-    an abstention with all three residuals, not a nearest guess.
+    drag/stiffness/scale hypothesis carries one free parameter fitted in log
+    space. Slow contamination fits only excess variance; apparent theta is
+    unpredicted and short-lag diffusion must agree independently. Its excess must
+    exceed contaminant_variance_floor (C4: a 3.8% control excess otherwise
+    falsely attributed). Theta is unpredicted and cannot gate admission. More
+    than one passing signature refuses, including the intrinsic overlap between
+    a stiffness decrease and slow contamination. A timescale for the contaminant
+    must come from its covariance, not this triple.
 
     Measured (tweezers C3): the C-Trap's near-surface record reads
-    (0.701, 0.710, 1.012) -- the drag signature at F = 1.42, and neither of the
-    others within a factor of ten in residual."""
+    (0.701, 0.785, 1.012) -- the drag signature at F = 1.348, and neither of the
+    others explains it within tolerance."""
     r = np.array([float(theta_ratio), float(diffusion_ratio), float(variance_ratio)])
     if np.any(r <= 0) or not np.all(np.isfinite(r)):
         return {"verdict": "unreadable", "ratios": r.tolist()}
+    admission = {
+        "variance_excess": float(r[2] - 1),
+        "variance_floor": float(contaminant_variance_floor),
+        "distance_to_floor": float(r[2] - 1 - contaminant_variance_floor),
+        "admitted": bool(r[2] > 1 + contaminant_variance_floor),
+        "theta_used_for_admission": False,
+        "note": "declared materiality boundary, no uncertainty or hysteresis model"}
     lr = np.log(r)
     if np.max(np.abs(np.expm1(np.abs(lr)))) <= tol:
         return {"verdict": "consistent", "ratios": r.tolist(), "tol": tol,
+                "slow_contaminant_admission": admission,
                 "note": ("all three ratios are 1 within tolerance: the record "
                          "agrees with its calibration and there is nothing to "
                          "attribute")}
@@ -595,15 +613,25 @@ def attribute_deviation(theta_ratio: float, diffusion_ratio: float,
         resid = lr - coef * lp
         out[name] = {"parameter": param, "value": float(np.exp(lp)),
                      "max_residual": float(np.max(np.abs(np.expm1(resid))))}
+    # The apparent theta is deliberately NOT predicted by this signature. The
+    # variance estimates v; short-lag diffusion is the remaining prediction.
+    # It cannot identify a contaminant timescale, or distinguish a stiffness
+    # change that also passes. Ambiguity keeps the existing refusal rule.
+    if admission["admitted"]:
+        out["slow-contaminant"] = {
+            "parameter": "v", "value": float(r[2] - 1),
+            "max_residual": float(abs(r[1] - 1)),
+            "unpredicted": ["apparent_theta"],
+            "note": "excess variance in reference-variance units; not a timescale"}
     ranked = sorted(out, key=lambda k: out[k]["max_residual"])
     best, second = ranked[0], ranked[1]
     ok = out[best]["max_residual"] <= tol and out[second]["max_residual"] > tol
     return {"verdict": best if ok else "unattributed", "hypotheses": out,
-            "ranked": ranked, "tol": tol,
+            "ranked": ranked, "tol": tol, "ratios": r.tolist(),
+            "slow_contaminant_admission": admission,
             "note": (f"{best}: {out[best]['parameter']} = {out[best]['value']:.3f} "
-                     f"explains all three ratios to {out[best]['max_residual']:.1%}, "
+                     f"matches its predicted ratios to {out[best]['max_residual']:.1%}, "
                      f"while {second} leaves {out[second]['max_residual']:.1%}"
                      if ok else
-                     "no single change of drag, stiffness or scale explains the "
-                     "three ratios: " + ", ".join(
+                     "no unique signature passes: " + ", ".join(
                          f"{k} leaves {out[k]['max_residual']:.1%}" for k in ranked))}
