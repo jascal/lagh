@@ -89,6 +89,16 @@ def _significance_gate(cert: Certificate) -> Certificate:
     return cert
 
 
+def _check_quiet(expr, syms, X, y, eps) -> dict:
+    """`check`, but a band that cannot be assembled for this law (a callable
+    per-candidate band handed a non-sympy law) is a FAILED check, never an
+    exception: the conservative direction."""
+    try:
+        return check(expr, syms, X, y, eps)
+    except Exception:                                          # noqa: BLE001
+        return {"certified": False, "nmiss": 0, "nuncov": len(X)}
+
+
 LINEAR_BASIS_BUDGET = 20000     # exhaustive-support budget (see _basis_supports)
 
 
@@ -830,8 +840,40 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     if max_tier >= 6 and dim == 1 and c6_quasipoly.is_integer_lattice(X_all, y_all):
         qr = c6_quasipoly.recover_integer(X_all[:, 0], y_all)
         if qr.certified:
+            # THE ROUNDING IS NOT THE DATA (jascal/lagh#3). `recover_integer`
+            # hands the exact tier ROUNDED observations and the exact tier
+            # certifies those. Before that becomes a certificate the recovered
+            # law must reproduce the ORIGINAL inputs and outputs within the
+            # declared band -- on the certification split at its own eps and
+            # on every row at the full-data band -- and the certificate states
+            # the quantization it permitted (machine precision, the eligibility
+            # rule in is_integer_lattice). Measured: a 0.1 perturbation at
+            # |y| ~ 1e5 rounded away and certified at alpha ~ 1e-211 against a
+            # declared band of 2e-8.
+            on_cert = _check_quiet(qr.quasipoly, syms, X_cert, y_cert, eps)
+            on_all = _check_quiet(qr.quasipoly, syms, X_all, y_all, eps_all)
+            dx, dy = c6_quasipoly.lattice_deviation(X_all, y_all)
+            if not (on_cert["certified"] and on_all["certified"]):
+                cert = Certificate(False, on_all["nmiss"], on_all["nuncov"],
+                                   qr.domain_size, bounds, str(qr.quasipoly),
+                                   abstain=Abstain.STRUCTURAL.value,
+                                   notes=[qr.note,
+                                          ("integer recovery certified the ROUNDED "
+                                           "observations, but the recovered law fails "
+                                           "the original observations at the declared "
+                                           f"band ({on_all['nmiss']}/{len(y_all)} rows "
+                                           f"miss, {on_all['nuncov']} uncovered; max "
+                                           f"|y - round(y)| = {dy:.3g}) -- not a "
+                                           "certificate")])
+                return Result(cert, None, 6, total)
             cert = Certificate(True, 0, 0, qr.domain_size, bounds, str(qr.quasipoly),
-                               notes=[qr.note],
+                               notes=[qr.note,
+                                      (f"integer lattice: max |x - round(x)| = {dx:.2g}, "
+                                       f"max |y - round(y)| = {dy:.2g} (eligibility "
+                                       f"<= {MACHINE_REL:.2g}*max(1,|v|), machine "
+                                       "precision); the recovered law was re-checked "
+                                       "against the ORIGINAL observations on all "
+                                       f"{len(y_all)} rows at the declared band")],
                                alpha_log10=significance_log10(
                                    qr.quasipoly, y_all, np.full(len(y_all), 0.5),
                                    max(total, 1)),
