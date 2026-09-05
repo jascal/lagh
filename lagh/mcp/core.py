@@ -58,10 +58,14 @@ def _characterize_oracle(oracle, box_final, abstain_reason, seed=0):
 
 
 def _prep(X, y):
+    """Finite rows of (X, y) as float arrays; raises ValueError on a shape a tool
+    cannot interpret (the tools turn that into a `bad-request` refusal)."""
     X = np.asarray(X, float)
     if X.ndim == 1:
         X = X[:, None]
     y = np.asarray(y, float).ravel()
+    if X.ndim != 2 or len(X) != len(y):
+        raise ValueError(f"X has shape {X.shape} but y has {len(y)} entries")
     m = np.isfinite(y) & np.all(np.isfinite(X), axis=1)
     return X[m], y[m]
 
@@ -177,7 +181,10 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
     # ---- data-only path (MCP wire): the PASSIVE regime (docs/DIRECTION_PASSIVE.md):
     # K deterministic re-splits + the full-data exhaustive gate, one code path shared
     # with benchmark submission track A.
-    X, y = _prep(X, y)
+    try:
+        X, y = _prep(X, y)
+    except (TypeError, ValueError) as e:
+        return _abstain("recover", "bad-request", str(e)[:200])
     if len(X) < 8:
         return {"tag": "open", "tool": "recover", "certified": False,
                 "abstain": Abstain.RANGE.value,
@@ -263,10 +270,15 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
     identified from finite data. Below 15 points the split machinery
     collapses, so (as `recover` does) the scale is refit and checked on all
     points, with the exposure bounded by the stated dof-discounted alpha."""
-    Xr = np.asarray(X, float)
-    if Xr.ndim == 1:
-        Xr = Xr[:, None]
-    yr = np.asarray(y, float).ravel()
+    try:
+        Xr = np.asarray(X, float)
+        if Xr.ndim == 1:
+            Xr = Xr[:, None]
+        yr = np.asarray(y, float).ravel()
+        if Xr.ndim != 2 or len(Xr) != len(yr):
+            raise ValueError(f"X has shape {Xr.shape} but y has {len(yr)} entries")
+    except (TypeError, ValueError) as e:
+        return _abstain("verify", "bad-request", str(e)[:200])
     m = np.isfinite(yr) & np.all(np.isfinite(Xr), axis=1)
     X, y = Xr[m], yr[m]
     se_full = None
@@ -381,7 +393,12 @@ def fit(X, y, *, sigma: float = 0.0, top: int = 5) -> dict:
     """UNBOUNDED scout. Best-guess conjectures + an identifiability diagnosis + a
     next_action pointer. NO `certified` field -- a guarantee cannot be read off this.
     Its real product is the diagnosis (what pins, what does not, what it would take)."""
-    X, y = _prep(X, y)
+    try:
+        X, y = _prep(X, y)
+    except (TypeError, ValueError) as e:
+        return {"tag": "exploratory", "tool": "fit", "conjectures": [],
+                "diagnosis": {"kind": "bad-request", "detail": str(e)[:200]},
+                "next_action": "fix_input"}
     dim = X.shape[1]
     syms = _syms(dim)
     out: dict = {"tag": "exploratory", "tool": "fit",
