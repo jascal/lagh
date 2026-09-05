@@ -1,0 +1,302 @@
+{
+ "campaign": "stochastic-real (C-Trap)",
+ "stage": "C2",
+ "axes": [
+  {
+   "record": "passive",
+   "channel": "Force 1x",
+   "fs_hz": 78125.0,
+   "n": 1252644,
+   "calibration": {
+    "fc_hz": 499.4646125979549,
+    "err_fc_hz": 6.087496284621689,
+    "alpha": 0.41703416787845804,
+    "f_diode_hz": 8113.027225352045,
+    "Rd_um_per_V": 4.5418947253217645,
+    "gamma0_kg_per_s": 4.101757616306441e-08,
+    "T_C": 25.0,
+    "fit_range_hz": [
+     100.0,
+     23000.0
+    ]
+   },
+   "reference": {
+    "theta_per_s": 3138.2287153316142,
+    "b2_bulk_nm2_per_s": 200714.20003636144
+   },
+   "scale_note": "stored Rd (defined by the thermal motion: circular for b^2)",
+   "axis_gate": {
+    "passed": false,
+    "theta_acf": 125.22251165365,
+    "theta_ref": 3138.2287153316142,
+    "ratio": 0.03990228979866365,
+    "tol": 1.25,
+    "acf_lag1": 0.9963667510704434,
+    "note": "timescale is 0.0399x the calibration's: the axis carries something the calibration's fit range never saw"
+   },
+   "band_loss": {
+    "fc_fit_hz": 542.6231612131421,
+    "r_nyquist": 0.7689390994506512,
+    "r_diode": 0.4386570657351339,
+    "r_antialias": 0.9415784315802237,
+    "r_total": 0.3175949408186821,
+    "psd_ratio_above_range": 0.5712157026800303,
+    "r_se": 0.0002998826023979384,
+    "r_halves": [
+     0.3170898205215815,
+     0.31649005531678565
+    ],
+    "alpha": 0.41703416787845804,
+    "f_diode_hz": 8113.027225352045,
+    "fit_range_hz": [
+     100.0,
+     23000.0
+    ],
+    "fs_hz": 78125.0
+   },
+   "qv": {
+    "raw_over_bulk": 0.3246925509841932,
+    "declared_over_bulk": 1.0223479950505987
+   },
+   "verdict": "axis refused by the ACF gate; nothing claimed"
+  },
+  {
+   "record": "passive",
+   "channel": "Force 1y",
+   "fs_hz": 78125.0,
+   "n": 1252644,
+   "calibration": {
+    "fc_hz": 524.7345364641319,
+    "err_fc_hz": 6.2976745978578785,
+    "alpha": 0.41561151101213084,
+    "f_diode_hz": 8398.670338755108,
+    "Rd_um_per_V": 4.889305783616283,
+    "gamma0_kg_per_s": 4.101757616306441e-08,
+    "T_C": 25.0,
+    "fit_range_hz": [
+     100.0,
+     23000.0
+    ]
+   },
+   "reference": {
+    "theta_per_s": 3297.0043296811245,
+    "b2_bulk_nm2_per_s": 200714.20003636144
+   },
+   "scale_note": "stored Rd (defined by the thermal motion: circular for b^2)",
+   "axis_gate": {
+    "passed": true,
+    "theta_acf": 3323.4242650282627,
+    "theta_ref": 3297.0043296811245,
+    "ratio": 1.0080133153327382,
+    "tol": 1.25,
+    "acf_lag1": 0.9857876138068092,
+    "note": "timescale agrees with the calibration"
+   },
+   "band_loss": {
+    "fc_fit_hz": 595.5988240110748,
+    "r_nyquist": 0.7684538787513818,
+    "r_diode": 0.4444148819974487,
+    "r_antialias": 0.9372225956963622,
+    "r_total": 0.32007308161259745,
+    "psd_ratio_above_range": 0.5473881133510731,
+    "r_se": 0.00010294913547850837,
+    "r_halves": [
+     0.3194211225121735,
+     0.3192152242412165
+    ],
+    "alpha": 0.41561151101213084,
+    "f_diode_hz": 8398.670338755108,
+    "fit_range_hz": [
+     100.0,
+     23000.0
+    ],
+    "fs_hz": 78125.0
+   },
+   "qv": {
+    "raw_over_bulk": 0.3229877530935661,
+    "declared_over_bulk": 1.0091062686880254
+   },
+   "diffusion": {
+    "raw": {
+     "n_rows": 312,
+     "certified": false,
+     "abstain": "noise",
+     "median_signal_to_band": 1.4197581064555536,
+     "b2_interval": [
+      26667.44617567729,
+      105120.18285166475
+     ],
+     "covers_bulk": false,
+     "mid_over_bulk": 0.3282967249040361
+    },
+    "declared": {
+     "n_rows": 312,
+     "certified": false,
+     "abstain": "noise",
+     "median_signal_to_band": 3.049091393457673,
+     "b2_interval": [
+      159154.8677107438,
+      252574.2488179365
+     ],
+     "covers_bulk": true,
+     "mid_over_bulk": 1.0256601587084804
+    }
+   },
+   "drift": {
+    "theta_acf_over_ref": 1.0080133153327382,
+    "lagform": {
+     "lag16": {
+      "theta_apparent": 2342.8777863152745,
+      "theta_inverted": 3191.3232831562696,
+      "ratio": 0.9679463428138488
+     },
+     "lag32": {
+      "theta_apparent": 1855.4332131067033,
+      "theta_inverted": 3484.0227242383644,
+      "ratio": 1.056723733382336
+     }
+    }
+   },
+   "verdict": "axis gated in; diffusion declared; drift scored"
+  },
+  {
+   "record": "active",
+   "channel": "Force 1x",
+   "fs_hz": 78125.0,
+   "n": 764373,
+   "calibration": {
+    "fc_hz": 1935.0402774950164,
+    "err_fc_hz": 15.457721805678588,
+    "alpha": 0.45100523496184003,
+    "f_diode_hz": 11684.361562063437,
+    "Rd_um_per_V": 4.567619002314173,
+    "gamma0_kg_per_s": 9.821372617358556e-09,
+    "T_C": 20.0,
+    "fit_range_hz": [
+     10.0,
+     23000.0
+    ]
+   },
+   "reference": {
+    "theta_per_s": 12158.216640357397,
+    "b2_bulk_nm2_per_s": 824196.9226066356
+   },
+   "active_scale": {
+    "f_drive_hz": 38.153421549431016,
+    "stage_amplitude": 0.5272719546934059,
+    "response_amplitude": 0.0027683558267595602,
+    "transfer": 0.01971328855562575,
+    "response_power_share": 0.7206947722444326,
+    "n": 764373,
+    "Rd_active_stage_units_per_V": 3.754670584498786,
+    "Rd_active_over_stored": 0.8220192145177807,
+    "driven_axis": true
+   },
+   "scale_note": "ACTIVE Rd from the nanostage drive: no thermal quantity enters, so b^2 against 2 k_B T / gamma is a physics claim and its ratio to bulk Stokes is the near-surface drag",
+   "axis_gate": {
+    "passed": false,
+    "theta_acf": 8408.3953511154,
+    "theta_ref": 12158.216640357397,
+    "ratio": 0.6915813066864575,
+    "tol": 1.25,
+    "acf_lag1": 0.9515773288404717,
+    "note": "timescale is 0.692x the calibration's: the axis carries something the calibration's fit range never saw"
+   },
+   "band_loss": {
+    "fc_fit_hz": 1484.8503092078295,
+    "r_nyquist": 0.7602651825877135,
+    "r_diode": 0.526949991315625,
+    "r_antialias": 0.9391269447670353,
+    "r_total": 0.3762346625814325,
+    "psd_ratio_above_range": 0.5989179701517265,
+    "r_se": 0.0005798264842628575,
+    "r_halves": [
+     0.374696149878745,
+     0.3735364969102193
+    ],
+    "alpha": 0.45100523496184003,
+    "f_diode_hz": 11684.361562063437,
+    "fit_range_hz": [
+     10.0,
+     23000.0
+    ],
+    "fs_hz": 78125.0
+   },
+   "qv": {
+    "raw_over_bulk": 0.19225789818637562,
+    "declared_over_bulk": 0.5110052775766325
+   },
+   "verdict": "axis refused by the ACF gate; nothing claimed"
+  },
+  {
+   "record": "active",
+   "channel": "Force 1y",
+   "fs_hz": 78125.0,
+   "n": 779349,
+   "calibration": {
+    "fc_hz": 1827.3414352616333,
+    "err_fc_hz": 14.564356142823163,
+    "alpha": 0.46184601448586593,
+    "f_diode_hz": 11677.399369010784,
+    "Rd_um_per_V": 5.107013767771442,
+    "gamma0_kg_per_s": 9.821372617358556e-09,
+    "T_C": 20.0,
+    "fit_range_hz": [
+     10.0,
+     23000.0
+    ]
+   },
+   "reference": {
+    "theta_per_s": 11481.52485723635,
+    "b2_bulk_nm2_per_s": 824196.9226066356
+   },
+   "active_scale": {
+    "f_drive_hz": 38.153421549431016,
+    "stage_amplitude": 0.5272575548361086,
+    "response_amplitude": 7.2833769523889785e-06,
+    "transfer": 0.020874647295633875,
+    "response_power_share": 2.118584955135283e-05,
+    "n": 779349,
+    "Rd_active_stage_units_per_V": 1511.1555481900446,
+    "Rd_active_over_stored": 295.8980760393506,
+    "driven_axis": false
+   },
+   "scale_note": "stored Rd (defined by the thermal motion: circular for b^2); drive line removed (undriven axis)",
+   "axis_gate": {
+    "passed": false,
+    "theta_acf": 7997.897123536772,
+    "theta_ref": 11481.52485723635,
+    "ratio": 0.6965884081586963,
+    "tol": 1.25,
+    "acf_lag1": 0.9542749889994638,
+    "note": "timescale is 0.697x the calibration's: the axis carries something the calibration's fit range never saw"
+   },
+   "band_loss": {
+    "fc_fit_hz": 1409.062142092887,
+    "r_nyquist": 0.7609661614217829,
+    "r_diode": 0.5340219629957765,
+    "r_antialias": 0.9370303235739843,
+    "r_total": 0.3807834894390989,
+    "psd_ratio_above_range": 0.5933637508583893,
+    "r_se": 0.00013697403707527145,
+    "r_halves": [
+     0.37875454395225083,
+     0.3784805958781003
+    ],
+    "alpha": 0.46184601448586593,
+    "f_diode_hz": 11677.399369010784,
+    "fit_range_hz": [
+     10.0,
+     23000.0
+    ],
+    "fs_hz": 78125.0
+   },
+   "qv": {
+    "raw_over_bulk": 0.28298316556555525,
+    "declared_over_bulk": 0.7431602824544591
+   },
+   "verdict": "axis refused by the ACF gate; nothing claimed"
+  }
+ ],
+ "seconds": 1.8
+}
