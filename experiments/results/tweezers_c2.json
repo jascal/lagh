@@ -32,19 +32,22 @@
     "ratio": 0.03990228979866365,
     "tol": 1.25,
     "acf_lag1": 0.9963667510704434,
-    "note": "timescale is 0.0399x the calibration's: the axis carries something the calibration's fit range never saw"
+    "var_ratio": null,
+    "var_ok": null,
+    "note": "timescale is 0.0399x the calibration's; no equipartition variance was supplied, so contamination and a different drag are not separated"
    },
    "band_loss": {
-    "fc_fit_hz": 542.6231612131421,
-    "r_nyquist": 0.7689390994506512,
+    "r_nyquist": 0.7687400440392373,
     "r_diode": 0.4386570657351339,
     "r_antialias": 0.9415784315802237,
-    "r_total": 0.3175949408186821,
+    "r_total": 0.31751272495574473,
+    "r_var": 0.9461169305192054,
+    "fc_fit_hz": 542.6231612131421,
     "psd_ratio_above_range": 0.5712157026800303,
-    "r_se": 0.0002998826023979384,
+    "r_se": 0.0002998212918217391,
     "r_halves": [
-     0.3170898205215815,
-     0.31649005531678565
+     0.3170077608045995,
+     0.31640811822095605
     ],
     "alpha": 0.41703416787845804,
     "f_diode_hz": 8113.027225352045,
@@ -56,7 +59,7 @@
    },
    "qv": {
     "raw_over_bulk": 0.3246925509841932,
-    "declared_over_bulk": 1.0223479950505987
+    "declared_over_bulk": 1.0226127190003147
    },
    "verdict": "axis refused by the ACF gate; nothing claimed"
   },
@@ -90,19 +93,22 @@
     "ratio": 1.0080133153327382,
     "tol": 1.25,
     "acf_lag1": 0.9857876138068092,
+    "var_ratio": null,
+    "var_ok": null,
     "note": "timescale agrees with the calibration"
    },
    "band_loss": {
-    "fc_fit_hz": 595.5988240110748,
-    "r_nyquist": 0.7684538787513818,
-    "r_diode": 0.4444148819974487,
+    "r_nyquist": 0.7682545279612061,
+    "r_diode": 0.44441488199744866,
     "r_antialias": 0.9372225956963622,
-    "r_total": 0.32007308161259745,
+    "r_total": 0.3199900488848075,
+    "r_var": 0.9428723810421399,
+    "fc_fit_hz": 595.5988240110748,
     "psd_ratio_above_range": 0.5473881133510731,
-    "r_se": 0.00010294913547850837,
+    "r_se": 0.00010294698222443333,
     "r_halves": [
-     0.3194211225121735,
-     0.3192152242412165
+     0.3193382847715121,
+     0.31913239080706324
     ],
     "alpha": 0.41561151101213084,
     "f_diode_hz": 8398.670338755108,
@@ -114,7 +120,7 @@
    },
    "qv": {
     "raw_over_bulk": 0.3229877530935661,
-    "declared_over_bulk": 1.0091062686880254
+    "declared_over_bulk": 1.0093681169749056
    },
    "diffusion": {
     "raw": {
@@ -133,13 +139,13 @@
      "n_rows": 312,
      "certified": false,
      "abstain": "noise",
-     "median_signal_to_band": 3.049091393457673,
+     "median_signal_to_band": 3.0495277202492184,
      "b2_interval": [
-      159154.8677107438,
-      252574.2488179365
+      159205.42119950245,
+      252630.5298528712
      ],
      "covers_bulk": true,
-     "mid_over_bulk": 1.0256601587084804
+     "mid_over_bulk": 1.0259262946462315
     }
    },
    "drift": {
@@ -200,19 +206,22 @@
     "ratio": 0.6915813066864575,
     "tol": 1.25,
     "acf_lag1": 0.9515773288404717,
-    "note": "timescale is 0.692x the calibration's: the axis carries something the calibration's fit range never saw"
+    "var_ratio": null,
+    "var_ok": null,
+    "note": "timescale is 0.692x the calibration's; no equipartition variance was supplied, so contamination and a different drag are not separated"
    },
    "band_loss": {
-    "fc_fit_hz": 1484.8503092078295,
-    "r_nyquist": 0.7602651825877135,
+    "r_nyquist": 0.7600608777497033,
     "r_diode": 0.526949991315625,
     "r_antialias": 0.9391269447670353,
-    "r_total": 0.3762346625814325,
+    "r_total": 0.37613355764653217,
+    "r_var": 0.9032561421536272,
+    "fc_fit_hz": 1484.8503092078295,
     "psd_ratio_above_range": 0.5989179701517265,
-    "r_se": 0.0005798264842628575,
+    "r_se": 0.000579735214958299,
     "r_halves": [
-     0.374696149878745,
-     0.3735364969102193
+     0.374595553946514,
+     0.3734360835165974
     ],
     "alpha": 0.45100523496184003,
     "f_diode_hz": 11684.361562063437,
@@ -224,7 +233,7 @@
    },
    "qv": {
     "raw_over_bulk": 0.19225789818637562,
-    "declared_over_bulk": 0.5110052775766325
+    "declared_over_bulk": 0.5111426361139734
    },
    "verdict": "axis refused by the ACF gate; nothing claimed"
   },
@@ -269,19 +278,22 @@
     "ratio": 0.6965884081586963,
     "tol": 1.25,
     "acf_lag1": 0.9542749889994638,
-    "note": "timescale is 0.697x the calibration's: the axis carries something the calibration's fit range never saw"
+    "var_ratio": null,
+    "var_ok": null,
+    "note": "timescale is 0.697x the calibration's; no equipartition variance was supplied, so contamination and a different drag are not separated"
    },
    "band_loss": {
-    "fc_fit_hz": 1409.062142092887,
-    "r_nyquist": 0.7609661614217829,
+    "r_nyquist": 0.7607622784320722,
     "r_diode": 0.5340219629957765,
     "r_antialias": 0.9370303235739843,
-    "r_total": 0.3807834894390989,
+    "r_total": 0.3806814674567886,
+    "r_var": 0.9084209511697785,
+    "fc_fit_hz": 1409.062142092887,
     "psd_ratio_above_range": 0.5933637508583893,
-    "r_se": 0.00013697403707527145,
+    "r_se": 0.00013695489439660702,
     "r_halves": [
-     0.37875454395225083,
-     0.3784805958781003
+     0.378653087176837,
+     0.3783791773880438
     ],
     "alpha": 0.46184601448586593,
     "f_diode_hz": 11677.399369010784,
@@ -293,10 +305,10 @@
    },
    "qv": {
     "raw_over_bulk": 0.28298316556555525,
-    "declared_over_bulk": 0.7431602824544591
+    "declared_over_bulk": 0.7433594481393473
    },
    "verdict": "axis refused by the ACF gate; nothing claimed"
   }
  ],
- "seconds": 1.8
+ "seconds": 4.1
 }
