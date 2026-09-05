@@ -95,5 +95,12 @@ client for `propose_fn`.
 2. Run the **machine composite** on NewtonBench-dev: expect the full-108 result (67/108,
    0 CW) with the abstains now *fast and clean* (no timeouts), and any `declare_and_verify`
    gains the proposer earns — all under a structurally-guaranteed zero-wrong.
+   *(Re-scored 2026-09-04 under today's gates, `experiments/reverify_gated_verify.py`:
+   64 of the 67 proved laws in `machine/run_results.json` still certify; the three
+   that do not are `m10_be_distribution/{easy,medium,hard}/v0`, whose oracle returns
+   y ≡ 1/2 to 1e-13 across the box, so the correct law `1/2` has zero held-out
+   evidence — α = 1 — and is a significance abstain on the `recover` path as well as
+   the gated `verify` path. A reach change, not a confident-wrong; 0 CW stands. The one
+   proposer-assisted proved cell, `m10_be_distribution/hard/v2`, stands.)*
 3. Package `machine/` as a first-class lagh entry point (a `lagh-research` script / MCP
    verb) so the verified loop is the product surface, not the bench harness.

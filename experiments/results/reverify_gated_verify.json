@@ -1,0 +1,870 @@
+{
+ "summary": {
+  "machine": {
+   "n_proved": 67,
+   "stand": 64,
+   "demoted": [
+    "m10_be_distribution/easy/v0",
+    "m10_be_distribution/medium/v0",
+    "m10_be_distribution/hard/v0"
+   ],
+   "demoted_reasons": {
+    "noise": 3
+   }
+  },
+  "dev_v1": {
+   "n_llm_verified": 19,
+   "stand": 19,
+   "demoted": [],
+   "alpha_log10_range": [
+    -631.5880758397027,
+    -391.2936056093139
+   ]
+  }
+ },
+ "machine": [
+  {
+   "pid": "m0_gravity/easy/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "6.674e-5*x_0*x_1/x_2**(3/2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -342.4275671521864,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m0_gravity/easy/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "6.674e-5*x_0/x_2**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -332.8776030357953,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m0_gravity/easy/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "6.674e-5*x_0**2*x_1**2/x_2**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -380.6485287760727,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m0_gravity/medium/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "6.674e-5*x_0**2*x_1**2/x_2**(3/2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -387.5155422186298,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m0_gravity/medium/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "6.674e-5*x_0/x_2**(13/5)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -338.0646361981133,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m0_gravity/medium/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "6.674e-5*x_0**2*x_1**2*x_2**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -458.0000283401607,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m0_gravity/hard/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "6.674e-5*x_0**(13/10)/x_2**(13/5)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -337.8703314097528,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m1_coulomb_force/easy/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "2*x_0*x_1/x_2**3",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -513.7036104702656,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m1_coulomb_force/easy/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "2.0*x_0**3*x_1**3/x_2**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -565.2001687864198,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m1_coulomb_force/easy/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "2.0*x_0**3*x_1/x_2**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -530.0681760946451,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m1_coulomb_force/medium/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "(2*x_0**2*x_1 + 2*x_0*x_1**2)/x_2**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -525.6224420722737,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m1_coulomb_force/medium/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "(2*x_0**3 + 6*x_0**2*x_1 + 6*x_0*x_1**2 + 2*x_1**3)/x_2**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -500.28610744096824,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m1_coulomb_force/medium/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "2.0*x_0**3*x_1**2/x_2**(5/2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -543.8942600334656,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m2_magnetic_force/easy/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "239*x_0*x_1/(5000*x_2**3)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -462.9215199487486,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m2_magnetic_force/easy/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "0.0478*x_0**2*x_1**2/x_2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -508.42811542853286,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m2_magnetic_force/easy/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "239*x_1/(5000*x_2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -443.1632198542376,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m2_magnetic_force/medium/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "0.0478*x_0**(3/2)*x_1**(3/2)/x_2**3",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -470.7421826726963,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m2_magnetic_force/medium/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "0.0478*x_0**2*x_1**2*x_2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -527.956703357924,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m2_magnetic_force/medium/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "0.0478*x_1/x_2**(19/5)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -445.4459617159657,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m2_magnetic_force/hard/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "239*x_0**2*x_2/5000 - 239*x_0*x_1*x_2/2500 + 239*x_1**2*x_2/5000",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -467.0758741920735,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m2_magnetic_force/hard/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "0.0478*x_1**(9/10)/x_2**(19/5)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -432.19549869887703,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m3_fourier_law/easy/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "x_0*x_1*x_2/x_3**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -527.9450812287224,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m3_fourier_law/easy/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1.0*x_0*sqrt(x_1)*x_2/x_3",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -506.0243901771592,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m3_fourier_law/easy/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1.0*x_0*x_1*x_2**2/x_3",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -533.8834258501987,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m3_fourier_law/medium/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1.0*x_0*sqrt(x_1)*x_2/x_3**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -503.2328412548474,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m3_fourier_law/medium/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1.0*x_0*sqrt(x_1)*x_2**(27/10)/x_3",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -528.121233227373,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m3_fourier_law/medium/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1.0*x_0*x_2**2/(x_1**(17/5)*x_3)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -548.572610616217,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m3_fourier_law/hard/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1.0*x_0*sqrt(x_1)*x_2**(13/10)/x_3**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -493.72926044833855,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m3_fourier_law/hard/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1.0*x_0*sqrt(x_1)*x_2**(27/10)/x_3**(3/7)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -519.9549260558964,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m3_fourier_law/hard/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1.0*x_0*x_2**2/(x_1**(17/5)*sqrt(x_3))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -539.7371735072803,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m5_radioactive_decay/easy/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "x_0*exp(-x_1*x_2**(3/2))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -513.5269972949117,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m5_radioactive_decay/easy/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "x_0*exp(-x_1**(3/2)*x_2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -509.79713838909277,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m5_radioactive_decay/medium/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "x_0**(6/5)*exp(-x_1*x_2**(3/2))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -508.85518819741935,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m5_radioactive_decay/medium/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "x_0**(7/5)*exp(-x_1**(3/2)*x_2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -512.2358785487131,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m6_underdamped_harmonic/easy/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "(x_0*x_1 - x_2**2/4)**2/x_1**4",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -478.36827522627664,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m6_underdamped_harmonic/easy/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "(x_0*x_1 - x_2**2/4)/x_1**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -455.39393052616094,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m6_underdamped_harmonic/medium/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "sqrt((x_0*x_1 - x_2/2)/x_1**2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -438.9509361613355,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m6_underdamped_harmonic/medium/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "(x_0 - x_2**2/4)**2/x_1**4",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -477.0266259488543,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m7_malus_law/easy/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "2*x_0*sin(x_1)*cos(x_1) + x_0",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -488.76485939979955,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m7_malus_law/easy/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "x_0*sin(x_1)**2/cos(x_1)**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -496.38665170471137,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m7_malus_law/easy/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "x_0*cos(x_1)**2/sin(x_1)**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -519.7517181158664,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m7_malus_law/medium/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "4*x_0*sin(x_1)**2 + 4*x_0*sin(x_1)*cos(x_1) + x_0*cos(x_1)**2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -486.0523113451601,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m7_malus_law/medium/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "x_0*sin(x_1)**2/cos(x_1)**3",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -511.4988990412771,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m7_malus_law/hard/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "7*x_0*sin(x_1)**2/4 + 6*x_0*sin(x_1)*cos(x_1) + 9*x_0/4",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -458.276372920369,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m8_sound_speed/easy/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "2812725*sqrt(x_0)*x_1/(150004*sqrt(x_2))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -469.2527378151708,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m8_sound_speed/easy/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1758*x_0*x_1/(5*x_2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -498.5723504170023,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m8_sound_speed/easy/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "2812725*sqrt(x_1)/(150004*sqrt(x_2))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -461.98305984079144,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m8_sound_speed/medium/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "18.7509999733348*sqrt(x_0)*x_1/x_2**(3/4)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -471.65662420089524,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m8_sound_speed/medium/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1758*x_0*x_1/(5*x_2**(1/3))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -480.0788776793119,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m8_sound_speed/medium/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "18.7509999733348*sqrt(x_1)*x_2**(3/4)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -463.6446332549686,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m8_sound_speed/hard/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "7.43127228058957e-8/(x_1**(14/5)*x_2**(21/5))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -258.45710300612825,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m9_hooke_law/easy/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "231141*x_0**2/500",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -534.912009974099,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m9_hooke_law/easy/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "231141*sqrt(x_0)/500",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -483.7588018793685,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m9_hooke_law/easy/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "462.282*x_0**(17/5)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -577.6612009308993,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m9_hooke_law/medium/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "231141*x_0**2/500 + 3104753*x_0/2500",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -503.1679125754622,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m9_hooke_law/medium/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "231141*sqrt(x_0)/500 + 3104753*x_0**3/2500",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -522.4568035860406,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m9_hooke_law/hard/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "231141*x_0**2/500 + 3104753*x_0/2500 + 6289/(500*sqrt(x_0))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -473.54665425731866,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m10_be_distribution/easy/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1/2",
+   "now_certified": false,
+   "abstain": "noise",
+   "alpha_log10": 0.0,
+   "note": "significance gate: alpha_log10 0.000 > -6 -- the held-out rows carry too little evidence for this form at this band"
+  },
+  {
+   "pid": "m10_be_distribution/medium/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1/2",
+   "now_certified": false,
+   "abstain": "noise",
+   "alpha_log10": 0.0,
+   "note": "significance gate: alpha_log10 0.000 > -6 -- the held-out rows carry too little evidence for this form at this band"
+  },
+  {
+   "pid": "m10_be_distribution/hard/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1/2",
+   "now_certified": false,
+   "abstain": "noise",
+   "alpha_log10": 0.0,
+   "note": "significance gate: alpha_log10 0.000 > -6 -- the held-out rows carry too little evidence for this form at this band"
+  },
+  {
+   "pid": "m10_be_distribution/hard/v2",
+   "cat": "CORRECT",
+   "lagh_alone": false,
+   "law": "1/(-3*log(x_0)/2 + 3*log(x_1) + 2363498*sin(x_0)**2/303147 + 2363498*sin(x_1)**2/303147 + 2363498*cos(x_0)**2/303147 + 2363498*cos(x_1)**2/303147 + 4726996/303147)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -330.12113083816115,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m11_heat_transfer/easy/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "x_0*x_1*x_2**(5/2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -592.6753633871555,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m11_heat_transfer/easy/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "x_0**(5/2)*x_1*x_2",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -556.7762866444901,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m11_heat_transfer/easy/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1.0*x_0**(5/2)*x_1*x_2**(5/2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -598.4426969959175,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m11_heat_transfer/medium/v0",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1.0*x_1/(x_0*x_2**(5/2))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -469.30211301197545,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m11_heat_transfer/medium/v1",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1.0*x_1/(x_0**(5/2)*x_2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -506.05400614816136,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  },
+  {
+   "pid": "m11_heat_transfer/medium/v2",
+   "cat": "CORRECT",
+   "lagh_alone": true,
+   "law": "1.0*x_1/(x_0**(5/2)*x_2**(5/2))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -486.64015493026983,
+   "note": "pinned: this exact form, no rival within the noise; domain = all 200 supplied points (scale refit on 120 rows, exhaustively checked on 40 held-out rows, then re-checked on all 200 supplied rows); cert"
+  }
+ ],
+ "dev_v1": [
+  {
+   "id": "LSR_Transform/II.15.5_0_0",
+   "expr": "-343080*x_0/(343081*x_1*cos(x_2))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -630.24112274589,
+   "law": "-343080*x_0/(343081*x_1*cos(x_2))",
+   "note": "pinned: this exact form, no rival within the noise; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then re-checked on all 600 supplied rows); cer"
+  },
+  {
+   "id": "LSR_Transform/II.13.23_1_0",
+   "expr": "-x_2*sqrt(1 - x_1**2/x_0**2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -391.2936056093139,
+   "law": "-941890397*x_2*sqrt(1 - x_1**2/x_0**2)/941890394",
+   "note": "pinned: this exact form, no rival within the noise; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then re-checked on all 600 supplied rows); cer"
+  },
+  {
+   "id": "LSR_Transform/I.32.5_1_1",
+   "expr": "4.34160756945711*sqrt(x_0)*sqrt(x_2)*x_3**(3/2)/x_1",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -460.83259642141246,
+   "law": "4.34160756945711*sqrt(x_0)*sqrt(x_2)*x_3**(3/2)/x_1",
+   "note": "pinned: this exact form, no rival within the noise; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then re-checked on all 600 supplied rows); cer"
+  },
+  {
+   "id": "LSR_Transform/I.32.5_0_1",
+   "expr": "4.34160756945711*sqrt(x_0)*sqrt(x_2)*x_3**(3/2)/x_1",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -460.83259642141246,
+   "law": "4.34160756945711*sqrt(x_0)*sqrt(x_2)*x_3**(3/2)/x_1",
+   "note": "pinned: this exact form, no rival within the noise; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then re-checked on all 600 supplied rows); cer"
+  },
+  {
+   "id": "LSR_Transform/I.43.43_0_0",
+   "expr": "1 + x_1*x_3/(x_0*x_2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -473.31421853726584,
+   "law": "975855117/975855092 + 975855117*x_1*x_3/(975855092*x_0*x_2)",
+   "note": "pinned: this exact form, no rival within the noise; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then re-checked on all 600 supplied rows); cer"
+  },
+  {
+   "id": "LSR_Transform/II.37.1_0_0",
+   "expr": "x_0/(x_1*(x_2 + 1))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -481.66990274897694,
+   "law": "169129430939*x_0/(169129430907*x_1*(x_2 + 1))",
+   "note": "pinned: this exact form, no rival within the noise; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then re-checked on all 600 supplied rows); cer"
+  },
+  {
+   "id": "LSR_Transform/II.15.4_1_0",
+   "expr": "-407605*x_0/(407606*x_1*cos(x_2))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -631.5880758397027,
+   "law": "-407605*x_0/(407606*x_1*cos(x_2))",
+   "note": "pinned: this exact form, no rival within the noise; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then re-checked on all 600 supplied rows); cer"
+  },
+  {
+   "id": "LSR_Transform/II.37.1_2_0",
+   "expr": "x_0/(x_1*x_2) - 1",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -500.6853502199744,
+   "law": "863228449*x_0/(863228447*x_1*x_2) - 863228449/863228447",
+   "note": "pinned: this exact form, no rival within the noise; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then re-checked on all 600 supplied rows); cer"
+  },
+  {
+   "id": "LSR_Transform/III.12.43_0_0",
+   "expr": "2*pi*x_0/x_1",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -452.7350782723351,
+   "law": "1391652146*pi*x_0/(695826075*x_1)",
+   "note": "consistent: fits within eps, but the irrational constant is not identifiable from the data; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then r"
+  },
+  {
+   "id": "LSR_Transform/III.13.18_1_1",
+   "expr": "sqrt(x_0*x_3/(x_1*x_2))/(2*sqrt(pi))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -415.4197753985825,
+   "law": "947653961*sqrt(x_0*x_3/(x_1*x_2))/(1895307914*sqrt(pi))",
+   "note": "consistent: fits within eps, but the irrational constant is not identifiable from the data; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then r"
+  },
+  {
+   "id": "LSR_Transform/II.11.20_1_1",
+   "expr": "sqrt(3)*sqrt(x_0*x_3*x_4/(x_1*x_2))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -422.45744076142364,
+   "law": "341032486*sqrt(3)*sqrt(x_0*x_3*x_4/(x_1*x_2))/341032485",
+   "note": "pinned: this exact form, no rival within the noise; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then re-checked on all 600 supplied rows); cer"
+  },
+  {
+   "id": "LSR_Transform/II.34.29b_3_0",
+   "expr": "x_0*x_2/(2*pi*x_1*x_3*x_4)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -475.77779495699747,
+   "law": "364525767*x_0*x_2/(729051553*pi*x_1*x_3*x_4)",
+   "note": "consistent: fits within eps, but the irrational constant is not identifiable from the data; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then r"
+  },
+  {
+   "id": "LSR_Transform/II.34.29b_0_0",
+   "expr": "x_0*x_1/(2*pi*x_2*x_3*x_4)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -527.8836562849821,
+   "law": "584927813*x_0*x_1/(1169855624*pi*x_2*x_3*x_4)",
+   "note": "consistent: fits within eps, but the irrational constant is not identifiable from the data; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then r"
+  },
+  {
+   "id": "LSR_Transform/II.34.29b_4_0",
+   "expr": "x_0*x_2/(2*pi*x_1*x_3*x_4)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -475.77779495699747,
+   "law": "364525767*x_0*x_2/(729051553*pi*x_1*x_3*x_4)",
+   "note": "consistent: fits within eps, but the irrational constant is not identifiable from the data; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then r"
+  },
+  {
+   "id": "LSR_Transform/III.21.20_2_0",
+   "expr": "-x_0*x_3/(x_1*x_2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -501.4737570836916,
+   "law": "-717904991*x_0*x_3/(717904989*x_1*x_2)",
+   "note": "pinned: this exact form, no rival within the noise; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then re-checked on all 600 supplied rows); cer"
+  },
+  {
+   "id": "LSR_Transform/III.13.18_0_0",
+   "expr": "x_0*x_3/(4*pi*x_1**2*x_2)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -529.1549926298312,
+   "law": "695430207*x_0*x_3/(2781720788*pi*x_1**2*x_2)",
+   "note": "consistent: fits within eps, but the irrational constant is not identifiable from the data; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then r"
+  },
+  {
+   "id": "LSR_Transform/II.37.1_1_0",
+   "expr": "x_0/(x_1*(x_2 + 1))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -481.66990274897694,
+   "law": "169129430939*x_0/(169129430907*x_1*(x_2 + 1))",
+   "note": "pinned: this exact form, no rival within the noise; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then re-checked on all 600 supplied rows); cer"
+  },
+  {
+   "id": "LSR_Transform/II.34.29b_2_0",
+   "expr": "x_0*x_2/(2*pi*x_1*x_3*x_4)",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -475.77779495699747,
+   "law": "364525767*x_0*x_2/(729051553*pi*x_1*x_3*x_4)",
+   "note": "consistent: fits within eps, but the irrational constant is not identifiable from the data; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then r"
+  },
+  {
+   "id": "LSR_Transform/II.15.5_1_0",
+   "expr": "-343080*x_0/(343081*x_1*cos(x_2))",
+   "now_certified": true,
+   "abstain": null,
+   "alpha_log10": -630.24112274589,
+   "law": "-343080*x_0/(343081*x_1*cos(x_2))",
+   "note": "pinned: this exact form, no rival within the noise; domain = all 600 supplied points (scale refit on 360 rows, exhaustively checked on 120 held-out rows, then re-checked on all 600 supplied rows); cer"
+  }
+ ]
+}
