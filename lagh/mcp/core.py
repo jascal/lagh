@@ -26,7 +26,7 @@ from ..acquisition import run_active, run_active_boxsearch
 from ..base import eval_expr, lstsq
 from ..certify import (Abstain, coherent, epsilon, pinned, sample_box)
 from ..characterize import characterize
-from ..engine import discover
+from ..engine import Result, discover
 from ..passive import discover_passive
 
 # nameable constants a free-fit exponent might be reaching for (fit's diagnosis)
@@ -129,6 +129,17 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
                                 time_budget_s=time_budget_s)
         r = active.result
         c = r.certificate
+        if box_search and c.certified and bs.heldout_box_ok is not True:
+            # belt to acquisition's braces (jascal/lagh#2): a certificate leaves
+            # box-search ONLY with a passed independent-box holdout. The search
+            # now demotes a rejected result itself; this is the boundary's own
+            # enforcement, so a future search-side regression cannot reach
+            # `tag: proved` through here.
+            c.certified = False
+            c.abstain = c.abstain or Abstain.HELDOUT.value
+            c.notes.append("held-out box guard did not pass: certificate withheld "
+                           "at the recover boundary")
+            r = Result(c, None, r.tier, r.n_candidates)
         bf = np.asarray(active.box_final, float)
         acq = {"mode": "box-search" if box_search else "active",
                "queries_used": int(active.queries_used),
