@@ -65,7 +65,8 @@ import numpy as np
 import sympy as sp
 
 from .certify import (band, check, determination, parameter_interval,
-                      significance_log10)
+                      significance_log10, vacuous)
+from .engine import ALPHA_CERT_MAX_LOG10
 from .weakform import LIBRARY, PatchEpsilon, build, ic_columns
 
 # h = n_rows - dof must clear this: a certificate resting on fewer independent
@@ -187,7 +188,29 @@ def _inner_box(B, y, eps, a, ref):
     t = float(np.min(ratio)) if ratio.size else 1.0
     if not np.isfinite(t):
         t = 1.0        # no row loads the box: the reference widths are feasible
-    w = t * ref
+    # The bound is exact in real arithmetic; in floats a band far below a row's
+    # resolution (eps_i ~ 1e-14 |y_i|) leaves the corner residual at the mercy
+    # of cancellation -- measured by fuzzing: corners 4e-6 .. 4e-4 over the band.
+    # So the box is VERIFIED as computed, not trusted: row i's residual is
+    # maximized at the sign-aligned corner, evaluate that corner in the same
+    # arithmetic the certificate check uses, and halve t until every row holds.
+    # t -> 0 is the point a, which certify_state has already checked.
+    sgn = np.sign(B)
+    y = np.asarray(y, float)
+    eps = np.asarray(eps, float)
+    ulp = 4.0 * B.shape[1] * np.finfo(float).eps
+    for _ in range(64):
+        w = t * ref
+        pt = a[None, :] + sgn * w[None, :]
+        worst = np.abs(np.einsum("ij,ij->i", B, pt) - y)
+        # allowance for the rounding of the dot product itself, so a corner the
+        # fuzz evaluates in a different summation order still lands inside
+        slop = ulp * (np.einsum("ij,ij->i", np.abs(B), np.abs(pt)) + np.abs(y))
+        if t == 0.0 or np.all(worst + slop <= eps):
+            break
+        t *= 0.5
+    else:
+        t, w = 0.0, 0.0 * ref
     return a - w, a + w, t
 
 
@@ -368,17 +391,41 @@ def certify_state(B, y, eps, labels, *, window=(), amp_max: float = 10.0,
     """Fit the amplitudes, certify the reconstruction, and report per-mode
     intervals -- with UNDETERMINED as a first-class outcome."""
     info = dict(info or {})
+    B = np.asarray(B, float)
+    y = np.asarray(y, float).ravel()
+    eps = np.asarray(eps, float).ravel()
+    # A non-finite row is "no observation here" and carries no information; it
+    # must not reach the LP (measured by fuzzing: scipy raised on a NaN target
+    # instead of the certificate refusing). Dropped, counted, and noted.
+    finite = np.isfinite(y) & np.isfinite(eps) & np.all(np.isfinite(B), axis=1)
+    n_dropped = int((~finite).sum())
+    B, y, eps = B[finite], y[finite], eps[finite]
+    if n_dropped:
+        info["rows_dropped_nonfinite"] = n_dropped
     n, dof = len(y), B.shape[1]
     h = n - dof
     cert = StateCertificate(certified=False, n_rows=int(n), dof=int(dof),
                             heldout=int(h), window=tuple(window),
                             basis=list(labels), amp_max_declared=amp_max)
+    if n_dropped:
+        cert.notes.append(f"{n_dropped} non-finite row(s) dropped before certification")
     if h < MIN_HELDOUT:
         cert.abstain = "resolution"
         cert.notes.append(
             f"h = n - dof = {h} < {MIN_HELDOUT}: at most as many modes can be "
             "certified as there are independent patch equations, with margin; "
             "reduce the basis or add patches")
+        return cert
+    syms0 = [sp.Symbol(f"x_{i}") for i in range(dof)]
+    # VACUITY, as in discovery: if the ZERO state reproduces the observations
+    # within the band, the band swallows the signal and every mode is
+    # "bounded" only by the band's own projection -- a certificate that
+    # excludes nothing. Measured by the tool-surface null sweep: a random
+    # target under a loose band certified with alpha = 1.
+    if vacuous(syms0, B, y, eps):
+        cert.abstain = "noise"
+        cert.notes.append("VACUOUS: the zero state reproduces the observations "
+                          "within the declared band; nothing here is evidence")
         return cert
     a, slack = _feasible_center(B, y, eps)
     if a is None:
@@ -455,11 +502,20 @@ def certify_state(B, y, eps, labels, *, window=(), amp_max: float = 10.0,
              "COMBINATION of endpoints is not guaranteed feasible -- the "
              "jointly guaranteed box is `inner_box`, and the band itself is "
              "`joint_constraint`")
-    cert.certified = True
     # |H| = 1: fixed basis, known law, no search over forms. This is a pure
     # chance-agreement bound and is NOT comparable with a law certificate's
-    # alpha, which is corrected for the candidate space it searched.
+    # alpha, which is corrected for the candidate space it searched. It is
+    # ENFORCED, as a law certificate's is: computed-but-not-gated was the hole
+    # the tool-surface null sweep found (jascal/lagh follow-up to #4).
     cert.alpha_log10 = significance_log10(expr, y, eps, 1)
+    if cert.alpha_log10 > ALPHA_CERT_MAX_LOG10:
+        cert.abstain = "noise"
+        cert.notes.append(
+            f"significance gate: alpha_log10 {cert.alpha_log10:.3f} > "
+            f"{ALPHA_CERT_MAX_LOG10:g} -- the rows carry too little evidence "
+            "for this basis at this band")
+        return cert
+    cert.certified = True
     cert.notes.append(
         f"state certificate over window {tuple(window)}: the per-mode intervals "
         "are MARGINAL projections of the feasible set (the true amplitude of "

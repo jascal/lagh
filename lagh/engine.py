@@ -19,7 +19,7 @@ from .base import Term as BaseTerm
 from .base import eval_expr, snap_all, to_expr
 from .certify import (MACHINE_REL, Abstain, Certificate,
                       arbitrate_significance, check, coherent, determination,
-                      epsilon, float_pinned, free_atoms, gated_atoms,
+                      epsilon, float_pinned, free_atoms, free_dof, gated_atoms,
                       input_constraints, invariant_content, minimal,
                       parameter_interval, pinned,
                       reduce_mod_constraints, reduce_to_minimal,
@@ -595,7 +595,20 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                  linear_basis=linear_basis)
         total += len(cands)
         certifying = []
+        n_cert = len(y_cert)
         for c in sorted(cands, key=lambda z: z.complexity):
+            # A candidate with dof >= the certification rows has h = 0 held-out
+            # evidence: alpha = |H| >= 1 and _significance_gate demotes it no
+            # matter how it fits, so checking it cannot produce a certificate.
+            # It can, however, cost a great deal: in tiny-data mode (fit rows =
+            # cert rows) every dense support INTERPOLATES the sample with
+            # exact-dyadic coefficients, "certifies", and the coefficient gate
+            # then re-lambdifies a 300-digit-rational expression per
+            # perturbation -- measured: 8 random points, tier 1, 413 s, 409 of
+            # them in float_pinned. The same exact bound _basis_supports applies
+            # at proposal time, applied here to every channel.
+            if free_dof(c.expr) >= n_cert:
+                continue
             r = check(c.expr, syms, X_cert, y_cert, eps)
             if r["certified"]:
                 # exact-coefficient gate (CAP-E lesson), per CANDIDATE on CLEAN
