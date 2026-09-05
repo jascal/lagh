@@ -62,11 +62,22 @@ probe run did, uniformly, and it looks identical to a real negative result.
 
 Draft semantics, to be fixed before anything runs:
 
-- **Claim.** "Over the stated observation window and patch family, every initial
-  condition whose mode coefficients lie in the reported intervals reproduces the
-  observations within the declared band; modes outside the reported set are NOT
-  determined." Undetermined modes are named, not silently dropped — an
-  ill-posed inversion's honest output is a resolution statement.
+- **Claim.** *(Amended 2026-09-04, jascal/lagh#5 — the original wording, kept
+  below, overclaimed.)* "Over the stated observation window and patch family,
+  the reported per-mode intervals are MARGINAL projections of the feasible set
+  of initial conditions: the true amplitude of each mode lies in its interval,
+  and each endpoint is attained by some state consistent with the observations
+  — but a combination of endpoints is not guaranteed to be. The jointly
+  guaranteed region is reported separately as an inner box (every state in it
+  reproduces the observations within the declared band), and the band
+  constraint itself is carried for consumers that construct states; modes
+  outside the reported set are NOT determined." Original draft wording: "every
+  initial condition whose mode coefficients lie in the reported intervals
+  reproduces the observations within the declared band" — false in general,
+  since the projections' Cartesian product contains infeasible states
+  (measured: two correlated modes, the upper-endpoint corner at 2× the band).
+  Undetermined modes are named, not silently dropped — an ill-posed
+  inversion's honest output is a resolution statement.
 - **Domain.** The observation window and the basis. A state certificate says
   nothing about other times, other solutions, or modes above the reported cut.
 - **α.** With a fixed basis and a known law there is no search: |H| ≈ 1, so α

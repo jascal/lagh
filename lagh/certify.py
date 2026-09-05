@@ -38,6 +38,10 @@ class Abstain(str, Enum):
     NUMERICAL = "numerical"    # law undefined/unstable inside its own domain
     RANGE = "range"            # sampled box carries no signal above the floor
     PARAMETRIC = "parametric"  # exact rational params not pinned within the noise band
+    HELDOUT = "heldout"        # certified on the acquired box, refuted on a fresh
+                               # independent sample of it (box-selection artifact;
+                               # jascal/lagh#2 -- such a result used to escape
+                               # box-search with its certificate intact)
     # --- emitted by the stochastic layer only (docs/STOCHASTIC_CHECKER.md).
     # They live in the ONE abstain vocabulary rather than as loose strings
     # because the alternative already happened once: pdesystem's
@@ -293,6 +297,10 @@ def pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray,
     gate only ever REMOVES certifications under declared noise; it can never add one.
     """
     if not np.isfinite(sigma) or sigma <= 0 or expr is None:
+        return True
+    if not isinstance(expr, sp.Basic):
+        # a non-sympy law (C6 QuasiPoly) is exact integer arithmetic with no
+        # snapped rational parameter to perturb: nothing here to test
         return True
     from fractions import Fraction
     y = np.asarray(y, float).ravel()

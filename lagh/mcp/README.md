@@ -25,7 +25,7 @@ with a `proved` / `open` tag — not a tool name.
 | tool | bound | act | returns |
 |---|---|---|---|
 | **`recover(X, y, sigma)`** | bounded | discover an exact law | `Certificate` \| `Abstention` |
-| **`verify(X, y, form, sigma)`** | bounded | check a *declared* form | `Certificate` \| `Abstention` |
+| **`verify(X, y, form, sigma)`** | bounded | check a *declared* form (restricted math grammar, never evaluated as Python) | `Certificate` \| `Abstention` |
 | **`fit(X, y, sigma)`** | **UNBOUNDED** | best-guess + identifiability diagnosis | `Conjecture[]` + `Diagnosis` — **no `certified` field** |
 
 - **Certificate strength** (`recover`/`verify`): `pinned` = this exact law, no rival

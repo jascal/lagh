@@ -139,7 +139,28 @@ def lambdify(syms, expr):
 
 
 def eval_expr(expr, syms, X: np.ndarray) -> np.ndarray | None:
-    """Numeric evaluation, never raising: None means 'undefined somewhere'."""
+    """Numeric evaluation, never raising: None means 'undefined somewhere'.
+
+    Two kinds of law object arrive here and both are supported explicitly
+    (jascal/lagh#6): a sympy expression (every float tier), and a non-sympy law
+    that carries its own `evaluate(X) -> array` (the C6 `QuasiPoly`, exact
+    integer arithmetic on the integer lattice). The second kind used to hit
+    `expr.has` before the exception handler and raise -- so a SUPPORTED result
+    crashed the passive full-data gate instead of passing through it. Catching
+    the error would have discarded the result; dispatching evaluates it.
+    NaN entries in the returned array mean 'undefined at that point'."""
+    if expr is None:
+        return None
+    if not isinstance(expr, sp.Basic):
+        ev = getattr(expr, "evaluate", None)
+        if ev is None:
+            return None
+        try:
+            with np.errstate(all="ignore"):
+                v = np.asarray(ev(X), float).reshape(-1)
+        except Exception:                                     # noqa: BLE001
+            return None
+        return v if len(v) == len(X) else None
     if expr.has(sp.zoo, sp.oo, -sp.oo, sp.nan):
         return None
     try:

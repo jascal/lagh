@@ -112,7 +112,7 @@ from lagh.submit import submission             # two-track benchmark submission
 
 r = discover_passive(X, y, sigma=0.0)
 r.certified                    # True -> exact law with certificate
-r.result.expr                  # sympy expression, exact rationals
+r.result.expr                  # sympy expression, exact rationals (a QuasiPoly law from the integer tier C6)
 r.result.certificate.alpha_log10   # log10 of the chance-fit bound
 ```
 

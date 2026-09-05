@@ -261,6 +261,9 @@ class BoxSearchResult:
     active: ActiveResult          # the winning (or last) ActiveResult
     boxes_tried: int              # K -- for the significance accounting alpha<=K*|H|*q^h
     heldout_box_ok: bool | None   # did the law survive a fresh independent box?
+                                  # None: no box ever certified, so no holdout ran;
+                                  # False: the most recent holdout REJECTED the law,
+                                  # and that result was demoted (never certified)
     transforms: list              # the box ladder actually attempted
 
 
@@ -297,6 +300,28 @@ def _heldout_box_ok(oracle, active: ActiveResult, floor_abs, seed) -> bool:
     return check(r.expr, syms, X, y, pred_eps)["certified"]
 
 
+def _demote_heldout(active: ActiveResult, box_name: str) -> None:
+    """A law that certified on the acquired box but FAILED the fresh independent
+    sample of it is a box-selection artifact, and the guard's verdict has to
+    land ON THE RESULT, not only on the search's control flow. Measured
+    (jascal/lagh#2): the loop discarded the failure by moving on, so when the
+    ladder or the time budget ended right after it, the last ActiveResult came
+    back with `heldout_box_ok=False` AND `certified=True`, and `recover` -- which
+    trusts the certificate -- emitted `tag: proved`. Demote in place: the
+    certificate is withdrawn with a machine-readable reason, the law string is
+    kept for the record, and the expr is dropped so no consumer can evaluate a
+    withdrawn result as if it were certified."""
+    r = active.result
+    cert = r.certificate
+    cert.certified = False
+    cert.abstain = Abstain.HELDOUT.value
+    cert.notes.append(
+        f"held-out box guard: '{cert.law}' certified on the acquired box "
+        f"({box_name}) but not on a fresh independent sample of it -- withdrawn "
+        "as a box-selection artifact")
+    active.result = Result(cert, None, r.tier, r.n_candidates)
+
+
 def run_active_boxsearch(oracle, box_lo, box_hi, *, budget: int = 200,
                          policy: Policy = Policy(), floor_abs: float = MACHINE_FLOOR,
                          seed: int = 0, max_boxes: int = 5,
@@ -308,6 +333,7 @@ def run_active_boxsearch(oracle, box_lo, box_hi, *, budget: int = 200,
     promptly instead of grinding every box x max_rounds (the inverse-trig timeout)."""
     last = None
     tried = []
+    heldout: bool | None = None       # verdict of the most recent holdout, if any ran
     deadline = None if time_budget_s is None else _time.time() + time_budget_s
     for k, (name, lo, hi) in enumerate(_box_ladder(box_lo, box_hi)):
         if k >= max_boxes:
@@ -320,9 +346,13 @@ def run_active_boxsearch(oracle, box_lo, box_hi, *, budget: int = 200,
                             floor_abs=floor_abs, seed=seed, time_budget_s=remaining)
         last = active
         if active.result.certificate.certified:
-            ok = _heldout_box_ok(oracle, active, floor_abs, seed)
-            if ok:
+            heldout = _heldout_box_ok(oracle, active, floor_abs, seed)
+            if heldout:
                 return BoxSearchResult(active, k + 1, True, tried)
-            # certified on this box but NOT on a fresh one -> box-selection artifact,
-            # reject and keep searching (this is the guard doing its job)
-    return BoxSearchResult(last, len(tried), False if last else None, tried)
+            # certified on this box but NOT on a fresh one -> box-selection
+            # artifact: DEMOTE the result (the guard's verdict lives on the
+            # result, whatever ends the ladder next), then keep searching
+            _demote_heldout(active, name)
+    # invariant: nothing certified leaves this function without heldout True
+    assert last is None or not last.result.certificate.certified
+    return BoxSearchResult(last, len(tried), heldout, tried)

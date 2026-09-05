@@ -28,9 +28,20 @@ SIMPLER here than in the law case, not harder.
 
 ## What a state certificate says
 
-- **Claim.** Over the stated observation window and patch family, every initial
-  condition whose mode coefficients lie in the reported intervals reproduces the
-  observations within the declared band. Modes outside the reported set are NOT
+- **Claim.** *(Amended 2026-09-04, jascal/lagh#5.)* Over the stated observation
+  window and patch family, the reported per-mode intervals are MARGINAL
+  projections of the feasible set of initial conditions: the true amplitude of
+  each mode lies in its interval, and each endpoint is attained by some state
+  consistent with the observations — but a combination of endpoints is not
+  guaranteed to be feasible. The jointly guaranteed region is reported
+  separately as an inner box (every state in it reproduces the observations
+  within the declared band), and the band constraint itself is carried for
+  consumers that construct states. The registration originally read "every
+  initial condition whose mode coefficients lie in the reported intervals
+  reproduces the observations within the declared band"; that is false in
+  general (the projections' product contains infeasible states — measured on
+  two correlated modes, the upper-endpoint corner at 2× the band) and the
+  generated certificates said it too. Modes outside the reported set are NOT
   determined — they are named, not silently dropped.
 - **Domain.** The observation window and the basis. Nothing about other times,
   other solutions, or modes above the reported cut.

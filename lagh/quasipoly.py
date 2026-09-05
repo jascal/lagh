@@ -13,6 +13,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from fractions import Fraction
 
+import numpy as np
+
 from .certify import Abstain
 
 
@@ -36,6 +38,29 @@ class QuasiPoly:
 
     def __str__(self) -> str:
         return f"quasipoly(period={self.period}, degree={self.degree})"
+
+    def evaluate(self, X) -> np.ndarray:
+        """Numeric evaluation on an (n,) or (n, 1) input array -- the
+        evaluation interface `base.eval_expr` dispatches to for non-sympy laws
+        (jascal/lagh#6: the passive full-data gate and every public consumer
+        used to reach for `.has` on this object and crash).
+
+        The law lives on the INTEGER lattice: an input that is not an integer
+        has no residue class mod `period`, so the law is UNDEFINED there and
+        the entry is NaN -- `check` counts that as uncovered, never as a hit.
+        Integer inputs evaluate exactly (Fraction arithmetic) and convert to
+        float afterwards, so an integer-valued result is exact below 2**53."""
+        t = np.asarray(X, float)
+        if t.ndim == 2:
+            if t.shape[1] != 1:
+                raise ValueError("a QuasiPoly is 1-D in the dilation parameter")
+            t = t[:, 0]
+        t = t.reshape(-1)
+        out = np.full(len(t), np.nan)
+        for i, v in enumerate(t):
+            if np.isfinite(v) and v == np.round(v):
+                out[i] = float(self(int(v)))
+        return out
 
 
 @dataclass
