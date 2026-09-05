@@ -853,6 +853,9 @@ class QvRows:
     dt: float = 0.0
     sigma_obs_built: float = 0.0
     notes: list = field(default_factory=list)
+    loss_se: np.ndarray | None = None   # |y| * r_se / r: the declared band
+                                        # loss's own uncertainty, per row
+    band_loss_built: float | None = None
 
     @property
     def n_trajectories(self) -> int:
@@ -911,6 +914,9 @@ class QvBand:
                                             # Bernstein correction's scale c
     leak: np.ndarray | None = None          # POINTWISE leakage, when an envelope
                                             # for |a(x)| was supplied
+    loss_se: np.ndarray | None = None       # the declared band loss's uncertainty,
+                                            # coefficient 1 (a declared input's
+                                            # error, like quad -- never x kappa)
 
     def __post_init__(self):
         self.kappa = coverage_factor(self.n_rows_declared, self.delta)
@@ -936,6 +942,8 @@ class QvBand:
             eps = eps + self.dt * self.leak
         else:
             eps = eps + self.dt * self.drift_max ** 2 * self.lam
+        if self.loss_se is not None:
+            eps = eps + self.loss_se
         if self.y is not None:
             eps = eps + MACHINE_REL * np.abs(self.y)
         return eps
@@ -944,8 +952,20 @@ class QvBand:
 def build_qv_rows(t, paths, diff_names, *, ws=("1", "x", "x**2"), windows=None,
                   half: int = 200, n_windows: int = 0, overlap: float = 0.0,
                   p: int = 8, delta: float = 0.05, sigma_obs: float = 0.0,
-                  qv_obs_max: float = 0.5, drift_envelope=None) -> QvRows:
+                  qv_obs_max: float = 0.5, drift_envelope=None,
+                  band_loss=None) -> QvRows:
     """Assemble quadratic-variation rows for the DIFFUSION.
+
+    `band_loss` = (r, r_se) is a DECLARED INPUT (instrument.band_loss): the
+    fraction of the process's quadratic variation the record can contain,
+    measured from the record's own spectrum and the instrument's declared
+    detector model, never from the candidate. The realized QV target is a
+    linear functional of the martingale variance, so the loss is a scalar
+    attenuation of every row: y -> y / r, Var -> Var / r^2, with the loss's
+    own uncertainty |y| r_se / r entering the band at coefficient 1, as a
+    declared input's error does (quad), never multiplied by kappa. Measured
+    on the C-Trap (C2): r = 0.32 and the raw diffusion read 0.325 of truth;
+    declared, it reads 1.01-1.02 on both axes.
 
     `ws` is the family of state weights, playing the role f plays for the drift.
     What it buys depends on the process, and this was MEASURED after being asserted
@@ -1015,12 +1035,26 @@ def build_qv_rows(t, paths, diff_names, *, ws=("1", "x", "x**2"), windows=None,
             f"median {np.median(obs_hits):.0%} of their raw quadratic variation "
             f"(bar {qv_obs_max:.0%}), so b^2 would be a small difference of two "
             "large numbers")
-    return QvRows(np.array(ys),
+    ys, vs = np.array(ys), np.array(vs)
+    loss_se, r_built = None, None
+    if band_loss is not None:
+        r, r_se = float(band_loss[0]), float(band_loss[1])
+        if not (0.0 < r <= 1.0) or r_se < 0:
+            raise ValueError(f"band_loss must be (r in (0, 1], r_se >= 0), got {band_loss}")
+        ys, vs = ys / r, vs / r ** 2
+        loss_se = np.abs(ys) * (r_se / r)
+        r_built = r
+        notes.append(f"declared band loss r = {r:.4f} +- {r_se:.2g}: the record "
+                     f"holds {r:.0%} of the process's quadratic variation "
+                     "(Nyquist x detector x anti-alias); rows rescaled, the "
+                     "loss's uncertainty in the band at coefficient 1")
+    return QvRows(ys,
                   np.array(As) if As else np.zeros((0, len(diff_names))),
-                  [f"diffusion:{h}" for h in diff_names], np.array(vs),
+                  [f"diffusion:{h}" for h in diff_names], vs,
                   np.array(lams),
                   np.array(lks) if lks else None,
-                  np.array(trs, int), wn, wl, dt, float(sigma_obs), notes)
+                  np.array(trs, int), wn, wl, dt, float(sigma_obs), notes,
+                  loss_se=loss_se, band_loss_built=r_built)
 
 
 def certify_diffusion(rows: QvRows, *, delta: float = 0.05,
@@ -1057,7 +1091,7 @@ def certify_diffusion(rows: QvRows, *, delta: float = 0.05,
     mx = None
     band = QvBand(rows.var, rows.lam, n, rows.dt, delta=delta,
                   drift_max=drift_max, y=rows.y, max_term=mx,
-                  leak=rows.leak)
+                  leak=rows.leak, loss_se=rows.loss_se)
     e_all = band(None)
     out.update(kappa=band.kappa, delta=delta,
                median_band=float(np.median(e_all)),
@@ -1088,7 +1122,8 @@ def certify_diffusion(rows: QvRows, *, delta: float = 0.05,
     a = int(0.75 * len(tr))
     eps_ce = QvBand(rows.var[ce], rows.lam[ce], n, rows.dt, delta=delta,
                     drift_max=drift_max, y=rows.y[ce],
-                    leak=None if rows.leak is None else rows.leak[ce])
+                    leak=None if rows.leak is None else rows.leak[ce],
+                    loss_se=None if rows.loss_se is None else rows.loss_se[ce])
     sigma_eff = float(np.median(e_all)
                       / max(KAPPA * np.median(np.abs(rows.y)), 1e-300))
     out["sigma_effective"] = sigma_eff
@@ -1099,13 +1134,16 @@ def certify_diffusion(rows: QvRows, *, delta: float = 0.05,
                                  delta=delta, drift_max=drift_max,
                                  y=rows.y[tr[a:]],
                                  leak=None if rows.leak is None
-                                 else rows.leak[tr[a:]])(None))
+                                 else rows.leak[tr[a:]],
+                                 loss_se=None if rows.loss_se is None
+                                 else rows.loss_se[tr[a:]])(None))
     c = r.certificate
     out.update(certified=bool(c.certified), abstain=c.abstain,
                alpha_log10=c.alpha_log10, n_cert_rows=int(len(ce)), tier=r.tier)
     out["notes"] += [str(x)[:220] for x in c.notes][:3]
     e0 = (band.kappa * np.sqrt(np.maximum(rows.var[ce], 0.0))
-          + MACHINE_REL * np.abs(rows.y[ce]))
+          + MACHINE_REL * np.abs(rows.y[ce])
+          + (0.0 if rows.loss_se is None else rows.loss_se[ce]))
     lp, info = admissible_interval(
         rows.A[ce], rows.y[ce],
         lambda cm: e0 + rows.dt * (rows.leak[ce] if rows.leak is not None
