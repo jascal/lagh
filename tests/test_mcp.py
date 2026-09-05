@@ -140,3 +140,32 @@ def test_recover_data_abstain_offers_a_broadened_box_for_the_caller_loop():
     assert r["next_action"] == ch["research"]["move"]
     assert r["next_action"] in ("acquire_more_data", "acquire_divergent",
                                 "declare_and_verify", "report_and_stop")
+
+
+# ---- jascal/lagh#1: the declared form is parsed, never evaluated as Python ----
+
+def test_verify_never_executes_python_in_the_form(capsys):
+    X = np.arange(1., 21.)[:, None]
+    form = "(__import__('builtins').print('REVIEW_EXECUTED'), Symbol('x_0'))[1]"
+    r = verify(X, X[:, 0], form)
+    assert "REVIEW_EXECUTED" not in capsys.readouterr().out
+    assert r["certified"] is False and r["abstain"] == "malformed-form"
+
+
+def test_verify_rejects_python_constructs_but_keeps_the_math_grammar():
+    X = np.arange(1., 21.)[:, None]
+    for bad in ("x_0.__class__", "foo(x_0)", "[x_0]", "x_0 if 1 else 2", "x_5",
+                "lambda: 1", "2**(10**10**10)", "'x_0'", "x_0 == 1"):
+        r = verify(X, X[:, 0], bad)
+        assert r["certified"] is False and r["abstain"] == "malformed-form", bad
+    # the intended grammar survives: variables, rationals, constants, functions
+    X2, y2 = _data(lambda X: 2.5 * X[:, 0] * X[:, 1], 2, 0.5, 3.0)
+    assert verify(X2, y2, "x_0*x_1")["certified"] is True
+    assert verify(X2, y2, "Rational(5,2)*x_0*x_1")["certified"] is True
+    assert verify(X2, y2, "x_0^1*x_1")["certified"] is True          # ^ as power
+    X1, y1 = _data(lambda X: 3 * np.sqrt(X[:, 0]), 1, 0.5, 4.0)
+    assert verify(X1, y1, "sqrt(x_0)")["certified"] is True
+    X1, y1 = _data(lambda X: 2 * np.exp(-X[:, 0]), 1, 0.5, 4.0)
+    assert verify(X1, y1, "exp(-x_0)")["certified"] is True
+    X1, y1 = _data(lambda X: 2.0 * X[:, 0] ** np.e, 1, 1.0, 3.0)
+    assert verify(X1, y1, "x_0**E")["strength"] == "consistent"

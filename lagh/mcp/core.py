@@ -27,6 +27,7 @@ from ..base import eval_expr, lstsq
 from ..certify import (Abstain, coherent, epsilon, pinned, sample_box)
 from ..characterize import characterize
 from ..engine import Result, discover
+from ..formparse import FormError, parse_form
 from ..passive import discover_passive
 
 # nameable constants a free-fit exponent might be reaching for (fit's diagnosis)
@@ -216,18 +217,20 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
 
 def verify(X, y, form: str, *, sigma: float = 0.0,
            floor_abs: float = 1e-12, se=None) -> dict:
-    """Bounded. Check a caller-DECLARED form. The form is a sympy expression in
-    x_0..x_{d-1}; its single overall scale is refit, then it is checked over the
-    domain. A rational form can certify `pinned`; a declared irrational only
+    """Bounded. Check a caller-DECLARED form. The form is an expression of the
+    RESTRICTED grammar in `lagh.formparse` (x_0..x_{d-1}, numbers, operators,
+    sqrt/exp/log/trig, named constants) -- parsed, never evaluated as Python
+    (jascal/lagh#1); its single overall scale is refit, then it is checked over
+    the domain. A rational form can certify `pinned`; a declared irrational only
     `consistent`."""
     X, y = _prep(X, y)
     dim = X.shape[1]
     syms = _syms(dim)
     try:
-        expr = sp.sympify(form)
-    except Exception as e:                                     # noqa: BLE001
+        expr = parse_form(form, syms)       # a restricted grammar, never eval
+    except FormError as e:
         return {"tag": "open", "tool": "verify", "certified": False,
-                "abstain": "malformed-form", "note": str(e)[:200]}
+                "abstain": "malformed-form", "note": str(e)[:300]}
     if len(X) < 8:
         return {"tag": "open", "tool": "verify", "certified": False,
                 "abstain": Abstain.RANGE.value,

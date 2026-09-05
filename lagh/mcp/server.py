@@ -60,7 +60,9 @@ def build_server():
                sigma: float = 0.0) -> dict:
         """BOUNDED. Check a form YOU declare against data (X, y).
 
-        `form` is a sympy expression in `x_0..x_{d-1}` (e.g. `"x_0*x_1/x_2**2"`); its
+        `form` is a mathematical expression in `x_0..x_{d-1}` (e.g. `"x_0*x_1/x_2**2"`)
+        in a RESTRICTED grammar -- numbers, + - * / **, sqrt/exp/log/trig, and the
+        constants E/pi/GoldenRatio/EulerGamma; it is never evaluated as Python. Its
         overall scale is refit, then it is checked over the domain. Returns a
         CERTIFICATE or an ABSTENTION (a wrong form is REFUTED, not tolerated). The
         `strength` field is load-bearing: a rational form certifies `pinned` (this
