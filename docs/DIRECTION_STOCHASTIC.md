@@ -613,3 +613,34 @@ frequency-dependent and the calibration's fit range does not resolve that — me
 0.692 and 0.697. The question of which of the two drag readings (1.48 from the scale
 ratio, 2.0 from the declared-loss QV) is right needs the height above the surface,
 which the file does not carry: **open**.
+
+
+## Registered 2026-09-05: a gate's ratio is a measurement (C3, `CASE_STUDY_TWEEZERS_C3.md`)
+
+The C2 registration above predicted (R-C2) that a near-surface record would fail the
+ACF gate on BOTH axes by a common factor, and it did, at 0.704 with an axis spread of
+0.8%. What C2 then did with that number was wrong twice over, and both corrections are
+registered here.
+
+1. **The gate's ratio is κ/γ, not γ.** One number, two quantities. `gate_record`
+   reports the common ratio and explicitly declines to attribute it; the equipartition
+   variance — which the drag does not enter — is what separates a common-mode ratio
+   from a contaminated axis, and one axis is never enough (`unresolved`).
+2. **Attribution needs a signature, not a second assumption.** Three ratios read in the
+   detector's own units — timescale, realized diffusion against the calibration's own
+   fitted D, and variance — respond differently to a drag, a stiffness and a scale
+   change, so a one-parameter fit per hypothesis leaves a residual that can refuse
+   (`attribute_deviation`). Measured: `drag` on both axes at F = 1.35, alternatives
+   5–10× worse; `consistent` on the passive control; `unattributed` on the
+   contaminated axis.
+3. **A single-frequency drive scale is degenerate**, and C2 broke the degeneracy with
+   the calibration's own corner — the quantity under test. The measured cost is a
+   factor equal to the drag itself. `drive_scale` now takes the corner from the record
+   and reports what a declared one would have introduced.
+
+Prediction R-C3, registered before the next active record is read: **a drive scale
+whose corner comes from the record will agree with the two scale-free routes only if
+the stage's amplitude is declared in a length unit.** On this file it does not, by 13%,
+and that is where the remaining disagreement is localised — not in the thermal ratios,
+which agree with each other and with the calibration's own Rd to 2%. A second drive
+frequency would determine Rd and f_c together and is what the next record should carry.

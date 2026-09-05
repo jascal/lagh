@@ -1,0 +1,464 @@
+{
+ "campaign": "stochastic-real (C-Trap)",
+ "stage": "C3",
+ "records": {
+  "passive": {
+   "gate_record": {
+    "verdict": "contaminated",
+    "contaminated": [
+     "Force 1x"
+    ],
+    "ratios": {
+     "Force 1x": 0.01852040203557042,
+     "Force 1y": 1.011376077220373
+    },
+    "note": "Force 1x: the equipartition variance is wrong too, so the timescale deficit is not a drag statement"
+   },
+   "axes": {
+    "Force 1x": {
+     "channel": "Force 1x",
+     "fs_hz": 78125.0,
+     "calibration": {
+      "fc_hz": 499.4646125979549,
+      "kappa_pN_per_nm": 0.1287225353482303,
+      "Rd_um_per_V": 4.5418947253217645,
+      "alpha": 0.41703416787845804,
+      "f_diode_hz": 8113.027225352045,
+      "T_C": 25.0,
+      "gamma0_kg_per_s": 4.101757616306441e-08,
+      "bead_diameter_um": 4.89,
+      "viscosity_Pa_s": 0.00089,
+      "hydrodynamic_correction": 0.0,
+      "fit_range_hz": [
+       100.0,
+       23000.0
+      ]
+     },
+     "retention": {
+      "r_var": 0.9461169305183131,
+      "fc_fit_hz": 542.6231612222876,
+      "r_nyquist": 0.768740044039154,
+      "r_diode": 0.43865706573490615,
+      "r_antialias": 0.9415784315759371,
+      "r_total": 0.3175127249540999,
+      "stride": {
+       "1": 0.3175127249540999,
+       "2": 0.49848075985434237,
+       "4": 0.6703136668471386,
+       "8": 0.8090177128747954,
+       "16": 0.8891841103517395,
+       "32": 0.9271725240210003
+      }
+     },
+     "gate": {
+      "passed": false,
+      "theta_acf": 58.121257487513176,
+      "theta_ref": 3138.2287153316142,
+      "ratio": 0.01852040203557042,
+      "tol": 1.25,
+      "acf_lag1": 0.9963667510704434,
+      "var_ratio": 3.796662520237528,
+      "var_ok": false,
+      "note": "timescale is 0.0185x the calibration's AND the equipartition variance is 3.8x its own expectation: the axis carries something the calibration's fit range never saw"
+     },
+     "realized_diffusion": {
+      "plateau_V2_per_s": 0.008611455976269973,
+      "spread": 0.6524840988333507,
+      "strides": [
+       2,
+       3,
+       4,
+       6,
+       8,
+       12,
+       16,
+       24,
+       32
+      ],
+      "calibration_b2_V2_per_s": 0.009729801304813098
+     },
+     "ratios": {
+      "theta": 0.01852040203557042,
+      "diffusion": 0.8850597978820075,
+      "variance": 3.796662520237528
+     },
+     "attribution": {
+      "verdict": "unattributed",
+      "hypotheses": {
+       "drag": {
+        "parameter": "F",
+        "value": 7.810673571804834,
+        "max_residual": 5.912913172783924
+       },
+       "stiffness": {
+        "parameter": "c",
+        "value": 0.06984321258884409,
+        "max_residual": 0.7348288924709538
+       },
+       "scale": {
+        "parameter": "s",
+        "value": 0.7385949734039836,
+        "max_residual": 1.0711649615833394
+       }
+      },
+      "ranked": [
+       "stiffness",
+       "scale",
+       "drag"
+      ],
+      "tol": 0.08,
+      "note": "no single change of drag, stiffness or scale explains the three ratios: stiffness leaves 73.5%, scale leaves 107.1%, drag leaves 591.3%"
+     }
+    },
+    "Force 1y": {
+     "channel": "Force 1y",
+     "fs_hz": 78125.0,
+     "calibration": {
+      "fc_hz": 524.7345364641319,
+      "kappa_pN_per_nm": 0.13523512620264866,
+      "Rd_um_per_V": 4.889305783616283,
+      "alpha": 0.41561151101213084,
+      "f_diode_hz": 8398.670338755108,
+      "T_C": 25.0,
+      "gamma0_kg_per_s": 4.101757616306441e-08,
+      "bead_diameter_um": 4.89,
+      "viscosity_Pa_s": 0.00089,
+      "hydrodynamic_correction": 0.0,
+      "fit_range_hz": [
+       100.0,
+       23000.0
+      ]
+     },
+     "retention": {
+      "r_var": 0.9428723810507795,
+      "fc_fit_hz": 595.5988239167506,
+      "r_nyquist": 0.768254527962071,
+      "r_diode": 0.44441488199975004,
+      "r_antialias": 0.937222595713483,
+      "r_total": 0.31999004889267024,
+      "stride": {
+       "1": 0.31999004889267024,
+       "2": 0.5039809845323121,
+       "4": 0.6758463529358192,
+       "8": 0.8121148703936751,
+       "16": 0.8897399337731011,
+       "32": 0.9259816385809353
+      }
+     },
+     "gate": {
+      "passed": true,
+      "theta_acf": 3334.5113055314814,
+      "theta_ref": 3297.0043296811245,
+      "ratio": 1.011376077220373,
+      "tol": 1.25,
+      "acf_lag1": 0.9857876138068095,
+      "var_ratio": 1.0171851964451917,
+      "var_ok": true,
+      "note": "timescale agrees with the calibration"
+     },
+     "realized_diffusion": {
+      "plateau_V2_per_s": 0.008531964445481661,
+      "spread": 0.03158609651176558,
+      "strides": [
+       2,
+       3,
+       4,
+       6,
+       8,
+       12,
+       16
+      ],
+      "calibration_b2_V2_per_s": 0.008396217880312194
+     },
+     "ratios": {
+      "theta": 1.011376077220373,
+      "diffusion": 1.016167584870299,
+      "variance": 1.0171851964451917
+     },
+     "attribution": {
+      "verdict": "consistent",
+      "ratios": [
+       1.011376077220373,
+       1.016167584870299,
+       1.0171851964451917
+      ],
+      "tol": 0.08,
+      "note": "all three ratios are 1 within tolerance: the record agrees with its calibration and there is nothing to attribute"
+     }
+    }
+   }
+  },
+  "active": {
+   "gate_record": {
+    "verdict": "common-mode",
+    "ratios": {
+     "Force 1x": 0.7008452200388373,
+     "Force 1y": 0.7063477022732395
+    },
+    "common_ratio": 0.7035910821092147,
+    "spread": 0.007851208907577734,
+    "note": "every axis is off by the same factor with healthy equipartition variances: the record's kappa/gamma is 0.704 of the calibration's reference. WHICH of kappa and gamma moved is not decided here -- the ratio is one number and they are two; `attribute_deviation` decides it from a second scale-free ratio"
+   },
+   "axes": {
+    "Force 1x": {
+     "channel": "Force 1x",
+     "fs_hz": 78125.0,
+     "calibration": {
+      "fc_hz": 1935.0402774950164,
+      "kappa_pN_per_nm": 0.11941037598751927,
+      "Rd_um_per_V": 4.567619002314173,
+      "alpha": 0.45100523496184003,
+      "f_diode_hz": 11684.361562063437,
+      "T_C": 20.0,
+      "gamma0_kg_per_s": 9.821372617358556e-09,
+      "bead_diameter_um": 1.04,
+      "viscosity_Pa_s": 0.001002,
+      "hydrodynamic_correction": 1.0,
+      "fit_range_hz": [
+       10.0,
+       23000.0
+      ]
+     },
+     "drive": {
+      "f_drive_hz": 38.153421549431016,
+      "stage_amplitude": 0.5272719546934059,
+      "response_amplitude": 0.0027683558267595602,
+      "response_power_share": 0.7206947722444326,
+      "f_c_record_hz": 1356.1637290650076,
+      "f_c_used_hz": 1356.1637290650076,
+      "f_c_source": "record",
+      "transfer": 0.028122217662323784,
+      "scale": 5.356268343034339,
+      "declared_f_c_hz": 1935.0402774950164,
+      "scale_at_declared_f_c": 3.754670584498786,
+      "degeneracy_factor": 0.700986273285135,
+      "driven_axis": true
+     },
+     "retention": {
+      "r_var": 0.9032561422000852,
+      "fc_fit_hz": 1484.8503084377492,
+      "r_nyquist": 0.7600608777568327,
+      "r_diode": 0.5269499913294309,
+      "r_antialias": 0.9391269448256202,
+      "r_total": 0.37613355768337897,
+      "stride": {
+       "1": 0.37613355768337897,
+       "2": 0.5757148937692279,
+       "4": 0.7314756988988087,
+       "8": 0.834271497005731,
+       "16": 0.8843193607327275,
+       "32": 0.9007894031464064
+      }
+     },
+     "gate": {
+      "passed": false,
+      "theta_acf": 8521.028016591134,
+      "theta_ref": 12158.216640357397,
+      "ratio": 0.7008452200388373,
+      "tol": 1.25,
+      "acf_lag1": 0.9515773288404715,
+      "var_ratio": 1.012407786377551,
+      "var_ok": true,
+      "note": "timescale is 0.701x the calibration's while the equipartition variance is as expected: kappa/gamma differs from the calibration's REFERENCE ratio -- see gate_record"
+     },
+     "realized_diffusion": {
+      "plateau_V2_per_s": 0.031016937879519674,
+      "spread": 0.03010230684972548,
+      "strides": [
+       2,
+       3,
+       4,
+       6,
+       8
+      ],
+      "calibration_b2_V2_per_s": 0.039504925445221745
+     },
+     "ratios": {
+      "theta": 0.7008452200388373,
+      "diffusion": 0.7851410306425798,
+      "variance": 1.012407786377551
+     },
+     "attribution": {
+      "verdict": "drag",
+      "hypotheses": {
+       "drag": {
+        "parameter": "F",
+        "value": 1.348078260827493,
+        "max_residual": 0.058431555092954356
+       },
+       "stiffness": {
+        "parameter": "c",
+        "value": 0.83201914475783,
+        "max_residual": 0.21485896935742022
+       },
+       "scale": {
+        "parameter": "s",
+        "value": 1.0590688937176438,
+        "max_residual": 0.2991547799611627
+       }
+      },
+      "ranked": [
+       "drag",
+       "stiffness",
+       "scale"
+      ],
+      "tol": 0.08,
+      "note": "drag: F = 1.348 explains all three ratios to 5.8%, while stiffness leaves 21.5%"
+     },
+     "local_from_drive": {
+      "kappa_N_per_m": 8.577123791109758e-05,
+      "kappa_pN_per_nm": 0.08577123791109757,
+      "gamma_kg_per_s": 1.0065832167679066e-08,
+      "theta_per_s": 8521.028016591134,
+      "variance_nm2": 47.18799264265168,
+      "r_var": 0.9032561422000852,
+      "gamma_bulk_kg_per_s": 9.821372617358556e-09,
+      "drag_over_bulk": 1.024890568746821,
+      "faxen": {
+       "height_um": 12.039253892394532,
+       "lambda": 0.04319204534165491,
+       "gap_um": 11.519253892394532,
+       "note": "Faxen parallel-to-wall, five-term near-field series"
+      },
+      "kappa_over_calibration": 0.718289656169095,
+      "needs": "the stage's length unit, which the file does not declare; um assumed"
+     },
+     "local_at_declared_f_c": {
+      "drag_over_bulk": 2.085731831963942,
+      "note": "what C2's corner choice gives"
+     },
+     "implied_by_drag": {
+      "scale_um_per_V": 4.661069406642389,
+      "calibration_Rd_um_per_V": 4.567619002314173,
+      "scale_over_calibration_Rd": 1.0204593255875476,
+      "stage_amplitude_implied": 0.45883645471162127,
+      "stage_amplitude_recorded": 0.5272719546934059,
+      "note": "the drag the scale-free routes agree on implies this displacement scale; compare it with the calibration's Rd and the recorded stage amplitude"
+     }
+    },
+    "Force 1y": {
+     "channel": "Force 1y",
+     "fs_hz": 78125.0,
+     "calibration": {
+      "fc_hz": 1827.3414352616333,
+      "kappa_pN_per_nm": 0.1127643338383827,
+      "Rd_um_per_V": 5.107013767771442,
+      "alpha": 0.46184601448586593,
+      "f_diode_hz": 11677.399369010784,
+      "T_C": 20.0,
+      "gamma0_kg_per_s": 9.821372617358556e-09,
+      "bead_diameter_um": 1.04,
+      "viscosity_Pa_s": 0.001002,
+      "hydrodynamic_correction": 1.0,
+      "fit_range_hz": [
+       10.0,
+       23000.0
+      ]
+     },
+     "drive": {
+      "f_drive_hz": 38.153421549431016,
+      "stage_amplitude": 0.5272575548361086,
+      "response_amplitude": 7.2833769523889785e-06,
+      "response_power_share": 2.118584955135283e-05,
+      "f_c_record_hz": 1290.7384240657382,
+      "f_c_used_hz": 1290.7384240657382,
+      "f_c_source": "record",
+      "transfer": 0.029546469951018867,
+      "scale": 2138.9253367289907,
+      "declared_f_c_hz": 1827.3414352616333,
+      "scale_at_declared_f_c": 1511.1555481900446,
+      "degeneracy_factor": 0.7065022430848474,
+      "driven_axis": false
+     },
+     "retention": {
+      "r_var": 0.9084209511822805,
+      "fc_fit_hz": 1409.0621418858298,
+      "r_nyquist": 0.7607622784339881,
+      "r_diode": 0.5340219629994879,
+      "r_antialias": 0.9370303235892028,
+      "r_total": 0.3806814674665757,
+      "stride": {
+       "1": 0.3806814674665757,
+       "2": 0.5810106349888049,
+       "4": 0.7358899093751823,
+       "8": 0.8381436823525407,
+       "16": 0.8884405920793298,
+       "32": 0.9055844805579091
+      }
+     },
+     "gate": {
+      "passed": false,
+      "theta_acf": 8109.94870150198,
+      "theta_ref": 11481.52485723635,
+      "ratio": 0.7063477022732395,
+      "tol": 1.25,
+      "acf_lag1": 0.9542749889994638,
+      "var_ratio": 1.0012607309187938,
+      "var_ok": true,
+      "note": "timescale is 0.706x the calibration's while the equipartition variance is as expected: kappa/gamma differs from the calibration's REFERENCE ratio -- see gate_record"
+     },
+     "realized_diffusion": {
+      "plateau_V2_per_s": 0.02423249162350017,
+      "spread": 0.026127758459140837,
+      "strides": [
+       2,
+       3,
+       4,
+       6,
+       8
+      ],
+      "calibration_b2_V2_per_s": 0.03160071661589504
+     },
+     "ratios": {
+      "theta": 0.7063477022732395,
+      "diffusion": 0.7668336107071484,
+      "variance": 1.0012607309187938
+     },
+     "attribution": {
+      "verdict": "drag",
+      "hypotheses": {
+       "drag": {
+        "parameter": "F",
+        "value": 1.3587518913966063,
+        "max_residual": 0.04193661893482687
+       },
+       "stiffness": {
+        "parameter": "c",
+        "value": 0.8399156559863304,
+        "max_residual": 0.2331663892928516
+       },
+       "scale": {
+        "parameter": "s",
+        "value": 1.068286940004907,
+        "max_residual": 0.2936522977267605
+       }
+      },
+      "ranked": [
+       "drag",
+       "stiffness",
+       "scale"
+      ],
+      "tol": 0.08,
+      "note": "drag: F = 1.359 explains all three ratios to 4.2%, while stiffness leaves 23.3%"
+     }
+    }
+   },
+   "drag": {
+    "over_bulk": 1.3534150761120496,
+    "se": 0.07908214758347623,
+    "per_axis": [
+     1.348078260827493,
+     1.3587518913966063
+    ],
+    "faxen": {
+     "height_um": 1.1075437749928088,
+     "lambda": 0.46950740164051424,
+     "gap_um": 0.5875437749928087,
+     "note": "Faxen parallel-to-wall, five-term near-field series"
+    },
+    "note": "every axis attributes its deviation to the drag alone, from ratios that need no displacement scale"
+   }
+  }
+ },
+ "seconds": 1.3
+}

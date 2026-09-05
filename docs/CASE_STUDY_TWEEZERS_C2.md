@@ -82,6 +82,14 @@ the ridge recorded in 14511a5 stands.
 
 ## 5. The active record: a scale that does not pass through the thermal motion
 
+> **SUPERSEDED by `CASE_STUDY_TWEEZERS_C3.md` (2026-09-05).** The drag figure below
+> (1.48× bulk) was computed from a drive scale that used the CALIBRATION's corner
+> frequency. At f_drive ≪ f_c the driven response determines only the product Rd·f_c,
+> so supplying that corner assumes the quantity under test and returns it: measured in
+> simulation, the error is exactly the drag ratio. Two scale-free routes put the drag
+> at **1.353 ± 0.079 × bulk**, and the gate failure below is a measurement of κ/γ
+> rather than a reason to refuse the record. The section is kept as written.
+
 `instrument.drive_scale`: lock-in of the bead's volts and the recorded nanostage
 position at the drive line (38.15 Hz, refined below the bin width), with the
 fluid-drag transfer |x_bead/x_stage| = f_d/√(f_d²+f_c²) = 0.0197. Force 1x carries
@@ -111,7 +119,7 @@ in hand; the record it came from is not a clean OU at the calibration's timescal
 | b² (passive, 1y), loss declared | interval covers; empirical, circular w.r.t. physics |
 | θ (passive, 1y), b²-free form | 0.97 / 1.06 of 2πf_c, scored |
 | Rd (active, 1x) | 3.755 stage-units/V, non-circular; empirical |
-| any stochastic claim on the active record | refused by the gate on both axes; open |
+| any stochastic claim on the active record | refused by the gate on both axes; open — **reopened and answered in C3**: the common-mode refusal was a measurement of κ/γ, attributed to the drag at 1.353 ± 0.079 × bulk |
 
 Zero confident-wrong. Nothing here is `proved`.
 
