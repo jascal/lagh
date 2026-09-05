@@ -75,8 +75,10 @@ def _has_irrational(expr) -> bool:
     """A DECLARED irrational constant the data cannot pin -- the symbolic e/pi/golden
     that a declared form like x**E introduces. A fitted Float coefficient (a physical
     constant like 6.674e-5) is NOT this: it is an identified value, so it must not make
-    the law 'consistent' -- that would mislabel every constant-carrying law."""
-    return bool(expr.has(sp.E, sp.pi, sp.GoldenRatio, sp.EulerGamma))
+    the law 'consistent' -- that would mislabel every constant-carrying law.
+    A non-sympy law (the C6 QuasiPoly, exact integer arithmetic) carries none."""
+    return isinstance(expr, sp.Basic) and \
+        bool(expr.has(sp.E, sp.pi, sp.GoldenRatio, sp.EulerGamma))
 
 
 def _strength(expr, syms, X_cert, y_cert, eps, sigma) -> str:

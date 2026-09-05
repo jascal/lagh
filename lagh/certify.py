@@ -294,6 +294,10 @@ def pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray,
     """
     if not np.isfinite(sigma) or sigma <= 0 or expr is None:
         return True
+    if not isinstance(expr, sp.Basic):
+        # a non-sympy law (C6 QuasiPoly) is exact integer arithmetic with no
+        # snapped rational parameter to perturb: nothing here to test
+        return True
     from fractions import Fraction
     y = np.asarray(y, float).ravel()
     ev_P = eval_expr(expr, syms, P)                   # original law on the probe box
