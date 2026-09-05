@@ -169,3 +169,44 @@ def test_verify_rejects_python_constructs_but_keeps_the_math_grammar():
     assert verify(X1, y1, "exp(-x_0)")["certified"] is True
     X1, y1 = _data(lambda X: 2.0 * X[:, 0] ** np.e, 1, 1.0, 3.0)
     assert verify(X1, y1, "x_0**E")["strength"] == "consistent"
+
+
+# ---- jascal/lagh#4: verify upholds the certification safeguards ----
+
+def test_verify_rejects_a_signal_below_the_floor_as_vacuous():
+    X = np.arange(1., 21.)[:, None]
+    r = verify(X, np.full(20, 1e-15), "0")     # used to be a `pinned` certificate
+    assert r["certified"] is False and r["abstain"] == "noise"
+    assert "VACUOUS" in r["note"]
+
+
+def test_verify_demotes_a_weak_significance_certificate():
+    X = np.arange(1., 21.)[:, None]
+    r = verify(X, X[:, 0], "x_0", floor_abs=0.5)  # loose band: q ~ 0.07 over h = 4
+    assert r["certified"] is False and r["abstain"] == "noise"
+    assert r["alpha_log10"] > -6
+    r = verify(X, X[:, 0], "x_0")                 # tight band: the bound is reported
+    assert r["certified"] is True and r["alpha_log10"] <= -6
+    assert r["n_hypotheses"] == 1
+
+
+def test_verify_checks_every_supplied_row_and_claims_the_full_domain():
+    X = np.arange(1., 21.)[:, None]
+    y = X[:, 0].copy()
+    i = np.random.default_rng(0).permutation(len(X))
+    y[i[12:16]] += 100          # the SELECTION rows, which verify never looked at
+    r = verify(X, y, "x_0")
+    assert r["certified"] is False and r["abstain"] == "structural"
+    assert "full supplied dataset" in r["note"]
+    r = verify(X, X[:, 0], "x_0")
+    assert r["certified"] is True
+    assert r["domain_size"] == 20 and r["n_certification"] == 4
+    assert "all 20 supplied points" in r["note"]
+
+
+def test_verify_gates_an_unpinned_coefficient_and_snaps_a_pinned_one():
+    X, y = _data(lambda X: 1.5 * X[:, 0] ** 2, 1, 0.5, 4.0)
+    r = verify(X, y, "1.50001*x_0**2", floor_abs=1.0)   # loose: a perturbed scale fits too
+    assert r["certified"] is False and r["abstain"] == "parametric"
+    r = verify(X, y, "1.50001*x_0**2")                  # tight: pinned, decimal-snapped
+    assert r["certified"] is True and r["law"] == "3*x_0**2/2"

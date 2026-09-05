@@ -23,10 +23,11 @@ import numpy as np
 import sympy as sp
 
 from ..acquisition import run_active, run_active_boxsearch
-from ..base import eval_expr, lstsq
-from ..certify import (Abstain, coherent, epsilon, pinned, sample_box)
+from ..base import eval_expr, lstsq, snap
+from ..certify import (Abstain, check, epsilon, float_pinned, pinned, sample_box,
+                       significance_log10, vacuous)
 from ..characterize import characterize
-from ..engine import Result, discover
+from ..engine import ALPHA_CERT_MAX_LOG10, Result, discover
 from ..formparse import FormError, parse_form
 from ..passive import discover_passive
 
@@ -80,6 +81,13 @@ def _has_irrational(expr) -> bool:
     A non-sympy law (the C6 QuasiPoly, exact integer arithmetic) carries none."""
     return isinstance(expr, sp.Basic) and \
         bool(expr.has(sp.E, sp.pi, sp.GoldenRatio, sp.EulerGamma))
+
+
+def _abstain(tool: str, reason: str, note: str, **extra) -> dict:
+    out = {"tag": "open", "tool": tool, "certified": False, "abstain": reason,
+           "note": note}
+    out.update(extra)
+    return out
 
 
 def _strength(expr, syms, X_cert, y_cert, eps, sigma) -> str:
@@ -217,63 +225,154 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
 
 def verify(X, y, form: str, *, sigma: float = 0.0,
            floor_abs: float = 1e-12, se=None) -> dict:
-    """Bounded. Check a caller-DECLARED form. The form is an expression of the
-    RESTRICTED grammar in `lagh.formparse` (x_0..x_{d-1}, numbers, operators,
-    sqrt/exp/log/trig, named constants) -- parsed, never evaluated as Python
-    (jascal/lagh#1); its single overall scale is refit, then it is checked over
-    the domain. A rational form can certify `pinned`; a declared irrational only
-    `consistent`."""
-    X, y = _prep(X, y)
+    """Bounded. Check a caller-DECLARED form.
+
+    `form` is an expression of the RESTRICTED grammar in `lagh.formparse`
+    (variables x_0..x_{d-1}, numbers, + - * / **, sqrt/exp/log/trig, and the
+    named constants E/pi/GoldenRatio/EulerGamma). It is parsed to a syntax
+    tree and built node by node -- never evaluated as Python (jascal/lagh#1:
+    `sympify` ran whatever the caller put in the string, before any check).
+
+    Protocol (declared form, refitted scale): the form's single overall scale
+    is refit on a fit split, snapped, and the scaled form is checked
+    exhaustively on a disjoint certification split. The declared form is ONE
+    hypothesis, so |H| = 1, and the refit scale is a dof the significance
+    bound discounts.
+
+    Every safeguard discovery applies to its own winner applies here too
+    (jascal/lagh#4 -- verify used to bypass them and reported a signal below
+    the default floor as a `pinned` certificate of `0`):
+
+      * VACUITY: if the zero law certifies, eps swallows the signal and no
+        form can be evidence at this band -> NOISE abstain.
+      * EXACT-COEFFICIENT gate (`float_pinned`): perturbing the refit scale
+        or a declared Float must BREAK certification, else the exactness
+        claim is unfounded -> PARAMETRIC abstain (pinned floats decimal-snap).
+      * PARAMETRIC gate under noise (`pinned`): a neighbour rational that
+        also fits means the value is not identified -> PARAMETRIC abstain.
+      * FULL-DATA check: the fit and selection rows are part of the claimed
+        domain and can contradict the form; every supplied row must satisfy
+        the law at its own band -> STRUCTURAL abstain otherwise.
+      * SIGNIFICANCE: alpha = |H| q^h over the held-out rows, dof-discounted,
+        must be <= 1e-6 or the certificate demotes -> NOISE abstain.
+
+    The domain a certificate claims is the FULL supplied dataset
+    (`domain_size`), and the response says how many rows were held out for
+    the bound (`n_certification`). A rational form can certify `pinned`; a
+    declared irrational (`x_0**E`) only `consistent` -- the constant is never
+    identified from finite data. Below 15 points the split machinery
+    collapses, so (as `recover` does) the scale is refit and checked on all
+    points, with the exposure bounded by the stated dof-discounted alpha."""
+    Xr = np.asarray(X, float)
+    if Xr.ndim == 1:
+        Xr = Xr[:, None]
+    yr = np.asarray(y, float).ravel()
+    m = np.isfinite(yr) & np.all(np.isfinite(Xr), axis=1)
+    X, y = Xr[m], yr[m]
+    se_full = None
+    if se is not None:
+        se_full = np.asarray(se, float).ravel()
+        if len(se_full) != len(m):
+            return _abstain("verify", "bad-request",
+                            f"se has {len(se_full)} entries for {len(m)} points")
+        se_full = se_full[m]
     dim = X.shape[1]
     syms = _syms(dim)
     try:
-        expr = parse_form(form, syms)       # a restricted grammar, never eval
+        expr = parse_form(form, syms)
     except FormError as e:
-        return {"tag": "open", "tool": "verify", "certified": False,
-                "abstain": "malformed-form", "note": str(e)[:300]}
-    if len(X) < 8:
-        return {"tag": "open", "tool": "verify", "certified": False,
-                "abstain": Abstain.RANGE.value,
-                "note": f"only {len(X)} finite points; too thin to certify"}
-    Xf, yf, Xs, ys, Xc, yc = _split(X, y)
+        return _abstain("verify", "malformed-form", str(e)[:300])
+    n = len(X)
+    if n < 8:
+        return _abstain("verify", Abstain.RANGE.value,
+                        f"only {n} finite points; too thin to certify")
+    if n < 15:
+        Xf, yf, Xc, yc, se_c = X, y, X, y, se_full
+        mode_note = ("tiny-data mode: scale refit and exhaustive check on all "
+                     "points; refit exposure bounded by the stated dof-discounted "
+                     "alpha")
+    else:
+        i = np.random.default_rng(0).permutation(n)
+        a, b = int(0.6 * n), int(0.8 * n)
+        Xf, yf, Xc, yc = X[i[:a]], y[i[:a]], X[i[b:]], y[i[b:]]
+        se_c = None if se_full is None else se_full[i[b:]]
+        mode_note = (f"scale refit on {len(Xf)} rows, exhaustively checked on "
+                     f"{len(Xc)} held-out rows, then re-checked on all {n} "
+                     "supplied rows")
     base = eval_expr(expr, syms, Xf)
     if base is None or not np.all(np.isfinite(base)):
-        return {"tag": "open", "tool": "verify", "certified": False,
-                "abstain": Abstain.NUMERICAL.value,
-                "note": "declared form does not evaluate finitely on the domain"}
+        return _abstain("verify", Abstain.NUMERICAL.value,
+                        "declared form does not evaluate finitely on the domain")
     d2 = float(np.dot(base, base))
-    alpha = float(np.dot(base, yf) / d2) if d2 > 0 else 1.0
-    # snap the refit scale to a rational when clean (keeps the exact claim exact)
-    a_snap = Fraction(alpha).limit_denominator(10 ** 6)
+    scale = float(np.dot(base, yf) / d2) if d2 > 0 else 1.0
+    if not np.isfinite(scale):
+        return _abstain("verify", Abstain.NUMERICAL.value,
+                        "the refit scale is not finite")
+    # snap the refit scale with escalating denominators (base.snap): a small
+    # physical constant needs more than a 10^6 cap; whether the result is
+    # PINNED is the coefficient gate's decision below, not the snapper's
+    a_snap = snap(scale)
     scaled = sp.Rational(a_snap.numerator, a_snap.denominator) * expr
-    se_arr = None
-    if se is not None:
-        se_full = np.asarray(se, float).ravel()
-        # align with _split's permutation (seed 0): the cert split is i[b:]
-        i = np.random.default_rng(0).permutation(len(se_full))
-        b_ = int(0.8 * len(se_full))
-        se_arr = se_full[i[b_:]]
-    eps = epsilon(yc, sigma=float(sigma), floor_abs=float(floor_abs),
-                  se=se_arr)
+    eps_c = epsilon(yc, sigma=float(sigma), floor_abs=float(floor_abs), se=se_c)
+    # 1) vacuity first, as discovery does
+    if vacuous(syms, Xc, yc, eps_c):
+        return _abstain("verify", Abstain.NOISE.value,
+                        "VACUOUS: eps swallows the signal on the certification "
+                        "split -- no declared form can be evidence at this band")
+    # 2) the exhaustive check on the held-out split
     pred = eval_expr(scaled, syms, Xc)
     if pred is None or not np.all(np.isfinite(pred)):
-        return {"tag": "open", "tool": "verify", "certified": False,
-                "abstain": Abstain.NUMERICAL.value, "note": "form diverges on cert split"}
-    miss = int(np.sum(np.abs(pred - yc) > eps))
+        return _abstain("verify", Abstain.NUMERICAL.value,
+                        "form diverges on the certification split")
+    miss = int(np.sum(np.abs(pred - yc) > eps_c))
     if miss:
-        return {"tag": "open", "tool": "verify", "certified": False,
-                "abstain": Abstain.STRUCTURAL.value,
-                "note": f"declared form refuted: {miss}/{len(yc)} points exceed eps"}
-    strength = _strength(scaled, syms, Xc, yc, eps, sigma)
+        return _abstain("verify", Abstain.STRUCTURAL.value,
+                        f"declared form refuted: {miss}/{len(yc)} certification "
+                        "points exceed eps")
+    # 3) the exact-coefficient gate (sigma-scaled under noise, as in discovery)
+    ok, gated = float_pinned(scaled, syms, Xc, yc, eps_c, float(sigma))
+    if not ok:
+        return _abstain("verify", Abstain.PARAMETRIC.value,
+                        "coefficient not pinned: a perturbed refit scale / declared "
+                        "coefficient also certifies, so the exact claim is "
+                        "unfounded at this band", law=str(scaled))
+    scaled = gated
+    # 4) the parametric gate under noise, and the strength
+    strength = _strength(scaled, syms, Xc, yc, eps_c, sigma)
     if strength == "not-pinned":
-        return {"tag": "open", "tool": "verify", "certified": False,
-                "abstain": Abstain.PARAMETRIC.value,
-                "note": "form fits but a neighbour-rational fits within the noise too"}
+        return _abstain("verify", Abstain.PARAMETRIC.value,
+                        "form fits but a neighbour-rational fits within the noise "
+                        "too", law=str(scaled))
+    # 5) the full-data check: the claimed domain is every supplied row
+    eps_full = epsilon(y, sigma=float(sigma), floor_abs=float(floor_abs),
+                       se=se_full)
+    full = check(scaled, syms, X, y, eps_full)
+    if not full["certified"]:
+        return _abstain("verify", Abstain.STRUCTURAL.value,
+                        "declared form refuted on the full supplied dataset: "
+                        f"{full['nmiss']}/{n} rows exceed eps ({full['nuncov']} "
+                        "undefined) -- rows outside the certification split "
+                        "contradict it, so no full-domain claim is possible",
+                        law=str(scaled))
+    # 6) significance: |H| = 1 (the declared form), h = held-out rows - dof
+    alpha_log10 = significance_log10(scaled, yc, eps_c, 1)
+    if alpha_log10 > ALPHA_CERT_MAX_LOG10:
+        return _abstain("verify", Abstain.NOISE.value,
+                        f"significance gate: alpha_log10 {alpha_log10:.3f} > "
+                        f"{ALPHA_CERT_MAX_LOG10:g} -- the held-out rows carry too "
+                        "little evidence for this form at this band",
+                        law=str(scaled), alpha_log10=alpha_log10, n_hypotheses=1)
+    bounds = [[float(X[:, j].min()), float(X[:, j].max())] for j in range(dim)]
     return {"tag": "proved", "tool": "verify", "certified": True,
-            "law": str(scaled), "strength": strength, "domain_size": len(Xc),
-            "note": ("consistent: fits within eps, but the irrational constant is not "
-                     "identifiable from the data" if strength == "consistent"
-                     else "pinned: this exact form, no rival within the noise")}
+            "law": str(scaled), "strength": strength,
+            "alpha_log10": alpha_log10, "n_hypotheses": 1,
+            "domain_size": n, "n_certification": len(Xc), "bounds": bounds,
+            "note": (("consistent: fits within eps, but the irrational constant is "
+                      "not identifiable from the data" if strength == "consistent"
+                      else "pinned: this exact form, no rival within the noise")
+                     + f"; domain = all {n} supplied points ({mode_note}); "
+                     "certified over the stated finite domain, not proved for "
+                     "the world")}
 
 
 # ------------------------------------------------------------------------------- fit
