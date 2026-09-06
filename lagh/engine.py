@@ -18,7 +18,7 @@ from .base import ALWAYS, Candidate, admissible, design_matrix, lstsq
 from .base import Term as BaseTerm
 from .base import snap_all, to_expr
 from .certify import (MACHINE_REL, Abstain, Certificate,
-                      arbitrate_significance, check, coherent, determination,
+                      arbitrate_significance, attach_check_evidence, check, coherent, determination,
                       epsilon, float_pinned, free_atoms, free_dof,
                       input_constraints, invariant_content,
                       parameter_interval, pinned,
@@ -588,7 +588,17 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             # ambiguity or unpinned -> the full loop decides (conservative)
 
     total = 0
-    closest_failure = None
+    closest_failure = last_checked = None
+
+    def finish(cert, expr, tier, count, *, checked=None,
+               domain="engine certification rows"):
+        if not cert.certified:
+            evidence = checked if checked is not None else (
+                closest_failure if closest_failure is not None else last_checked)
+            attach_check_evidence(cert, evidence, domain=domain,
+                                  role="already checked candidate diagnostic; not necessarily the refusal cause")
+        return Result(cert, expr, tier, count)
+
     tiers = [1] if linear_basis else [t for t, _ in CURRICULUM if t <= max_tier]
     for tier in tiers:
         cands = _tier_candidates(tier, syms, dim, X_fit, y_fit, X_sel, y_sel,
@@ -611,6 +621,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             if free_dof(c.expr) >= n_cert:
                 continue
             r = check(c.expr, syms, X_cert, y_cert, eps)
+            last_checked = r
             if not r["certified"] and (closest_failure is None
                     or r["nmiss"] + r["nuncov"] < closest_failure["nmiss"] + closest_failure["nuncov"]):
                 closest_failure = r
@@ -721,7 +732,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                    abstain=Abstain.PARAMETRIC.value,
                                    notes=["exact rational parameters not pinned within "
                                           f"the noise band (sigma={sigma:g})"])
-                return Result(cert, None, tier, total)
+                return finish(cert, None, tier, total)
             if sigma > 0:
                 winner.expr = reduce_to_minimal(winner.expr, syms, X_all_m,
                                                 y_all_m, eps_all)
@@ -791,7 +802,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                 abstain=Abstain.PARAMETRIC.value,
                                 notes=["declared-basis winner gate: parameters "
                                        f"not determined at sigma={sigma:g}"])
-                            return Result(cert, None, tier, total)
+                            return finish(cert, None, tier, total)
                         winner.expr = centred
                         interval_note = (
                             "interval-parameter certificate: no exact value is "
@@ -810,7 +821,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                        notes=["loose-floor winner gate: "
                                               "coefficients not pinned at the "
                                               "declared floor"])
-                    return Result(cert, None, tier, total)
+                    return finish(cert, None, tier, total)
                 winner.expr = gated
             cert = Certificate(True, 0, 0, len(X_cert), bounds, str(winner.expr),
                                alpha_log10=significance_log10(
@@ -823,7 +834,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             if interval_note:
                 cert.notes.append(interval_note)
             cert = _significance_gate(cert)
-            return Result(cert, winner.expr if cert.certified else None,
+            return finish(cert, winner.expr if cert.certified else None,
                           tier, total)
         cert = Certificate(False, 0, 0, len(X_cert), bounds,
                            str(min(certifying, key=lambda z: z.complexity).expr),
@@ -845,7 +856,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                     f"partial determination over {cert.partial['n_certifying_read']} "
                     f"consistent laws: required {req or 'none'}, excluded "
                     f"{exc or 'none'}")
-        return Result(cert, None, tier, total)
+        return finish(cert, None, tier, total)
 
     # C6: escalate to the exact-integer quasi-polynomial tier when the float tiers
     # are exhausted AND the target is an integer lattice. Float tiers structurally
@@ -882,7 +893,9 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                            f"miss, {on_all['nuncov']} uncovered; max "
                                            f"|y - round(y)| = {dy:.3g}) -- not a "
                                            "certificate")])
-                return Result(cert, None, 6, total)
+                return finish(cert, None, 6, total,
+                              checked=on_all if not on_all["certified"] else on_cert,
+                              domain="all engine rows" if not on_all["certified"] else "engine certification rows")
             cert = Certificate(True, 0, 0, qr.domain_size, bounds, str(qr.quasipoly),
                                notes=[qr.note,
                                       (f"integer lattice: max |x - round(x)| = {dx:.2g}, "
@@ -896,16 +909,13 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                    max(total, 1)),
                                n_hypotheses=max(total, 1))
             cert = _significance_gate(cert)
-            return Result(cert, qr.quasipoly if cert.certified else None,
+            return finish(cert, qr.quasipoly if cert.certified else None,
                           6, total)
         cert = Certificate(False, 0, 0, qr.domain_size, bounds, "",
                            abstain=qr.abstain, notes=[qr.note])
-        return Result(cert, None, 6, total)
+        return finish(cert, None, 6, total)
 
     cert = Certificate(False, len(X_cert), 0, len(X_cert), bounds, "",
                        abstain=Abstain.STRUCTURAL.value,
-                       notes=[f"no law certifies through tier {max_tier}"],
-                       measurement=(closest_failure.measurement(
-                           domain="engine certification rows").get("measurement")
-                           if closest_failure is not None else None))
-    return Result(cert, None, max_tier, total)
+                       notes=[f"no law certifies through tier {max_tier}"])
+    return finish(cert, None, max_tier, total)

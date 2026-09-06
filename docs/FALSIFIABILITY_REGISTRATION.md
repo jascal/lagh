@@ -136,3 +136,52 @@ mutate caller y to [1,1] and epsilon to100 before requesting the measurement.
 The stored verdict still has one miss; the measurement must retain residual2,
 epsilon.1 and the original row labels. A changed measurement kills the retained
 record. This is an evidence-integrity fix, with no new candidate or verdict.
+
+## PR14 review revision — registered 2026-09-06 before new witnesses
+
+All findings below are **open** until executed. Preserve the pre-revision
+artifact and keep the tweezers campaign closed.
+
+R1: malformed X (1-D vector, scalar, wrong feature count, 3-D array) must refuse
+without AxisError; wrong-length or duplicate/negative row indices must raise a
+clear ValueError at check(), before diagnostic consumers lose the omission.
+Nonfinite bands and undefined forms must have different verify refusal notes.
+Retained residual snapshots must survive caller mutation with one subtraction;
+remove redundant eager prediction/observation copies without changing evidence.
+
+R2: sweep Faxen ratios 1, nextafter(1,2), 1+1e-12, 1+1e-9 and 1.5 against
+uncertainty None, 0, positive (including intervals reaching bulk), NaN, Inf and
+negative. Invalid uncertainty must refuse. No arbitrary near-bulk cutoff or
+invented measurement precision: invert the series stably down to lambda=0.
+Missing uncertainty is NOT zero uncertainty. Return an explicitly conditional
+inversion separately; height_um as a determined reading requires a supplied
+nonnegative finite uncertainty. Exact synthetic inputs may declare se=0.
+This intentionally withdraws the old interpretation of no-SE inversions as
+measured heights at ALL ratios, not only the two review examples. Kill any
+fix that merely catches equality to 1 or substitutes a guessed uncertainty.
+
+R3: healthy timescales without variance evidence remain unresolved, even at
+ratio=1. Both recover refusal routes must surface available measurements.
+Engine structural/parametric/C6 refusals retain evidence already evaluated,
+naming the checked candidate and domain; do not evaluate a candidate solely
+for diagnostics or imply that another candidate's residual caused the refusal.
+
+R4: insufficient-data GLS results retain the normal metadata keys. Quantized
+artifact comparison must allow two adjacent 12-significant-digit encodings of
+one-ULP-neighbor inputs straddling a rounding boundary, but reject a 1e-5
+perturbation. Keep C4's raw-float comparison separately at rtol1e-12; derive the
+additional bound for rounded artifacts from the storage precision.
+
+R5: distinguish synthetic declarations from computed observations in seed
+artifacts. Correct the review interpretations without a new scientific run:
+the 35/36 replay is already committed; zero baseline successes do not make a
+gain impossible, but identical OU weights provide no intervention and this
+small ladder cannot establish a general negative result or statistical power.
+
+PR14 revised execution: the46-input baseline/current artifacts and24 focused
+review tests support R1–R4 on their stated families; nonnumeric X was added to
+the malformed-domain family before its revised execution. All233 targeted and
+regression tests passed in separate processes. R5 is an interpretation/schema
+correction, not an additional scientific experiment. No kill criterion was
+rescued with a guessed threshold or uncertainty. No new certified reach or
+post-review36-cell replay is claimed. See PR14_REVIEW_REVISION.md for scope.

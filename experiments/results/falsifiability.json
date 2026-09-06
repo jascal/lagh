@@ -261,7 +261,7 @@
       "gate": "gate_record/missing variance",
       "input": "{'a': {'ratio': 0.7}, 'b': {'ratio': 0.7}}",
       "refusal_expected": "unresolved",
-      "observed": "{'verdict': 'unresolved', 'ratios': {'a': 0.7, 'b': 0.7}, 'spread': 0.0, 'note': 'axes disagree with the calibration by DIFFERENT factors with healthy variances: not one drag, and not one contaminant this test can name'}",
+      "observed": "{'verdict': 'unresolved', 'ratios': {'a': 0.7, 'b': 0.7}, 'note': 'missing equipartition evidence prevents a clean or common-mode claim'}",
       "witness_observed": true,
       "evidence": "empirical"
     },
@@ -285,7 +285,7 @@
       "gate": "faxen_height/0.9",
       "input": "radius=1, ratio=0.9",
       "refusal_expected": "no finite height",
-      "observed": "{'height_um': None, 'lambda': None, 'note': 'drag ratio 0.900 < 1: a wall can only INCREASE the parallel drag, so this is not a Faxen reading'}",
+      "observed": "{'height_um': None, 'lambda': None, 'height_determined': False, 'conditional_height_um': None, 'evidence': 'empirical', 'uncertainty_supplied': False, 'note': 'uncertainty not supplied: conditional series inversion only; height not determined'}",
       "witness_observed": true,
       "evidence": "empirical"
     },
@@ -293,7 +293,7 @@
       "gate": "faxen_height/3.0",
       "input": "radius=1, ratio=3.0",
       "refusal_expected": "no finite height",
-      "observed": "{'height_um': None, 'lambda': None, 'note': \"drag ratio 3.000 needs a/h > 0.6, outside the series' near-field domain: the height is not read off it\"}",
+      "observed": "{'height_um': None, 'lambda': None, 'height_determined': False, 'conditional_height_um': None, 'evidence': 'empirical', 'uncertainty_supplied': False, 'note': 'uncertainty not supplied: conditional series inversion only; height not determined'}",
       "witness_observed": true,
       "evidence": "empirical"
     },
@@ -301,7 +301,7 @@
       "gate": "faxen_height/1.0",
       "input": "radius=1, ratio=1.0",
       "refusal_expected": "no finite height",
-      "observed": "{'height_um': None, 'lambda': None, 'note': 'bulk or unreadable drag gives no finite wall height'}",
+      "observed": "{'height_um': None, 'lambda': None, 'height_determined': False, 'conditional_height_um': None, 'evidence': 'empirical', 'uncertainty_supplied': False, 'note': 'uncertainty not supplied: conditional series inversion only; height not determined'}",
       "witness_observed": true,
       "evidence": "empirical"
     },
@@ -309,7 +309,7 @@
       "gate": "faxen_height/1.02",
       "input": "radius=1, ratio=1.02, se=.1",
       "refusal_expected": "no finite height",
-      "observed": "{'height_um': None, 'lambda': None, 'height_lower_bound_um': 5.2194995740551215, 'note': 'drag ratio 1.020 +- 0.100 reaches 1: consistent with bulk, so the height is bounded BELOW and not determined above'}",
+      "observed": "{'height_um': None, 'lambda': 0.03486734004660572, 'height_determined': False, 'conditional_height_um': 28.680134437078987, 'evidence': 'empirical', 'uncertainty_supplied': True, 'height_lower_bound_um': 5.219499574055122, 'note': 'drag interval is consistent with bulk: no finite upper height bound'}",
       "witness_observed": true,
       "evidence": "empirical"
     },

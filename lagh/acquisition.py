@@ -295,12 +295,11 @@ def _heldout_box_ok(oracle, active: ActiveResult, floor_abs, seed) -> bool:
     dim = X.shape[1]
     syms = list(sp.symbols([f"x_{i}" for i in range(dim)])) if dim > 1 \
         else [sp.Symbol("x_0")]
-    from .certify import check, epsilon
+    from .certify import attach_check_evidence, check, epsilon
     pred_eps = epsilon(y, floor_abs=floor_abs)
     checked = check(r.expr, syms, X, y, pred_eps, row_indices=np.flatnonzero(m))
     if not checked["certified"]:
-        r.certificate.measurement = checked.measurement(
-            domain="fresh held-out box sample").get("measurement")
+        attach_check_evidence(r.certificate, checked, domain="fresh held-out box sample")
     return checked["certified"]
 
 

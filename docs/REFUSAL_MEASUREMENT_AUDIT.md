@@ -96,3 +96,12 @@ No diagnostic contributes a candidate, attributes cause, or upgrades a verdict.
 Invalid/nonfinite/empty checks are separately registered reject-only corrections.
 The old scalar significance-band shortcut remains conservative and unchanged;
 this work does not use a broadcasting correction to purchase more certificates.
+
+**Empirical, PR14 review revision:** both recover refusal routes now expose
+certificate evidence. Engine tier-loop parametric/structural and C6 failures
+retain already checked evidence as well. A payload names its candidate and
+states when its residual is not necessarily the refusal cause; a fitting law
+can still be parametrically or structurally unresolved. Check validates labels
+at the caller boundary; explicit measurement omissions are carried rather than
+silently converted to None. The retained residual is computed once, and its
+bounded diagnostic needs no duplicate observation/prediction snapshots.

@@ -11,27 +11,39 @@ def residual_measurement(y, pred, eps, row_indices, *, domain, candidate):
     be resolved by the caller for the checked candidate. Invalid input reports an
     omission, never a determination. Undefined rows do not discard finite peers.
     """
+    if pred is None:
+        return {"measurement_omitted": "prediction unavailable"}
+    try:
+        y, pred = (np.asarray(v, float).ravel() for v in (y, pred))
+        if y.shape != pred.shape:
+            return {"measurement_omitted": "invalid row alignment"}
+        with np.errstate(over="ignore", invalid="ignore"):
+            residual = y - pred
+    except (TypeError, ValueError, OverflowError):
+        return {"measurement_omitted": "invalid arrays or band shape"}
+    return residual_evidence(residual, eps, row_indices, domain=domain, candidate=candidate)
+
+
+def residual_evidence(residual, eps, row_indices, *, domain, candidate):
+    """Bound already-computed residuals; no candidate evaluation or subtraction."""
     def omitted(reason):
         return {"measurement_omitted": reason}
 
-    if pred is None:
-        return omitted("prediction unavailable")
     if callable(eps):
         return omitted("band must be evaluated for the checked candidate")
     try:
-        y, pred = (np.asarray(v, float).ravel() for v in (y, pred))
-        eps = np.broadcast_to(np.asarray(eps, float), y.shape)
+        residual = np.asarray(residual, float).ravel()
+        eps = np.broadcast_to(np.asarray(eps, float), residual.shape)
         indices = np.asarray(row_indices)
-        if (y.shape != pred.shape or indices.shape != y.shape
+        if (indices.shape != residual.shape
                 or indices.dtype.kind not in "iu" or np.any(indices < 0)
                 or len(np.unique(indices)) != len(indices)):
             return omitted("invalid row alignment")
-        if not len(y):
+        if not len(residual):
             return omitted("no checked rows")
     except (TypeError, ValueError, OverflowError):
         return omitted("invalid arrays or band shape")
     with np.errstate(over="ignore", invalid="ignore"):
-        residual = y - pred
         excess = np.abs(residual) - eps
     valid = np.isfinite(residual) & np.isfinite(eps) & (eps >= 0) & np.isfinite(excess)
     available = np.flatnonzero(valid)
@@ -46,7 +58,7 @@ def residual_measurement(y, pred, eps, row_indices, *, domain, candidate):
         "candidate": str(candidate), "domain": str(domain),
         "row_indices": [int(i) for i in indices[chosen]],
         "residual": residual[chosen].tolist(), "epsilon": eps[chosen].tolist(),
-        "n_checked": len(y), "n_measurable": len(available),
+        "n_checked": len(residual), "n_measurable": len(available),
         "n_exceeding": int(np.sum(excess[available] > 0)),
         "max_band_excess": float(excess[available].max()),
         "n_invalid": invalid_count, "n_elided": len(available) - len(chosen),

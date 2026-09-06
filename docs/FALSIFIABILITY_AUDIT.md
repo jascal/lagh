@@ -162,3 +162,14 @@ values. `residual_mutation_baseline.json` and `residual_consumers.json` preserve
 the rejected aliasing design and corrected behavior. The reproducible consumer
 script exercises actual refusal paths using an explicitly fixed wrong proposer.
 Original44 witnesses and this dataflow test are separate counts.
+
+## Review: witness specificity is itself a failure mode
+
+**Empirical:** the equality-only Faxen witness hid a surviving crash at1+1e-12.
+The PR14 revision replaces that limited interpretation with a neighborhood and
+uncertainty-state sweep, and separates conditional inversion from a measured
+height. Other newly exhibited inputs include malformed check domains, NaN
+uncertainty, clean-looking axes with missing variance evidence, and rounded
+storage boundaries. See `PR14_REVIEW_REVISION.md` and the pinned baseline/current
+review artifacts. The44 original witnesses are not claimed to exhaust these
+input families. No absent coverage is retroactively credited.

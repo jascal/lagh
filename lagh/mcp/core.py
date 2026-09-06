@@ -167,6 +167,10 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
                    "abstain": c.abstain, "domain_size": c.domain_size,
                    "acquisition": acq,
                    "note": "; ".join(map(str, c.notes)) if c.notes else ""}
+            if c.measurement is not None:
+                out["measurement"] = c.measurement
+            if c.measurement_omitted is not None:
+                out["measurement_omitted"] = c.measurement_omitted
             if ch is not None:                    # middle rung: a hedged diagnosis, not a law
                 out["characterization"] = ch
                 out["next_action"] = ch["research"]["move"]
@@ -214,6 +218,9 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
         ch = characterize(X, y, sigma=float(sigma), abstain_reason=c.abstain)
         return {"tag": "open", "tool": "recover", "certified": False,
                 "abstain": c.abstain, "domain_size": c.domain_size,
+                **({"measurement": c.measurement} if c.measurement is not None else {}),
+                **({"measurement_omitted": c.measurement_omitted}
+                   if c.measurement_omitted is not None else {}),
                 "next_action": ch["research"]["move"],
                 "characterization": ch,
                 "suggested_box": [(lo / 10).tolist(), (hi * 10).tolist()],
@@ -341,8 +348,15 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
     # 2) the exhaustive check on the held-out split
     checked = check(scaled, syms, Xc, yc, eps_c, row_indices=checked_indices)
     if checked["nuncov"]:
+        issues = checked.uncovered_reasons
+        if issues.get("band"):
+            note = "invalid nonfinite or negative certification band"
+        elif issues.get("input") or issues.get("domain_shape"):
+            note = "invalid input on the certification split"
+        else:
+            note = "form diverges on the certification split"
         return _abstain("verify", Abstain.NUMERICAL.value,
-                        "form diverges on the certification split")
+                        note, **checked.measurement(domain="certification rows of supplied dataset"))
     miss = checked["nmiss"]
     if miss:
         return _abstain("verify", Abstain.STRUCTURAL.value,

@@ -1,0 +1,809 @@
+{
+  "evidence": "empirical",
+  "witnesses": [
+    {
+      "input": "check X=1D",
+      "observed": {
+        "certified": false,
+        "nmiss": 0,
+        "nuncov": 5
+      }
+    },
+    {
+      "input": "check X=scalar",
+      "observed": {
+        "certified": false,
+        "nmiss": 0,
+        "nuncov": 5
+      }
+    },
+    {
+      "input": "check X=3D",
+      "observed": {
+        "certified": false,
+        "nmiss": 0,
+        "nuncov": 5
+      }
+    },
+    {
+      "input": "check X=wrong columns",
+      "observed": {
+        "certified": false,
+        "nmiss": 0,
+        "nuncov": 5
+      }
+    },
+    {
+      "input": "check X=non-numeric",
+      "observed": {
+        "certified": false,
+        "nmiss": 0,
+        "nuncov": 5
+      }
+    },
+    {
+      "input": "check row_indices=[0, 1]",
+      "observed": {
+        "exception": "ValueError",
+        "message": "row_indices must give one unique nonnegative integer per checked row"
+      }
+    },
+    {
+      "input": "check row_indices=[-1, 0, 1, 2, 3]",
+      "observed": {
+        "exception": "ValueError",
+        "message": "row_indices must give one unique nonnegative integer per checked row"
+      }
+    },
+    {
+      "input": "check row_indices=[0, 0, 1, 2, 3]",
+      "observed": {
+        "exception": "ValueError",
+        "message": "row_indices must give one unique nonnegative integer per checked row"
+      }
+    },
+    {
+      "input": "faxen F=1.0, radius=1, se=None",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": false,
+        "note": "uncertainty not supplied: conditional series inversion only; height not determined"
+      }
+    },
+    {
+      "input": "faxen F=1.0, radius=1, se=0.0",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "height_lower_bound_um": null,
+        "note": "drag interval is consistent with bulk: no finite upper height bound"
+      }
+    },
+    {
+      "input": "faxen F=1.0, radius=1, se=0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "height_lower_bound_um": 6.160013730208997,
+        "note": "drag interval is consistent with bulk: no finite upper height bound"
+      }
+    },
+    {
+      "input": "faxen F=1.0, radius=1, se=nan",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=1.0, radius=1, se=inf",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=1.0, radius=1, se=-0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=np.float64(1.0000000000000002), radius=1, se=None",
+      "observed": {
+        "height_um": null,
+        "lambda": 3.9474596431116665e-16,
+        "height_determined": false,
+        "conditional_height_um": 2533274790395905.0,
+        "evidence": "empirical",
+        "uncertainty_supplied": false,
+        "note": "uncertainty not supplied: conditional series inversion only; height not determined"
+      }
+    },
+    {
+      "input": "faxen F=np.float64(1.0000000000000002), radius=1, se=0.0",
+      "observed": {
+        "height_um": 2533274790395905.0,
+        "lambda": 3.9474596431116665e-16,
+        "height_determined": true,
+        "conditional_height_um": 2533274790395905.0,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "gap_um": 2533274790395904.0,
+        "height_interval_um": [
+          2533274790395905.0,
+          2533274790395905.0
+        ],
+        "note": "Faxen five-term series, conditional on the supplied drag uncertainty; no added coverage claim"
+      }
+    },
+    {
+      "input": "faxen F=np.float64(1.0000000000000002), radius=1, se=0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": 3.9474596431116665e-16,
+        "height_determined": false,
+        "conditional_height_um": 2533274790395905.0,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "height_lower_bound_um": 6.160013730208983,
+        "note": "drag interval is consistent with bulk: no finite upper height bound"
+      }
+    },
+    {
+      "input": "faxen F=np.float64(1.0000000000000002), radius=1, se=nan",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=np.float64(1.0000000000000002), radius=1, se=inf",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=np.float64(1.0000000000000002), radius=1, se=-0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=1.000000000001, radius=1, se=None",
+      "observed": {
+        "height_um": null,
+        "lambda": 1.7779358232557168e-12,
+        "height_determined": false,
+        "conditional_height_um": 562449997868.2145,
+        "evidence": "empirical",
+        "uncertainty_supplied": false,
+        "note": "uncertainty not supplied: conditional series inversion only; height not determined"
+      }
+    },
+    {
+      "input": "faxen F=1.000000000001, radius=1, se=0.0",
+      "observed": {
+        "height_um": 562449997868.2145,
+        "lambda": 1.7779358232557168e-12,
+        "height_determined": true,
+        "conditional_height_um": 562449997868.2145,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "gap_um": 562449997867.2145,
+        "height_interval_um": [
+          562449997868.2145,
+          562449997868.2145
+        ],
+        "note": "Faxen five-term series, conditional on the supplied drag uncertainty; no added coverage claim"
+      }
+    },
+    {
+      "input": "faxen F=1.000000000001, radius=1, se=0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": 1.7779358232557168e-12,
+        "height_determined": false,
+        "conditional_height_um": 562449997868.2145,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "height_lower_bound_um": 6.160013730152574,
+        "note": "drag interval is consistent with bulk: no finite upper height bound"
+      }
+    },
+    {
+      "input": "faxen F=1.000000000001, radius=1, se=nan",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=1.000000000001, radius=1, se=inf",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=1.000000000001, radius=1, se=-0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=1.000000001, radius=1, se=None",
+      "observed": {
+        "height_um": null,
+        "lambda": 1.7777779230939924e-09,
+        "height_determined": false,
+        "conditional_height_um": 562499954.0210452,
+        "evidence": "empirical",
+        "uncertainty_supplied": false,
+        "note": "uncertainty not supplied: conditional series inversion only; height not determined"
+      }
+    },
+    {
+      "input": "faxen F=1.000000001, radius=1, se=0.0",
+      "observed": {
+        "height_um": 562499954.0210452,
+        "lambda": 1.7777779230939924e-09,
+        "height_determined": true,
+        "conditional_height_um": 562499954.0210452,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "gap_um": 562499953.0210452,
+        "height_interval_um": [
+          562499954.0210452,
+          562499954.0210452
+        ],
+        "note": "Faxen five-term series, conditional on the supplied drag uncertainty; no added coverage claim"
+      }
+    },
+    {
+      "input": "faxen F=1.000000001, radius=1, se=0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": 1.7777779230939924e-09,
+        "height_determined": false,
+        "conditional_height_um": 562499954.0210452,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "height_lower_bound_um": 6.160013673789889,
+        "note": "drag interval is consistent with bulk: no finite upper height bound"
+      }
+    },
+    {
+      "input": "faxen F=1.000000001, radius=1, se=nan",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=1.000000001, radius=1, se=inf",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=1.000000001, radius=1, se=-0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=1.5, radius=1, se=None",
+      "observed": {
+        "height_um": null,
+        "lambda": 0.5922158095433323,
+        "height_determined": false,
+        "conditional_height_um": 1.6885736312428352,
+        "evidence": "empirical",
+        "uncertainty_supplied": false,
+        "note": "uncertainty not supplied: conditional series inversion only; height not determined"
+      }
+    },
+    {
+      "input": "faxen F=1.5, radius=1, se=0.0",
+      "observed": {
+        "height_um": 1.6885736312428352,
+        "lambda": 0.5922158095433323,
+        "height_determined": true,
+        "conditional_height_um": 1.6885736312428352,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "gap_um": 0.6885736312428352,
+        "height_interval_um": [
+          1.6885736312428352,
+          1.6885736312428352
+        ],
+        "note": "Faxen five-term series, conditional on the supplied drag uncertainty; no added coverage claim"
+      }
+    },
+    {
+      "input": "faxen F=1.5, radius=1, se=0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": 0.5922158095433323,
+        "height_determined": false,
+        "conditional_height_um": 1.6885736312428352,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty extends outside the Faxen series domain"
+      }
+    },
+    {
+      "input": "faxen F=1.5, radius=1, se=nan",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=1.5, radius=1, se=inf",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "faxen F=1.5, radius=1, se=-0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_determined": false,
+        "conditional_height_um": null,
+        "evidence": "empirical",
+        "uncertainty_supplied": true,
+        "note": "drag uncertainty must be finite and nonnegative"
+      }
+    },
+    {
+      "input": "gate_record ratios=1, no variance",
+      "observed": {
+        "verdict": "unresolved",
+        "ratios": {
+          "a": 1.0,
+          "b": 1.0
+        },
+        "note": "missing equipartition evidence prevents a clean or common-mode claim"
+      }
+    },
+    {
+      "input": "GLS zeros(100)",
+      "observed": {
+        "evidence": "empirical",
+        "n_blocks": 0,
+        "n_lags": 192,
+        "shrinkage": 0.2,
+        "method": "fixed-window block-covariance GLS",
+        "uncertainty": "requires regime calibration",
+        "theta": null,
+        "amplitude_normalized": null,
+        "offset_normalized": null,
+        "note": "requires variance and four covariance blocks"
+      }
+    },
+    {
+      "input": "recover passive failed x against 2x, retained measurement",
+      "observed": {
+        "tag": "open",
+        "tool": "recover",
+        "certified": false,
+        "abstain": "structural",
+        "domain_size": 30,
+        "measurement": {
+          "evidence": "empirical",
+          "quantity": "observation-minus-candidate",
+          "candidate": "x_0",
+          "domain": "fixture",
+          "row_indices": [
+            29,
+            28,
+            27,
+            26,
+            25,
+            24,
+            23,
+            22,
+            21,
+            20,
+            19,
+            18,
+            17,
+            16,
+            15,
+            14,
+            13,
+            12,
+            11,
+            10,
+            9,
+            8,
+            7,
+            6,
+            5,
+            4,
+            3,
+            2,
+            1,
+            0
+          ],
+          "residual": [
+            2.0,
+            1.9655172413793103,
+            1.9310344827586206,
+            1.896551724137931,
+            1.8620689655172413,
+            1.8275862068965516,
+            1.793103448275862,
+            1.7586206896551724,
+            1.7241379310344827,
+            1.6896551724137931,
+            1.6551724137931034,
+            1.6206896551724137,
+            1.5862068965517242,
+            1.5517241379310345,
+            1.5172413793103448,
+            1.4827586206896552,
+            1.4482758620689655,
+            1.4137931034482758,
+            1.3793103448275863,
+            1.3448275862068966,
+            1.3103448275862069,
+            1.2758620689655173,
+            1.2413793103448276,
+            1.206896551724138,
+            1.1724137931034484,
+            1.1379310344827587,
+            1.103448275862069,
+            1.0689655172413792,
+            1.0344827586206897,
+            1.0
+          ],
+          "epsilon": [
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01
+          ],
+          "n_checked": 30,
+          "n_measurable": 30,
+          "n_exceeding": 30,
+          "max_band_excess": 1.99,
+          "n_invalid": 0,
+          "n_elided": 0,
+          "selection": "up to 64 rows, descending absolute residual minus epsilon",
+          "attribution": "unresolved",
+          "extra_observable": "independent instrument calibration or a controlled intervention separating the proposed physical causes",
+          "uncertainty": "declared epsilon envelope; no additional coverage claim"
+        },
+        "next_action": "acquire_divergent",
+        "characterization": {
+          "tag": "empirical",
+          "certified": false,
+          "kind": "characterization",
+          "shape": {
+            "trend": [
+              "increasing"
+            ],
+            "sign": "positive",
+            "bounded": true
+          },
+          "class": "power-law",
+          "why": "clean monomial: exponents pin to ['1/1']",
+          "research": {
+            "move": "acquire_divergent",
+            "detail": "near-monomial but rivals fit the sampled range; hand-sample a WIDER / asymptotic regime where they separate, then call lagh.recover(X, y) on those points (NOT lab.discover -- that re-runs the slow loop)"
+          },
+          "note": "a GUESS about the function's structure, NOT a certificate; report it as a hedge, never as a law",
+          "power_law": {
+            "exponents": [
+              1.0
+            ],
+            "snapped": [
+              "1/1"
+            ],
+            "pins_to_rational": true,
+            "fit_residual": 0.0,
+            "irrational_hint": null
+          },
+          "exponential": {
+            "input": 0,
+            "fit_residual": 0.01877,
+            "rate": 0.68334
+          }
+        },
+        "suggested_box": [
+          [
+            0.1
+          ],
+          [
+            20.0
+          ]
+        ],
+        "note": "see characterization.research for the next move"
+      }
+    },
+    {
+      "input": "recover active failed x against 2x, retained measurement",
+      "observed": {
+        "tag": "open",
+        "tool": "recover",
+        "certified": false,
+        "abstain": "structural",
+        "domain_size": 30,
+        "acquisition": {
+          "mode": "active",
+          "queries_used": 30,
+          "budget_spent": 30,
+          "box_final": [
+            [
+              1.0
+            ],
+            [
+              2.0
+            ]
+          ],
+          "ranging_steps": 0
+        },
+        "note": "",
+        "measurement": {
+          "evidence": "empirical",
+          "quantity": "observation-minus-candidate",
+          "candidate": "x_0",
+          "domain": "fixture",
+          "row_indices": [
+            29,
+            28,
+            27,
+            26,
+            25,
+            24,
+            23,
+            22,
+            21,
+            20,
+            19,
+            18,
+            17,
+            16,
+            15,
+            14,
+            13,
+            12,
+            11,
+            10,
+            9,
+            8,
+            7,
+            6,
+            5,
+            4,
+            3,
+            2,
+            1,
+            0
+          ],
+          "residual": [
+            2.0,
+            1.9655172413793103,
+            1.9310344827586206,
+            1.896551724137931,
+            1.8620689655172413,
+            1.8275862068965516,
+            1.793103448275862,
+            1.7586206896551724,
+            1.7241379310344827,
+            1.6896551724137931,
+            1.6551724137931034,
+            1.6206896551724137,
+            1.5862068965517242,
+            1.5517241379310345,
+            1.5172413793103448,
+            1.4827586206896552,
+            1.4482758620689655,
+            1.4137931034482758,
+            1.3793103448275863,
+            1.3448275862068966,
+            1.3103448275862069,
+            1.2758620689655173,
+            1.2413793103448276,
+            1.206896551724138,
+            1.1724137931034484,
+            1.1379310344827587,
+            1.103448275862069,
+            1.0689655172413792,
+            1.0344827586206897,
+            1.0
+          ],
+          "epsilon": [
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01,
+            0.01
+          ],
+          "n_checked": 30,
+          "n_measurable": 30,
+          "n_exceeding": 30,
+          "max_band_excess": 1.99,
+          "n_invalid": 0,
+          "n_elided": 0,
+          "selection": "up to 64 rows, descending absolute residual minus epsilon",
+          "attribution": "unresolved",
+          "extra_observable": "independent instrument calibration or a controlled intervention separating the proposed physical causes",
+          "uncertainty": "declared epsilon envelope; no additional coverage claim"
+        }
+      }
+    },
+    {
+      "input": "verify exact 2x with NaN band",
+      "observed": {
+        "tag": "open",
+        "tool": "verify",
+        "certified": false,
+        "abstain": "numerical",
+        "note": "invalid nonfinite or negative certification band",
+        "measurement_omitted": "no finite residuals with valid bands",
+        "measurement_invalid_rows": 6
+      }
+    },
+    {
+      "input": "one-ULP neighbors 1.234567890125,np.float64(1.2345678901250001), rounded to 1.23456789012,1.23456789013; raw profile",
+      "observed": [
+        "$: value differs"
+      ]
+    },
+    {
+      "input": "same rounded pair; 12-significant-digit profile",
+      "observed": []
+    },
+    {
+      "input": "rounded profile, unit-sized value perturbed1e-5",
+      "observed": [
+        "$: value differs"
+      ]
+    }
+  ]
+}

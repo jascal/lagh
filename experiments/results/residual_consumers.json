@@ -100,8 +100,10 @@
       "selection": "up to 64 rows, descending absolute residual minus epsilon",
       "attribution": "unresolved",
       "extra_observable": "independent instrument calibration or a controlled intervention separating the proposed physical causes",
-      "uncertainty": "declared epsilon envelope; no additional coverage claim"
-    }
+      "uncertainty": "declared epsilon envelope; no additional coverage claim",
+      "role": "already checked candidate diagnostic; not necessarily the refusal cause"
+    },
+    "measurement_omitted": null
   },
   "passive": {
     "certified": false,
@@ -334,8 +336,10 @@
       "selection": "up to 64 rows, descending absolute residual minus epsilon",
       "attribution": "unresolved",
       "extra_observable": "independent instrument calibration or a controlled intervention separating the proposed physical causes",
-      "uncertainty": "declared epsilon envelope; no additional coverage claim"
-    }
+      "uncertainty": "declared epsilon envelope; no additional coverage claim",
+      "role": "checked candidate residual"
+    },
+    "measurement_omitted": null
   },
   "acquisition": {
     "heldout_passed": false,
@@ -539,7 +543,8 @@
       "selection": "up to 64 rows, descending absolute residual minus epsilon",
       "attribution": "unresolved",
       "extra_observable": "independent instrument calibration or a controlled intervention separating the proposed physical causes",
-      "uncertainty": "declared epsilon envelope; no additional coverage claim"
+      "uncertainty": "declared epsilon envelope; no additional coverage claim",
+      "role": "checked candidate residual"
     }
   },
   "mutation": {

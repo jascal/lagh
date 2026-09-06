@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 import numpy as np
 import sympy as sp
 
-from .certify import Abstain, Certificate, check, epsilon
+from .certify import Abstain, Certificate, attach_check_evidence, check, epsilon
 from .engine import Result, discover
 
 
@@ -88,8 +88,8 @@ def discover_passive(X, y, *, sigma: float = 0.0, floor_abs: float = 1e-12,
         else:
             # certified on the split but not on all points: a split artifact
             # the full-data gate exists to catch
-            r.certificate.measurement = full.measurement(
-                domain="all finite rows of passive dataset").get("measurement")
+            attach_check_evidence(r.certificate, full,
+                                  domain="all finite rows of passive dataset")
             full_ok = False
             reasons.append("full-data-gate")
     if accepted is not None and not ambiguity_seen:

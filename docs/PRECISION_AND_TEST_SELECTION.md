@@ -156,3 +156,20 @@ Five slow lagh tests were deselected; a full-suite result is not claimed.
 Existing empty-array/overflow warnings remain. F/E9 lint and diff whitespace
 checks passed. The initial/final timescale artifacts and selection artifact
 were regenerated after the runner refactor and were byte-identical.
+
+## Interpretation and API corrections after review
+
+See `PR14_REVIEW_REVISION.md`. Zero baseline successes did not make a gain
+impossible, but the four unchanged OU pairs were not interventions and no
+power study justified a general negative conclusion. The eight changed-weight
+pairs showed no certification gain; interval-width changes remain empirical
+measurements. The complete35/36 rerun was already committed separately as
+`test_selection_reach.json` in150c617; it is not a fresh post-review run.
+
+`check()` now retains residual/band/row-label snapshots directly; the initial
+PR's redundant observation/prediction attributes are removed. Both recover
+routes expose the evidence, including explicit omissions when available.
+For rounded synthetic artifacts, use the comparison tool's explicit
+`--significant-digits 12` profile; the original C4 raw-float tolerance stays
+unchanged. Faxen inversion without supplied uncertainty is now explicitly
+conditional and cannot populate a determined `height_um`.

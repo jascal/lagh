@@ -14,13 +14,16 @@ from lagh.certify import check, Certificate
 def mutation(legacy_aliasing=False):
     y=np.array([1.,3.]); eps=np.array([.1,.1]); ids=np.array([8,2])
     r=check(sp.S.One,[],np.empty((2,0)),y,eps,row_indices=ids)
-    if legacy_aliasing:
-        # Explicit reconstruction of the rejected intermediate implementation;
-        # never a production option or an empirical test credited as a pass.
-        r.observed, r.epsilon, r.row_indices = y, eps, ids
     y[:]=1; eps[:]=100; ids[:]=[0,1]
+    measurement = r.measurement()
+    if legacy_aliasing:
+        # Reconstruct the rejected old design from the caller-owned arrays:
+        # it recomputed the residual AFTER caller mutation.
+        from lagh.refusal import residual_measurement
+        measurement = residual_measurement(y, np.ones(2), eps, ids,
+                                           domain="supplied check rows", candidate=sp.S.One)
     return dict(input='check 1 vs [1,3] at .1, ids[8,2]; mutate y=1, eps=100, ids[0,1]',
-                verdict=dict(r),measurement_after_mutation=r.measurement())
+                verdict=dict(r),measurement_after_mutation=measurement)
 
 
 def main():

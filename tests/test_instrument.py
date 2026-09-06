@@ -294,7 +294,7 @@ def test_local_drag_recovers_a_known_drag_and_stiffness():
 def test_faxen_inverts_inside_its_domain_and_refuses_outside_it():
     for lam in (0.2, 0.4, 0.55):
         F = faxen_drag_ratio(lam)
-        got = faxen_height(F, A_BEAD_UM)
+        got = faxen_height(F, A_BEAD_UM, drag_ratio_se=0.0)  # exact synthetic ratio
         assert abs(got["lambda"] - lam) < 1e-6
         assert abs(got["height_um"] - A_BEAD_UM / lam) < 1e-6
     assert faxen_height(faxen_drag_ratio(0.9), A_BEAD_UM)["height_um"] is None
