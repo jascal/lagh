@@ -208,3 +208,32 @@ box must fail prior-data checks; a changed fresh target must demote and stop;
 a fresh sample outside the new claimed bounds exposes inherited-domain bugs;
 budget below batch+reserved-final must cause zero new queries; same design and
 different future final responses must produce byte-identical pre-query plans.
+
+## P1 result and P2 survivor screen (registered before execution)
+
+P1 results and failures are in ACQUISITION_PILOT_FINDINGS.md. The positive
+soundness reading is withdrawn: eight terminal certificates from nonstructural
+initial inputs were approximants, and the intended restricted twin did not
+exist. The two structural inputs tied fixed x10. Do not present this as a gain
+over both fixed strategies. All16 outcomes remain recorded.
+
+**P2 screen, open prediction:** of16 datasets from truth (3x+2)/(x+4), each400
+uniform rows on [.5,3] at seeds20 through35, at least4 produce a structural
+refusal with at least2 representatives passing check on ALL400 rows at the
+unchanged epsilon (sigma0, floor1e-12). Ordinary passive defaults remain frozen.
+Record nonstructural outcomes, all per-rival miss counts and exact truth of any
+initial certificate. This is a DESIGN-only pilot screen,6400 oracle observations,
+no follow-up or final observations. No seed is discarded from the artifact.
+
+If fewer than4 qualify, score that failure before any amendment. If none
+qualify, stop the strict survivor-policy experiment and report the absence of
+the required rival set; do not relabel already-refuted classes as survivors.
+Qualified frozen design states can be used as manufactured twin problems with
+fresh, separately registered acquisition/final seeds. Conditioning on their
+initial refusal is explicit; these will not be a random population sample.
+
+Proposed corrections, not yet executed: require structural entry; retain only
+full-design-compatible representatives for strict disagreement; require new
+evidence to exclude old incompatible explanations before crediting resolution.
+Every correction needs its own counter-input and pre-run amendment. No old P1
+artifact is overwritten, and no core hypothesis class or tolerance changes.
