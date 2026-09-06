@@ -3,8 +3,8 @@
 
 **One-sentence claim.** A symbolic law discoverer that returns either a
 machine-checked certificate carrying a stated significance bound, or a
-machine-readable refusal — never a confident wrong LAW (see §1 for what that
-covers and what it does not) — and whose
+machine-readable refusal, conditional on the declared domain and error model
+(see §1), and whose
 deterministic observation-planning agent nearly doubled LLM-agent SOTA on a
 sealed benchmark without a single LLM call.
 
@@ -13,9 +13,19 @@ sealed benchmark without a single LLM call.
 ## 1. The instrument
 
 lagh (`github.com/jascal/lagh`) discovers exact symbolic laws from data. Its
-product definition is an invariant, not a metric: **zero confident-wrong
-certifications**, inherited from a predecessor's 114-task record and preserved
-through every capability added since.
+target is **zero confident-wrong certifications**; observed campaign counts are
+empirical evidence toward that target, not a universal guarantee.
+
+**Current scope correction (empirical).** Certificates check a stated finite
+domain under supplied error declarations and checker assumptions; neither a
+certificate nor its chance-fit significance bound proves global truth or causal
+identification. The [44 committed falsifiability witnesses](FALSIFIABILITY_AUDIT.md)
+exposed low-level acceptance of invalid evidence, including empty domains, NaN
+observations and NaN bands; input-boundary review also exposed NaN input rows
+under constant laws. Caller filtering protected some reported results while the
+checker itself was defective. Repairs and passing witnesses do not establish
+that no other defects exist. The historical zero-wrong counts below describe
+their scored campaigns, not all checker inputs or future measurements.
 
 **Read that scope exactly.** The invariant covers CERTIFICATES — claims carrying
 an α — and it is pre-registered as covering only those

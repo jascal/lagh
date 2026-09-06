@@ -3,8 +3,35 @@
 Status: **open**. Written before new experiments. This is the pilot protocol,
 not the scored-run registration. Numerical scored predictions must be appended
 from the pilot and committed BEFORE evaluation. The incoming task is truncated;
-the second precondition and missing constraints remain pending clarification.
+the second precondition and missing constraints were initially pending clarification.
 The scored protocol remains incomplete; no scored run has been performed.
+
+## Complete instruction received
+
+docs/STRETCH_GOAL_ACQUISITION.md supplies the missing text. Preconditions are
+the scoped paragraph in README and INSTRUMENT_REPORT and a counter-input for
+every new gate. Both documentation paragraphs are now present. An acquired
+certificate must explicitly name its new finite domain. Apex success is optional;
+the fixed-baseline comparison and measured soundness are mandatory.
+
+## Pilot P0: apex design inspection (registered before execution)
+
+**Open prediction P0:** the historical rational-d1 draw still returns a structural
+refusal with at least two retained representatives. Its fixed input is 400 rows
+uniform on [.5,3], RNG seed crc32('rational-d1'), ordinary passive defaults
+(three re-splits, seed0), sigma0 and floor1e-12. Record every representative,
+verdict and measured range. No target truth enters the selector.
+
+On that refusal, score a fixed 257-point geometric grid in [.005,300] at unit
+query cost using the new oracle-free selector. **Open prediction P0b:** its
+selected query is outside the initial box. Grid evaluations are model
+predictions, not measurements. Register all rival values at the selected point
+before making any follow-up query. P0 does not claim certification or a gain.
+If the initial result certifies or has fewer than two rivals, record failure
+and retain the result; do not force a structural refusal. No final certification
+sample is generated during this inspection. Full pilot acquisition settings and
+scored predictions follow from this inspection, with amendments recorded before
+the affected run. The task is no longer blocked on missing instructions.
 
 ## Scope
 
