@@ -52,3 +52,16 @@ search heuristic; a measurement chosen from it cannot be credited with first
 falsifying a law that old observations already falsify. The strict surviving-
 rival workflow needs at least two representatives that pass all design rows.
 The apex remains a diagnostic of reach ordering; it is not quietly dropped.
+
+## P2 survivor screen
+
+**Empirical:** only3/16 seeds qualify, missing the registered at-least4 prediction.
+All16 records are retained under acquisition_p2 (6400 design observations).
+Seed30 has3 fully compatible representatives; seeds32 and35 have2 each. Eight
+other draws already certify structurally wrong approximants before acquisition.
+The remaining five are structural but have fewer than2 full-data survivors.
+
+These three qualified, frozen design states are a manufactured twin bank for
+follow-up experiments, not a random sample of successful discovery tasks. Their
+follow-up and final observations have not been sampled by P2. The ordinary
+engine's initial false-exact behavior remains a finding, not a repaired guarantee.

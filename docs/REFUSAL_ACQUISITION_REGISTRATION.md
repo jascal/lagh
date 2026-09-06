@@ -237,3 +237,66 @@ full-design-compatible representatives for strict disagreement; require new
 evidence to exclude old incompatible explanations before crediting resolution.
 Every correction needs its own counter-input and pre-run amendment. No old P1
 artifact is overwritten, and no core hypothesis class or tolerance changes.
+
+## P3 corrected survivor-policy pilot (registered before execution)
+
+P2 delivered3 qualifying draws, seeds30,32,35, rather than the predicted4.
+The numerical prediction FAILED. Use all three as the frozen twin bank: same
+truth (3x+2)/(x+4), different initial400-row draws and fitted competitors. For
+each, run both unrestricted [.005,300] and restricted [.5,3] acquisition domains.
+That is6 problem conditions, not6 independent physical laws. P3 follow-up seed99;
+the future scored follow-up seeds100,101,102,103 remain untouched.
+
+All P1 policy numbers and fixed selection policies remain unchanged. The
+following common acceptance/entry corrections are explicit amendments:
+
+- Require an actual structural initial refusal with at least2 representatives
+  compatible with every initial row. Nonqualifying inputs return an uncovered
+  acquisition claim, not the incoming certificate. Preserve the incoming status
+  in the experiment artifact. This fixes P1's out-of-scope acceptance branch;
+  it does not repair or hide the underlying discovery behavior.
+- Use only currently full-design-compatible rivals for guided disagreement.
+  At later rounds, retain any old representatives still compatible with all
+  observed design rows. New measurements, not disappearance from a later
+  proposal list, must eliminate an old competitor.
+- Query only if finite predicted separation exceeds the sum of the two
+  existing epsilon bands (evaluated at the extreme rival predictions). This
+  is a deterministic design heuristic using the unchanged machine/floor model,
+  not a new statistical significance threshold. No informative finite probe
+  means refusal; it is not proof about an unprobed continuum.
+- Before freezing an engine candidate, require every surviving old rival to
+  be that same symbolic expression or to have failed on measured design rows.
+  Otherwise continue the matched strategy using DESIGN evidence only; no final
+  sample has yet been drawn. Native ladder is left byte-identical and its raw
+  verdict recorded: if its returned law does not eliminate the prior rivals,
+  the wrapper reports no twin resolution. It does not rerun native on the final
+  data or silently replace its stopping policy.
+- The common independent80-row final guard and explicit expanded finite domain
+  remain as P1. Any final failure terminates the arm without reuse.
+
+**New counter-inputs before credit:** an initially certified x on exact x data
+must not count as a refusal resolution; a pair(x,2x) on exact x data is not two
+survivors; a compatible pair(x, x+1e-16*x**8) on [.5,3] supplies a valid unit
+fixture; a later proposal list containing only x does not eliminate its old
+compatible twin on that restricted domain; an all-data-rejected rival cannot
+determine the next query. The same pair has detectable separation at x=300;
+the admissible-domain change must change queryability. A future changed final
+response must still not change any pre-query plan. These are mocked unit
+witnesses, not manufactured scientific successes.
+
+**P3 numerical predictions (open):** guided resolves3/6 conditions, with at
+least2/6 remaining unresolved; successful guided and x10 cases use560 total
+queries, so their paired median difference is0 (NO strict gain predicted).
+Matched ladder requires640 on successful cases. Native raw successes are not
+automatically twin resolutions; record both. Zero wrong terminal certificates
+is required in all corrected arms. Scored numbers will be finalized from P3
+before running any scored follow-up seed.
+
+**Separate apex diagnostic:** replay the historical crc32 rational-d1 draw
+using the original P1 refusal-model heuristic, loaded from pinned5f64d9a,
+with follow-up seed99, all four arms and the existing80-row final guard. Predict
+guided obtains the exact rational at560 queries and ties x10; this can fail.
+This is explicitly NOT a surviving-twin experiment (both initial models already
+miss old rows). It tests measurement-driven escape from the engine's reach
+ordering without changing its grammar. Record its new finite domain, exact
+truth check, cost and that qualification. Do not relabel it a36/36 passive audit.
