@@ -1,0 +1,4112 @@
+{
+  "evidence": "empirical",
+  "records": [
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 20,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11637.9801185,
+        "gls": 12774.8785295,
+        "psd": 14554.7364934
+      },
+      "halves": [
+        {
+          "legacy": 9281.13065741,
+          "gls": 14956.2366865,
+          "psd": 12915.831557
+        },
+        {
+          "legacy": 13529.5878809,
+          "gls": 12882.195632,
+          "psd": 11505.2350709
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 20,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11.2309045506,
+        "gls": 11310.4306461,
+        "psd": 14554.7407305
+      },
+      "halves": [
+        {
+          "legacy": 15.004933143,
+          "gls": 9724.0691613,
+          "psd": 12915.7806139
+        },
+        {
+          "legacy": 11.4747626425,
+          "gls": 11184.6418892,
+          "psd": 11505.276845
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 21,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14278.9917017,
+        "gls": 13602.6059855,
+        "psd": 16950.8950479
+      },
+      "halves": [
+        {
+          "legacy": 1221.55274243,
+          "gls": 10859.824074,
+          "psd": 11432.3800516
+        },
+        {
+          "legacy": 17263.6090721,
+          "gls": 17864.8716404,
+          "psd": 14444.3622857
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 21,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11.5017643455,
+        "gls": 13746.6127828,
+        "psd": 16950.8969359
+      },
+      "halves": [
+        {
+          "legacy": 17.2955209277,
+          "gls": 10285.7562638,
+          "psd": 11432.3332565
+        },
+        {
+          "legacy": 8.42803048004,
+          "gls": 16951.9130392,
+          "psd": 14442.7239526
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 22,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10947.7363455,
+        "gls": 12916.6779037,
+        "psd": 13032.3098642
+      },
+      "halves": [
+        {
+          "legacy": 12940.7644363,
+          "gls": 12296.1352446,
+          "psd": 11803.1703962
+        },
+        {
+          "legacy": 9978.26090244,
+          "gls": 8445.67761356,
+          "psd": 9605.18434943
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 22,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.9086102839,
+        "gls": 12119.7541459,
+        "psd": 13032.3175249
+      },
+      "halves": [
+        {
+          "legacy": 17.3888972161,
+          "gls": 10412.6291078,
+          "psd": 11803.0879839
+        },
+        {
+          "legacy": 12.8329317117,
+          "gls": 13054.6803997,
+          "psd": 9605.08009201
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 23,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13966.5694393,
+        "gls": 16947.0202921,
+        "psd": 12594.8079773
+      },
+      "halves": [
+        {
+          "legacy": 13270.2811724,
+          "gls": 15673.0943389,
+          "psd": 17446.1481968
+        },
+        {
+          "legacy": 14689.2501677,
+          "gls": 15773.2630809,
+          "psd": 13585.7333168
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 23,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 8.82774147849,
+        "gls": 13622.5255024,
+        "psd": 12594.8043003
+      },
+      "halves": [
+        {
+          "legacy": 11.4280422206,
+          "gls": 12103.1502604,
+          "psd": 17446.2040941
+        },
+        {
+          "legacy": 8.39383509458,
+          "gls": 15440.5031324,
+          "psd": 13585.8614633
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 24,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10543.4819717,
+        "gls": 10962.0750466,
+        "psd": 10316.6860847
+      },
+      "halves": [
+        {
+          "legacy": 8948.11263664,
+          "gls": 8720.68486432,
+          "psd": 12242.6725516
+        },
+        {
+          "legacy": 13006.0624751,
+          "gls": 12672.6756412,
+          "psd": 13963.8360838
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 24,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12.194131797,
+        "gls": 11568.1980382,
+        "psd": 10316.6876595
+      },
+      "halves": [
+        {
+          "legacy": 15.9643257092,
+          "gls": 9558.38983314,
+          "psd": 12242.6620098
+        },
+        {
+          "legacy": 11.2236399334,
+          "gls": 12852.0386116,
+          "psd": 13963.6801033
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 25,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11561.7009044,
+        "gls": 11322.6463423,
+        "psd": 12787.2598679
+      },
+      "halves": [
+        {
+          "legacy": 10159.7439803,
+          "gls": 11188.6337529,
+          "psd": 13273.5714093
+        },
+        {
+          "legacy": 12354.9075596,
+          "gls": 11047.5370479,
+          "psd": 11817.410284
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 25,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.0692333829,
+        "gls": 12122.447163,
+        "psd": 12787.2616566
+      },
+      "halves": [
+        {
+          "legacy": 19.0659386651,
+          "gls": 11460.41153,
+          "psd": 13273.5231543
+        },
+        {
+          "legacy": 12.2242801202,
+          "gls": 12315.448228,
+          "psd": 11817.3301344
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 26,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 650.926678584,
+        "gls": 12844.4547306,
+        "psd": 11492.7985389
+      },
+      "halves": [
+        {
+          "legacy": 656.331404406,
+          "gls": 10926.2559654,
+          "psd": 10897.5939929
+        },
+        {
+          "legacy": 570.424061842,
+          "gls": 12258.2278527,
+          "psd": 13002.1628988
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 26,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.8129402701,
+        "gls": 11644.4747148,
+        "psd": 11492.8031059
+      },
+      "halves": [
+        {
+          "legacy": 14.7289055554,
+          "gls": 9646.67208047,
+          "psd": 10897.6578217
+        },
+        {
+          "legacy": 14.4803444034,
+          "gls": 14378.2167027,
+          "psd": 13002.215218
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 27,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12257.347466,
+        "gls": 14214.33411,
+        "psd": 12445.1973038
+      },
+      "halves": [
+        {
+          "legacy": 12270.6192836,
+          "gls": 3550.30275305,
+          "psd": 9735.36091336
+        },
+        {
+          "legacy": 12367.253417,
+          "gls": 12247.5785221,
+          "psd": 15650.3910071
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 27,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.1632816335,
+        "gls": 11038.5251246,
+        "psd": 12445.2032158
+      },
+      "halves": [
+        {
+          "legacy": 24.6271334572,
+          "gls": 1539.22748227,
+          "psd": 9735.39707273
+        },
+        {
+          "legacy": 10.0050929746,
+          "gls": 13031.8828951,
+          "psd": 15650.467008
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 40,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11613.5827686,
+        "gls": 14691.3817422,
+        "psd": 10400.8119187
+      },
+      "halves": [
+        {
+          "legacy": 11566.0784948,
+          "gls": 16136.9638159,
+          "psd": 13314.5572415
+        },
+        {
+          "legacy": 410.587541741,
+          "gls": 13353.7052918,
+          "psd": 13985.9994108
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 40,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 9.35059109616,
+        "gls": 9397.46472791,
+        "psd": 10400.8139372
+      },
+      "halves": [
+        {
+          "legacy": 10.0607680066,
+          "gls": 11181.8784887,
+          "psd": 13314.4986337
+        },
+        {
+          "legacy": 9.88302189203,
+          "gls": 8208.84053207,
+          "psd": 13985.8018297
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 41,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10418.040743,
+        "gls": 11245.7559531,
+        "psd": 10495.9479796
+      },
+      "halves": [
+        {
+          "legacy": 15135.8601085,
+          "gls": 18290.3574595,
+          "psd": 15155.6288418
+        },
+        {
+          "legacy": 8184.55941113,
+          "gls": 8650.17720155,
+          "psd": 8812.21112081
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 41,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.8747369661,
+        "gls": 8559.94862385,
+        "psd": 10495.9468225
+      },
+      "halves": [
+        {
+          "legacy": 14.8889809764,
+          "gls": 14644.7119494,
+          "psd": 15155.7620597
+        },
+        {
+          "legacy": 19.9210197675,
+          "gls": 5853.47229802,
+          "psd": 8812.28113719
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 42,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 7189.99061535,
+        "gls": 17526.7429805,
+        "psd": 11448.1728059
+      },
+      "halves": [
+        {
+          "legacy": 8834.7714291,
+          "gls": 16542.3568972,
+          "psd": 9419.18506243
+        },
+        {
+          "legacy": 430.911763995,
+          "gls": 15392.4353744,
+          "psd": 14029.6215184
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 42,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 18.3457516097,
+        "gls": 8717.73419695,
+        "psd": 11448.1724869
+      },
+      "halves": [
+        {
+          "legacy": 19.7441516606,
+          "gls": 11568.4975137,
+          "psd": 9419.16064453
+        },
+        {
+          "legacy": 19.8778900483,
+          "gls": 2505.88299154,
+          "psd": 14029.3384953
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 43,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12513.3030979,
+        "gls": 7979.15885622,
+        "psd": 11274.1394843
+      },
+      "halves": [
+        {
+          "legacy": 11906.7332172,
+          "gls": 9638.27829264,
+          "psd": 13183.90099
+        },
+        {
+          "legacy": 641.166490637,
+          "gls": 4123.12916619,
+          "psd": 19077.1046924
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 43,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10.9868808885,
+        "gls": 11853.3539505,
+        "psd": 11274.13653
+      },
+      "halves": [
+        {
+          "legacy": 14.1044512508,
+          "gls": 11811.8771901,
+          "psd": 13184.0049836
+        },
+        {
+          "legacy": 9.79744180328,
+          "gls": 10988.017368,
+          "psd": 19077.1593548
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 20,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 8241.65961947,
+        "gls": 10601.1244753,
+        "psd": 11161.1123323
+      },
+      "halves": [
+        {
+          "legacy": 306.483745372,
+          "gls": 12136.7089745,
+          "psd": 10763.1233449
+        },
+        {
+          "legacy": 8192.61692459,
+          "gls": 7442.86912717,
+          "psd": 11034.2704531
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 20,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 19.8157075993,
+        "gls": 9843.34795537,
+        "psd": 11161.111927
+      },
+      "halves": [
+        {
+          "legacy": 18.479791453,
+          "gls": 12504.7964473,
+          "psd": 10763.1772602
+        },
+        {
+          "legacy": 23.751754497,
+          "gls": 7008.21336452,
+          "psd": 11034.2213567
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 21,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 8208.63354644,
+        "gls": 8874.01278593,
+        "psd": 10897.2928264
+      },
+      "halves": [
+        {
+          "legacy": 557.696290401,
+          "gls": 9804.45742509,
+          "psd": 8679.57893118
+        },
+        {
+          "legacy": 8053.97041419,
+          "gls": 8939.53315906,
+          "psd": 9469.85514693
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 21,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.9521229751,
+        "gls": 8496.41987836,
+        "psd": 10897.2927326
+      },
+      "halves": [
+        {
+          "legacy": 15.34766749,
+          "gls": 8641.13574955,
+          "psd": 8679.58892995
+        },
+        {
+          "legacy": 19.7344618023,
+          "gls": 7798.62622277,
+          "psd": 9469.95581266
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 22,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 743.639529235,
+        "gls": 7160.85155204,
+        "psd": 11952.0512746
+      },
+      "halves": [
+        {
+          "legacy": 700.121989856,
+          "gls": 13483.7564676,
+          "psd": 12528.0584216
+        },
+        {
+          "legacy": 686.898143936,
+          "gls": 3483.35025793,
+          "psd": 11559.7448573
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 22,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 24.4506319811,
+        "gls": 9858.80949994,
+        "psd": 11952.0471097
+      },
+      "halves": [
+        {
+          "legacy": 21.3051634603,
+          "gls": 11959.0468227,
+          "psd": 12528.0649644
+        },
+        {
+          "legacy": 32.1424280284,
+          "gls": 4655.01925885,
+          "psd": 11559.6632782
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 23,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13582.5259548,
+        "gls": 15750.1608126,
+        "psd": 15608.3918375
+      },
+      "halves": [
+        {
+          "legacy": 11069.4745605,
+          "gls": 10588.4410483,
+          "psd": 13672.7587723
+        },
+        {
+          "legacy": 15702.006529,
+          "gls": 24956.3185803,
+          "psd": 13634.4352168
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 23,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10.6112171214,
+        "gls": 13664.3040319,
+        "psd": 15608.3920423
+      },
+      "halves": [
+        {
+          "legacy": 11.3947400755,
+          "gls": 13575.5463889,
+          "psd": 13672.8367023
+        },
+        {
+          "legacy": 11.2510293569,
+          "gls": 13410.7309178,
+          "psd": 13634.5005807
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 24,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12841.6145538,
+        "gls": 12812.7831689,
+        "psd": 11712.4798937
+      },
+      "halves": [
+        {
+          "legacy": 13786.0140071,
+          "gls": 17462.5770917,
+          "psd": 13973.3297776
+        },
+        {
+          "legacy": 442.573380373,
+          "gls": 10025.605838,
+          "psd": 11684.8785812
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 24,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 8.39806948926,
+        "gls": 12911.4465511,
+        "psd": 11712.2948615
+      },
+      "halves": [
+        {
+          "legacy": 7.73381632266,
+          "gls": 11411.5368634,
+          "psd": 13973.3568536
+        },
+        {
+          "legacy": 8.94817137411,
+          "gls": 13934.678328,
+          "psd": 11684.8234145
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 25,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11918.522239,
+        "gls": 11297.3028556,
+        "psd": 9683.44957172
+      },
+      "halves": [
+        {
+          "legacy": 9367.07426133,
+          "gls": 8926.81701218,
+          "psd": 13539.2675889
+        },
+        {
+          "legacy": 14542.2599899,
+          "gls": 13175.1176187,
+          "psd": 12197.4960672
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 25,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.0313096716,
+        "gls": 11513.4243495,
+        "psd": 9683.44996463
+      },
+      "halves": [
+        {
+          "legacy": 17.5765313545,
+          "gls": 10295.9088823,
+          "psd": 13539.1121245
+        },
+        {
+          "legacy": 10.3421480102,
+          "gls": 13411.0003705,
+          "psd": 12197.5907724
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 26,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11813.6374727,
+        "gls": 10511.5248798,
+        "psd": 10898.7446202
+      },
+      "halves": [
+        {
+          "legacy": 9623.04976051,
+          "gls": 7035.03625448,
+          "psd": 12086.3218361
+        },
+        {
+          "legacy": 13912.2438664,
+          "gls": 13765.9534816,
+          "psd": 14695.7975049
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 26,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.3781708397,
+        "gls": 10503.5792093,
+        "psd": 10898.747265
+      },
+      "halves": [
+        {
+          "legacy": 15.4396261949,
+          "gls": 8378.68355001,
+          "psd": 12086.3499985
+        },
+        {
+          "legacy": 16.3691630426,
+          "gls": 13118.0968779,
+          "psd": 14695.7145508
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 27,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10877.9333941,
+        "gls": 11879.6809133,
+        "psd": 10524.8508651
+      },
+      "halves": [
+        {
+          "legacy": 13448.1405446,
+          "gls": 12856.284141,
+          "psd": 11966.1311712
+        },
+        {
+          "legacy": 8805.75099007,
+          "gls": 8353.49860641,
+          "psd": 13337.0239045
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 27,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.0654272888,
+        "gls": 10823.7880722,
+        "psd": 10524.8504343
+      },
+      "halves": [
+        {
+          "legacy": 15.4360756357,
+          "gls": 10354.8502105,
+          "psd": 11966.1434102
+        },
+        {
+          "legacy": 11.4012814175,
+          "gls": 11104.7552473,
+          "psd": 13336.9607021
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 40,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11502.4456184,
+        "gls": 12880.3273787,
+        "psd": 14198.5990651
+      },
+      "halves": [
+        {
+          "legacy": 8755.67072851,
+          "gls": 11803.7132416,
+          "psd": 9734.44689641
+        },
+        {
+          "legacy": 13120.645333,
+          "gls": 14647.7014079,
+          "psd": 12024.6760504
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 40,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11.7334019774,
+        "gls": 11139.6641025,
+        "psd": 14198.6047841
+      },
+      "halves": [
+        {
+          "legacy": 14.3615903787,
+          "gls": 7887.81096331,
+          "psd": 9734.4188195
+        },
+        {
+          "legacy": 10.297744004,
+          "gls": 13652.6169986,
+          "psd": 12024.745982
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 41,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12060.9803488,
+        "gls": 11407.2746512,
+        "psd": 13842.30775
+      },
+      "halves": [
+        {
+          "legacy": 12008.7052922,
+          "gls": 10662.4016687,
+          "psd": 12297.7855734
+        },
+        {
+          "legacy": 12091.3380395,
+          "gls": 11164.1782399,
+          "psd": 11315.3055213
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 41,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 18.5484604414,
+        "gls": 10982.5048264,
+        "psd": 13842.3094868
+      },
+      "halves": [
+        {
+          "legacy": 18.0287051748,
+          "gls": 10250.4819573,
+          "psd": 12297.7573577
+        },
+        {
+          "legacy": 22.6470431058,
+          "gls": 10562.2271081,
+          "psd": 11315.212979
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 42,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10983.1212699,
+        "gls": 12819.5225939,
+        "psd": 14480.2348199
+      },
+      "halves": [
+        {
+          "legacy": 891.689405722,
+          "gls": 12133.7560683,
+          "psd": 10422.3855629
+        },
+        {
+          "legacy": 12448.8218838,
+          "gls": 12904.1428196,
+          "psd": 13325.1999699
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 42,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 17.8667154065,
+        "gls": 10387.7497612,
+        "psd": 14480.2502252
+      },
+      "halves": [
+        {
+          "legacy": 20.3576333412,
+          "gls": 9186.20645032,
+          "psd": 10422.2285813
+        },
+        {
+          "legacy": 16.8469364751,
+          "gls": 10370.1430657,
+          "psd": 13325.19374
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 43,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14072.6616557,
+        "gls": 13024.1455104,
+        "psd": 14552.962235
+      },
+      "halves": [
+        {
+          "legacy": 14856.9911213,
+          "gls": 13005.3020136,
+          "psd": 14782.8092674
+        },
+        {
+          "legacy": 13336.1651119,
+          "gls": 12365.7837413,
+          "psd": 12461.2208953
+        }
+      ]
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 43,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10.89218509,
+        "gls": 13080.4548387,
+        "psd": 14552.9487873
+      },
+      "halves": [
+        {
+          "legacy": 6.54749969894,
+          "gls": 15443.41021,
+          "psd": 14782.8773383
+        },
+        {
+          "legacy": 16.692367704,
+          "gls": 12160.5982428,
+          "psd": 12461.1878703
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 20,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11289.3320111,
+        "gls": 12113.3030859,
+        "psd": 11256.4573982
+      },
+      "halves": [
+        {
+          "legacy": 11736.0597074,
+          "gls": 12354.692138,
+          "psd": 11358.8820241
+        },
+        {
+          "legacy": 10873.0749685,
+          "gls": 11728.6858434,
+          "psd": 10037.7553225
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 20,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.4443558125,
+        "gls": 10527.3113198,
+        "psd": 11256.4576551
+      },
+      "halves": [
+        {
+          "legacy": 13.6561748305,
+          "gls": 12236.9033484,
+          "psd": 11358.8822174
+        },
+        {
+          "legacy": 16.1271030334,
+          "gls": 9080.12772431,
+          "psd": 10037.7556189
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 21,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12575.4126139,
+        "gls": 12497.5924857,
+        "psd": 12047.5737785
+      },
+      "halves": [
+        {
+          "legacy": 12300.6178352,
+          "gls": 12032.9334094,
+          "psd": 12586.3077734
+        },
+        {
+          "legacy": 12950.9906863,
+          "gls": 13319.8174125,
+          "psd": 11409.4367178
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 21,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12.1603883125,
+        "gls": 11694.1133166,
+        "psd": 12047.5743207
+      },
+      "halves": [
+        {
+          "legacy": 12.5337967053,
+          "gls": 11400.3062648,
+          "psd": 12586.308978
+        },
+        {
+          "legacy": 13.7695144225,
+          "gls": 12163.1434996,
+          "psd": 11409.4370767
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 22,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12753.1691723,
+        "gls": 13362.9602229,
+        "psd": 12535.890229
+      },
+      "halves": [
+        {
+          "legacy": 12850.3909572,
+          "gls": 13408.2639389,
+          "psd": 13806.6420155
+        },
+        {
+          "legacy": 12652.6762623,
+          "gls": 13459.9475926,
+          "psd": 13852.982928
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 22,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.2912890803,
+        "gls": 12216.5565571,
+        "psd": 12535.89049
+      },
+      "halves": [
+        {
+          "legacy": 13.2543279592,
+          "gls": 11447.4372524,
+          "psd": 13806.642108
+        },
+        {
+          "legacy": 17.3992412914,
+          "gls": 12849.6842781,
+          "psd": 13852.9827687
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 23,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11850.4323669,
+        "gls": 12633.8798715,
+        "psd": 11283.1700632
+      },
+      "halves": [
+        {
+          "legacy": 11922.8748748,
+          "gls": 12980.6944534,
+          "psd": 11552.7763115
+        },
+        {
+          "legacy": 11834.3978836,
+          "gls": 13178.0207038,
+          "psd": 11761.3601457
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 23,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.9035926903,
+        "gls": 10914.9866381,
+        "psd": 11283.1703194
+      },
+      "halves": [
+        {
+          "legacy": 11.2713817866,
+          "gls": 11257.9106289,
+          "psd": 11552.7768333
+        },
+        {
+          "legacy": 18.065528481,
+          "gls": 10485.8574726,
+          "psd": 11761.3600052
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 24,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10562.336651,
+        "gls": 10581.5248158,
+        "psd": 11599.4203147
+      },
+      "halves": [
+        {
+          "legacy": 10667.6081814,
+          "gls": 11514.5312754,
+          "psd": 12082.567613
+        },
+        {
+          "legacy": 10462.2565045,
+          "gls": 7844.81654711,
+          "psd": 12668.3981352
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 24,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.7763836497,
+        "gls": 10595.9069009,
+        "psd": 11599.4199556
+      },
+      "halves": [
+        {
+          "legacy": 15.1320921463,
+          "gls": 10683.2603672,
+          "psd": 12082.5671269
+        },
+        {
+          "legacy": 15.7342270343,
+          "gls": 10524.5353124,
+          "psd": 12668.3987033
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 25,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11485.0978818,
+        "gls": 11956.9815845,
+        "psd": 12215.3032477
+      },
+      "halves": [
+        {
+          "legacy": 11231.6984061,
+          "gls": 11316.3824373,
+          "psd": 11617.6887886
+        },
+        {
+          "legacy": 11772.9032209,
+          "gls": 11913.36075,
+          "psd": 12813.2499785
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 25,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.3181138862,
+        "gls": 12110.0808501,
+        "psd": 12215.3032289
+      },
+      "halves": [
+        {
+          "legacy": 15.2767382025,
+          "gls": 11986.6698276,
+          "psd": 11617.6890785
+        },
+        {
+          "legacy": 14.2458722639,
+          "gls": 12078.2845984,
+          "psd": 12813.2498134
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 26,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11305.6032652,
+        "gls": 11474.7428461,
+        "psd": 11819.2726881
+      },
+      "halves": [
+        {
+          "legacy": 11718.3202607,
+          "gls": 11688.813897,
+          "psd": 11943.4363097
+        },
+        {
+          "legacy": 10916.4058604,
+          "gls": 11431.1632509,
+          "psd": 13091.4238988
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 26,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.0603785083,
+        "gls": 10512.5337533,
+        "psd": 11819.2726835
+      },
+      "halves": [
+        {
+          "legacy": 14.7088522823,
+          "gls": 11031.9457024,
+          "psd": 11943.4371111
+        },
+        {
+          "legacy": 16.5784275827,
+          "gls": 9995.78877815,
+          "psd": 13091.4235808
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 27,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12537.384323,
+        "gls": 12143.4017117,
+        "psd": 12073.2235114
+      },
+      "halves": [
+        {
+          "legacy": 11531.2145078,
+          "gls": 12241.8531717,
+          "psd": 12366.0120479
+        },
+        {
+          "legacy": 13474.6267192,
+          "gls": 12663.0661891,
+          "psd": 12142.6431198
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 27,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.3550480938,
+        "gls": 10596.3789726,
+        "psd": 12073.2241293
+      },
+      "halves": [
+        {
+          "legacy": 19.2001090004,
+          "gls": 10055.8647524,
+          "psd": 12366.0131545
+        },
+        {
+          "legacy": 12.5853092617,
+          "gls": 11818.554623,
+          "psd": 12142.6431022
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 40,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10715.6986667,
+        "gls": 11830.509306,
+        "psd": 12132.0544902
+      },
+      "halves": [
+        {
+          "legacy": 11168.8332843,
+          "gls": 12958.0358797,
+          "psd": 12995.101277
+        },
+        {
+          "legacy": 10031.516119,
+          "gls": 12609.7222902,
+          "psd": 12387.8157696
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 40,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.9710180307,
+        "gls": 10271.8509399,
+        "psd": 12132.054019
+      },
+      "halves": [
+        {
+          "legacy": 10.8466029864,
+          "gls": 11192.1997701,
+          "psd": 12995.0999621
+        },
+        {
+          "legacy": 18.05219723,
+          "gls": 9297.67202449,
+          "psd": 12387.8159025
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 41,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11650.25109,
+        "gls": 11704.7243783,
+        "psd": 11628.8350208
+      },
+      "halves": [
+        {
+          "legacy": 10910.2736738,
+          "gls": 11336.4375646,
+          "psd": 10626.1306205
+        },
+        {
+          "legacy": 12977.9658527,
+          "gls": 12111.1344506,
+          "psd": 12603.0368369
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 41,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.9216522085,
+        "gls": 10661.1136238,
+        "psd": 11628.8351134
+      },
+      "halves": [
+        {
+          "legacy": 14.1166885657,
+          "gls": 10572.5279233,
+          "psd": 10626.130584
+        },
+        {
+          "legacy": 15.3637081474,
+          "gls": 10646.9206197,
+          "psd": 12603.037255
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 42,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10329.1690243,
+        "gls": 11511.8481692,
+        "psd": 11867.0388042
+      },
+      "halves": [
+        {
+          "legacy": 7875.98591488,
+          "gls": 12038.4824059,
+          "psd": 11217.6903236
+        },
+        {
+          "legacy": 12050.8797638,
+          "gls": 10595.4657903,
+          "psd": 12073.4760938
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 42,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.8885714958,
+        "gls": 9349.60379671,
+        "psd": 11867.0381304
+      },
+      "halves": [
+        {
+          "legacy": 17.8984879692,
+          "gls": 8483.83852713,
+          "psd": 11217.6886606
+        },
+        {
+          "legacy": 13.1529236428,
+          "gls": 9921.92806713,
+          "psd": 12073.4759347
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 43,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12332.1524724,
+        "gls": 11530.7585695,
+        "psd": 12131.9384098
+      },
+      "halves": [
+        {
+          "legacy": 10301.5243786,
+          "gls": 10486.3599508,
+          "psd": 11172.2853649
+        },
+        {
+          "legacy": 14358.6329477,
+          "gls": 12381.0113675,
+          "psd": 14687.0736146
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 43,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12.6398280401,
+        "gls": 11269.6785916,
+        "psd": 12131.9383776
+      },
+      "halves": [
+        {
+          "legacy": 15.7368584176,
+          "gls": 10075.6894336,
+          "psd": 11172.2851265
+        },
+        {
+          "legacy": 11.0104610595,
+          "gls": 12714.887135,
+          "psd": 14687.0731913
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 20,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11252.6597016,
+        "gls": 12111.724083,
+        "psd": 11979.7797604
+      },
+      "halves": [
+        {
+          "legacy": 10499.4203813,
+          "gls": 12612.9341627,
+          "psd": 11740.7513454
+        },
+        {
+          "legacy": 11869.372417,
+          "gls": 12918.1326297,
+          "psd": 10366.2785589
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 20,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 18.0460690766,
+        "gls": 10850.5485195,
+        "psd": 11979.7795421
+      },
+      "halves": [
+        {
+          "legacy": 17.439457306,
+          "gls": 11236.2965632,
+          "psd": 11740.750422
+        },
+        {
+          "legacy": 19.3003634373,
+          "gls": 10477.8050397,
+          "psd": 10366.2787858
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 21,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10898.4762419,
+        "gls": 11297.3446399,
+        "psd": 12382.9522575
+      },
+      "halves": [
+        {
+          "legacy": 10647.9180102,
+          "gls": 11970.3156741,
+          "psd": 12421.2883446
+        },
+        {
+          "legacy": 11024.6567883,
+          "gls": 10881.6508159,
+          "psd": 12536.1330828
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 21,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.6477073712,
+        "gls": 10455.4673478,
+        "psd": 12382.952152
+      },
+      "halves": [
+        {
+          "legacy": 13.8979968103,
+          "gls": 10293.227732,
+          "psd": 12421.2884899
+        },
+        {
+          "legacy": 16.8150197214,
+          "gls": 10480.5415986,
+          "psd": 12536.1329875
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 22,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11324.9420746,
+        "gls": 11529.5829395,
+        "psd": 11676.5060651
+      },
+      "halves": [
+        {
+          "legacy": 11702.1383126,
+          "gls": 9404.88716349,
+          "psd": 11852.9753051
+        },
+        {
+          "legacy": 10969.1015828,
+          "gls": 12759.930292,
+          "psd": 10678.4204498
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 22,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 18.3986211927,
+        "gls": 11055.4926736,
+        "psd": 11676.5062615
+      },
+      "halves": [
+        {
+          "legacy": 19.2347816245,
+          "gls": 11210.5299137,
+          "psd": 11852.9760132
+        },
+        {
+          "legacy": 18.4024128636,
+          "gls": 10778.6883495,
+          "psd": 10678.4204427
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 23,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12321.5804266,
+        "gls": 12738.3330353,
+        "psd": 12081.1759375
+      },
+      "halves": [
+        {
+          "legacy": 13112.1858629,
+          "gls": 12644.3218927,
+          "psd": 14198.3744119
+        },
+        {
+          "legacy": 11481.0548577,
+          "gls": 12405.1907087,
+          "psd": 10877.9812949
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 23,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.2016298979,
+        "gls": 11863.3483773,
+        "psd": 12081.1756837
+      },
+      "halves": [
+        {
+          "legacy": 11.8687322177,
+          "gls": 13425.3208226,
+          "psd": 14198.3743609
+        },
+        {
+          "legacy": 17.3111914792,
+          "gls": 10128.3789905,
+          "psd": 10877.981058
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 24,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12493.1485489,
+        "gls": 11503.1208452,
+        "psd": 12785.4447348
+      },
+      "halves": [
+        {
+          "legacy": 12354.0051431,
+          "gls": 13037.9432644,
+          "psd": 13067.6261864
+        },
+        {
+          "legacy": 12717.92816,
+          "gls": 10892.1838094,
+          "psd": 12647.7473853
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 24,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12.8258532478,
+        "gls": 11883.0142889,
+        "psd": 12785.4444496
+      },
+      "halves": [
+        {
+          "legacy": 12.2194160399,
+          "gls": 11789.1479232,
+          "psd": 13067.6266588
+        },
+        {
+          "legacy": 14.0578235125,
+          "gls": 12003.8322884,
+          "psd": 12647.7470837
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 25,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10452.8440503,
+        "gls": 11257.5798892,
+        "psd": 10792.1553041
+      },
+      "halves": [
+        {
+          "legacy": 9532.35028708,
+          "gls": 10779.1505476,
+          "psd": 10794.0982272
+        },
+        {
+          "legacy": 11515.0944147,
+          "gls": 11283.1330391,
+          "psd": 11565.7508241
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 25,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 18.8338767618,
+        "gls": 10139.1247459,
+        "psd": 10792.1555684
+      },
+      "halves": [
+        {
+          "legacy": 19.0971300554,
+          "gls": 10342.1825259,
+          "psd": 10794.0985965
+        },
+        {
+          "legacy": 19.6884734591,
+          "gls": 9740.76773117,
+          "psd": 11565.7510439
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 26,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11225.5008287,
+        "gls": 11839.6854032,
+        "psd": 11805.0459747
+      },
+      "halves": [
+        {
+          "legacy": 11370.4580393,
+          "gls": 11253.0260644,
+          "psd": 13535.1322981
+        },
+        {
+          "legacy": 10913.8322923,
+          "gls": 12027.9103611,
+          "psd": 10914.8304375
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 26,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.3953917652,
+        "gls": 10762.0098025,
+        "psd": 11805.0458839
+      },
+      "halves": [
+        {
+          "legacy": 14.6335025938,
+          "gls": 10474.3553229,
+          "psd": 13535.1319732
+        },
+        {
+          "legacy": 16.2586048324,
+          "gls": 10693.332772,
+          "psd": 10914.830249
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 27,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 10159.7850919,
+        "gls": 10661.7676746,
+        "psd": 10695.498789
+      },
+      "halves": [
+        {
+          "legacy": 10494.5426329,
+          "gls": 11991.4894831,
+          "psd": 10040.8028574
+        },
+        {
+          "legacy": 9871.65358347,
+          "gls": 10825.6419311,
+          "psd": 11208.6133282
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 27,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 19.3312562271,
+        "gls": 9811.92828002,
+        "psd": 10695.4988344
+      },
+      "halves": [
+        {
+          "legacy": 18.5742051809,
+          "gls": 9335.31345752,
+          "psd": 10040.8026781
+        },
+        {
+          "legacy": 21.1498773983,
+          "gls": 10325.8795228,
+          "psd": 11208.6129794
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 40,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12482.9422435,
+        "gls": 12559.7559454,
+        "psd": 13343.9036434
+      },
+      "halves": [
+        {
+          "legacy": 11859.5560002,
+          "gls": 12533.0085352,
+          "psd": 13970.8933629
+        },
+        {
+          "legacy": 13159.1749718,
+          "gls": 12380.9623148,
+          "psd": 13234.5535519
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 40,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.2894684851,
+        "gls": 12033.7693387,
+        "psd": 13343.9040647
+      },
+      "halves": [
+        {
+          "legacy": 12.0037771134,
+          "gls": 12613.8833651,
+          "psd": 13970.8833718
+        },
+        {
+          "legacy": 15.5513741902,
+          "gls": 11337.6639164,
+          "psd": 13234.5534363
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 41,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12848.7926028,
+        "gls": 12542.1705741,
+        "psd": 12702.3136707
+      },
+      "halves": [
+        {
+          "legacy": 12393.9575666,
+          "gls": 10679.7452388,
+          "psd": 11914.8331261
+        },
+        {
+          "legacy": 13328.8505458,
+          "gls": 12957.3537374,
+          "psd": 13742.5857499
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 41,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 16.0408732167,
+        "gls": 12170.858508,
+        "psd": 12702.313828
+      },
+      "halves": [
+        {
+          "legacy": 15.9881298232,
+          "gls": 11365.9237592,
+          "psd": 11914.8332445
+        },
+        {
+          "legacy": 17.2209111079,
+          "gls": 12763.8270163,
+          "psd": 13742.5859514
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 42,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12237.1586871,
+        "gls": 12922.7000504,
+        "psd": 12492.9785029
+      },
+      "halves": [
+        {
+          "legacy": 11688.7493348,
+          "gls": 13185.6957251,
+          "psd": 13275.9980661
+        },
+        {
+          "legacy": 12794.3833043,
+          "gls": 13297.1277913,
+          "psd": 12189.3700598
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 42,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.776728043,
+        "gls": 11488.4950433,
+        "psd": 12492.9789653
+      },
+      "halves": [
+        {
+          "legacy": 16.1679564444,
+          "gls": 10432.0337527,
+          "psd": 13275.9993225
+        },
+        {
+          "legacy": 16.7948936155,
+          "gls": 12481.2641523,
+          "psd": 12189.3709239
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 43,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12075.1904458,
+        "gls": 12019.274367,
+        "psd": 12073.6679356
+      },
+      "halves": [
+        {
+          "legacy": 13136.4913991,
+          "gls": 13454.6027641,
+          "psd": 12502.79776
+        },
+        {
+          "legacy": 11153.2532084,
+          "gls": 11413.7546223,
+          "psd": 11528.0022489
+        }
+      ]
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 43,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.7548299173,
+        "gls": 10672.1335974,
+        "psd": 12073.6678947
+      },
+      "halves": [
+        {
+          "legacy": 12.9568171307,
+          "gls": 11993.1182093,
+          "psd": 12502.7969589
+        },
+        {
+          "legacy": 19.6047943362,
+          "gls": 9349.34325242,
+          "psd": 11528.0025222
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 20,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11458.1544453,
+        "gls": 11868.152967,
+        "psd": 11747.049314
+      },
+      "halves": [
+        {
+          "legacy": 11524.6692022,
+          "gls": 11877.3955113,
+          "psd": 11838.3281541
+        },
+        {
+          "legacy": 11445.4156439,
+          "gls": 11551.7524052,
+          "psd": 11903.1221768
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 20,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.7949832339,
+        "gls": 10881.3551289,
+        "psd": 11747.0490806
+      },
+      "halves": [
+        {
+          "legacy": 12.2637259821,
+          "gls": 11064.8763932,
+          "psd": 11838.3280505
+        },
+        {
+          "legacy": 15.3964193026,
+          "gls": 10698.658423,
+          "psd": 11903.1218697
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 21,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12978.3920945,
+        "gls": 12475.1878025,
+        "psd": 12530.2308991
+      },
+      "halves": [
+        {
+          "legacy": 12804.9940986,
+          "gls": 12493.4039736,
+          "psd": 12444.538567
+        },
+        {
+          "legacy": 13153.0017084,
+          "gls": 12427.0520938,
+          "psd": 12642.4463849
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 21,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12.7367495756,
+        "gls": 12027.6701907,
+        "psd": 12530.2308664
+      },
+      "halves": [
+        {
+          "legacy": 11.5544797933,
+          "gls": 11870.1253786,
+          "psd": 12444.538738
+        },
+        {
+          "legacy": 13.9487076698,
+          "gls": 12197.3742882,
+          "psd": 12642.4462442
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 22,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12255.4397812,
+        "gls": 12462.9136731,
+        "psd": 12251.0525282
+      },
+      "halves": [
+        {
+          "legacy": 12596.6338355,
+          "gls": 12681.6186218,
+          "psd": 12612.088007
+        },
+        {
+          "legacy": 11970.8913766,
+          "gls": 12117.7404186,
+          "psd": 11892.5808699
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 22,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.9838421454,
+        "gls": 11684.1632544,
+        "psd": 12251.052541
+      },
+      "halves": [
+        {
+          "legacy": 12.8519838357,
+          "gls": 11772.2869629,
+          "psd": 12612.0881856
+        },
+        {
+          "legacy": 15.1131329436,
+          "gls": 11580.0152276,
+          "psd": 11892.5808632
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 23,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12060.0816572,
+        "gls": 12127.9470508,
+        "psd": 11850.5499595
+      },
+      "halves": [
+        {
+          "legacy": 12099.6908546,
+          "gls": 11954.9839707,
+          "psd": 11493.6891511
+        },
+        {
+          "legacy": 12025.2655192,
+          "gls": 12487.0888049,
+          "psd": 12280.5188591
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 23,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.4867749344,
+        "gls": 10926.9823156,
+        "psd": 11850.5501901
+      },
+      "halves": [
+        {
+          "legacy": 14.6438523592,
+          "gls": 11001.973405,
+          "psd": 11493.6893432
+        },
+        {
+          "legacy": 14.3551309833,
+          "gls": 10849.1409124,
+          "psd": 12280.5190905
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 24,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12240.9539611,
+        "gls": 12014.2596429,
+        "psd": 12033.8464427
+      },
+      "halves": [
+        {
+          "legacy": 11895.1905701,
+          "gls": 11808.6574366,
+          "psd": 12017.9496554
+        },
+        {
+          "legacy": 12616.1407949,
+          "gls": 12348.8259364,
+          "psd": 11988.3803823
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 24,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.7673917318,
+        "gls": 11141.456282,
+        "psd": 12033.8462656
+      },
+      "halves": [
+        {
+          "legacy": 13.3713122421,
+          "gls": 11325.942068,
+          "psd": 12017.949181
+        },
+        {
+          "legacy": 14.1672945576,
+          "gls": 10901.531394,
+          "psd": 11988.3804586
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 25,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12015.0218404,
+        "gls": 12147.3041596,
+        "psd": 12387.0570617
+      },
+      "halves": [
+        {
+          "legacy": 11996.2393335,
+          "gls": 11940.5338193,
+          "psd": 12189.9217251
+        },
+        {
+          "legacy": 12053.807601,
+          "gls": 12248.0900418,
+          "psd": 12480.7774893
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 25,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.7297534486,
+        "gls": 11696.5029336,
+        "psd": 12387.0570082
+      },
+      "halves": [
+        {
+          "legacy": 15.2490072129,
+          "gls": 12017.6118276,
+          "psd": 12189.9216806
+        },
+        {
+          "legacy": 12.2291405278,
+          "gls": 11276.2846127,
+          "psd": 12480.7773182
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 26,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12036.6547967,
+        "gls": 12125.538889,
+        "psd": 12160.1734193
+      },
+      "halves": [
+        {
+          "legacy": 12215.7624324,
+          "gls": 12304.3658268,
+          "psd": 12414.9884719
+        },
+        {
+          "legacy": 11857.3556516,
+          "gls": 11928.1021564,
+          "psd": 11949.274706
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 26,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.7966896266,
+        "gls": 11272.1230886,
+        "psd": 12160.1733747
+      },
+      "halves": [
+        {
+          "legacy": 14.5310316323,
+          "gls": 10990.5810063,
+          "psd": 12414.9883074
+        },
+        {
+          "legacy": 13.0997210959,
+          "gls": 11553.4151685,
+          "psd": 11949.2747876
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 27,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12196.8362732,
+        "gls": 11907.7195036,
+        "psd": 12540.9740075
+      },
+      "halves": [
+        {
+          "legacy": 12500.1427267,
+          "gls": 11433.5375347,
+          "psd": 12808.0431971
+        },
+        {
+          "legacy": 11793.3237309,
+          "gls": 12199.2758631,
+          "psd": 12064.4956024
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 27,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.4450204095,
+        "gls": 11440.2947521,
+        "psd": 12540.9741551
+      },
+      "halves": [
+        {
+          "legacy": 12.8497598603,
+          "gls": 11137.7827691,
+          "psd": 12808.0433708
+        },
+        {
+          "legacy": 14.0772473357,
+          "gls": 11668.2118448,
+          "psd": 12064.4957976
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 40,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11492.2102061,
+        "gls": 11591.8332052,
+        "psd": 11790.4943663
+      },
+      "halves": [
+        {
+          "legacy": 10888.1450048,
+          "gls": 11426.6968553,
+          "psd": 11696.3859003
+        },
+        {
+          "legacy": 12067.4143209,
+          "gls": 11778.2342322,
+          "psd": 11751.2115242
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 40,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.9512087409,
+        "gls": 10986.5268862,
+        "psd": 11790.4943498
+      },
+      "halves": [
+        {
+          "legacy": 14.4595393464,
+          "gls": 10310.2862324,
+          "psd": 11696.3857519
+        },
+        {
+          "legacy": 13.4399855846,
+          "gls": 11568.9348906,
+          "psd": 11751.2116401
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 41,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11798.3163718,
+        "gls": 11957.684974,
+        "psd": 11734.6865375
+      },
+      "halves": [
+        {
+          "legacy": 11728.8254076,
+          "gls": 12118.4563435,
+          "psd": 12144.6615271
+        },
+        {
+          "legacy": 11879.6444401,
+          "gls": 12127.9335246,
+          "psd": 11432.0692521
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 41,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.8709353881,
+        "gls": 10563.7085413,
+        "psd": 11734.6869965
+      },
+      "halves": [
+        {
+          "legacy": 14.1774693912,
+          "gls": 10726.2691232,
+          "psd": 12144.661757
+        },
+        {
+          "legacy": 15.5304974888,
+          "gls": 10415.1449545,
+          "psd": 11432.0697855
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 42,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11828.5458779,
+        "gls": 12334.6005118,
+        "psd": 12201.0571912
+      },
+      "halves": [
+        {
+          "legacy": 11277.5119335,
+          "gls": 12272.6079373,
+          "psd": 11902.5175745
+        },
+        {
+          "legacy": 12399.2675918,
+          "gls": 12221.1691605,
+          "psd": 12461.8741865
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 42,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.5003014155,
+        "gls": 11433.8072967,
+        "psd": 12201.0570921
+      },
+      "halves": [
+        {
+          "legacy": 13.7953629937,
+          "gls": 10568.1977524,
+          "psd": 11902.5172928
+        },
+        {
+          "legacy": 13.2397760867,
+          "gls": 12204.6435124,
+          "psd": 12461.874275
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "seed": 43,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12129.0337934,
+        "gls": 12055.1407586,
+        "psd": 12349.4202571
+      },
+      "halves": [
+        {
+          "legacy": 11671.3455927,
+          "gls": 11303.6241377,
+          "psd": 11892.6503707
+        },
+        {
+          "legacy": 12671.0860658,
+          "gls": 12728.468045,
+          "psd": 13035.6517411
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "seed": 43,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 13.629775052,
+        "gls": 10881.4544679,
+        "psd": 12349.4202598
+      },
+      "halves": [
+        {
+          "legacy": 14.4186659912,
+          "gls": 10592.6097394,
+          "psd": 11892.6503277
+        },
+        {
+          "legacy": 12.8765039568,
+          "gls": 11262.6466025,
+          "psd": 13035.6516971
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 20,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12884.339292,
+        "gls": 12762.7394062,
+        "psd": 12624.3044619
+      },
+      "halves": [
+        {
+          "legacy": 11979.96941,
+          "gls": 12454.8017226,
+          "psd": 12044.8692641
+        },
+        {
+          "legacy": 13757.6103577,
+          "gls": 13296.1861087,
+          "psd": 13282.167975
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 20,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.6162793139,
+        "gls": 12736.9457304,
+        "psd": 12624.3044226
+      },
+      "halves": [
+        {
+          "legacy": 15.0768793382,
+          "gls": 11415.8804063,
+          "psd": 12044.8692901
+        },
+        {
+          "legacy": 16.1803504058,
+          "gls": 14008.0268276,
+          "psd": 13282.1678709
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 21,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11649.2669703,
+        "gls": 11973.1035061,
+        "psd": 11986.8015651
+      },
+      "halves": [
+        {
+          "legacy": 11287.0210135,
+          "gls": 11547.5573264,
+          "psd": 11939.0473114
+        },
+        {
+          "legacy": 12052.6568448,
+          "gls": 12189.5994643,
+          "psd": 12127.1564983
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 21,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.2970114029,
+        "gls": 11364.4316532,
+        "psd": 11986.8014045
+      },
+      "halves": [
+        {
+          "legacy": 16.3116074822,
+          "gls": 11029.2523021,
+          "psd": 11939.0471395
+        },
+        {
+          "legacy": 14.2640763819,
+          "gls": 11692.8835149,
+          "psd": 12127.1562525
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 22,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11430.0999908,
+        "gls": 11813.4553364,
+        "psd": 11533.4911001
+      },
+      "halves": [
+        {
+          "legacy": 11116.9938228,
+          "gls": 11420.0362074,
+          "psd": 11412.4036308
+        },
+        {
+          "legacy": 11755.1922195,
+          "gls": 11972.2623071,
+          "psd": 11718.4628685
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 22,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 17.5615968677,
+        "gls": 10958.5170035,
+        "psd": 11533.49105
+      },
+      "halves": [
+        {
+          "legacy": 18.05240222,
+          "gls": 10432.7043709,
+          "psd": 11412.4037404
+        },
+        {
+          "legacy": 17.0898225236,
+          "gls": 11459.8023763,
+          "psd": 11718.462508
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 23,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12325.8906062,
+        "gls": 12242.7026709,
+        "psd": 12243.1245278
+      },
+      "halves": [
+        {
+          "legacy": 12310.8678105,
+          "gls": 12258.4929521,
+          "psd": 12219.0873433
+        },
+        {
+          "legacy": 12335.8688895,
+          "gls": 12146.1860902,
+          "psd": 12369.2174753
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 23,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.6024173453,
+        "gls": 11582.9837389,
+        "psd": 12243.1244843
+      },
+      "halves": [
+        {
+          "legacy": 14.509205772,
+          "gls": 11390.9449283,
+          "psd": 12219.0871962
+        },
+        {
+          "legacy": 14.736328753,
+          "gls": 11732.3143317,
+          "psd": 12369.2174929
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 24,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12045.0105832,
+        "gls": 11859.419958,
+        "psd": 12237.7592664
+      },
+      "halves": [
+        {
+          "legacy": 12398.3968857,
+          "gls": 11574.1217997,
+          "psd": 12707.897053
+        },
+        {
+          "legacy": 11606.128798,
+          "gls": 12098.6294098,
+          "psd": 12003.8814358
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 24,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.6131831268,
+        "gls": 11188.9672141,
+        "psd": 12237.75911
+      },
+      "halves": [
+        {
+          "legacy": 14.1424692761,
+          "gls": 11549.3939223,
+          "psd": 12707.8969856
+        },
+        {
+          "legacy": 15.0958399573,
+          "gls": 10783.9195563,
+          "psd": 12003.8812452
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 25,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11778.20936,
+        "gls": 12071.2417858,
+        "psd": 12119.985811
+      },
+      "halves": [
+        {
+          "legacy": 10590.5604626,
+          "gls": 11267.161397,
+          "psd": 11300.7649744
+        },
+        {
+          "legacy": 13068.3110907,
+          "gls": 12793.0285885,
+          "psd": 12925.9354637
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 25,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.3899407955,
+        "gls": 11037.8038933,
+        "psd": 12119.9860131
+      },
+      "halves": [
+        {
+          "legacy": 17.1953934112,
+          "gls": 9836.48123612,
+          "psd": 11300.7651324
+        },
+        {
+          "legacy": 13.5695941434,
+          "gls": 12420.0547188,
+          "psd": 12925.9356459
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 26,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11737.9005682,
+        "gls": 12086.0692715,
+        "psd": 11963.659101
+      },
+      "halves": [
+        {
+          "legacy": 11907.9869225,
+          "gls": 12027.2729156,
+          "psd": 11847.2717825
+        },
+        {
+          "legacy": 11563.0468505,
+          "gls": 12051.4886023,
+          "psd": 12075.8436312
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 26,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.4356538982,
+        "gls": 10851.8491036,
+        "psd": 11963.65908
+      },
+      "halves": [
+        {
+          "legacy": 14.158492842,
+          "gls": 10967.8015814,
+          "psd": 11847.2716149
+        },
+        {
+          "legacy": 16.7256587989,
+          "gls": 10659.9880883,
+          "psd": 12075.8438271
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 27,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12147.6261131,
+        "gls": 12206.0371303,
+        "psd": 11983.5795184
+      },
+      "halves": [
+        {
+          "legacy": 10518.6727442,
+          "gls": 11638.4232514,
+          "psd": 11323.596057
+        },
+        {
+          "legacy": 13401.7614757,
+          "gls": 12441.1140946,
+          "psd": 12687.3922267
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 27,
+      "split": "calibration",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 16.4980318302,
+        "gls": 11799.2523162,
+        "psd": 11983.5795591
+      },
+      "halves": [
+        {
+          "legacy": 16.8801687319,
+          "gls": 10528.1351205,
+          "psd": 11323.5962924
+        },
+        {
+          "legacy": 16.1487225418,
+          "gls": 12999.679112,
+          "psd": 12687.3921506
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 40,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12224.4522135,
+        "gls": 12024.3855108,
+        "psd": 12062.0198526
+      },
+      "halves": [
+        {
+          "legacy": 11627.0485793,
+          "gls": 12030.4572965,
+          "psd": 12036.8583354
+        },
+        {
+          "legacy": 12791.0050432,
+          "gls": 12179.1970235,
+          "psd": 11890.0654969
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 40,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 16.6038660637,
+        "gls": 11475.2732657,
+        "psd": 12062.0199607
+      },
+      "halves": [
+        {
+          "legacy": 14.7480856212,
+          "gls": 11444.0581378,
+          "psd": 12036.8587488
+        },
+        {
+          "legacy": 18.4887920843,
+          "gls": 11523.6729344,
+          "psd": 11890.0652648
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 41,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12670.7660326,
+        "gls": 12260.9352684,
+        "psd": 12465.6297407
+      },
+      "halves": [
+        {
+          "legacy": 12733.2417481,
+          "gls": 12496.2509618,
+          "psd": 12305.5776886
+        },
+        {
+          "legacy": 12603.9879929,
+          "gls": 11959.6005147,
+          "psd": 12820.529931
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 41,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 14.7902749972,
+        "gls": 12083.4630824,
+        "psd": 12465.6297913
+      },
+      "halves": [
+        {
+          "legacy": 14.9093065399,
+          "gls": 11742.1882425,
+          "psd": 12305.5777704
+        },
+        {
+          "legacy": 14.6884733168,
+          "gls": 12312.3959479,
+          "psd": 12820.5299185
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 42,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 12577.4496821,
+        "gls": 12315.6653928,
+        "psd": 12393.6917003
+      },
+      "halves": [
+        {
+          "legacy": 12794.7864096,
+          "gls": 12911.7915604,
+          "psd": 12864.8617575
+        },
+        {
+          "legacy": 12444.5032152,
+          "gls": 11926.1816054,
+          "psd": 12079.6373833
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 42,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.1599139389,
+        "gls": 12133.5376107,
+        "psd": 12393.691704
+      },
+      "halves": [
+        {
+          "legacy": 13.4680394161,
+          "gls": 12354.3479708,
+          "psd": 12864.8618563
+        },
+        {
+          "legacy": 16.8501180279,
+          "gls": 11992.3407478,
+          "psd": 12079.6375246
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "seed": 43,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 11946.337602,
+        "gls": 12122.8121277,
+        "psd": 12226.0168471
+      },
+      "halves": [
+        {
+          "legacy": 12005.3377903,
+          "gls": 12468.3429411,
+          "psd": 12194.4654513
+        },
+        {
+          "legacy": 11900.7389909,
+          "gls": 11920.7847582,
+          "psd": 12107.2541966
+        }
+      ]
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "seed": 43,
+      "split": "evaluation",
+      "truth_theta": 12157.1601702,
+      "full": {
+        "legacy": 15.5302338572,
+        "gls": 11619.3435564,
+        "psd": 12226.0169306
+      },
+      "halves": [
+        {
+          "legacy": 14.8175643813,
+          "gls": 11411.8796598,
+          "psd": 12194.4655281
+        },
+        {
+          "legacy": 16.2814941549,
+          "gls": 11823.6146683,
+          "psd": 12107.2542586
+        }
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "method": "legacy",
+      "evaluation_max_truth_error": 0.966226689787,
+      "evaluation_max_half_disagreement": 27.1695797339,
+      "evaluation_max_psd_disagreement": 0.371952997456,
+      "calibration_empirical_max": 13.1325122301,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "method": "gls",
+      "evaluation_max_truth_error": 0.660847672608,
+      "evaluation_max_half_disagreement": 1.33761250355,
+      "evaluation_max_psd_disagreement": 0.53096422265,
+      "calibration_empirical_max": 2.44972791732,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": false,
+      "method": "psd",
+      "evaluation_max_truth_error": 0.569207316953,
+      "evaluation_max_half_disagreement": 0.71984404754,
+      "evaluation_max_psd_disagreement": 0.0,
+      "calibration_empirical_max": 0.607582004031,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "method": "legacy",
+      "evaluation_max_truth_error": 0.999230857292,
+      "evaluation_max_half_disagreement": 0.439605514783,
+      "evaluation_max_psd_disagreement": 0.999100975063,
+      "calibration_empirical_max": 1.46145973055,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "method": "gls",
+      "evaluation_max_truth_error": 0.793875958162,
+      "evaluation_max_half_disagreement": 3.61653539,
+      "evaluation_max_psd_disagreement": 0.238504293422,
+      "calibration_empirical_max": 7.46650871633,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 32768,
+      "filtered": false,
+      "contaminated": true,
+      "method": "psd",
+      "evaluation_max_truth_error": 0.569211813268,
+      "evaluation_max_half_disagreement": 0.719845500139,
+      "evaluation_max_psd_disagreement": 0.0,
+      "calibration_empirical_max": 0.607583839785,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "method": "legacy",
+      "evaluation_max_truth_error": 0.926653149811,
+      "evaluation_max_half_disagreement": 12.9609395423,
+      "evaluation_max_psd_disagreement": 0.241509450192,
+      "calibration_empirical_max": 30.1496683228,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "method": "gls",
+      "evaluation_max_truth_error": 0.204862089741,
+      "evaluation_max_half_disagreement": 0.240940126901,
+      "evaluation_max_psd_disagreement": 0.175912365392,
+      "calibration_empirical_max": 2.87091606333,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": false,
+      "method": "psd",
+      "evaluation_max_truth_error": 0.215975528867,
+      "evaluation_max_half_disagreement": 0.27851727318,
+      "evaluation_max_psd_disagreement": 0.0,
+      "calibration_empirical_max": 0.286052103476,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "method": "legacy",
+      "evaluation_max_truth_error": 0.999461428524,
+      "evaluation_max_half_disagreement": 1.54942626522,
+      "evaluation_max_psd_disagreement": 0.999251547899,
+      "calibration_empirical_max": 0.999363846802,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "method": "gls",
+      "evaluation_max_truth_error": 0.351179810671,
+      "evaluation_max_half_disagreement": 0.730849923011,
+      "evaluation_max_psd_disagreement": 0.282626363517,
+      "calibration_empirical_max": 1.56906495069,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 32768,
+      "filtered": true,
+      "contaminated": true,
+      "method": "psd",
+      "evaluation_max_truth_error": 0.21598112811,
+      "evaluation_max_half_disagreement": 0.278535932692,
+      "evaluation_max_psd_disagreement": 0.0,
+      "calibration_empirical_max": 0.286051281017,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "method": "legacy",
+      "evaluation_max_truth_error": 0.352152492469,
+      "evaluation_max_half_disagreement": 0.53007888714,
+      "evaluation_max_psd_disagreement": 0.129591703985,
+      "calibration_empirical_max": 0.168534911047,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "method": "gls",
+      "evaluation_max_truth_error": 0.137433429848,
+      "evaluation_max_half_disagreement": 0.180677701859,
+      "evaluation_max_psd_disagreement": 0.0495534860156,
+      "calibration_empirical_max": 0.467788469784,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": false,
+      "method": "psd",
+      "evaluation_max_truth_error": 0.20810069202,
+      "evaluation_max_half_disagreement": 0.314598860924,
+      "evaluation_max_psd_disagreement": 0.0,
+      "calibration_empirical_max": 0.174333875509,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "method": "legacy",
+      "evaluation_max_truth_error": 0.99910780126,
+      "evaluation_max_half_disagreement": 0.664318059087,
+      "evaluation_max_psd_disagreement": 0.998958136149,
+      "calibration_empirical_max": 0.999072860633,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "method": "gls",
+      "evaluation_max_truth_error": 0.302152936345,
+      "evaluation_max_half_disagreement": 0.261937182443,
+      "evaluation_max_psd_disagreement": 0.212136702187,
+      "calibration_empirical_max": 0.347657623319,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 131072,
+      "filtered": false,
+      "contaminated": true,
+      "method": "psd",
+      "evaluation_max_truth_error": 0.2081006572,
+      "evaluation_max_half_disagreement": 0.314598851088,
+      "evaluation_max_psd_disagreement": 0.0,
+      "calibration_empirical_max": 0.174333851127,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "method": "legacy",
+      "evaluation_max_truth_error": 0.0963786245512,
+      "evaluation_max_half_disagreement": 0.177817014794,
+      "evaluation_max_psd_disagreement": 0.0645209545053,
+      "calibration_empirical_max": 0.21590649842,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "method": "gls",
+      "evaluation_max_truth_error": 0.121526319525,
+      "evaluation_max_half_disagreement": 0.213264309932,
+      "evaluation_max_psd_disagreement": 0.0587644904388,
+      "calibration_empirical_max": 0.356734011818,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": false,
+      "method": "psd",
+      "evaluation_max_truth_error": 0.149190531947,
+      "evaluation_max_half_disagreement": 0.153401445445,
+      "evaluation_max_psd_disagreement": 0.0,
+      "calibration_empirical_max": 0.30523982593,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "method": "legacy",
+      "evaluation_max_truth_error": 0.999012616685,
+      "evaluation_max_half_disagreement": 0.513087214119,
+      "evaluation_max_psd_disagreement": 0.999004079434,
+      "calibration_empirical_max": 0.999023724945,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "method": "gls",
+      "evaluation_max_truth_error": 0.230959934593,
+      "evaluation_max_half_disagreement": 0.282776542215,
+      "evaluation_max_psd_disagreement": 0.116081899016,
+      "calibration_empirical_max": 0.325515251269,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 131072,
+      "filtered": true,
+      "contaminated": true,
+      "method": "psd",
+      "evaluation_max_truth_error": 0.149189710119,
+      "evaluation_max_half_disagreement": 0.153401450889,
+      "evaluation_max_psd_disagreement": 0.0,
+      "calibration_empirical_max": 0.305239849676,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "method": "legacy",
+      "evaluation_max_truth_error": 0.104384177517,
+      "evaluation_max_half_disagreement": 0.108307642443,
+      "evaluation_max_psd_disagreement": 0.0305310685382,
+      "calibration_empirical_max": 0.081913993429,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "method": "gls",
+      "evaluation_max_truth_error": 0.0702085043319,
+      "evaluation_max_half_disagreement": 0.12605195378,
+      "evaluation_max_psd_disagreement": 0.0238294180932,
+      "calibration_empirical_max": 0.066973001669,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": false,
+      "method": "psd",
+      "evaluation_max_truth_error": 0.0722612484057,
+      "evaluation_max_half_disagreement": 0.0961098943261,
+      "evaluation_max_psd_disagreement": 0.0,
+      "calibration_empirical_max": 0.0684575420173,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "method": "legacy",
+      "evaluation_max_truth_error": 0.99894082962,
+      "evaluation_max_half_disagreement": 0.119765585413,
+      "evaluation_max_psd_disagreement": 0.99889632268,
+      "calibration_empirical_max": 0.999049574108,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "method": "gls",
+      "evaluation_max_truth_error": 0.151916558797,
+      "evaluation_max_half_disagreement": 0.154846247038,
+      "evaluation_max_psd_disagreement": 0.118869206895,
+      "calibration_empirical_max": 0.119970595661,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 524288,
+      "filtered": false,
+      "contaminated": true,
+      "method": "psd",
+      "evaluation_max_truth_error": 0.0722612447878,
+      "evaluation_max_half_disagreement": 0.0961098945891,
+      "evaluation_max_psd_disagreement": 0.0,
+      "calibration_empirical_max": 0.0684575442902,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "method": "legacy",
+      "evaluation_max_truth_error": 0.0524486171501,
+      "evaluation_max_half_disagreement": 0.100107646065,
+      "evaluation_max_psd_disagreement": 0.0228757451027,
+      "calibration_empirical_max": 0.274092445087,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "method": "gls",
+      "evaluation_max_truth_error": 0.0620729989325,
+      "evaluation_max_half_disagreement": 0.0826425412238,
+      "evaluation_max_psd_disagreement": 0.0164207085044,
+      "calibration_empirical_max": 0.135426052555,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": false,
+      "method": "psd",
+      "evaluation_max_truth_error": 0.0582127386162,
+      "evaluation_max_half_disagreement": 0.0650039690096,
+      "evaluation_max_psd_disagreement": 0.0,
+      "calibration_empirical_max": 0.143810661749,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": true
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "method": "legacy",
+      "evaluation_max_truth_error": 0.998892172248,
+      "evaluation_max_half_disagreement": 0.253640137382,
+      "evaluation_max_psd_disagreement": 0.998813515623,
+      "calibration_empirical_max": 0.998883818758,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": false
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "method": "gls",
+      "evaluation_max_truth_error": 0.0613038324689,
+      "evaluation_max_half_disagreement": 0.0485605999202,
+      "evaluation_max_psd_disagreement": 0.0496215061439,
+      "calibration_empirical_max": 0.262652204654,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": true
+    },
+    {
+      "n": 524288,
+      "filtered": true,
+      "contaminated": true,
+      "method": "psd",
+      "evaluation_max_truth_error": 0.0582127467438,
+      "evaluation_max_half_disagreement": 0.0650039647309,
+      "evaluation_max_psd_disagreement": 0.0,
+      "calibration_empirical_max": 0.143810661881,
+      "calibrated_tolerance": null,
+      "quantile_rank": 9,
+      "calibration_count": 8,
+      "within_eight_percent": true
+    }
+  ],
+  "note": "Null tolerance means no finite 90% bound at registered pilot size; no classifier threshold changed."
+}

@@ -1,0 +1,52 @@
+{
+  "evidence": "empirical",
+  "scope": "computed synthetic responses to the declared inputs below",
+  "declarations": {
+    "drag_ratio": 2.3,
+    "seed": 4,
+    "n": 400000,
+    "detector_psd": "constant 1",
+    "transfer": "H\u00b2=.01 above43kHz, 1 elsewhere",
+    "training_repeatability": [
+      2.0,
+      1.0,
+      1.0
+    ],
+    "disjoint_validation": [
+      1.0,
+      1.0
+    ],
+    "perturbed_validation": [
+      2.0,
+      1.0
+    ],
+    "note": "Constructed inputs, not empirical findings; flags below are computed predicates."
+  },
+  "circular_corner": {
+    "input": "bead drag=2.3, seed=4, n=400000, declared bulk corner",
+    "true_scale": 4.568,
+    "assumed_corner_scale": 1.9862261359437043,
+    "record_corner_scale": 4.685683197472197,
+    "assumed_relative_error": 0.5651869229545305,
+    "note": "Changing true drag defeats independence while supplied-corner inversion remains evaluable."
+  },
+  "decimation": {
+    "input": "sin(2*pi*.4*n)+.1*sin(2*pi*.023*n), n=0..9999",
+    "paired_identity_error": 0.0,
+    "scope": "paired-sample identity; no independent response validation"
+  },
+  "whiteness": {
+    "input": "white PSD=1; H\u00b2=.01 above43kHz; subtracted thermal PSD=0",
+    "old_band_relative_error": 0.6175124999999999,
+    "declared_detector_psd": "constant one-sided PSD of 1",
+    "construction_identity_equal": true,
+    "scope": "identical constructed spectra do not independently test whiteness"
+  },
+  "training_band_vote": {
+    "input": "training-repeat ratio2; disjoint-band ratios1,1",
+    "old_all_bands_pass": false,
+    "disjoint_bands_pass": true,
+    "independent_failure_input": "change first disjoint-band ratio to2",
+    "independent_failure_pass": false
+  }
+}

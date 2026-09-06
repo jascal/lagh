@@ -164,7 +164,9 @@ def gate_record(axes: dict, *, tol: float = 1.25,
     Two axes are the minimum for `common-mode`: one axis off by a factor is
     indistinguishable from one axis being wrong, and calling it a measurement
     would be the unsound direction."""
-    named = {k: v for k, v in axes.items() if v.get("ratio")}
+    named = {k: v for k, v in axes.items()
+             if v.get("ratio") is not None and np.isfinite(v["ratio"])
+             and v["ratio"] > 0}
     if not named:
         return {"verdict": "unreadable", "axes": list(axes),
                 "note": "no axis yielded a timescale"}
@@ -177,10 +179,17 @@ def gate_record(axes: dict, *, tol: float = 1.25,
                          "statement")}
     ratios = {k: float(v["ratio"]) for k, v in named.items()}
     lo, hi = min(ratios.values()), max(ratios.values())
+    if len(named) != len(axes):
+        return {"verdict": "unresolved", "ratios": ratios,
+                "note": "an unreadable axis prevents a whole-record claim"}
+    if not all(v.get("var_ok") is True for v in named.values()):
+        return {"verdict": "unresolved", "ratios": ratios,
+                "note": "missing equipartition evidence prevents a clean or common-mode claim"}
     if all(1.0 / tol <= r <= tol for r in ratios.values()):
         return {"verdict": "clean", "ratios": ratios,
                 "note": "every axis agrees with the calibration's timescale"}
-    if len(ratios) >= 2 and hi / lo - 1.0 <= spread:
+    if (len(ratios) >= 2 and hi / lo - 1.0 <= spread
+            and all(v.get("var_ok") is True for v in named.values())):
         common = float(np.exp(np.mean(np.log(list(ratios.values())))))
         return {"verdict": "common-mode", "ratios": ratios,
                 "common_ratio": common, "spread": float(hi / lo - 1.0),
@@ -451,39 +460,60 @@ FAXEN_LAMBDA_MAX = 0.6
 
 def faxen_height(drag_ratio: float, radius_um: float,
                  drag_ratio_se: float | None = None) -> dict:
-    """Invert Faxen's parallel correction for the centre height, or REFUSE.
+    """Conditional Faxen inversion and, only with uncertainty, a height reading.
 
-    Two refusals, and both were measured rather than anticipated. Outside
-    lam <= FAXEN_LAMBDA_MAX the five-term series is a near-field expansion being
-    asked a question it does not answer. And a drag ratio whose uncertainty
-    reaches 1 puts NO upper bound on the height at all -- the wall's effect
-    dies off, so a ratio of 1.02 +- 0.10 is consistent with any height above a
-    few radii, and returning its point inversion (12 um, from a real reading)
-    would state a position the data does not determine."""
-    F = float(drag_ratio)
-    if drag_ratio_se:
-        lo_F = F - float(drag_ratio_se)
-        if lo_F <= 1.0:
-            hi = faxen_height(F + float(drag_ratio_se), radius_um)
-            return {"height_um": None, "lambda": None,
-                    "height_lower_bound_um": hi.get("height_um"),
-                    "note": (f"drag ratio {F:.3f} +- {drag_ratio_se:.3f} reaches "
-                             "1: consistent with bulk, so the height is bounded "
-                             "BELOW and not determined above")}
-    if F < 1.0:
-        return {"height_um": None, "lambda": None,
-                "note": f"drag ratio {F:.3f} < 1: a wall can only INCREASE the "
-                        "parallel drag, so this is not a Faxen reading"}
+    None means UNKNOWN uncertainty, not zero. `conditional_height_um` is the
+    mathematical inversion, never a measured position on its own. Exact
+    synthetic ratios can explicitly declare se=0. A supplied finite uncertainty
+    reaching bulk gives only a lower bound; invalid uncertainty refuses.
+    The five-term series is restricted to lambda <= FAXEN_LAMBDA_MAX.
+    """
     from scipy.optimize import brentq
-    if F > faxen_drag_ratio(FAXEN_LAMBDA_MAX):
-        return {"height_um": None, "lambda": None,
-                "note": (f"drag ratio {F:.3f} needs a/h > {FAXEN_LAMBDA_MAX}, "
-                         "outside the series' near-field domain: the height is "
-                         "not read off it")}
-    lam = float(brentq(lambda L: faxen_drag_ratio(L) - F, 1e-9, FAXEN_LAMBDA_MAX))
-    h = float(radius_um) / lam
-    return {"height_um": h, "lambda": lam, "gap_um": h - float(radius_um),
-            "note": "Faxen parallel-to-wall, five-term near-field series"}
+    F, radius = float(drag_ratio), float(radius_um)
+    out = {"height_um": None, "lambda": None, "height_determined": False,
+           "conditional_height_um": None, "evidence": "empirical",
+           "uncertainty_supplied": drag_ratio_se is not None}
+    if not np.isfinite(F) or not np.isfinite(radius) or radius <= 0:
+        return dict(out, note="finite drag ratio and positive finite radius required")
+    se = None if drag_ratio_se is None else float(drag_ratio_se)
+    if se is not None and (not np.isfinite(se) or se < 0):
+        return dict(out, note="drag uncertainty must be finite and nonnegative")
+    max_F = faxen_drag_ratio(FAXEN_LAMBDA_MAX)
+
+    def invert(ratio):
+        if not 1 < ratio <= max_F:
+            return None
+        # Solve for z=lambda/delta, delta=1-1/F. (F-1)/F avoids
+        # subtracting two nearly equal reciprocals. The scaled polynomial
+        # stays O(1) even for nextafter(1,2), unlike the old lambda>=1e-9
+        # bracket. delta/lambda >= 9/16 - .6**2/8 > 1/2, so z<2.
+        delta = (ratio - 1) / ratio
+        def equation(z):
+            lam = delta*z
+            return z*(9/16 - lam**2/8 + 45*lam**3/256 + lam**4/16) - 1
+        z = brentq(equation, 0., 2., xtol=1e-14)
+        lam = delta*z
+        return radius/lam, lam
+
+    central = invert(F)
+    if central is not None:
+        out.update(conditional_height_um=float(central[0]), **{"lambda": float(central[1])})
+    if se is None:
+        return dict(out, note="uncertainty not supplied: conditional series inversion only; height not determined")
+    if F-se <= 1:
+        high = invert(F+se)
+        return dict(out, height_lower_bound_um=None if high is None else float(high[0]),
+                    note="drag interval is consistent with bulk: no finite upper height bound")
+    if central is None:
+        return dict(out, note="drag ratio outside the Faxen series domain")
+    low_height, high_height = invert(F+se), invert(F-se)
+    if low_height is None or high_height is None:
+        return dict(out, note="drag uncertainty extends outside the Faxen series domain")
+    out.update(height_um=float(central[0]), gap_um=float(central[0]-radius),
+               height_interval_um=[float(low_height[0]), float(high_height[0])],
+               height_determined=True,
+               note="Faxen five-term series, conditional on the supplied drag uncertainty; no added coverage claim")
+    return out
 
 
 def local_drag(theta: float, scale_um_per_v: float, var_volts: float,
@@ -554,7 +584,8 @@ def realized_diffusion(x, dt: float, theta: float, ret: Retention, *,
             "spread": float(vals.max() / vals.min() - 1.0)}
 
 
-ATTRIBUTION_TOL = 0.08
+ATTRIBUTION_TOL = 0.08  # historical compatibility bar, not calibrated joint coverage
+# Synthetic theta precision is regime-dependent: PRECISION_AND_TEST_SELECTION.md.
 CONTAMINANT_VARIANCE_FLOOR = 0.08  # separate materiality declaration, C4 control failure
 
 
@@ -635,3 +666,59 @@ def attribute_deviation(theta_ratio: float, diffusion_ratio: float,
                      if ok else
                      "no unique signature passes: " + ", ".join(
                          f"{k} leaves {out[k]['max_residual']:.1%}" for k in ranked))}
+
+
+def covariance_timescale(x, dt: float, *, min_lag: int = 8,
+                         max_lag: int = 200, block_size: int = 2048,
+                         shrinkage: float = 0.2) -> dict:
+    """Empirical GLS of A exp(-theta*t)+C on a fixed covariance window.
+
+    C absorbs a locally slow covariance component; it is not a contaminant
+    amplitude measurement. Block product covariance supplies correlated weights,
+    regularized toward its diagonal. No reference rate or ACF sign selects lags.
+    Precision must be calibrated on the acquisition regime, not assumed from
+    optimizer curvature. This opt-in estimator leaves historical ACF readings
+    unchanged. See FALSIFIABILITY_REGISTRATION.md.
+    """
+    from scipy.linalg import cholesky, solve_triangular
+    from scipy.optimize import least_squares
+    v = np.asarray(x, float)
+    if (v.ndim != 1 or not np.all(np.isfinite(v)) or not np.isfinite(dt) or dt <= 0
+            or not 0 < shrinkage <= 1 or min_lag < 1
+            or max_lag <= min_lag + 3 or block_size <= max_lag):
+        raise ValueError("invalid covariance estimator inputs")
+    nblocks = len(v) // block_size
+    metadata = {"evidence": "empirical", "n_blocks": nblocks,
+                "n_lags": max_lag-min_lag, "shrinkage": shrinkage,
+                "method": "fixed-window block-covariance GLS",
+                "uncertainty": "requires regime calibration"}
+    if nblocks < 4 or np.var(v) <= 0:
+        return {**metadata, "theta": None, "amplitude_normalized": None,
+                "offset_normalized": None,
+                "note": "requires variance and four covariance blocks"}
+    v = (v - v.mean()) / v.std()
+    blocks = v[:nblocks*block_size].reshape(nblocks, block_size)
+    lags = np.arange(min_lag, max_lag)
+    products = np.array([np.mean(blocks[:, :-k]*blocks[:, k:], axis=1) for k in lags]).T
+    cov = np.cov(products, rowvar=False) / nblocks
+    diagonal = np.maximum(np.diag(cov), 1e-12)
+    cov = (1-shrinkage)*cov + shrinkage*np.diag(diagonal)
+    root = cholesky(cov, lower=True)
+    target = products.mean(axis=0)
+
+    def residual(p):
+        model = p[0]*np.exp(-p[1]*lags)+p[2]
+        return solve_triangular(root, model-target, lower=True)
+
+    # A fixed initial dimensionless rate, not an input calibration or truth.
+    fit = least_squares(residual, [1., .03, 0.],
+                        bounds=([0, 1e-6, -2], [10, 2., 2]), max_nfev=1000)
+    rate = float(fit.x[1])
+    readable = fit.success and not np.any(fit.active_mask) and np.isfinite(rate)
+    return {**metadata, "theta": rate/dt if readable else None,
+            "amplitude_normalized": float(fit.x[0]),
+            "offset_normalized": float(fit.x[2]), "n_blocks": nblocks,
+            "n_lags": len(lags), "shrinkage": shrinkage,
+            "method": "fixed-window block-covariance GLS",
+            "evidence": "empirical", "uncertainty": "requires regime calibration",
+            "note": "fit converged" if readable else "fit failed or reached a bound"}

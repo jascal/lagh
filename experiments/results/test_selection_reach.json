@@ -1,0 +1,264 @@
+{
+  "evidence": "empirical",
+  "comparison": "Unchanged deterministic consumer; no state-test selection applies.",
+  "cells": {
+    "linear-2term-d1": {
+      "dim": 1,
+      "certified": true,
+      "law": "3*x_0 - 2",
+      "abstain": null,
+      "note": []
+    },
+    "linear-3term-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "2*x_0*sin(x_1)**2/3 + 2*x_0*cos(x_1)**2/3 + 4*x_0/3 - 5*x_1*sin(x_0)**2/3 - 5*x_1*cos(x_0)",
+      "abstain": null,
+      "note": []
+    },
+    "linear-4term-d3": {
+      "dim": 3,
+      "certified": true,
+      "law": "x_0 + x_1*sin(x_0)**2/2 + x_1*sin(x_2)**2/2 + x_1*cos(x_0)**2/2 + x_1*cos(x_2)**2/2 + x_1 ",
+      "abstain": null,
+      "note": []
+    },
+    "linear-5term-d4": {
+      "dim": 4,
+      "certified": true,
+      "law": "x_0 - x_1 + 2*x_2 - 3*x_3 + 5",
+      "abstain": null,
+      "note": []
+    },
+    "linear-6term-d5": {
+      "dim": 5,
+      "certified": true,
+      "law": "x_0 + x_1 - x_2 + 2*x_3 - 2*x_4 + 3",
+      "abstain": null,
+      "note": []
+    },
+    "linear-7term-d6": {
+      "dim": 6,
+      "certified": true,
+      "law": "x_0 - x_1 + x_2 + 2*x_3 - x_4 + 3*x_5 - 1",
+      "abstain": null,
+      "note": []
+    },
+    "quadric-full-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "2*x_0**2 + 3*x_0*x_1 + x_0 - x_1**2 - x_1 + 1",
+      "abstain": null,
+      "note": []
+    },
+    "quadric-full-d3": {
+      "dim": 3,
+      "certified": true,
+      "law": "x_0**2 - x_0*x_2 - x_0*sin(x_1)**2/3 - x_0*cos(x_1)**2/3 - 2*x_0/3 + 2*x_1*x_2 + x_1*sin(x",
+      "abstain": null,
+      "note": []
+    },
+    "quadric-full-d4": {
+      "dim": 4,
+      "certified": true,
+      "law": "x_0*x_1 + x_0 + x_1 - x_2*x_3 + x_2 + x_3**2 + x_3 + 1",
+      "abstain": null,
+      "note": []
+    },
+    "quadric-full-d5": {
+      "dim": 5,
+      "certified": true,
+      "law": "x_0*x_4 + x_0 - x_1*x_3 + x_1 + x_2**2 + x_2 + x_3 + x_4 + 1",
+      "abstain": null,
+      "note": []
+    },
+    "cubic-full-d1": {
+      "dim": 1,
+      "certified": true,
+      "law": "x_0**3 - 2*x_0**2 + x_0 - 1",
+      "abstain": null,
+      "note": []
+    },
+    "cubic-cross-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "x_0**3 - x_0**2*x_1 + 2*x_1*sin(x_0)**2/3 + 2*x_1*cos(x_0)**2/3 + 4*x_1/3 - sin(x_1)**2/3 ",
+      "abstain": null,
+      "note": []
+    },
+    "cubic-cross-d3": {
+      "dim": 3,
+      "certified": true,
+      "law": "x_0**2*x_1 - x_1*x_2 + x_2**3",
+      "abstain": null,
+      "note": []
+    },
+    "monomial-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "7*x_0**2/(2*x_1)",
+      "abstain": null,
+      "note": []
+    },
+    "monomial-d3": {
+      "dim": 3,
+      "certified": true,
+      "law": "2*x_0*x_1**2/x_2**3",
+      "abstain": null,
+      "note": [
+        "CAP-S cheap pre-pass"
+      ]
+    },
+    "monomial-d4": {
+      "dim": 4,
+      "certified": true,
+      "law": "x_0*x_1/(x_2*x_3)",
+      "abstain": null,
+      "note": [
+        "CAP-S cheap pre-pass"
+      ]
+    },
+    "monomial-frac-d1": {
+      "dim": 1,
+      "certified": true,
+      "law": "2*x_0**(3/2)",
+      "abstain": null,
+      "note": []
+    },
+    "monomial-frac-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "x_0**(3/2)/sqrt(x_1)",
+      "abstain": null,
+      "note": []
+    },
+    "rational-d1": {
+      "dim": 1,
+      "certified": false,
+      "law": "",
+      "abstain": "structural",
+      "note": [
+        "passive: certified on a split but failed the full-data exhaustive gate"
+      ]
+    },
+    "rational-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "x_0/(x_1 + 1)",
+      "abstain": null,
+      "note": []
+    },
+    "rational-d3": {
+      "dim": 3,
+      "certified": true,
+      "law": "(x_0/2 + x_1/2)/(x_2/2 + 1)",
+      "abstain": null,
+      "note": []
+    },
+    "trig-sum-d1": {
+      "dim": 1,
+      "certified": true,
+      "law": "2*sin(x_0) + cos(x_0)",
+      "abstain": null,
+      "note": []
+    },
+    "trig-prod-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "x_0*sin(x_1)",
+      "abstain": null,
+      "note": []
+    },
+    "trig-cross-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "sin(x_0)*cos(x_1)",
+      "abstain": null,
+      "note": []
+    },
+    "exp-decay-d1": {
+      "dim": 1,
+      "certified": true,
+      "law": "3*exp(-Abs(x_0))",
+      "abstain": null,
+      "note": []
+    },
+    "exp-decay-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "x_0*exp(-Abs(x_1))",
+      "abstain": null,
+      "note": []
+    },
+    "log-sum-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "x_1 + 2*log(x_0)",
+      "abstain": null,
+      "note": []
+    },
+    "mixed-4term-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "x_0*x_1 + log(x_1) - sin(x_0)**2/2 + sin(x_0) - sin(x_1)**2/2 - cos(x_0)**2/2 - cos(x_1)**",
+      "abstain": null,
+      "note": []
+    },
+    "sparse3-d1": {
+      "dim": 1,
+      "certified": true,
+      "law": "x_0**2 + 2*sin(x_0) - 3/x_0",
+      "abstain": null,
+      "note": []
+    },
+    "sparse4-d1": {
+      "dim": 1,
+      "certified": true,
+      "law": "x_0 + sin(x_0) + cos(x_0) - exp(-Abs(x_0))",
+      "abstain": null,
+      "note": []
+    },
+    "sparse5-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "x_0**2 - x_1 + log(x_1) + sin(x_0) + 2/x_0",
+      "abstain": null,
+      "note": []
+    },
+    "sparse6-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "-sqrt(x_0) + x_0*x_1 - sin(x_0)**2/3 + sin(x_0) - cos(x_0)**2/3 + cos(x_1) - 2/3 + exp(-Ab",
+      "abstain": null,
+      "note": []
+    },
+    "gaussian-d1": {
+      "dim": 1,
+      "certified": true,
+      "law": "exp(-x_0**2 + 3*x_0 - 9/4)",
+      "abstain": null,
+      "note": []
+    },
+    "inner-linear-trig-d1": {
+      "dim": 1,
+      "certified": true,
+      "law": "595304*sin(x_0)*cos(x_0)/550899 + 1244406*cos(x_0)**2/739423 - 622203/739423",
+      "abstain": null,
+      "note": []
+    },
+    "sqrt-sum-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "sqrt(x_0**2 + x_1**2)",
+      "abstain": null,
+      "note": []
+    },
+    "inverse-square-sum-d2": {
+      "dim": 2,
+      "certified": true,
+      "law": "1/(x_0**2 + x_1**2)",
+      "abstain": null,
+      "note": []
+    }
+  }
+}

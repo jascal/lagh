@@ -1,0 +1,35 @@
+[
+  {
+    "input": "constant",
+    "rejected": true,
+    "reason": "pilot contains no drift/diffusion evidence"
+  },
+  {
+    "input": "nonfinite",
+    "rejected": true,
+    "reason": "finite pilot trajectories aligned with t are required"
+  },
+  {
+    "input": "irregular",
+    "rejected": true,
+    "reason": "pilot grid must be uniform and increasing"
+  },
+  {
+    "input": "wrong drift +x on noiseless y=-x, x=1..10, eps=.01",
+    "result": {
+      "certified": false,
+      "nmiss": 10,
+      "nuncov": 0
+    }
+  },
+  {
+    "input": "unit float + 1e-5",
+    "differences": [
+      "$.x: value differs"
+    ]
+  },
+  {
+    "input": "unit float + 1 ULP",
+    "differences": []
+  }
+]

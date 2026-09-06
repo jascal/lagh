@@ -191,3 +191,17 @@ stiffness increases, free-theta admission, mean-removal matching, explicit diode
 provenance under python -O, direct voltage conversion, and unresolved plotting.
 Ruff F,E9 and diff whitespace checks passed. The revised real-data artifact and
 figure were regenerated; no full-suite or new certified-physics claim is made.
+
+## Closed-campaign falsifiability disposition (2026-09-05)
+
+The PR13 withdrawals remain binding. P5 equal-lag subsampling is **WITHDRAWN
+as an independent response test** (paired increments are identical). P4's
+original stopband statistic is **WITHDRAWN as a whiteness test** (unknown
+transfer confounds it). Training-band agreement is repeatability only. No
+threshold change or new data analysis rescues these claims. R-C3, detector
+whiteness and cross-record sampling causality remain **open**. The complete
+prediction inventory and uncovered branches are in FALSIFIABILITY_AUDIT.md.
+
+Artifact reproducibility is numerical: identical structure and nonnumeric
+values, finite floats compared with rtol=1e-12, atol=1e-15. Last-bit summation
+differences are permitted; this is not a scientific agreement tolerance.

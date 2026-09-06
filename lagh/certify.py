@@ -70,6 +70,9 @@ class Certificate:
                                        # an abstain so the determined part is not
                                        # discarded (see invariant_content)
 
+    measurement: dict | None = None  # empirical checked-row evidence, never attribution
+    measurement_omitted: str | None = None
+
     def one_line(self) -> str:
         if not self.certified:
             return f"ABSTAIN[{self.abstain}] |D|={self.domain_size} nmiss={self.nmiss}"
@@ -209,8 +212,12 @@ def significance_log10(expr, y: np.ndarray, eps: np.ndarray,
     # value_range override: a ZERO-VALUED identity's own range is its residual
     # noise, which makes q vacuous; the chance-agreement range is the scale of
     # the CONSTITUENT terms (measured: color identity got alpha > 1)
+    if len(y) == 0:
+        return 0.0
+    if not np.all(np.isfinite(eps) & (eps >= 0)) or not np.all(np.isfinite(y)):
+        return 0.0
     R = float(value_range) if value_range else float(np.max(y) - np.min(y))
-    if R <= 0 or len(y) == 0:
+    if R <= 0:
         return 0.0
     # (C6 QuasiPoly and other non-sympy law objects: dof=0, conservative)
     h = max(0, len(y) - free_dof(expr))
@@ -223,18 +230,86 @@ def significance_log10(expr, y: np.ndarray, eps: np.ndarray,
     return float(np.log10(max(n_hypotheses, 1)) + np.sum(log_q))
 
 
-def check(expr, syms, X: np.ndarray, y: np.ndarray, eps) -> dict:
-    """Exhaustive: every point checked; wrong-value and no-value kept distinct.
-    `eps` may be a per-candidate band (see `band`)."""
+class CheckResult(dict):
+    """Verdict mapping and snapshots of residuals, bands and original row labels.
+
+    No observation/prediction copies are retained: the signed residual suffices
+    for evidence. Extra arrays remain outside the JSON-compatible verdict map.
+    """
+
+    def __init__(self, verdict, residual, eps, row_indices, candidate, issues):
+        super().__init__(verdict)
+        self.residual = residual  # newly allocated once by check()
+        self.epsilon = eps.copy()
+        self.row_indices = row_indices  # owned arange or checked caller copy
+        self.candidate = candidate
+        self.uncovered_reasons = issues
+
+    def measurement(self, *, domain="supplied check rows"):
+        from .refusal import residual_evidence
+        return residual_evidence(self.residual, self.epsilon, self.row_indices,
+                                 domain=domain, candidate=self.candidate)
+
+
+def check(expr, syms, X: np.ndarray, y: np.ndarray, eps, *, row_indices=None) -> CheckResult:
+    """Exhaustive finite-domain check, retaining signed per-row residuals.
+
+    Invalid domains refuse without evaluating the law. Misaligned row labels
+    raise at this boundary. Empty domains and nonfinite/negative bands cannot
+    certify. Numerical failures remain distinct from finite band exceedances.
+    """
     y = np.asarray(y, float).ravel()
-    eps = band(eps, expr)
+    n = len(y)
+    if row_indices is None:
+        indices = np.arange(n)
+    else:
+        indices = np.asarray(row_indices)
+        if (indices.shape != y.shape or indices.dtype.kind not in "iu"
+                or np.any(indices < 0) or len(np.unique(indices)) != n):
+            raise ValueError("row_indices must give one unique nonnegative integer per checked row")
+        indices = indices.copy()
+    eps = np.broadcast_to(band(eps, expr), y.shape)
+    try:
+        X = np.asarray(X, float)
+    except (TypeError, ValueError):
+        X = None
+    invalid_shape = X is None or X.ndim != 2 or X.shape != (n, len(syms))
+    if invalid_shape:
+        residual = np.full(n, np.nan)
+        return CheckResult({"certified": False, "nmiss": 0, "nuncov": n},
+                           residual, eps, indices, expr, {"input" if X is None else "domain_shape": n})
     pred = eval_expr(expr, syms, X)
     if pred is None:
-        return {"certified": False, "nmiss": 0, "nuncov": len(X)}
-    uncov = ~np.isfinite(pred)
-    miss = (np.abs(pred - y) > eps) & ~uncov
-    return {"certified": bool(miss.sum() == 0 and uncov.sum() == 0),
-            "nmiss": int(miss.sum()), "nuncov": int(uncov.sum())}
+        pred = np.full(n, np.nan)
+    pred = np.broadcast_to(np.asarray(pred, float).ravel(), y.shape)
+    with np.errstate(invalid="ignore", over="ignore"):
+        residual = y - pred
+    invalid_input = ~np.isfinite(y) | ~np.all(np.isfinite(X), axis=1)
+    invalid_band = ~np.isfinite(eps) | (eps < 0)
+    undefined = ~np.isfinite(pred)
+    uncov = invalid_input | invalid_band | ~np.isfinite(residual)
+    miss = (np.abs(residual) > eps) & ~uncov
+    issues = {k: int(mask.sum()) for k, mask in
+              (("input", invalid_input), ("band", invalid_band), ("prediction", undefined))
+              if mask.any()}
+    verdict = {"certified": bool(n and not miss.any() and not uncov.any()),
+               "nmiss": int(miss.sum()), "nuncov": int(uncov.sum())}
+    return CheckResult(verdict, residual, eps, indices, expr, issues)
+
+
+def attach_check_evidence(cert: Certificate, checked, *, domain: str,
+                          role: str = "checked candidate residual") -> None:
+    """Attach available evidence or its explicit omission, never re-evaluate."""
+    if checked is None:
+        return
+    if not hasattr(checked, "measurement"):
+        cert.measurement_omitted = "check did not retain residuals (band/evaluation unavailable)"
+        return
+    payload = checked.measurement(domain=domain)
+    cert.measurement = payload.get("measurement")
+    cert.measurement_omitted = payload.get("measurement_omitted")
+    if cert.measurement is not None:
+        cert.measurement["role"] = role
 
 
 def vacuous(syms, X: np.ndarray, y: np.ndarray, eps: np.ndarray) -> bool:

@@ -1,0 +1,444 @@
+{
+  "evidence": "empirical",
+  "witnesses": [
+    {
+      "input": "check X=1D",
+      "observed": {
+        "exception": "AxisError",
+        "message": "axis 1 is out of bounds for array of dimension 1"
+      }
+    },
+    {
+      "input": "check X=scalar",
+      "observed": {
+        "exception": "TypeError",
+        "message": "len() of unsized object"
+      }
+    },
+    {
+      "input": "check X=3D",
+      "observed": {
+        "certified": false,
+        "nmiss": 0,
+        "nuncov": 25
+      }
+    },
+    {
+      "input": "check X=wrong columns",
+      "observed": {
+        "certified": false,
+        "nmiss": 0,
+        "nuncov": 5
+      }
+    },
+    {
+      "input": "check X=non-numeric",
+      "observed": {
+        "exception": "TypeError",
+        "message": "ufunc 'isfinite' not supported for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''"
+      }
+    },
+    {
+      "input": "check row_indices=[0, 1]",
+      "observed": {
+        "certified": false,
+        "nmiss": 5,
+        "nuncov": 0
+      }
+    },
+    {
+      "input": "check row_indices=[-1, 0, 1, 2, 3]",
+      "observed": {
+        "certified": false,
+        "nmiss": 5,
+        "nuncov": 0
+      }
+    },
+    {
+      "input": "check row_indices=[0, 0, 1, 2, 3]",
+      "observed": {
+        "certified": false,
+        "nmiss": 5,
+        "nuncov": 0
+      }
+    },
+    {
+      "input": "faxen F=1.0, radius=1, se=None",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "note": "bulk or unreadable drag gives no finite wall height"
+      }
+    },
+    {
+      "input": "faxen F=1.0, radius=1, se=0.0",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "note": "bulk or unreadable drag gives no finite wall height"
+      }
+    },
+    {
+      "input": "faxen F=1.0, radius=1, se=0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_lower_bound_um": 6.1600137302089975,
+        "note": "drag ratio 1.000 +- 0.100 reaches 1: consistent with bulk, so the height is bounded BELOW and not determined above"
+      }
+    },
+    {
+      "input": "faxen F=1.0, radius=1, se=nan",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "note": "bulk or unreadable drag gives no finite wall height"
+      }
+    },
+    {
+      "input": "faxen F=1.0, radius=1, se=inf",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_lower_bound_um": null,
+        "note": "drag ratio 1.000 +- inf reaches 1: consistent with bulk, so the height is bounded BELOW and not determined above"
+      }
+    },
+    {
+      "input": "faxen F=1.0, radius=1, se=-0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "note": "bulk or unreadable drag gives no finite wall height"
+      }
+    },
+    {
+      "input": "faxen F=np.float64(1.0000000000000002), radius=1, se=None",
+      "observed": {
+        "exception": "ValueError",
+        "message": "f(a) and f(b) must have different signs"
+      }
+    },
+    {
+      "input": "faxen F=np.float64(1.0000000000000002), radius=1, se=0.0",
+      "observed": {
+        "exception": "ValueError",
+        "message": "f(a) and f(b) must have different signs"
+      }
+    },
+    {
+      "input": "faxen F=np.float64(1.0000000000000002), radius=1, se=0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_lower_bound_um": 6.160013730208989,
+        "note": "drag ratio 1.000 +- 0.100 reaches 1: consistent with bulk, so the height is bounded BELOW and not determined above"
+      }
+    },
+    {
+      "input": "faxen F=np.float64(1.0000000000000002), radius=1, se=nan",
+      "observed": {
+        "exception": "ValueError",
+        "message": "f(a) and f(b) must have different signs"
+      }
+    },
+    {
+      "input": "faxen F=np.float64(1.0000000000000002), radius=1, se=inf",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_lower_bound_um": null,
+        "note": "drag ratio 1.000 +- inf reaches 1: consistent with bulk, so the height is bounded BELOW and not determined above"
+      }
+    },
+    {
+      "input": "faxen F=np.float64(1.0000000000000002), radius=1, se=-0.1",
+      "observed": {
+        "exception": "ValueError",
+        "message": "f(a) and f(b) must have different signs"
+      }
+    },
+    {
+      "input": "faxen F=1.000000000001, radius=1, se=None",
+      "observed": {
+        "exception": "ValueError",
+        "message": "f(a) and f(b) must have different signs"
+      }
+    },
+    {
+      "input": "faxen F=1.000000000001, radius=1, se=0.0",
+      "observed": {
+        "exception": "ValueError",
+        "message": "f(a) and f(b) must have different signs"
+      }
+    },
+    {
+      "input": "faxen F=1.000000000001, radius=1, se=0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_lower_bound_um": 6.160013730152574,
+        "note": "drag ratio 1.000 +- 0.100 reaches 1: consistent with bulk, so the height is bounded BELOW and not determined above"
+      }
+    },
+    {
+      "input": "faxen F=1.000000000001, radius=1, se=nan",
+      "observed": {
+        "exception": "ValueError",
+        "message": "f(a) and f(b) must have different signs"
+      }
+    },
+    {
+      "input": "faxen F=1.000000000001, radius=1, se=inf",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_lower_bound_um": null,
+        "note": "drag ratio 1.000 +- inf reaches 1: consistent with bulk, so the height is bounded BELOW and not determined above"
+      }
+    },
+    {
+      "input": "faxen F=1.000000000001, radius=1, se=-0.1",
+      "observed": {
+        "exception": "ValueError",
+        "message": "f(a) and f(b) must have different signs"
+      }
+    },
+    {
+      "input": "faxen F=1.000000001, radius=1, se=None",
+      "observed": {
+        "height_um": 562500018.6772518,
+        "lambda": 1.7777777187484406e-09,
+        "gap_um": 562500017.6772518,
+        "note": "Faxen parallel-to-wall, five-term near-field series"
+      }
+    },
+    {
+      "input": "faxen F=1.000000001, radius=1, se=0.0",
+      "observed": {
+        "height_um": 562500018.6772518,
+        "lambda": 1.7777777187484406e-09,
+        "gap_um": 562500017.6772518,
+        "note": "Faxen parallel-to-wall, five-term near-field series"
+      }
+    },
+    {
+      "input": "faxen F=1.000000001, radius=1, se=0.1",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_lower_bound_um": 6.160013673789885,
+        "note": "drag ratio 1.000 +- 0.100 reaches 1: consistent with bulk, so the height is bounded BELOW and not determined above"
+      }
+    },
+    {
+      "input": "faxen F=1.000000001, radius=1, se=nan",
+      "observed": {
+        "height_um": 562500018.6772518,
+        "lambda": 1.7777777187484406e-09,
+        "gap_um": 562500017.6772518,
+        "note": "Faxen parallel-to-wall, five-term near-field series"
+      }
+    },
+    {
+      "input": "faxen F=1.000000001, radius=1, se=inf",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_lower_bound_um": null,
+        "note": "drag ratio 1.000 +- inf reaches 1: consistent with bulk, so the height is bounded BELOW and not determined above"
+      }
+    },
+    {
+      "input": "faxen F=1.000000001, radius=1, se=-0.1",
+      "observed": {
+        "height_um": 562500018.6772518,
+        "lambda": 1.7777777187484406e-09,
+        "gap_um": 562500017.6772518,
+        "note": "Faxen parallel-to-wall, five-term near-field series"
+      }
+    },
+    {
+      "input": "faxen F=1.5, radius=1, se=None",
+      "observed": {
+        "height_um": 1.688573631243394,
+        "lambda": 0.5922158095431364,
+        "gap_um": 0.6885736312433941,
+        "note": "Faxen parallel-to-wall, five-term near-field series"
+      }
+    },
+    {
+      "input": "faxen F=1.5, radius=1, se=0.0",
+      "observed": {
+        "height_um": 1.688573631243394,
+        "lambda": 0.5922158095431364,
+        "gap_um": 0.6885736312433941,
+        "note": "Faxen parallel-to-wall, five-term near-field series"
+      }
+    },
+    {
+      "input": "faxen F=1.5, radius=1, se=0.1",
+      "observed": {
+        "height_um": 1.688573631243394,
+        "lambda": 0.5922158095431364,
+        "gap_um": 0.6885736312433941,
+        "note": "Faxen parallel-to-wall, five-term near-field series"
+      }
+    },
+    {
+      "input": "faxen F=1.5, radius=1, se=nan",
+      "observed": {
+        "height_um": 1.688573631243394,
+        "lambda": 0.5922158095431364,
+        "gap_um": 0.6885736312433941,
+        "note": "Faxen parallel-to-wall, five-term near-field series"
+      }
+    },
+    {
+      "input": "faxen F=1.5, radius=1, se=inf",
+      "observed": {
+        "height_um": null,
+        "lambda": null,
+        "height_lower_bound_um": null,
+        "note": "drag ratio 1.500 +- inf reaches 1: consistent with bulk, so the height is bounded BELOW and not determined above"
+      }
+    },
+    {
+      "input": "faxen F=1.5, radius=1, se=-0.1",
+      "observed": {
+        "height_um": 1.688573631243394,
+        "lambda": 0.5922158095431364,
+        "gap_um": 0.6885736312433941,
+        "note": "Faxen parallel-to-wall, five-term near-field series"
+      }
+    },
+    {
+      "input": "gate_record ratios=1, no variance",
+      "observed": {
+        "verdict": "clean",
+        "ratios": {
+          "a": 1.0,
+          "b": 1.0
+        },
+        "note": "every axis agrees with the calibration's timescale"
+      }
+    },
+    {
+      "input": "GLS zeros(100)",
+      "observed": {
+        "theta": null,
+        "note": "requires variance and four covariance blocks"
+      }
+    },
+    {
+      "input": "recover passive failed x against 2x, retained measurement",
+      "observed": {
+        "tag": "open",
+        "tool": "recover",
+        "certified": false,
+        "abstain": "structural",
+        "domain_size": 30,
+        "next_action": "acquire_divergent",
+        "characterization": {
+          "tag": "empirical",
+          "certified": false,
+          "kind": "characterization",
+          "shape": {
+            "trend": [
+              "increasing"
+            ],
+            "sign": "positive",
+            "bounded": true
+          },
+          "class": "power-law",
+          "why": "clean monomial: exponents pin to ['1/1']",
+          "research": {
+            "move": "acquire_divergent",
+            "detail": "near-monomial but rivals fit the sampled range; hand-sample a WIDER / asymptotic regime where they separate, then call lagh.recover(X, y) on those points (NOT lab.discover -- that re-runs the slow loop)"
+          },
+          "note": "a GUESS about the function's structure, NOT a certificate; report it as a hedge, never as a law",
+          "power_law": {
+            "exponents": [
+              1.0
+            ],
+            "snapped": [
+              "1/1"
+            ],
+            "pins_to_rational": true,
+            "fit_residual": 0.0,
+            "irrational_hint": null
+          },
+          "exponential": {
+            "input": 0,
+            "fit_residual": 0.01877,
+            "rate": 0.68334
+          }
+        },
+        "suggested_box": [
+          [
+            0.1
+          ],
+          [
+            20.0
+          ]
+        ],
+        "note": "see characterization.research for the next move"
+      }
+    },
+    {
+      "input": "recover active failed x against 2x, retained measurement",
+      "observed": {
+        "tag": "open",
+        "tool": "recover",
+        "certified": false,
+        "abstain": "structural",
+        "domain_size": 30,
+        "acquisition": {
+          "mode": "active",
+          "queries_used": 30,
+          "budget_spent": 30,
+          "box_final": [
+            [
+              1.0
+            ],
+            [
+              2.0
+            ]
+          ],
+          "ranging_steps": 0
+        },
+        "note": ""
+      }
+    },
+    {
+      "input": "verify exact 2x with NaN band",
+      "observed": {
+        "tag": "open",
+        "tool": "verify",
+        "certified": false,
+        "abstain": "numerical",
+        "note": "form diverges on the certification split"
+      }
+    },
+    {
+      "input": "one-ULP neighbors 1.234567890125,np.float64(1.2345678901250001), rounded to 1.23456789012,1.23456789013; raw profile",
+      "observed": [
+        "$: value differs"
+      ]
+    },
+    {
+      "input": "same rounded pair; 12-significant-digit profile",
+      "observed": {
+        "exception": "TypeError",
+        "message": "differences() got an unexpected keyword argument 'significant_digits'"
+      }
+    },
+    {
+      "input": "rounded profile, unit-sized value perturbed1e-5",
+      "observed": {
+        "exception": "TypeError",
+        "message": "differences() got an unexpected keyword argument 'significant_digits'"
+      }
+    }
+  ]
+}

@@ -1,0 +1,357 @@
+{
+  "evidence": "empirical",
+  "witnesses": [
+    {
+      "gate": "check/wrong value",
+      "input": "x=linspace(1,2,40), y=2x, law=x, eps=1e-6",
+      "refusal_expected": "40 misses",
+      "observed": "{'certified': False, 'nmiss': 40, 'nuncov': 0}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "check/undefined",
+      "input": "law=log(-x), x in [1,2]",
+      "refusal_expected": "40 uncovered",
+      "observed": "{'certified': False, 'nmiss': 0, 'nuncov': 40}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "check/NaN target",
+      "input": "NaN target on 40 exact x rows",
+      "refusal_expected": "refuse",
+      "observed": "{'certified': False, 'nmiss': 0, 'nuncov': 40}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "check/NaN band",
+      "input": "NaN band on 40 exact x rows",
+      "refusal_expected": "refuse",
+      "observed": "{'certified': False, 'nmiss': 0, 'nuncov': 40}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "check/infinite band",
+      "input": "infinite band on 40 exact x rows",
+      "refusal_expected": "refuse",
+      "observed": "{'certified': False, 'nmiss': 0, 'nuncov': 40}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "check/negative band",
+      "input": "negative band on 40 exact x rows",
+      "refusal_expected": "refuse",
+      "observed": "{'certified': False, 'nmiss': 0, 'nuncov': 40}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "check/empty",
+      "input": "X=(0,1), y=eps=[]",
+      "refusal_expected": "refuse",
+      "observed": "{'certified': False, 'nmiss': 0, 'nuncov': 0}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "vacuous",
+      "input": "y=x, eps=3",
+      "refusal_expected": "zero law covers: vacuous",
+      "observed": "True",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "significance/empty",
+      "input": "y=[], eps=[]",
+      "refusal_expected": "no evidence: log bound 0",
+      "observed": "0.0",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "significance/evidence",
+      "input": "y=x, eps=10",
+      "refusal_expected": "no evidence: log bound >=0",
+      "observed": "0.0",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "float_pinned",
+      "input": "law=2.1*x, y=2.1*x, eps=.1",
+      "refusal_expected": "unidentified coefficient",
+      "observed": "False",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "pinned",
+      "input": "x in [1,1.001], law=x**(3/2), sigma=.2, eps=.1; probe [1,2]",
+      "refusal_expected": "rival exponent fits narrow domain but diverges on probe",
+      "observed": "False",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "minimal",
+      "input": "law=x+1/1000, y=x, eps=.01",
+      "refusal_expected": "junk term removable",
+      "observed": "False",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "parameter_interval",
+      "input": "law=2*x, y=2*x, eps=100",
+      "refusal_expected": "unbounded at max_rel=.5",
+      "observed": "None",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "admissible_interval/infeasible",
+      "input": "A=[[1],[1]], y=[0,1], eps=0",
+      "refusal_expected": "infeasible",
+      "observed": "(None, {'infeasible': True, 'coeff_max': 1000.0, 'note': 'no law in the vocabulary fits every row at this band -- the band or the vocabulary is wrong, and that is a finding about the inputs'})",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "admissible_interval/unbounded",
+      "input": "A=[[0]], y=[0], eps=0",
+      "refusal_expected": "no coefficient bound",
+      "observed": "([(None, None)], {'coeff_max': 1000.0, 'max_abs_coefficient': inf, 'coeff_max_verified': False})",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "admissible_interval/coefficient budget",
+      "input": "A=[[1]], y=[2], eps=lambda cap:cap, cap=1, iters=1",
+      "refusal_expected": "coefficient declaration unverified",
+      "observed": "([(1.0, 3.0)], {'coeff_max': 1.0, 'max_abs_coefficient': 3.0, 'coeff_max_verified': False})",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "admissible_functional",
+      "input": "A=[[1],[1]], y=[0,1], eps=0, W=[[1]]",
+      "refusal_expected": "infeasible",
+      "observed": "(None, {'infeasible': True, 'coeff_max': 1000.0})",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "max_divergence/overlap",
+      "input": "identical x laws, only 7 probes",
+      "refusal_expected": "insufficient overlap: infinity",
+      "observed": "inf",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "arbitrate_significance/margin",
+      "input": "rivals x and 2x on 40 rows",
+      "refusal_expected": "no winner",
+      "observed": "None",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "arbitrate_significance/rival evidence",
+      "input": "x versus polynomial with 14 coefficients, 40 rows, eps=1e-6",
+      "refusal_expected": "margin alone cannot defeat evidence-bearing rival",
+      "observed": "None",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "coherent",
+      "input": "laws x and 2x, probe [1,2], yscale=1",
+      "refusal_expected": "two classes",
+      "observed": "2",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "input_constraints",
+      "input": "seed 0 independent uniform 40x2 design",
+      "refusal_expected": "no exact constraint",
+      "observed": "[]",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "conjoin_determination/domain",
+      "input": "qualified domains x>0 and x<0",
+      "refusal_expected": "refused",
+      "observed": "{'status': 'refused', 'refusal': 'different domains', 'domains': ['x<0', 'x>0'], 'components': {}, 'exact': [], 'interval': [], 'unconstrained': [], 'n_resolved': 0, 'note': 'these records were established on different regions; their conjunction is defined only where both were, and this layer cannot intersect the predicates'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "conjoin_determination/contradiction",
+      "input": "a in [1,2] AND [3,4]",
+      "refusal_expected": "contradiction",
+      "observed": "{'status': 'conjoined', 'components': {'a': {'kind': 'interval', 'lo': 3, 'hi': 2, 'span': -1, 'resolved': True}}, 'exact': [], 'interval': ['a'], 'unconstrained': [], 'n_resolved': 1, 'note': 'intersection over the conjoined records; CONTRADICTION: a have empty intersections, so the conjoined records cannot all be right', 'contradiction': ['a']}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "determination/resolution",
+      "input": "a in [-1,1]",
+      "refusal_expected": "not resolved",
+      "observed": "{'status': 'test', 'components': {'a': {'kind': 'interval', 'lo': -1, 'hi': 1, 'span': 2, 'resolved': False}}, 'exact': [], 'interval': ['a'], 'unconstrained': [], 'n_resolved': 0, 'note': ''}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "acf_timescale",
+      "input": "zeros(1000), dt=.001",
+      "refusal_expected": "unreadable",
+      "observed": "{'theta': None, 'note': 'no variance or too short'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "axis_gate",
+      "input": "zeros(1000), dt=.001, theta_ref=1",
+      "refusal_expected": "refuse",
+      "observed": "{'passed': False, 'theta_acf': None, 'theta_ref': 1.0, 'ratio': None, 'tol': 1.25, 'var_ratio': None, 'note': 'no variance or too short'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "gate_record/unreadable",
+      "input": "{'a': {'ratio': None}}",
+      "refusal_expected": "unreadable",
+      "observed": "{'verdict': 'unreadable', 'axes': ['a'], 'note': 'no axis yielded a timescale'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "gate_record/contaminated",
+      "input": "{'a': {'ratio': 0.1, 'var_ok': False}}",
+      "refusal_expected": "contaminated",
+      "observed": "{'verdict': 'contaminated', 'contaminated': ['a'], 'ratios': {'a': 0.1}, 'note': 'a: the equipartition variance is wrong too, so the timescale deficit is not a drag statement'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "gate_record/single",
+      "input": "{'a': {'ratio': 0.7, 'var_ok': True}}",
+      "refusal_expected": "unresolved",
+      "observed": "{'verdict': 'unresolved', 'ratios': {'a': 0.7}, 'spread': 0.0, 'note': 'axes disagree with the calibration by DIFFERENT factors with healthy variances: not one drag, and not one contaminant this test can name'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "gate_record/spread",
+      "input": "{'a': {'ratio': 0.5, 'var_ok': True}, 'b': {'ratio': 0.7, 'var_ok': True}}",
+      "refusal_expected": "unresolved",
+      "observed": "{'verdict': 'unresolved', 'ratios': {'a': 0.5, 'b': 0.7}, 'spread': 0.3999999999999999, 'note': 'axes disagree with the calibration by DIFFERENT factors with healthy variances: not one drag, and not one contaminant this test can name'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "gate_record/missing variance",
+      "input": "{'a': {'ratio': 0.7}, 'b': {'ratio': 0.7}}",
+      "refusal_expected": "unresolved",
+      "observed": "{'verdict': 'unresolved', 'ratios': {'a': 0.7, 'b': 0.7}, 'note': 'missing equipartition evidence prevents a clean or common-mode claim'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "gate_record/missing axis",
+      "input": "{'a': {'ratio': 0.7, 'var_ok': True}, 'b': {'ratio': 0.7, 'var_ok': True}, 'c': {'ratio': None}}",
+      "refusal_expected": "unresolved",
+      "observed": "{'verdict': 'unresolved', 'ratios': {'a': 0.7, 'b': 0.7}, 'note': 'an unreadable axis prevents a whole-record claim'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "retention/fit bins",
+      "input": "zeros(20), fs=100, fit_range=(10,11)",
+      "refusal_expected": "ValueError insufficient bins",
+      "observed": "ValueError",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "faxen_height/0.9",
+      "input": "radius=1, ratio=0.9",
+      "refusal_expected": "no finite height",
+      "observed": "{'height_um': None, 'lambda': None, 'height_determined': False, 'conditional_height_um': None, 'evidence': 'empirical', 'uncertainty_supplied': False, 'note': 'uncertainty not supplied: conditional series inversion only; height not determined'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "faxen_height/3.0",
+      "input": "radius=1, ratio=3.0",
+      "refusal_expected": "no finite height",
+      "observed": "{'height_um': None, 'lambda': None, 'height_determined': False, 'conditional_height_um': None, 'evidence': 'empirical', 'uncertainty_supplied': False, 'note': 'uncertainty not supplied: conditional series inversion only; height not determined'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "faxen_height/1.0",
+      "input": "radius=1, ratio=1.0",
+      "refusal_expected": "no finite height",
+      "observed": "{'height_um': None, 'lambda': None, 'height_determined': False, 'conditional_height_um': None, 'evidence': 'empirical', 'uncertainty_supplied': False, 'note': 'uncertainty not supplied: conditional series inversion only; height not determined'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "faxen_height/1.02",
+      "input": "radius=1, ratio=1.02, se=.1",
+      "refusal_expected": "no finite height",
+      "observed": "{'height_um': None, 'lambda': 0.03486734004660572, 'height_determined': False, 'conditional_height_um': 28.680134437078987, 'evidence': 'empirical', 'uncertainty_supplied': True, 'height_lower_bound_um': 5.219499574055122, 'note': 'drag interval is consistent with bulk: no finite upper height bound'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "attribute_deviation/(0, 1, 1)",
+      "input": "(0, 1, 1)",
+      "refusal_expected": "unreadable",
+      "observed": "{'verdict': 'unreadable', 'ratios': [0.0, 1.0, 1.0]}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "attribute_deviation/(0.019, 0.885, 3.797)",
+      "input": "(0.019, 0.885, 3.797)",
+      "refusal_expected": "unattributed",
+      "observed": "{'verdict': 'unattributed', 'hypotheses': {'drag': {'parameter': 'F', 'value': 7.711725531616939, 'max_residual': 5.824877095480991}, 'stiffness': {'parameter': 'c', 'value': 0.07073860676622602, 'max_residual': 0.7314055101086399}, 'scale': {'parameter': 's', 'value': 0.738591036954901, 'max_residual': 1.0713269853468306}, 'slow-contaminant': {'parameter': 'v', 'value': 2.797, 'max_residual': 0.11499999999999999, 'unpredicted': ['apparent_theta'], 'note': 'excess variance in reference-variance units; not a timescale'}}, 'ranked': ['slow-contaminant', 'stiffness', 'scale', 'drag'], 'tol': 0.08, 'ratios': [0.019, 0.885, 3.797], 'slow_contaminant_admission': {'variance_excess': 2.797, 'variance_floor': 0.08, 'distance_to_floor': 2.717, 'admitted': True, 'theta_used_for_admission': False, 'note': 'declared materiality boundary, no uncertainty or hysteresis model'}, 'note': 'no unique signature passes: slow-contaminant leaves 11.5%, stiffness leaves 73.1%, scale leaves 107.1%, drag leaves 582.5%'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "attribute_deviation/(0.5, 1, 2)",
+      "input": "(0.5, 1, 2)",
+      "refusal_expected": "unattributed",
+      "observed": "{'verdict': 'unattributed', 'hypotheses': {'drag': {'parameter': 'F', 'value': 1.414213562373095, 'max_residual': 1.0}, 'stiffness': {'parameter': 'c', 'value': 0.5, 'max_residual': 0.0}, 'scale': {'parameter': 's', 'value': 0.8408964152537145, 'max_residual': 0.5}, 'slow-contaminant': {'parameter': 'v', 'value': 1.0, 'max_residual': 0.0, 'unpredicted': ['apparent_theta'], 'note': 'excess variance in reference-variance units; not a timescale'}}, 'ranked': ['stiffness', 'slow-contaminant', 'scale', 'drag'], 'tol': 0.08, 'ratios': [0.5, 1.0, 2.0], 'slow_contaminant_admission': {'variance_excess': 1.0, 'variance_floor': 0.08, 'distance_to_floor': 0.92, 'admitted': True, 'theta_used_for_admission': False, 'note': 'declared materiality boundary, no uncertainty or hysteresis model'}, 'note': 'no unique signature passes: stiffness leaves 0.0%, slow-contaminant leaves 0.0%, scale leaves 50.0%, drag leaves 100.0%'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "attribute_deviation/(0.1, 1, 1.04)",
+      "input": "(0.1, 1, 1.04)",
+      "refusal_expected": "unattributed",
+      "observed": "{'verdict': 'unattributed', 'hypotheses': {'drag': {'parameter': 'F', 'value': 3.162277660168379, 'max_residual': 2.162277660168379}, 'stiffness': {'parameter': 'c', 'value': 0.3100868364730212, 'max_residual': 0.6775096900680581}, 'scale': {'parameter': 's', 'value': 0.9902427357425654, 'max_residual': 0.9}}, 'ranked': ['stiffness', 'scale', 'drag'], 'tol': 0.08, 'ratios': [0.1, 1.0, 1.04], 'slow_contaminant_admission': {'variance_excess': 0.040000000000000036, 'variance_floor': 0.08, 'distance_to_floor': -0.039999999999999966, 'admitted': False, 'theta_used_for_admission': False, 'note': 'declared materiality boundary, no uncertainty or hysteresis model'}, 'note': 'no unique signature passes: stiffness leaves 67.8%, scale leaves 90.0%, drag leaves 216.2%'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    },
+    {
+      "gate": "attribute_deviation/(2, 3, 4)",
+      "input": "(2, 3, 4)",
+      "refusal_expected": "unattributed",
+      "observed": "{'verdict': 'unattributed', 'hypotheses': {'drag': {'parameter': 'F', 'value': 0.408248290463863, 'max_residual': 3.0}, 'stiffness': {'parameter': 'c', 'value': 0.7071067811865476, 'max_residual': 2.0000000000000004}, 'scale': {'parameter': 's', 'value': 0.537284965911771, 'max_residual': 1.0}, 'slow-contaminant': {'parameter': 'v', 'value': 3.0, 'max_residual': 2.0, 'unpredicted': ['apparent_theta'], 'note': 'excess variance in reference-variance units; not a timescale'}}, 'ranked': ['scale', 'slow-contaminant', 'stiffness', 'drag'], 'tol': 0.08, 'ratios': [2.0, 3.0, 4.0], 'slow_contaminant_admission': {'variance_excess': 3.0, 'variance_floor': 0.08, 'distance_to_floor': 2.92, 'admitted': True, 'theta_used_for_admission': False, 'note': 'declared materiality boundary, no uncertainty or hysteresis model'}, 'note': 'no unique signature passes: scale leaves 100.0%, slow-contaminant leaves 200.0%, stiffness leaves 200.0%, drag leaves 300.0%'}",
+      "witness_observed": true,
+      "evidence": "empirical"
+    }
+  ]
+}
