@@ -2,9 +2,11 @@
 
 The tool-shape from [`docs/DIRECTION_TOOLSHAPE.md`](../../docs/DIRECTION_TOOLSHAPE.md),
 made runnable. An LLM parses a problem, samples the black-box oracle, and calls these
-three tools; lagh returns a **certified law or a reasoned abstention** (never a
-confident-wrong answer). The composite is provably non-degrading: lagh only ever adds
-certified answers or abstains.
+three tools; lagh returns a **law checked over a stated finite domain or a
+reasoned abstention**. Certification is conditional on the declared error model
+and checker assumptions. The `proved` tag records passage through those checks,
+not universal truth or a guarantee against checker defects. See the
+[falsifiability audit](../../docs/FALSIFIABILITY_AUDIT.md) for measured failures.
 
 ## Install & run
 
@@ -52,6 +54,14 @@ carry, so `recover` has two modes:
   so on a thin/under-determined abstain it returns `next_action:"acquire"` +
   `suggested_box` (10× wider). Re-sample that box, call `recover` again — the acquisition
   loop, driven by you.
+
+Structural refusals can also carry `design_evidence`: an empirical list of rival
+expressions retained across discovery splits. These are candidates for planning
+a distinguishing measurement, not certified output laws or an exhaustive list
+of explanations. The truth need not be among them. Once used to choose a query,
+all observations behind these rivals are design evidence; a subsequent claim
+requires fresh certification observations. This metadata does not change the
+fixed `suggested_box` or automatically query a new measurement.
 
 ## The loop `fit` is built for
 

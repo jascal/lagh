@@ -4,7 +4,7 @@ Status: **open**. Written before new experiments. This is the pilot protocol,
 not the scored-run registration. Numerical scored predictions must be appended
 from the pilot and committed BEFORE evaluation. The incoming task is truncated;
 the second precondition and missing constraints remain pending clarification.
-No scored run is authorized by this incomplete registration.
+The scored protocol remains incomplete; no scored run has been performed.
 
 ## Scope
 
@@ -80,9 +80,42 @@ information. Invalid costs and inadmissible probes raise ValueError. Mutation
 of a caller's probe array cannot change a stored choice.
 
 This is unit coverage only. No end-to-end acquisition, rational-d1 replay,
-pilot, scored run, or sample-efficiency improvement has been measured. Rival
-retention in Result is additive; integration through passive re-splits and MCP
-and independent final validation remain work to do.
+pilot, scored run, or sample-efficiency improvement has been measured.
 
 Reproduce the unit cases in one process:
 `.venv/bin/pytest -q tests/test_measurement_design.py`.
+
+### Refusal transport counter-inputs
+
+**Empirical:** five mocked-split witnesses fail against preparation commit
+cef9feef213c860e67c6eb8ec9bf4f9300032ea2 and pass after transport repair.
+The artifact is experiments/results/refusal_transport_witnesses.json.
+
+- A structural first split followed by a rival-free last refusal previously
+  erased the first pair. It now retains it.
+- The same first split followed by a successful split remains an abstention
+  under the unchanged sticky guard, and now retains the refusal's pair.
+- Two overlapping pairs from separate splits are retained in first-seen order
+  without syntactic duplicates. They are not claimed to be a single exhaustive
+  coherence partition or laws that pass on every observed row.
+- Passive and active MCP recover now expose these expressions in
+  design_evidence, tagged empirical and explicitly requiring fresh
+  certification. They remain absent from the returned law field. Passive
+  recover's fixed suggested_box remains [lo/10, hi*10].
+
+Reproduce before/after witnesses (one test file per process):
+`.venv/bin/python -m experiments.run_refusal_transport_witnesses`.
+Their failure inputs and expected behavior are in tests/test_refusal_transport.py;
+the pinned run actually exhibits the loss, rather than merely naming a possible
+mutation. No acquisition or discovery-success claim follows from mocked splits.
+Independent final validation and the acquisition comparison remain unimplemented.
+
+**Empirical regression check:** the 17 existing MCP tests pass (one process),
+including wrong-form, below-floor, weak-significance and unpinned-coefficient
+counter-inputs. Three existing overflow warnings occur in scout/abstain cases.
+This is regression coverage of those cases, not a global soundness guarantee.
+The five existing passive tests also pass in a separate process, including
+the wrong-law full-data demotion witness and the irrational-power abstention.
+The latter emits an existing overflow warning. Together with the five repaired
+transport cases, this checkpoint has 27 passing cases; no full-suite run is
+claimed.

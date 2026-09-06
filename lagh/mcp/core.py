@@ -94,6 +94,20 @@ def _abstain(tool: str, reason: str, note: str, **extra) -> dict:
     return out
 
 
+def _refusal_design_evidence(result: Result) -> dict:
+    """Serialize discovered rivals without promoting them to returned laws."""
+    if not result.rivals or result.certificate.certified:
+        return {}
+    return {"design_evidence": {
+        "tag": "empirical",
+        "rivals": [str(expr) for expr in result.rivals],
+        "scope": "representatives from structural refusals on design splits; "
+                 "not exhaustive, not necessarily consistent with every observed row, "
+                 "and not guaranteed to contain the truth",
+        "requires_fresh_certification": True,
+    }}
+
+
 def _strength(expr, syms, X_cert, y_cert, eps, sigma) -> str:
     """`consistent` if the form carries a declared irrational (never identifiable);
     otherwise `pinned` (rational structure, and -- under noise -- no neighbour rival)."""
@@ -165,6 +179,7 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
             ch = _characterize_oracle(oracle, bf, c.abstain, seed)
             out = {"tag": "open", "tool": "recover", "certified": False,
                    "abstain": c.abstain, "domain_size": c.domain_size,
+                   **_refusal_design_evidence(r),
                    "acquisition": acq,
                    "note": "; ".join(map(str, c.notes)) if c.notes else ""}
             if c.measurement is not None:
@@ -218,6 +233,7 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
         ch = characterize(X, y, sigma=float(sigma), abstain_reason=c.abstain)
         return {"tag": "open", "tool": "recover", "certified": False,
                 "abstain": c.abstain, "domain_size": c.domain_size,
+                **_refusal_design_evidence(r),
                 **({"measurement": c.measurement} if c.measurement is not None else {}),
                 **({"measurement_omitted": c.measurement_omitted}
                    if c.measurement_omitted is not None else {}),

@@ -63,6 +63,10 @@ def discover_passive(X, y, *, sigma: float = 0.0, floor_abs: float = 1e-12,
     full_ok: bool | None = None
     ambiguity_seen = False
     accepted: tuple | None = None
+    # Retain the content that made ambiguity sticky, even when the last split
+    # sees no rivals or finds a candidate that the sticky guard then demotes.
+    # These are split-local representatives, not all-data-certified laws.
+    refusal_rivals: dict = {}
     for k in range(n_resplits):
         idx = np.random.default_rng(seed + k).permutation(len(X))
         a, b = int(0.6 * len(X)), int(0.8 * len(X))
@@ -71,6 +75,8 @@ def discover_passive(X, y, *, sigma: float = 0.0, floor_abs: float = 1e-12,
                      max_tier=max_tier)
         last = r
         if not r.certificate.certified:
+            for rival in r.rivals:
+                refusal_rivals.setdefault(rival, None)
             reasons.append(r.certificate.abstain)
             # STICKY AMBIGUITY: a split that sees materially-different rival
             # classes has witnessed genuine under-determination at this epsilon;
@@ -102,7 +108,8 @@ def discover_passive(X, y, *, sigma: float = 0.0, floor_abs: float = 1e-12,
         cert.notes.append("passive: certification rejected -- another re-split "
                           "witnessed materially different rival classes at "
                           "this epsilon (sticky ambiguity)")
-        return PassiveResult(Result(cert, None, r0.tier, r0.n_candidates),
+        return PassiveResult(Result(cert, None, r0.tier, r0.n_candidates,
+                                    tuple(refusal_rivals)),
                              n_resplits, False, reasons)
     if last is not None and last.certificate.certified and full_ok is False:
         # never return a certification that failed the gate
@@ -112,4 +119,6 @@ def discover_passive(X, y, *, sigma: float = 0.0, floor_abs: float = 1e-12,
         cert.notes.append("passive: certified on a split but failed the "
                           "full-data exhaustive gate")
         last = Result(cert, None, last.tier, last.n_candidates)
+    if last is not None:
+        last.rivals = tuple(refusal_rivals)
     return PassiveResult(last, n_resplits, full_ok, reasons)
