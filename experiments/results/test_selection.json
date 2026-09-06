@@ -1,0 +1,1491 @@
+{
+  "evidence": "empirical",
+  "runs": [
+    {
+      "case": "OU",
+      "pilot_seed": 100,
+      "certification_seed": 200,
+      "pilot": {
+        "function": "x**2/2",
+        "pilot_sha256": "35ad0892332ad6e36b1ffe2a480611b53fde23ee93af5bd9a660a22f0113cb5f",
+        "scores": [
+          [
+            "x",
+            0.00604681090978
+          ],
+          [
+            "x**2/2",
+            0.712083577375
+          ]
+        ],
+        "drift": [
+          -0.00845551006331,
+          -1.00762407462
+        ],
+        "diffusion": [
+          0.24898457056,
+          0.00632041538344
+        ],
+        "evidence": "empirical"
+      },
+      "certification_sha256": "a28189131854cf6fc07143ad1228ce598e1627ef58791d90e1d1a4768ee2b9c2",
+      "results": {
+        "baseline": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -2.50207528436,
+                "hi": 2.03626331268,
+                "span": 4.53833859704,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -3.46432469482,
+                "hi": 0.905465457076,
+                "span": 4.3697901519,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -4.94760597278,
+                "hi": 8.53656163027,
+                "span": 13.484167603,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 120,
+          "median_signal_to_band": 0.428286851724
+        },
+        "selected": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -2.50207528436,
+                "hi": 2.03626331268,
+                "span": 4.53833859704,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -3.46432469482,
+                "hi": 0.905465457076,
+                "span": 4.3697901519,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -4.94760597278,
+                "hi": 8.53656163027,
+                "span": 13.484167603,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 120,
+          "median_signal_to_band": 0.428286851724
+        }
+      }
+    },
+    {
+      "case": "OU",
+      "pilot_seed": 101,
+      "certification_seed": 201,
+      "pilot": {
+        "function": "x**2/2",
+        "pilot_sha256": "c6c42ca49c1e685fede3a1fd4f8be392207956511452e380f5ac667d6f30e30a",
+        "scores": [
+          [
+            "x",
+            0.00896050012357
+          ],
+          [
+            "x**2/2",
+            0.709985574148
+          ]
+        ],
+        "drift": [
+          -0.00153180786701,
+          -0.994414188309
+        ],
+        "diffusion": [
+          0.249508028571,
+          0.000362770034951
+        ],
+        "evidence": "empirical"
+      },
+      "certification_sha256": "824db44666c948459c9f9403e5b892134ff7e3d8b10db91531f4b552a60725c3",
+      "results": {
+        "baseline": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -3.1243871233,
+                "hi": 3.03984909784,
+                "span": 6.16423622114,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -2.83531712298,
+                "hi": 1.00033751042,
+                "span": 3.83565463341,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -7.33302945015,
+                "hi": 7.31594845949,
+                "span": 14.6489779096,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 120,
+          "median_signal_to_band": 0.43148441721
+        },
+        "selected": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -3.1243871233,
+                "hi": 3.03984909784,
+                "span": 6.16423622114,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -2.83531712298,
+                "hi": 1.00033751042,
+                "span": 3.83565463341,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -7.33302945015,
+                "hi": 7.31594845949,
+                "span": 14.6489779096,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 120,
+          "median_signal_to_band": 0.43148441721
+        }
+      }
+    },
+    {
+      "case": "OU",
+      "pilot_seed": 102,
+      "certification_seed": 202,
+      "pilot": {
+        "function": "x**2/2",
+        "pilot_sha256": "a8f3d29d726d4648d58e5418ecaf5bc74f14b07cbfe544fbc286abf320ef17ab",
+        "scores": [
+          [
+            "x",
+            0.00805875311009
+          ],
+          [
+            "x**2/2",
+            0.703811309981
+          ]
+        ],
+        "drift": [
+          0.00218920745937,
+          -0.979346926194
+        ],
+        "diffusion": [
+          0.249975360322,
+          0.0012908774068
+        ],
+        "evidence": "empirical"
+      },
+      "certification_sha256": "d87dcb1fa6d21ec9ec6db7b1704510a7b36e6ed98aba804d78cef799e0e3fdfa",
+      "results": {
+        "baseline": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -2.37018064916,
+                "hi": 1.99227406734,
+                "span": 4.3624547165,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -2.60222419287,
+                "hi": 1.19421689546,
+                "span": 3.79644108833,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -6.05904866673,
+                "hi": 7.34378247358,
+                "span": 13.4028311403,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 120,
+          "median_signal_to_band": 0.434169998521
+        },
+        "selected": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -2.37018064916,
+                "hi": 1.99227406734,
+                "span": 4.3624547165,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -2.60222419287,
+                "hi": 1.19421689546,
+                "span": 3.79644108833,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -6.05904866673,
+                "hi": 7.34378247358,
+                "span": 13.4028311403,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 120,
+          "median_signal_to_band": 0.434169998521
+        }
+      }
+    },
+    {
+      "case": "OU",
+      "pilot_seed": 103,
+      "certification_seed": 203,
+      "pilot": {
+        "function": "x**2/2",
+        "pilot_sha256": "c1925f1e9e40c2efb2f2c1ead4e6a8ba67fa93a0b37d3c55104ca255a8d64eb9",
+        "scores": [
+          [
+            "x",
+            0.00774589520317
+          ],
+          [
+            "x**2/2",
+            0.725535415596
+          ]
+        ],
+        "drift": [
+          -0.014108836784,
+          -1.03817867245
+        ],
+        "diffusion": [
+          0.249672085895,
+          0.0
+        ],
+        "evidence": "empirical"
+      },
+      "certification_sha256": "075c09727a059e16dc88f20e1bdce0c85977f66dce7306ba586df92ca27d6d28",
+      "results": {
+        "baseline": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -3.27492314083,
+                "hi": 1.79064162096,
+                "span": 5.06556476179,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -2.60033088942,
+                "hi": 1.3531197665,
+                "span": 3.95345065593,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -6.38375678707,
+                "hi": 9.62291516591,
+                "span": 16.006671953,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 120,
+          "median_signal_to_band": 0.425990613116
+        },
+        "selected": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -3.27492314083,
+                "hi": 1.79064162096,
+                "span": 5.06556476179,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -2.60033088942,
+                "hi": 1.3531197665,
+                "span": 3.95345065593,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -6.38375678707,
+                "hi": 9.62291516591,
+                "span": 16.006671953,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 120,
+          "median_signal_to_band": 0.425990613116
+        }
+      }
+    },
+    {
+      "case": "GBM",
+      "pilot_seed": 100,
+      "certification_seed": 200,
+      "pilot": {
+        "function": "log(x)",
+        "pilot_sha256": "7065adc1aeb71ec1db15092b81bcc72cb9d1f8f753f60687464d0a58793c3c46",
+        "scores": [
+          [
+            "x",
+            0.0110289633767
+          ],
+          [
+            "x**2/2",
+            0.0146941043013
+          ],
+          [
+            "log(x)",
+            3.07359729729
+          ]
+        ],
+        "drift": [
+          0.16207224468,
+          -0.02052313279
+        ],
+        "diffusion": [
+          0.0,
+          0.0404913802158
+        ],
+        "evidence": "empirical"
+      },
+      "certification_sha256": "bc5195254e583c9c95074472cdd5eab047c2ff74c865c94c38b57754173e3a6d",
+      "results": {
+        "baseline": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -18.3659091241,
+                "hi": 13.312896926,
+                "span": 31.6788060501,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -18.2583403631,
+                "hi": 25.9834860208,
+                "span": 44.2418263839,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -8.38559906205,
+                "hi": 5.71362650563,
+                "span": 14.0992255677,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.191178190511
+        },
+        "selected": {
+          "function": "log(x)",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -21.301690037,
+                "hi": 10.6955634313,
+                "span": 31.9972534683,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -15.1185583025,
+                "hi": 32.0593499424,
+                "span": 47.1779082449,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -10.2294152507,
+                "hi": 4.44568960388,
+                "span": 14.6751048546,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.152316292157
+        }
+      }
+    },
+    {
+      "case": "GBM",
+      "pilot_seed": 101,
+      "certification_seed": 201,
+      "pilot": {
+        "function": "log(x)",
+        "pilot_sha256": "14fe5e86049a94da072b00f9f11d554ffaa3d9cc62539a1cfa3889072922ee24",
+        "scores": [
+          [
+            "x",
+            0.00317347746758
+          ],
+          [
+            "x**2/2",
+            0.0221973983224
+          ],
+          [
+            "log(x)",
+            0.271494444974
+          ]
+        ],
+        "drift": [
+          0.0239976274345,
+          -0.0214748726728
+        ],
+        "diffusion": [
+          0.00134341052755,
+          0.0394087882621
+        ],
+        "evidence": "empirical"
+      },
+      "certification_sha256": "f169a5cf0bf822656a84e904fc896d4c44a39e9df5f5817acc020a9af8b50710",
+      "results": {
+        "baseline": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -0.416732178267,
+                "hi": 0.528004969246,
+                "span": 0.944737147513,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -1.64202078627,
+                "hi": 1.30649556814,
+                "span": 2.94851635442,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -0.684219963392,
+                "hi": 0.859364257076,
+                "span": 1.54358422047,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.176922716314
+        },
+        "selected": {
+          "function": "log(x)",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -0.337738081563,
+                "hi": 0.428865669966,
+                "span": 0.76660375153,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -1.46414270607,
+                "hi": 1.23667598865,
+                "span": 2.70081869472,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -0.72192238317,
+                "hi": 0.896650852329,
+                "span": 1.6185732355,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.159596427267
+        }
+      }
+    },
+    {
+      "case": "GBM",
+      "pilot_seed": 102,
+      "certification_seed": 202,
+      "pilot": {
+        "function": "log(x)",
+        "pilot_sha256": "bbc7fd8138a042e098571599e5707cc9195edb9a51c62d7d194beca0ba9b4bab",
+        "scores": [
+          [
+            "x",
+            0.0106924254381
+          ],
+          [
+            "x**2/2",
+            0.0141630365825
+          ],
+          [
+            "log(x)",
+            0.119184658059
+          ]
+        ],
+        "drift": [
+          0.0666851167813,
+          -0.021833607974
+        ],
+        "diffusion": [
+          0.0228015324983,
+          0.0396048276999
+        ],
+        "evidence": "empirical"
+      },
+      "certification_sha256": "2faa190ba24d147d022805879c9d55c9d1dbf20c3c34630b190948d5087a9f51",
+      "results": {
+        "baseline": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -0.42253259486,
+                "hi": 0.441648674542,
+                "span": 0.864181269401,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -1.76886206941,
+                "hi": 1.67334076732,
+                "span": 3.44220283673,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -1.05579047574,
+                "hi": 1.01200522166,
+                "span": 2.0677956974,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.195678478586
+        },
+        "selected": {
+          "function": "log(x)",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -0.370701059376,
+                "hi": 0.399945824297,
+                "span": 0.770646883673,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -1.78094112451,
+                "hi": 1.69770190022,
+                "span": 3.47864302473,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -1.25406551858,
+                "hi": 1.25535656121,
+                "span": 2.50942207979,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.16951569282
+        }
+      }
+    },
+    {
+      "case": "GBM",
+      "pilot_seed": 103,
+      "certification_seed": 203,
+      "pilot": {
+        "function": "log(x)",
+        "pilot_sha256": "91efcdcdbd4edd466f36882fbd4609bc45a075aaa26e37c1c4c92402c7ad5afc",
+        "scores": [
+          [
+            "x",
+            0.0428184760215
+          ],
+          [
+            "x**2/2",
+            0.0643616494773
+          ],
+          [
+            "log(x)",
+            0.307326411421
+          ]
+        ],
+        "drift": [
+          0.0149296366445,
+          -0.0419688336826
+        ],
+        "diffusion": [
+          3.35722587371e-05,
+          0.0398117810449
+        ],
+        "evidence": "empirical"
+      },
+      "certification_sha256": "09f17d67736c5f683af490ac15c7719c9f973f6637fa087ed84a25a1b9c5044c",
+      "results": {
+        "baseline": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -2.69989098157,
+                "hi": 2.82126240695,
+                "span": 5.52115338852,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -2.04972056748,
+                "hi": 1.84081570233,
+                "span": 3.89053626981,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -0.233116723951,
+                "hi": 0.255570557093,
+                "span": 0.488687281044,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.130044747864
+        },
+        "selected": {
+          "function": "log(x)",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -1.49228231168,
+                "hi": 1.54580008074,
+                "span": 3.03808239242,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -1.39009538688,
+                "hi": 1.29724020985,
+                "span": 2.68733559673,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -0.178784514753,
+                "hi": 0.199557402257,
+                "span": 0.378341917009,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.131285327418
+        }
+      }
+    },
+    {
+      "case": "null",
+      "pilot_seed": 100,
+      "certification_seed": 200,
+      "pilot": {
+        "function": "log(x)",
+        "pilot_sha256": "e15ef281c4040783d61fc16b904641250541c085e36a89455605aca1d3d48627",
+        "scores": [
+          [
+            "x",
+            0.000533950304892
+          ],
+          [
+            "x**2/2",
+            0.0152308253827
+          ],
+          [
+            "log(x)",
+            4.26083454554
+          ]
+        ],
+        "drift": [
+          0.047579633734,
+          -0.022109710473
+        ],
+        "diffusion": [
+          0.0,
+          0.0405614170181
+        ],
+        "evidence": "empirical"
+      },
+      "certification_sha256": "8706a9c013736a601b5dbc5bd5dfacbe4c349d0914372700a2a363c387d909fc",
+      "results": {
+        "baseline": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -4.38089409283,
+                "hi": 3.2690365635,
+                "span": 7.64993065632,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -10.7857381955,
+                "hi": 13.8182999236,
+                "span": 24.6040381191,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -9.84483073627,
+                "hi": 7.96883635013,
+                "span": 17.8136670864,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.222508096612
+        },
+        "selected": {
+          "function": "log(x)",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -1.73256615851,
+                "hi": 1.11123899419,
+                "span": 2.8438051527,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -5.13309175293,
+                "hi": 7.44321769894,
+                "span": 12.5763094519,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -6.46171341358,
+                "hi": 4.7902103006,
+                "span": 11.2519237142,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.16466966682
+        }
+      }
+    },
+    {
+      "case": "null",
+      "pilot_seed": 101,
+      "certification_seed": 201,
+      "pilot": {
+        "function": "log(x)",
+        "pilot_sha256": "c8eec7e2f1acdd2214d17f4ab092602314d5c94bcb7ecd1bddde254e83631062",
+        "scores": [
+          [
+            "x",
+            0.049257622374
+          ],
+          [
+            "x**2/2",
+            0.0664295900143
+          ],
+          [
+            "log(x)",
+            0.756029566148
+          ]
+        ],
+        "drift": [
+          0.00937964718057,
+          -0.0370536568608
+        ],
+        "diffusion": [
+          0.0,
+          0.03995413759
+        ],
+        "evidence": "empirical"
+      },
+      "certification_sha256": "b1c20bdfe6bdff9083582007658ea8b2e3c7dd1ff3fd46d6f058164850c2a2f8",
+      "results": {
+        "baseline": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -0.248028216804,
+                "hi": 0.307682228541,
+                "span": 0.555710445345,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -1.95520503362,
+                "hi": 1.5579769677,
+                "span": 3.51318200132,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -1.14010140371,
+                "hi": 1.40571832162,
+                "span": 2.54581972533,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.215405175389
+        },
+        "selected": {
+          "function": "log(x)",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -0.196632154183,
+                "hi": 0.252994553383,
+                "span": 0.449626707566,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -1.69992499383,
+                "hi": 1.37268444003,
+                "span": 3.07260943386,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -1.08806532786,
+                "hi": 1.37673377317,
+                "span": 2.46479910103,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.18692851845
+        }
+      }
+    },
+    {
+      "case": "null",
+      "pilot_seed": 102,
+      "certification_seed": 202,
+      "pilot": {
+        "function": "log(x)",
+        "pilot_sha256": "ba576ace184a2b8fc4a27fd153b2cb31b5ea2b993379544a53af2429c4e37469",
+        "scores": [
+          [
+            "x",
+            0.0150173965546
+          ],
+          [
+            "x**2/2",
+            0.0231688283782
+          ],
+          [
+            "log(x)",
+            0.159913572146
+          ]
+        ],
+        "drift": [
+          0.0168948510657,
+          -0.0266876377999
+        ],
+        "diffusion": [
+          0.000622338816434,
+          0.0398423963576
+        ],
+        "evidence": "empirical"
+      },
+      "certification_sha256": "c2dee50ea7a128a6f2f211f8a70935aeb2c0eb09e6207197ebc85f43c6c9e721",
+      "results": {
+        "baseline": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -0.0703835287835,
+                "hi": 0.0752660430882,
+                "span": 0.145649571872,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -0.827296446692,
+                "hi": 0.706150877881,
+                "span": 1.53344732457,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -0.737267803471,
+                "hi": 0.687697462429,
+                "span": 1.4249652659,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.258348934973
+        },
+        "selected": {
+          "function": "log(x)",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -0.0570183424289,
+                "hi": 0.0644202240064,
+                "span": 0.121438566435,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -0.756052110103,
+                "hi": 0.663004075628,
+                "span": 1.41905618573,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -0.83458265037,
+                "hi": 0.833028801941,
+                "span": 1.66761145231,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.173291691792
+        }
+      }
+    },
+    {
+      "case": "null",
+      "pilot_seed": 103,
+      "certification_seed": 203,
+      "pilot": {
+        "function": "log(x)",
+        "pilot_sha256": "bd37551269e0f6850499b436acce9240bc51e83343d19c89922301582eb57b80",
+        "scores": [
+          [
+            "x",
+            0.0774107427693
+          ],
+          [
+            "x**2/2",
+            0.0679703437574
+          ],
+          [
+            "log(x)",
+            0.278750320746
+          ]
+        ],
+        "drift": [
+          0.00461223074948,
+          -0.0417415903517
+        ],
+        "diffusion": [
+          1.77793080216e-05,
+          0.0396001603666
+        ],
+        "evidence": "empirical"
+      },
+      "certification_sha256": "b2ae1c0d610605a193ea58defa587c630cfea9f90605539ace4c129238052867",
+      "results": {
+        "baseline": {
+          "function": "x**2/2",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -151.225364501,
+                "hi": 150.293142044,
+                "span": 301.518506544,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -172.798730099,
+                "hi": 173.72733548,
+                "span": 346.526065579,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -36.4108705416,
+                "hi": 36.212237211,
+                "span": 72.6231077526,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.164015922707
+        },
+        "selected": {
+          "function": "log(x)",
+          "certified": false,
+          "abstain": "noise",
+          "partial": {
+            "status": "noise",
+            "components": {
+              "1": {
+                "kind": "interval",
+                "lo": -3.4637792037,
+                "hi": 3.33899336571,
+                "span": 6.80277256941,
+                "resolved": false
+              },
+              "x": {
+                "kind": "interval",
+                "lo": -4.70200796343,
+                "hi": 4.79886655626,
+                "span": 9.50087451969,
+                "resolved": false
+              },
+              "x**2": {
+                "kind": "interval",
+                "lo": -1.1508744358,
+                "hi": 1.14284735863,
+                "span": 2.29372179443,
+                "resolved": false
+              }
+            },
+            "exact": [],
+            "interval": [
+              "1",
+              "x",
+              "x**2"
+            ],
+            "unconstrained": [],
+            "n_resolved": 0,
+            "note": "JOINT bound by LP over every law in the declared vocabulary consistent with the held-out rows at the martingale band: if the truth is in the vocabulary and the band covers, the truth is in these ranges"
+          },
+          "true_law_misses": 0,
+          "true_law_uncovered": 0,
+          "truth_exclusions": [],
+          "n_rows": 24,
+          "median_signal_to_band": 0.0891396053281
+        }
+      }
+    }
+  ],
+  "delta_per_run": 0.05,
+  "claim": "Pilot-only proposal; empirical reach, no new coverage theorem."
+}

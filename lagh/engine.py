@@ -16,11 +16,11 @@ import sympy as sp
 
 from .base import ALWAYS, Candidate, admissible, design_matrix, lstsq
 from .base import Term as BaseTerm
-from .base import eval_expr, snap_all, to_expr
+from .base import snap_all, to_expr
 from .certify import (MACHINE_REL, Abstain, Certificate,
                       arbitrate_significance, check, coherent, determination,
-                      epsilon, float_pinned, free_atoms, free_dof, gated_atoms,
-                      input_constraints, invariant_content, minimal,
+                      epsilon, float_pinned, free_atoms, free_dof,
+                      input_constraints, invariant_content,
                       parameter_interval, pinned,
                       reduce_mod_constraints, reduce_to_minimal,
                       refit_minimal, sample_box, significance_log10, vacuous)
@@ -588,6 +588,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             # ambiguity or unpinned -> the full loop decides (conservative)
 
     total = 0
+    closest_failure = None
     tiers = [1] if linear_basis else [t for t, _ in CURRICULUM if t <= max_tier]
     for tier in tiers:
         cands = _tier_candidates(tier, syms, dim, X_fit, y_fit, X_sel, y_sel,
@@ -610,6 +611,9 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             if free_dof(c.expr) >= n_cert:
                 continue
             r = check(c.expr, syms, X_cert, y_cert, eps)
+            if not r["certified"] and (closest_failure is None
+                    or r["nmiss"] + r["nuncov"] < closest_failure["nmiss"] + closest_failure["nuncov"]):
+                closest_failure = r
             if r["certified"]:
                 # exact-coefficient gate (CAP-E lesson), per CANDIDATE on CLEAN
                 # data: dyadic-garbage overfits certify at floor-dominated eps and
@@ -900,5 +904,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
 
     cert = Certificate(False, len(X_cert), 0, len(X_cert), bounds, "",
                        abstain=Abstain.STRUCTURAL.value,
-                       notes=[f"no law certifies through tier {max_tier}"])
+                       notes=[f"no law certifies through tier {max_tier}"],
+                       measurement=(closest_failure.measurement(
+                           domain="engine certification rows").get("measurement")
+                           if closest_failure is not None else None))
     return Result(cert, None, max_tier, total)

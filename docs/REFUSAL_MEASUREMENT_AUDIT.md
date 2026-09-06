@@ -83,3 +83,16 @@ fresh-box holdout residuals and coefficient perturbation witnesses, followed by
 independent-observable attribution experiments. Optimal held-out weak tests,
 per-case approximant arbitration and LawSystemBench v1.3 remain **open**.
 The blanket dense-channel restriction remains in force.
+
+## Core residual debt paid (2026-09-05)
+
+**Empirical:** `check()` now retains per-row residuals, bands and row labels
+from its own candidate evaluation. MCP uses that result on both checked domains;
+engine terminal no-law, passive full-data and acquisition held-out failures
+attach a bounded measurement. `run_residual_consumers.py` exhibits the same
+wrong-law input through all three consumers. Array snapshots survive subsequent
+caller mutation; the rejected aliasing design is retained as a failing witness.
+No diagnostic contributes a candidate, attributes cause, or upgrades a verdict.
+Invalid/nonfinite/empty checks are separately registered reject-only corrections.
+The old scalar significance-band shortcut remains conservative and unchanged;
+this work does not use a broadcasting correction to purchase more certificates.

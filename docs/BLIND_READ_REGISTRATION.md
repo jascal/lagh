@@ -84,3 +84,12 @@ conjectures, never certificates. The passive R-noise re-confirmation
 - The report states both tracks, the certified partition, and the comparison
   against the frozen SOTA above — win, lose, or mixed.
 - NewtonBench remains dev; this read's numbers are the only headline claims.
+
+## Falsifiability correction (2026-09-05; historical scores unchanged)
+
+**WITHDRAWN:** the local symbolic score is a lower bound on the official GPT
+judge. No coupling or one-sided error guarantee was established; it is a
+different empirical metric. Also withdraw the universal claim that noisy data
+never certify: perturbations smaller than epsilon can pass. Certification
+asserts finite-domain agreement at the declared band, not noise-free truth.
+No benchmark rerun or alteration of the frozen submissions is authorized.

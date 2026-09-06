@@ -164,7 +164,9 @@ def gate_record(axes: dict, *, tol: float = 1.25,
     Two axes are the minimum for `common-mode`: one axis off by a factor is
     indistinguishable from one axis being wrong, and calling it a measurement
     would be the unsound direction."""
-    named = {k: v for k, v in axes.items() if v.get("ratio")}
+    named = {k: v for k, v in axes.items()
+             if v.get("ratio") is not None and np.isfinite(v["ratio"])
+             and v["ratio"] > 0}
     if not named:
         return {"verdict": "unreadable", "axes": list(axes),
                 "note": "no axis yielded a timescale"}
@@ -177,10 +179,14 @@ def gate_record(axes: dict, *, tol: float = 1.25,
                          "statement")}
     ratios = {k: float(v["ratio"]) for k, v in named.items()}
     lo, hi = min(ratios.values()), max(ratios.values())
+    if len(named) != len(axes):
+        return {"verdict": "unresolved", "ratios": ratios,
+                "note": "an unreadable axis prevents a whole-record claim"}
     if all(1.0 / tol <= r <= tol for r in ratios.values()):
         return {"verdict": "clean", "ratios": ratios,
                 "note": "every axis agrees with the calibration's timescale"}
-    if len(ratios) >= 2 and hi / lo - 1.0 <= spread:
+    if (len(ratios) >= 2 and hi / lo - 1.0 <= spread
+            and all(v.get("var_ok") is True for v in named.values())):
         common = float(np.exp(np.mean(np.log(list(ratios.values())))))
         return {"verdict": "common-mode", "ratios": ratios,
                 "common_ratio": common, "spread": float(hi / lo - 1.0),
@@ -470,6 +476,9 @@ def faxen_height(drag_ratio: float, radius_um: float,
                     "note": (f"drag ratio {F:.3f} +- {drag_ratio_se:.3f} reaches "
                              "1: consistent with bulk, so the height is bounded "
                              "BELOW and not determined above")}
+    if not np.isfinite(F) or F == 1.0:
+        return {"height_um": None, "lambda": None,
+                "note": "bulk or unreadable drag gives no finite wall height"}
     if F < 1.0:
         return {"height_um": None, "lambda": None,
                 "note": f"drag ratio {F:.3f} < 1: a wall can only INCREASE the "
@@ -554,7 +563,8 @@ def realized_diffusion(x, dt: float, theta: float, ret: Retention, *,
             "spread": float(vals.max() / vals.min() - 1.0)}
 
 
-ATTRIBUTION_TOL = 0.08
+ATTRIBUTION_TOL = 0.08  # historical compatibility bar, not calibrated joint coverage
+# Synthetic theta precision is regime-dependent: PRECISION_AND_TEST_SELECTION.md.
 CONTAMINANT_VARIANCE_FLOOR = 0.08  # separate materiality declaration, C4 control failure
 
 
@@ -635,3 +645,53 @@ def attribute_deviation(theta_ratio: float, diffusion_ratio: float,
                      if ok else
                      "no unique signature passes: " + ", ".join(
                          f"{k} leaves {out[k]['max_residual']:.1%}" for k in ranked))}
+
+
+def covariance_timescale(x, dt: float, *, min_lag: int = 8,
+                         max_lag: int = 200, block_size: int = 2048,
+                         shrinkage: float = 0.2) -> dict:
+    """Empirical GLS of A exp(-theta*t)+C on a fixed covariance window.
+
+    C absorbs a locally slow covariance component; it is not a contaminant
+    amplitude measurement. Block product covariance supplies correlated weights,
+    regularized toward its diagonal. No reference rate or ACF sign selects lags.
+    Precision must be calibrated on the acquisition regime, not assumed from
+    optimizer curvature. This opt-in estimator leaves historical ACF readings
+    unchanged. See FALSIFIABILITY_REGISTRATION.md.
+    """
+    from scipy.linalg import cholesky, solve_triangular
+    from scipy.optimize import least_squares
+    v = np.asarray(x, float)
+    if (v.ndim != 1 or not np.all(np.isfinite(v)) or not np.isfinite(dt) or dt <= 0
+            or not 0 < shrinkage <= 1 or min_lag < 1
+            or max_lag <= min_lag + 3 or block_size <= max_lag):
+        raise ValueError("invalid covariance estimator inputs")
+    nblocks = len(v) // block_size
+    if nblocks < 4 or np.var(v) <= 0:
+        return {"theta": None, "note": "requires variance and four covariance blocks"}
+    v = (v - v.mean()) / v.std()
+    blocks = v[:nblocks*block_size].reshape(nblocks, block_size)
+    lags = np.arange(min_lag, max_lag)
+    products = np.array([np.mean(blocks[:, :-k]*blocks[:, k:], axis=1) for k in lags]).T
+    cov = np.cov(products, rowvar=False) / nblocks
+    diagonal = np.maximum(np.diag(cov), 1e-12)
+    cov = (1-shrinkage)*cov + shrinkage*np.diag(diagonal)
+    root = cholesky(cov, lower=True)
+    target = products.mean(axis=0)
+
+    def residual(p):
+        model = p[0]*np.exp(-p[1]*lags)+p[2]
+        return solve_triangular(root, model-target, lower=True)
+
+    # A fixed initial dimensionless rate, not an input calibration or truth.
+    fit = least_squares(residual, [1., .03, 0.],
+                        bounds=([0, 1e-6, -2], [10, 2., 2]), max_nfev=1000)
+    rate = float(fit.x[1])
+    readable = fit.success and not np.any(fit.active_mask) and np.isfinite(rate)
+    return {"theta": rate/dt if readable else None,
+            "amplitude_normalized": float(fit.x[0]),
+            "offset_normalized": float(fit.x[2]), "n_blocks": nblocks,
+            "n_lags": len(lags), "shrinkage": shrinkage,
+            "method": "fixed-window block-covariance GLS",
+            "evidence": "empirical", "uncertainty": "requires regime calibration",
+            "note": "fit converged" if readable else "fit failed or reached a bound"}

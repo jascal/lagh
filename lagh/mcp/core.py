@@ -29,7 +29,6 @@ from ..certify import (Abstain, check, epsilon, float_pinned, pinned, sample_box
 from ..characterize import characterize
 from ..engine import ALPHA_CERT_MAX_LOG10, Result, discover
 from ..formparse import FormError, parse_form
-from ..refusal import residual_measurement
 from ..passive import discover_passive
 
 # nameable constants a free-fit exponent might be reaching for (fit's diagnosis)
@@ -340,18 +339,16 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
                         "VACUOUS: eps swallows the signal on the certification "
                         "split -- no declared form can be evidence at this band")
     # 2) the exhaustive check on the held-out split
-    pred = eval_expr(scaled, syms, Xc)
-    if pred is None or not np.all(np.isfinite(pred)):
+    checked = check(scaled, syms, Xc, yc, eps_c, row_indices=checked_indices)
+    if checked["nuncov"]:
         return _abstain("verify", Abstain.NUMERICAL.value,
                         "form diverges on the certification split")
-    miss = int(np.sum(np.abs(pred - yc) > eps_c))
+    miss = checked["nmiss"]
     if miss:
         return _abstain("verify", Abstain.STRUCTURAL.value,
                         f"declared form refuted: {miss}/{len(yc)} certification "
                         "points exceed eps",
-                        **residual_measurement(yc, pred, eps_c, checked_indices,
-                            domain="certification rows of supplied dataset",
-                            candidate=scaled))
+                        **checked.measurement(domain="certification rows of supplied dataset"))
     # 3) the exact-coefficient gate (sigma-scaled under noise, as in discovery)
     ok, gated = float_pinned(scaled, syms, Xc, yc, eps_c, float(sigma))
     if not ok:
@@ -369,7 +366,7 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
     # 5) the full-data check: the claimed domain is every supplied row
     eps_full = epsilon(y, sigma=float(sigma), floor_abs=float(floor_abs),
                        se=se_full)
-    full = check(scaled, syms, X, y, eps_full)
+    full = check(scaled, syms, X, y, eps_full, row_indices=finite_indices)
     if not full["certified"]:
         return _abstain("verify", Abstain.STRUCTURAL.value,
                         "declared form refuted on the full supplied dataset: "
@@ -377,10 +374,7 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
                         "undefined) -- rows outside the certification split "
                         "contradict it, so no full-domain claim is possible",
                         law=str(scaled),
-                        **residual_measurement(y, eval_expr(scaled, syms, X),
-                            eps_full, finite_indices,
-                            domain="all finite rows of supplied dataset",
-                            candidate=scaled))
+                        **full.measurement(domain="all finite rows of supplied dataset"))
     # 6) significance: |H| = 1 (the declared form), h = held-out rows - dof
     alpha_log10 = significance_log10(scaled, yc, eps_c, 1)
     if alpha_log10 > ALPHA_CERT_MAX_LOG10:

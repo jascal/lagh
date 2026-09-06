@@ -55,3 +55,11 @@ surface retains two empty-array warnings. Ruff F,E9 and diff whitespace checks
 passed. The 20,000-row synthetic diagnostic returned 64 rows, counted all 100
 misses and 19,936 elisions, and serialized below 6,000 characters. Fixture
 artifact regenerated; clean control unchanged. No partial determination ships.
+
+## Falsifiability correction (2026-09-05)
+
+P4 is **WITHDRAWN as an empirical prediction** and restated as an identifiability
+limitation: identical observations cannot discriminate their identical-input
+explanations. It supplies no independent physical validation. P3's diagnostic
+noninterference requirement remains; rejecting invalid/nonfinite check inputs
+is a separately registered soundness correction, not a diagnostic upgrade.

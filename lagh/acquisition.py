@@ -29,7 +29,7 @@ import numpy as np
 import sympy as sp
 
 from .base import eval_expr
-from .certify import Abstain, Certificate, epsilon, sample_box
+from .certify import Abstain, Certificate, epsilon
 from .engine import Result, discover
 
 MACHINE_FLOOR = 1e-12
@@ -297,7 +297,11 @@ def _heldout_box_ok(oracle, active: ActiveResult, floor_abs, seed) -> bool:
         else [sp.Symbol("x_0")]
     from .certify import check, epsilon
     pred_eps = epsilon(y, floor_abs=floor_abs)
-    return check(r.expr, syms, X, y, pred_eps)["certified"]
+    checked = check(r.expr, syms, X, y, pred_eps, row_indices=np.flatnonzero(m))
+    if not checked["certified"]:
+        r.certificate.measurement = checked.measurement(
+            domain="fresh held-out box sample").get("measurement")
+    return checked["certified"]
 
 
 def _demote_heldout(active: ActiveResult, box_name: str) -> None:

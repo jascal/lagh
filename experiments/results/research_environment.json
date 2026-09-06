@@ -1,0 +1,19 @@
+{
+  "evidence": "empirical",
+  "python": "3.12.3",
+  "packages": {
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "sympy": "1.14.0",
+    "pytest": "9.1.1"
+  },
+  "threads": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "baseline_revision": "582227fc59f22d6d1a5d09fbec7a575a8a2224df",
+  "float_comparison": {
+    "rtol": 1e-12,
+    "atol": 1e-15
+  }
+}

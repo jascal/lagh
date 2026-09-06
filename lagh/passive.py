@@ -46,6 +46,7 @@ def discover_passive(X, y, *, sigma: float = 0.0, floor_abs: float = 1e-12,
     X = np.atleast_2d(np.asarray(X, float))
     y = np.asarray(y, float).ravel()
     m = np.isfinite(y) & np.all(np.isfinite(X), axis=1)
+    finite_indices = np.flatnonzero(m)
     X, y = X[m], y[m]
     if len(X) < 10:
         cert = Certificate(False, 0, 0, int(len(X)), [], "",
@@ -80,12 +81,15 @@ def discover_passive(X, y, *, sigma: float = 0.0, floor_abs: float = 1e-12,
                    for nt in r.certificate.notes):
                 ambiguity_seen = True
             continue
-        if check(r.expr, syms, X, y, eps_full)["certified"]:
+        full = check(r.expr, syms, X, y, eps_full, row_indices=finite_indices)
+        if full["certified"]:
             if accepted is None:
                 accepted = (r, k + 1)
         else:
             # certified on the split but not on all points: a split artifact
             # the full-data gate exists to catch
+            r.certificate.measurement = full.measurement(
+                domain="all finite rows of passive dataset").get("measurement")
             full_ok = False
             reasons.append("full-data-gate")
     if accepted is not None and not ambiguity_seen:
