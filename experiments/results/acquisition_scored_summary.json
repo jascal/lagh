@@ -1,0 +1,143 @@
+{
+  "tag": "empirical",
+  "complete": true,
+  "total_arm_runs": 96,
+  "arms": {
+    "guided": {
+      "trials": 24,
+      "resolved": 12,
+      "unresolved": 12,
+      "resolved_queries": [
+        560,
+        560,
+        560,
+        560,
+        560,
+        560,
+        560,
+        560,
+        560,
+        560,
+        560,
+        560
+      ],
+      "actual_queries": 11920,
+      "actual_new_queries": 2320,
+      "mean_censored_cost": 1180.5,
+      "native_raw_certificates": 0
+    },
+    "fixed-x10": {
+      "trials": 24,
+      "resolved": 12,
+      "unresolved": 12,
+      "resolved_queries": [
+        560,
+        560,
+        560,
+        560,
+        560,
+        560,
+        560,
+        560,
+        560,
+        560,
+        560,
+        560
+      ],
+      "actual_queries": 11520,
+      "actual_new_queries": 1920,
+      "mean_censored_cost": 1180.5,
+      "native_raw_certificates": 0
+    },
+    "fixed-ladder": {
+      "trials": 24,
+      "resolved": 12,
+      "unresolved": 12,
+      "resolved_queries": [
+        640,
+        640,
+        640,
+        640,
+        640,
+        640,
+        640,
+        640,
+        640,
+        640,
+        640,
+        640
+      ],
+      "actual_queries": 13440,
+      "actual_new_queries": 3840,
+      "mean_censored_cost": 1220.5,
+      "native_raw_certificates": 0
+    },
+    "native-ladder": {
+      "trials": 24,
+      "resolved": 0,
+      "unresolved": 24,
+      "resolved_queries": [],
+      "actual_queries": 12432,
+      "actual_new_queries": 2832,
+      "mean_censored_cost": 1801.0,
+      "native_raw_certificates": 24
+    }
+  },
+  "paired_query_differences": {
+    "fixed-x10": {
+      "joint_resolutions": 12,
+      "differences": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "median": 0.0
+    },
+    "fixed-ladder": {
+      "joint_resolutions": 12,
+      "differences": [
+        -80,
+        -80,
+        -80,
+        -80,
+        -80,
+        -80,
+        -80,
+        -80,
+        -80,
+        -80,
+        -80,
+        -80
+      ],
+      "median": -80.0
+    },
+    "native-ladder": {
+      "joint_resolutions": 0,
+      "differences": [],
+      "median": null
+    }
+  },
+  "wrong_terminal_certificates": 0,
+  "wrong_trials": [],
+  "strict_gain_over_both_fixed_strategies": false,
+  "audited_trials": 96,
+  "prequery_plan_records": 197,
+  "independent_final_samples": 36,
+  "predictions": {
+    "resolution_counts": true,
+    "minimum_unresolved": true,
+    "paired_medians": true,
+    "zero_wrong": true,
+    "expanded_wide_domains": true,
+    "successful_query_counts": true
+  }
+}

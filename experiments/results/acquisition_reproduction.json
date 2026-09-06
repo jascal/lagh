@@ -1,0 +1,125 @@
+{
+  "tag": "empirical",
+  "scope": "one fresh scored condition, all four arms and plan ledgers",
+  "comparisons": [
+    {
+      "file": "design30_wide_seed100_fixed-ladder.json",
+      "original_sha256": "70959808fffb86dbbd7684e2b11d7c1daf1e1c49b742b2cfb50e8892ad88c9dd",
+      "reproduced_sha256": "70959808fffb86dbbd7684e2b11d7c1daf1e1c49b742b2cfb50e8892ad88c9dd",
+      "byte_identical": true
+    },
+    {
+      "file": "design30_wide_seed100_fixed-ladder.plans.jsonl",
+      "original_sha256": "5833933d114e5a9977cbf34c21ad336e1f5c98b77fa4b6f22383baba53bbab21",
+      "reproduced_sha256": "5833933d114e5a9977cbf34c21ad336e1f5c98b77fa4b6f22383baba53bbab21",
+      "byte_identical": true
+    },
+    {
+      "file": "design30_wide_seed100_fixed-x10.json",
+      "original_sha256": "5dc805fb452e50e69c47d9a5d20355bf7c0ddbc9acb19d3e7c9043c262a11248",
+      "reproduced_sha256": "5dc805fb452e50e69c47d9a5d20355bf7c0ddbc9acb19d3e7c9043c262a11248",
+      "byte_identical": true
+    },
+    {
+      "file": "design30_wide_seed100_fixed-x10.plans.jsonl",
+      "original_sha256": "fa67aa09fe9f77b9bb1be06d3f1f2afdbe9fb317f3f64f3d0407b8f0ab5cfc33",
+      "reproduced_sha256": "fa67aa09fe9f77b9bb1be06d3f1f2afdbe9fb317f3f64f3d0407b8f0ab5cfc33",
+      "byte_identical": true
+    },
+    {
+      "file": "design30_wide_seed100_guided.json",
+      "original_sha256": "fdb3811dbe50b50154926a8f4b2286ee0882bba2a234db643ab991e197dd6d2f",
+      "reproduced_sha256": "fdb3811dbe50b50154926a8f4b2286ee0882bba2a234db643ab991e197dd6d2f",
+      "byte_identical": true
+    },
+    {
+      "file": "design30_wide_seed100_guided.plans.jsonl",
+      "original_sha256": "1958d1442361d8be729f2f3cac6acc8a4639e41717c92830605be473c87dd84a",
+      "reproduced_sha256": "1958d1442361d8be729f2f3cac6acc8a4639e41717c92830605be473c87dd84a",
+      "byte_identical": true
+    },
+    {
+      "file": "design30_wide_seed100_native-ladder.json",
+      "original_sha256": "4b07281f1427784ee92cb62145e9b777d928a94cb8cc2b0ab401431b43ba8e09",
+      "reproduced_sha256": "4b07281f1427784ee92cb62145e9b777d928a94cb8cc2b0ab401431b43ba8e09",
+      "byte_identical": true
+    },
+    {
+      "file": "design30_wide_seed100_native-ladder.plans.jsonl",
+      "original_sha256": "e8c970b3f5a36427ee5cee8cd5bb06c139a97700a1ed6cbdaa2f6276b536a0ec",
+      "reproduced_sha256": "e8c970b3f5a36427ee5cee8cd5bb06c139a97700a1ed6cbdaa2f6276b536a0ec",
+      "byte_identical": true
+    }
+  ],
+  "unchanged_sources": [
+    {
+      "file": "lagh/acquisition.py",
+      "unchanged_from_base": true,
+      "sha256": "d69fd8873aa809ca25256ba8aab8569ba63deab2c69487c521f39a74901facfa"
+    },
+    {
+      "file": "lagh/certify.py",
+      "unchanged_from_base": true,
+      "sha256": "fdcaf72461ef424bce82e42db12f7f1abc1bc81731d42a4c50fc2d8f4d73a27b"
+    },
+    {
+      "file": "lagh/classes/__init__.py",
+      "unchanged_from_base": true,
+      "sha256": "90975662d5671bd32224d34d4514a8cb1b1caeb2ac875a6e976bc543a695828f"
+    },
+    {
+      "file": "lagh/classes/c1_polynomial.py",
+      "unchanged_from_base": true,
+      "sha256": "5685fb4841f53f357c8de191a9304b84f82b0b2021d8a212775963e249a2b650"
+    },
+    {
+      "file": "lagh/classes/c2_rational.py",
+      "unchanged_from_base": true,
+      "sha256": "706a0da26a98f2197b772564cd9fa029226de2f721f617e4c8c139bcf5e3267a"
+    },
+    {
+      "file": "lagh/classes/c3_powerlaw.py",
+      "unchanged_from_base": true,
+      "sha256": "7a9bb292de6b54ee12636226bb1db296de8be73b1c784079fa007ec46ed4a5d6"
+    },
+    {
+      "file": "lagh/classes/c4_inner.py",
+      "unchanged_from_base": true,
+      "sha256": "3ce01153dc10c165d12397f369b09faf01352e94a64385a1818786efaf0a8c77"
+    },
+    {
+      "file": "lagh/classes/c5_transforms.py",
+      "unchanged_from_base": true,
+      "sha256": "67895729e92c5cf3da619345b39afc03679d352219dc6367d814e8fadfc23cf0"
+    },
+    {
+      "file": "lagh/classes/c6_quasipoly.py",
+      "unchanged_from_base": true,
+      "sha256": "7f9b65c17a412fc09802db0afd00a8a3820a62135448ada072e98418227d2df9"
+    },
+    {
+      "file": "lagh/classes/c7_levy.py",
+      "unchanged_from_base": true,
+      "sha256": "adeee81d9e9f939ee82c205ad1271231e3f3471646b6217386562689ecd47206"
+    },
+    {
+      "file": "lagh/classes/c8_angular.py",
+      "unchanged_from_base": true,
+      "sha256": "c6fc5576bbb9cdf271b12e2ff04a7d27025ee317f3ec5a43724a62fe87900e08"
+    },
+    {
+      "file": "lagh/classes/c9_genmonomial.py",
+      "unchanged_from_base": true,
+      "sha256": "e9d5f4863267bd69b0c891f8d001b6b461d0d13363f55f75f6014e90ac27b074"
+    }
+  ],
+  "environment": {
+    "python": "3.12.3",
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "sympy": "1.14.0",
+    "machine": "x86_64",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  }
+}

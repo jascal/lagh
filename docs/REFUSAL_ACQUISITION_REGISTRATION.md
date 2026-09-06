@@ -349,3 +349,18 @@ it wrong; a missing arm or duplicated trial must invalidate completeness; a
 fixed-x10 tie must fail the strict-gain criterion; an unresolved400-query run
 must receive1801 rather than outperforming a resolved560-query run. These
 scoring counter-inputs must be exhibited before crediting the scored summary.
+
+## S1 scored result
+
+**Empirical:** all96 arms completed at the frozen code hash. Guided/x10/matched
+ladder each resolved12/24; native had24 raw correct formulas but0 twin
+resolutions. Guided and x10 used560 per resolution, matched ladder640. Zero
+corrected terminal certificates were wrong. All numerical S1 forecasts held;
+the separate strict-gain criterion failed because guided tied x10. Guided also
+spent400 extra actual follow-up observations on unresolved controls relative
+to x10. No scored-data tuning or replacement experiment followed.
+
+See REFUSAL_ACQUISITION_RESULTS.md and acquisition_scored_summary.json for the
+complete account, including native's raw-versus-resolution distinction, the
+qualified apex recovery and the retained initial-checker failures. The summary
+audits all96 trials,197 pre-query records and36 independent final samples.

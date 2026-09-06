@@ -20,6 +20,11 @@ does not prove the absence of other defects.
 
 ## Headline results
 
+- **Refusal-guided acquisition, corrected scored study:**12/24 trials resolved
+  at560 measurements, tying fixed x10 expansion and beating a matched ladder's640.
+  Zero wrong terminal certificates across96 scored arms; earlier pilot failures
+  remain recorded. The historical rational-d1 cell also recovers after acquisition
+  on a new domain, with the same x10 tie ([report](docs/REFUSAL_ACQUISITION_RESULTS.md)).
 - **Gravity-Bench-v1 (ICML'25), budgeted variant: 94.7% vs 49% LLM-agent SOTA**
   — a fully deterministic observation-planning agent (no LLM calls), one-shot
   blind read, pre-registered protocol
