@@ -364,3 +364,20 @@ See REFUSAL_ACQUISITION_RESULTS.md and acquisition_scored_summary.json for the
 complete account, including native's raw-versus-resolution distinction, the
 qualified apex recovery and the retained initial-checker failures. The summary
 audits all96 trials,197 pre-query records and36 independent final samples.
+
+
+## Post-result interpretation correction (2026-09-06)
+
+**Empirical:** P2's 8/16 false-exact initial certificates occurred on clean,
+noiseless data. The approximant-impostor boundary limits exact-form claims in
+both clean and declared-noise regimes. The first non-empty certifying tier
+terminates escalation, preventing later-tier truth from entering that comparison.
+P1's eight wrong arm outputs remain retained; S1's zero wrong terminal
+certificates is conditional on its corrected refusal-only entry and bank.
+
+**Open:** when to continue escalation past a certifying tier and how to
+adjudicate later candidates at unchanged soundness. No escalation repair or
+validation is claimed. This is a post-result scope correction, not a change
+to frozen predictions or scoring. The full-data apex replay also withdraws
+permanent-indistinguishability language for its archived split-local rivals.
+See [results](REFUSAL_ACQUISITION_RESULTS.md).

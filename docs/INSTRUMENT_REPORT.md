@@ -77,7 +77,7 @@ and the distinction is the reason the term is reserved. Architecture:
   ~1% noise minus one named, bounded exposure — *asymptotic degeneracy*
   (2/87 cells: the certified form is the true form's asymptote, deviating
   ~20× BELOW the noise floor; symbolically incomplete, numerically honest).
-- **The approximant-impostor boundary** (measured, then enforced): at
+- **The approximant-impostor boundary** (noise-specific restriction): at
   envelope-epsilon on a bounded box, dense linear/rational channels can
   certify Taylor-slop approximants of smooth laws whenever the true support
   goes unproposed. Since α bounds chance-fits, not wrong-form significant
@@ -85,6 +85,12 @@ and the distinction is the reason the term is reserved. Architecture:
   only small-hypothesis-class closed-form channels certify; dense-channel fits
   are labeled conjectures.** (The |H|-accounting extension that would relax
   this is future work.)
+  **Empirical scope correction (2026-09-06):** acquisition P2 also produced
+  false-exact certificates on 8/16 clean, noiseless initial draws. This
+  noise-specific restriction is not a general structural guarantee.
+  **Open:** stopping at the first non-empty certifying tier excludes later-tier
+  truth from the comparison. Whether and when to continue with unchanged
+  soundness remains untested. See [acquisition results](REFUSAL_ACQUISITION_RESULTS.md).
 
 ## 3. Benchmark results (both blind reads pre-registered; SOTA frozen before
 download; one shot each; crash-fixes logged; conservative local judges)

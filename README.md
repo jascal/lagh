@@ -78,7 +78,7 @@ failure modes: [docs/INSTRUMENT_REPORT.md](docs/INSTRUMENT_REPORT.md).
 ## The failure → hardening ledger
 
 Every protection in the engine is traceable to a measured failure — none is
-speculative. The ledger, in the order the field taught it:
+speculative. Unrepaired findings are marked open. The ledger, in the order the field taught it:
 
 | measured failure | hardening |
 |---|---|
@@ -105,14 +105,20 @@ speculative. The ledger, in the order the field taught it:
 | the same bead's near-surface record failed the timescale gate on both axes, so C2 refused it and read the leftover drag off a driven-stage scale — which at one drive frequency determines only Rd × f_c, and was handed the calibration's own corner: the quantity under test, returned as the answer (measured in simulation: wrong by exactly the drag ratio) | a gate that REPORTS rather than only refuses — a common-mode ratio with healthy equipartition variances is a measurement of κ/γ, and one axis is never enough to call it — plus attribution by signature: timescale, realized diffusion and variance read in the detector's own units respond differently to a drag, a stiffness and a scale change, so a one-parameter fit per hypothesis leaves a residual that can refuse (`drag` on both axes at 1.353 ± 0.079 × bulk, `consistent` on the control, `unattributed` on the contaminated axis) |
 | public `verify` discarded the signed residuals of refuted forms, retaining only a miss count | [refusal measurement audit](docs/REFUSAL_MEASUREMENT_AUDIT.md): retain a bounded sample of signed discrepancies and declared epsilon bands, candidate identity, original row indices, checked domain and complete counts; attribution remains unresolved; no partial determination (20-row split and 100-row full-data fixtures, no gate changes) |
 | C4 mixed stopband attenuation into a whiteness test and described native-band repeatability as alias validation | [review correction](docs/CASE_STUDY_TWEEZERS_C4.md): separate passband validation from training-band repeatability and rolloff; detector whiteness unresolved; restore axis gates and report unstable theta; 2.402 mV is a demeaned window statistic with unknown population uncertainty; no validation of Retention’s above-Nyquist extrapolation |
+| noiseless rational data produced false-exact approximant certificates on 8/16 P2 draws; P1 retained eight wrong arm outputs, including fresh in-box checks | **Empirical failure; escalation remains open:** the first non-empty certifying tier stops the search before later-tier truth is considered. The acquisition entry guard excludes initial certificates but does not repair the engine. [Evidence and scope](docs/REFUSAL_ACQUISITION_RESULTS.md) |
 
-One registered open boundary, honestly held: the approximant-impostor class
-under declared noise (dense channels are empirical-only by design —
-|H|·q^h accounting is the eventual road through). A second, newly stated:
-**constrained twins** — rivals that each retain real held-out evidence and
-diverge only outside the sampled box — are indistinguishable under this
-instrument's evidence, and the abstain there is permanent, not a gap
-(`MUNTZ_ARBITRATION.md`).
+**Open boundary, scope corrected:** approximant impostors occur on clean data
+at machine floor as well as under declared noise. The noise-specific restriction
+on dense channels does not protect the clean-data path; |H|·q^h bounds chance
+fits, not exact-form error. **Open:** when to escalate past the first non-empty
+certifying tier, and how to compare later-tier laws without weakening soundness.
+No escalation repair was tested in this study.
+
+**Open boundary:** constrained twins compatible with all available evidence
+may require measurements outside the sampled box. The archived `rational-d1`
+representatives were split-local twins: both already fail original full-data
+rows. Its 35/36 passive audit stands, but does not establish permanent full-data
+indistinguishability. See [the qualified apex result](docs/REFUSAL_ACQUISITION_RESULTS.md#apex-rational-d1).
 
 ## Error-model repertoire (hard-won, both directions)
 

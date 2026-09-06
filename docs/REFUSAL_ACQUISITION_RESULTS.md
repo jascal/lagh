@@ -1,5 +1,23 @@
 # Refusal-guided acquisition: scored result
 
+**Empirical — clean-data false exactness is the central finding.** P2 certified
+structurally wrong approximants on 8/16 noiseless initial 400-row draws
+(`sigma=0`, machine-floor bands), before acquisition could act. P1 also retained
+eight wrong arm outputs from two conditions sharing an initial draw, even after
+fresh original-box checks. Local residual coverage does not establish the exact
+generating form, including on clean data. The corrected acquisition entry guard
+excludes initial certificates; it does not repair the ordinary engine.
+
+**Open — the escalation rule.** The engine stops at the first tier with a
+non-empty certifying set, whether it returns a winner or a structural refusal.
+Later tiers therefore cannot contribute the truth to that comparison. The apex
+diagnostic shows that the rational truth is already in the grammar. Whether and
+when to continue escalation, and how to adjudicate later candidates without
+weakening soundness, remain open. Escalating only on ambiguity would not address
+the initial false-exact certificates. Neither the corrected scored zero-wrong
+result nor significance against a random null settles this question. See the
+[retained pilot evidence](ACQUISITION_PILOT_FINDINGS.md).
+
 **Empirical result:** the implemented policy did not beat fixed x10 expansion.
 It resolved the same12/24 trials at the same560 measurements. It did beat the
 matched five-rung ladder's640 measurements on those successes. The registered
