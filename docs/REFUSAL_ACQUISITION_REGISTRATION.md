@@ -146,3 +146,65 @@ the wrong-law full-data demotion witness and the irrational-power abstention.
 The latter emits an existing overflow warning. Together with the five repaired
 transport cases, this checkpoint has 27 passing cases; no full-suite run is
 claimed.
+
+## P0 result and acquisition pilot P1 (before execution)
+
+**Empirical P0:** the historical draw still refuses with two representatives,
+dof34 and45. Unit-cost maximum disagreement selects x=300, outside [.5,3];
+its rival predictions are about 6.7e6 and -1.6e127. Both P0 predictions hold.
+Large extrapolated disagreement is a selection heuristic, not reliable physics.
+Artifact: acquisition_pilot_p0.json; no follow-up measurement was made in P0.
+
+**P1 protocol, open predictions:** four manufactured cases from the existing
+rational reach family: (2x+1)/(x+3), (3x+2)/(x+4), (x+1)/(x+5), and a restricted
+copy of the first. Each starts with400 uniform design rows on [.5,3], seed10.
+The first three allow [.005,300]; the last permits only [.5,3]. All use sigma0,
+floor1e-12, unchanged passive discovery with three re-splits. Initial non-twin
+cases remain in the report, explicitly ineligible for a twin-resolution gain.
+
+Four arms share the same initial observations and charge them as400 measurements:
+
+1. Guided:257 geometric probe points, unit cost, maximum finite rival spread.
+   Acquire80 points in [q/3,3q] intersected with admissible bounds, including q
+   itself; other79 are log-uniform. Append to design observations and rediscover.
+2. Fixed x10: use [observed_min/10,observed_max*10] as in recover,80 log-uniform
+   measurements per attempt, append and rediscover. Stop when the whole next box
+   would exceed admissible bounds; do not silently clip the baseline.
+3. Matched fixed ladder: exactly _box_ladder's five boxes and order,80
+   log-uniform observations per box, append and rediscover. This matched wrapper
+   isolates WHERE to measure; it is not a claim to run native run_active.
+4. Native fixed ladder: run_active_boxsearch unchanged, budget200 per box,
+   max_boxes5, default Policy, no wall-clock scoring cutoff. Only admissible
+   prefix rungs are allowed. Count every actual oracle call, including existing
+   holdouts. Report its native verdict separately from the shared final guard.
+
+Guided and matched arms have at most5 acquisition rounds. Global ceiling1800
+observations per arm includes initial data and a reserved80-row final guard.
+The native ladder's predeclared ceiling (initial400 + five200 budgets + five60
+holdouts + final80) is1780; actual run_active round ledgers are also retained.
+Only deterministic finite positive-domain oracles are in this first experiment.
+
+Selection sees design data only. All internal discovery splits are treated as
+design. Freeze the first returned candidate, then generate80 fresh log-uniform
+points across the measured design bounds using a separate SeedSequence child.
+Check that frozen candidate on ALL acquired/design observations and these fresh
+rows. Stop after any final guard failure: never return final responses to the
+selector or retry a law. Recompute finite-domain bounds and row count explicitly.
+No new noisy-data or adaptive significance theorem is claimed; report search
+exposure rather than treating a per-discovery alpha as a family-wide guarantee.
+
+**Pilot predictions:** at least one initial case supplies two rivals; at least
+one unrestricted arm resolves; the restricted case remains unresolved. These
+can fail. P1 is for measuring query counts and choosing scored N/thresholds;
+no efficiency prediction is promoted from this pilot. Scored seeds and numbers
+will be separately frozen and committed. Full truth is used only for oracle
+responses and post-run scoring (exact rational equivalence plus an independent
+257-point probe); it is never given to the selector. Count every structurally
+wrong certified law, even if it agrees locally. No failed arm is removed.
+
+New gate witnesses registered before tests: invalid/nonfinite oracle rows cannot
+vanish in discovery's finite-row filter; a law agreeing only in the selected
+box must fail prior-data checks; a changed fresh target must demote and stop;
+a fresh sample outside the new claimed bounds exposes inherited-domain bugs;
+budget below batch+reserved-final must cause zero new queries; same design and
+different future final responses must produce byte-identical pre-query plans.
