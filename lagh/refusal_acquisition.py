@@ -14,7 +14,7 @@ import numpy as np
 import sympy as sp
 
 from .acquisition import _box_ladder, run_active_boxsearch
-from .certify import Abstain, Certificate, check, epsilon
+from .certify import Abstain, check, epsilon
 from .engine import Result
 from .measurement_design import choose_measurement
 from .passive import discover_passive
@@ -42,6 +42,7 @@ class AcquisitionOutcome:
     domain: dict | None = None
     final_passed: bool | None = None
     native_verdict: bool | None = None
+    native_law: str | None = None
     # Internal evidence for scoring/reproduction, never supplied to the chooser.
     X_design: np.ndarray | None = None
     y_design: np.ndarray | None = None
@@ -117,6 +118,7 @@ def run_refusal_acquisition(oracle, X, y, *, initial_box, policy: RefusalPolicy,
                                  len(r.rivals))
     syms = [sp.Symbol(f'x_{i}') for i in range(X.shape[1])]
     design_X, design_y = [X], [y]
+    known_rivals = dict.fromkeys(r.rivals)
 
     def demote(reason, note):
         c = deepcopy(outcome.result.certificate)
@@ -124,6 +126,41 @@ def run_refusal_acquisition(oracle, X, y, *, initial_box, policy: RefusalPolicy,
         c.notes.append(note)
         outcome.result = Result(c, None, outcome.result.tier,
                                 outcome.result.n_candidates, outcome.result.rivals)
+
+    def refresh_rivals():
+        all_X, all_y = np.vstack(design_X), np.concatenate(design_y)
+        for rival in outcome.result.rivals:
+            known_rivals.setdefault(rival, None)
+        surviving, checks = [], []
+        for rival in known_rivals:
+            witness = check(rival, syms, all_X, all_y,
+                            epsilon(all_y, floor_abs=policy.floor_abs))
+            checks.append({'expr': str(rival), **dict(witness)})
+            if witness['certified']:
+                surviving.append(rival)
+        known_rivals.clear()
+        known_rivals.update(dict.fromkeys(surviving))
+        outcome.result.rivals = tuple(surviving)
+        outcome.history.append({'role': 'rival-check', 'rows': len(all_X),
+                                'surviving': len(surviving), 'checks': checks})
+        return surviving
+
+    def rivals_allow_resolution():
+        survivors = refresh_rivals()
+        candidate = outcome.result.expr
+        if any(rival != candidate for rival in survivors):
+            # Candidate emergence on a later split does not falsify an older
+            # rival. Keep the candidate too, if all design observations support
+            # it, and let the next DESIGN query try to separate the alternatives.
+            all_X, all_y = np.vstack(design_X), np.concatenate(design_y)
+            if check(candidate, syms, all_X, all_y,
+                     epsilon(all_y, floor_abs=policy.floor_abs))['certified']:
+                known_rivals.setdefault(candidate, None)
+            outcome.result.rivals = tuple(known_rivals)
+            demote(Abstain.STRUCTURAL.value,
+                   'old rival remains compatible with every measured design row')
+            return False
+        return True
 
     def query(points, role, **metadata):
         n = len(points)
@@ -186,8 +223,11 @@ def run_refusal_acquisition(oracle, X, y, *, initial_box, policy: RefusalPolicy,
             'alpha is the original discovery statistic, not an adaptive family-wide bound')
         outcome.result, outcome.domain = frozen, domain
 
-    if r.certificate.certified:
-        finish_candidate()
+    survivors = refresh_rivals()
+    if not outcome.initial_structural or len(survivors) < 2:
+        demote(Abstain.COVERAGE.value,
+               'no qualifying structural refusal with two full-design survivors; '
+               'no acquisition resolution is claimed')
     elif strategy == 'native-ladder':
         # Only an admissible PREFIX, preserving native ordering and boxes.
         prefix = 0
@@ -206,9 +246,10 @@ def run_refusal_acquisition(oracle, X, y, *, initial_box, policy: RefusalPolicy,
                                           seed=seed, time_budget_s=None)
             outcome.result = native.active.result
             outcome.native_verdict = bool(outcome.result.certificate.certified)
+            outcome.native_law = str(outcome.result.expr) if outcome.native_verdict else None
             outcome.history.append({'role': 'native-summary', 'boxes': native.transforms,
                                     'native_holdout': native.heldout_box_ok})
-            if outcome.native_verdict:
+            if outcome.native_verdict and rivals_allow_resolution():
                 finish_candidate()
         except (ValueError, FloatingPointError) as error:
             demote(Abstain.HELDOUT.value, str(error))
@@ -223,7 +264,8 @@ def run_refusal_acquisition(oracle, X, y, *, initial_box, policy: RefusalPolicy,
                     probes = np.geomspace(*admissible[:, 0], policy.probe_points)[:, None]
                 else:
                     probes = _sample(admissible, policy.probe_points, probe_rng)
-                choice = choose_measurement(outcome.result.rivals, probes, bounds=admissible)
+                choice = choose_measurement(outcome.result.rivals, probes, bounds=admissible,
+                                            prediction_floor=policy.floor_abs)
                 if choice.point is None:
                     outcome.history.append({'role': 'stop', 'reason': choice.reason})
                     break
@@ -263,8 +305,11 @@ def run_refusal_acquisition(oracle, X, y, *, initial_box, policy: RefusalPolicy,
                                     'rivals': [str(e) for e in result.result.rivals],
                                     'hypotheses': result.result.n_candidates})
             if result.certified:
-                finish_candidate()
-                break
+                if rivals_allow_resolution():
+                    finish_candidate()
+                    break
+            else:
+                refresh_rivals()
     outcome.X_design, outcome.y_design = np.vstack(design_X), np.concatenate(design_y)
     # The public outcome never leaves a failed/not-run final guard as certified.
     if outcome.result.certificate.certified and outcome.final_passed is not True:

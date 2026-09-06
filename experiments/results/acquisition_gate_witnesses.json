@@ -1,0 +1,135 @@
+{
+  "tag": "empirical",
+  "scope": "mocked discovery gate witnesses; not scientific reach",
+  "baseline": "5f64d9a91b18af62df827bc876696cf1dd6af2e2",
+  "before": {
+    "exit_code": 1,
+    "cases": {
+      "test_expanded_domain_is_recomputed": {
+        "passed": true,
+        "failure": null
+      },
+      "test_final_disagreement_demotes_and_stops": {
+        "passed": true,
+        "failure": null
+      },
+      "test_future_responses_do_not_change_prequery_design": {
+        "passed": true,
+        "failure": null
+      },
+      "test_invalid_design_observation_cannot_be_filtered[nan]": {
+        "passed": true,
+        "failure": null
+      },
+      "test_invalid_design_observation_cannot_be_filtered[inf]": {
+        "passed": true,
+        "failure": null
+      },
+      "test_invalid_design_observation_cannot_be_filtered[-inf]": {
+        "passed": true,
+        "failure": null
+      },
+      "test_invalid_final_observation_demotes[nan]": {
+        "passed": true,
+        "failure": null
+      },
+      "test_invalid_final_observation_demotes[inf]": {
+        "passed": true,
+        "failure": null
+      },
+      "test_old_observations_cannot_be_erased": {
+        "passed": true,
+        "failure": null
+      },
+      "test_budget_reserves_final_measurements": {
+        "passed": true,
+        "failure": null
+      },
+      "test_no_rivals_cannot_trigger_fallback_queries": {
+        "passed": true,
+        "failure": null
+      },
+      "test_initial_certificate_is_not_a_refusal_resolution": {
+        "passed": false,
+        "failure": "assert (not True)\n +  where True = AcquisitionOutcome(result=Result(certificate=Certificate(certified=True, nmiss=0, nuncov=0, domain_size=52, state_boun...516287, 0.59223522,\\n       0.98557699, 0.94242975, 2.38316773, 0.99236956, 0.60008232,\\n       0.57706627, 0.84318348])).certified"
+      },
+      "test_already_refuted_model_cannot_choose_the_query": {
+        "passed": false,
+        "failure": "assert (62 == 40)\n +  where 62 = AcquisitionOutcome(result=Result(certificate=Certificate(certified=True, nmiss=0, nuncov=0, domain_size=62, state_boun... 0.91509417,   5.63870877,   4.80584201, 131.89274075,\\n         5.77868633,   0.95912489,   0.83413223,   3.2302272 ])).queries"
+      },
+      "test_tiny_disagreement_is_not_a_useful_query": {
+        "passed": false,
+        "failure": "Failed: below-band disagreement queried"
+      },
+      "test_later_proposal_list_cannot_erase_a_live_twin": {
+        "passed": false,
+        "failure": "assert (not True)\n +  where True = AcquisitionOutcome(result=Result(certificate=Certificate(certified=True, nmiss=0, nuncov=0, domain_size=62, state_boun...516287, 0.59223522,\\n       0.98557699, 0.94242975, 2.38316773, 0.99236956, 0.60008232,\\n       0.57706627, 0.84318348])).certified"
+      }
+    }
+  },
+  "after": {
+    "exit_code": 0,
+    "cases": {
+      "test_expanded_domain_is_recomputed": {
+        "passed": true,
+        "failure": null
+      },
+      "test_final_disagreement_demotes_and_stops": {
+        "passed": true,
+        "failure": null
+      },
+      "test_future_responses_do_not_change_prequery_design": {
+        "passed": true,
+        "failure": null
+      },
+      "test_invalid_design_observation_cannot_be_filtered[nan]": {
+        "passed": true,
+        "failure": null
+      },
+      "test_invalid_design_observation_cannot_be_filtered[inf]": {
+        "passed": true,
+        "failure": null
+      },
+      "test_invalid_design_observation_cannot_be_filtered[-inf]": {
+        "passed": true,
+        "failure": null
+      },
+      "test_invalid_final_observation_demotes[nan]": {
+        "passed": true,
+        "failure": null
+      },
+      "test_invalid_final_observation_demotes[inf]": {
+        "passed": true,
+        "failure": null
+      },
+      "test_old_observations_cannot_be_erased": {
+        "passed": true,
+        "failure": null
+      },
+      "test_budget_reserves_final_measurements": {
+        "passed": true,
+        "failure": null
+      },
+      "test_no_rivals_cannot_trigger_fallback_queries": {
+        "passed": true,
+        "failure": null
+      },
+      "test_initial_certificate_is_not_a_refusal_resolution": {
+        "passed": true,
+        "failure": null
+      },
+      "test_already_refuted_model_cannot_choose_the_query": {
+        "passed": true,
+        "failure": null
+      },
+      "test_tiny_disagreement_is_not_a_useful_query": {
+        "passed": true,
+        "failure": null
+      },
+      "test_later_proposal_list_cannot_erase_a_live_twin": {
+        "passed": true,
+        "failure": null
+      }
+    }
+  }
+}

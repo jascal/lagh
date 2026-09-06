@@ -1,0 +1,49 @@
+{
+  "stage": "scored S1",
+  "tag": "open",
+  "code_hash": "43bf0282cb18229ba1185f5715e4af8d9675a9677e8f1306c750033f5a4571db",
+  "design_seeds": [
+    30,
+    32,
+    35
+  ],
+  "domains": [
+    "wide",
+    "restricted"
+  ],
+  "followup_seeds": [
+    100,
+    101,
+    102,
+    103
+  ],
+  "arms": [
+    "guided",
+    "fixed-x10",
+    "fixed-ladder",
+    "native-ladder"
+  ],
+  "trials_per_arm": 24,
+  "total_arm_runs": 96,
+  "unresolved_penalty": 1801,
+  "predictions": {
+    "resolutions": {
+      "guided": 12,
+      "fixed-x10": 12,
+      "fixed-ladder": 12,
+      "native-ladder": 0
+    },
+    "successful_queries": {
+      "guided": 560,
+      "fixed-x10": 560,
+      "fixed-ladder": 640
+    },
+    "guided_unresolved_minimum": 8,
+    "wrong_terminal_certificates": 0,
+    "paired_median_differences": {
+      "fixed-x10": 0,
+      "fixed-ladder": -80
+    }
+  },
+  "strict_gain": "at least equal resolution counts and strictly smaller paired median cost than both fixed comparators, with zero wrong terminal certificates"
+}

@@ -11,6 +11,7 @@ import numpy as np
 import sympy as sp
 
 from .base import eval_expr
+from .certify import epsilon
 
 
 @dataclass(frozen=True)
@@ -23,13 +24,17 @@ class MeasurementChoice:
     reason: str
 
 
-def choose_measurement(rivals, probes, *, bounds, costs=1.0) -> MeasurementChoice:
+def choose_measurement(rivals, probes, *, bounds, costs=1.0,
+                       prediction_floor=None) -> MeasurementChoice:
     """Maximize (max prediction - min prediction) / cost on finite probes.
 
     Bounds and costs must be declared independently of future responses. Ties
     take the first probe in the declared order. Require ALL rivals to evaluate
     finitely: undefined values do not count as observable disagreement. This
     spread heuristic need not separate every pair in a multi-rival set.
+    If prediction_floor is supplied, require separation beyond the existing
+    epsilon bands at the two extreme predictions. This is a design heuristic,
+    not a new certification tolerance or a continuum-identifiability theorem.
     """
     X = np.asarray(probes, dtype=float)
     box = np.asarray(bounds, dtype=float)
@@ -44,6 +49,9 @@ def choose_measurement(rivals, probes, *, bounds, costs=1.0) -> MeasurementChoic
     if c.shape != (len(X),) or np.any(~np.isfinite(c)) or np.any(c <= 0):
         raise ValueError("one finite positive declared cost is required per probe")
     rivals = tuple(rivals)
+    if prediction_floor is not None and (not np.isfinite(prediction_floor)
+                                          or prediction_floor < 0):
+        raise ValueError('prediction floor must be finite and nonnegative')
     empty = MeasurementChoice(None, (), 0.0, None, 0.0,
                               "no finite informative query among declared probes")
     if len(rivals) < 2 or not len(X):
@@ -61,6 +69,10 @@ def choose_measurement(rivals, probes, *, bounds, costs=1.0) -> MeasurementChoic
         spread = np.max(V, axis=0) - np.min(V, axis=0)
         utility = spread / c
     valid = finite & np.isfinite(utility) & (utility > 0)
+    if prediction_floor is not None:
+        required = (epsilon(np.min(V, axis=0), floor_abs=prediction_floor)
+                    + epsilon(np.max(V, axis=0), floor_abs=prediction_floor))
+        valid &= spread > required
     if not np.any(valid):
         return empty
     i = int(np.argmax(np.where(valid, utility, -np.inf)))

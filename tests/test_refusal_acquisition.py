@@ -20,7 +20,7 @@ POLICY = acq.RefusalPolicy(((.005,), (300.,)), batch=10, final_points=12,
 def result(expr=None):
     if expr is None:
         c = Certificate(False, 0, 0, 8, [[.5, 3.]], '', abstain='structural')
-        r = Result(c, None, 1, 2, (x, 2*x))
+        r = Result(c, None, 1, 2, (x, x + sp.Rational(1, 10**16)*x**8))
     else:
         c = Certificate(True, 0, 0, 8, [[.5, 3.]], str(expr), alpha_log10=-100)
         r = Result(c, expr, 1, 2)
@@ -87,7 +87,7 @@ def test_invalid_design_observation_cannot_be_filtered(monkeypatch, bad):
         return y
     out = run(oracle)
     assert not out.certified and out.queries == 50
-    assert len(out.history) == 1
+    assert sum(r['role'] == 'design' for r in out.history) == 1
 
 
 @pytest.mark.parametrize('bad', [np.nan, np.inf])
@@ -132,3 +132,48 @@ def test_no_rivals_cannot_trigger_fallback_queries():
                                       X, Y, initial_box=[[.5], [3.]],
                                       policy=POLICY, seed=7, initial_result=initial)
     assert out.queries == 40 and not out.certified
+
+
+def test_initial_certificate_is_not_a_refusal_resolution():
+    # P1 counterexample: final rechecking an initial certificate was counted as
+    # a resolution even though no structural refusal or acquisition occurred.
+    out = acq.run_refusal_acquisition(lambda P: P[:, 0], X, Y,
+                                      initial_box=[[.5], [3.]], policy=POLICY,
+                                      seed=7, initial_result=result(x))
+    assert not out.certified and not out.result.certificate.certified
+    assert out.queries == 40 and out.initial_structural is False
+
+
+def test_already_refuted_model_cannot_choose_the_query(monkeypatch):
+    # x and2x on exact x data are not two surviving explanations.
+    initial = result()
+    initial.result.rivals = (x, 2*x)
+    monkeypatch.setattr(acq, 'discover_passive', lambda *a, **kw: result(x))
+    out = acq.run_refusal_acquisition(lambda P: P[:, 0], X, Y,
+                                      initial_box=[[.5], [3.]], policy=POLICY,
+                                      seed=7, initial_result=initial)
+    assert out.queries == 40 and not out.certified
+
+
+def test_tiny_disagreement_is_not_a_useful_query():
+    # Both different models fit every admissible probe inside the old bands.
+    restricted = acq.RefusalPolicy(((.5,), (3.,)), batch=10, final_points=12,
+                                   max_queries=100)
+    out = run(lambda _: pytest.fail('below-band disagreement queried'), policy=restricted)
+    assert out.queries == 40 and not out.certified
+
+
+def test_later_proposal_list_cannot_erase_a_live_twin(monkeypatch):
+    # A later mock discovery returns only x, while its old x+1e-16*x**8 rival
+    # still fits all measured rows. The fixed ladder must keep the refusal.
+    monkeypatch.setattr(acq, 'discover_passive', lambda *a, **kw: result(x))
+    restricted = acq.RefusalPolicy(((.5,), (3.,)), batch=10, final_points=12,
+                                   max_queries=100)
+    calls = []
+    def oracle(points):
+        calls.append(len(points))
+        return points[:, 0]
+    out = run(oracle, strategy='fixed-ladder', policy=restricted)
+    assert not out.certified and out.queries == 50
+    assert calls == [10]  # no fresh final sample before design ambiguity resolves
+    assert len(out.result.rivals) == 2

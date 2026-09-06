@@ -300,3 +300,52 @@ This is explicitly NOT a surviving-twin experiment (both initial models already
 miss old rows). It tests measurement-driven escape from the engine's reach
 ordering without changing its grammar. Record its new finite domain, exact
 truth check, cost and that qualification. Do not relabel it a36/36 passive audit.
+
+## Scored S1 registration (after P3, before any scored follow-up samples)
+
+P3 results are in ACQUISITION_PILOT_FINDINGS.md. Freeze the current study code
+hash in experiments/acquisition_scored_protocol.json. Run the same6 manufactured
+problem conditions (three frozen P2 initial states, each with wide/restricted
+admissibility) at follow-up seeds100,101,102,103. N=24 paired acquisition trials
+per arm,96 total arm runs. There are only3 distinct initial rival sets and one
+rational truth family; the four follow-up replicates do not create24 independent
+physical laws. Selection/discovery/final rules and every numerical policy
+parameter remain exactly P3. No scored seed has been used in P0-P3.
+
+**S1a, empirical prediction:** guided, fixed x10 and matched ladder each resolve
+12/24 trials;12/24 remain unresolved. In particular, at least8/24 guided trials
+remain unresolved. Successful totals are560 for guided/x10 and640 for matched
+ladder. These numbers come directly from P3, not from the scored seeds.
+
+**S1b, empirical prediction:** paired median(guided queries - fixed x10 queries)
+is0 on jointly resolved trials; against matched ladder it is-80. Thus no strict
+gain over x10 is predicted. The stretch criterion is nevertheless explicit:
+guided must resolve at least as many trials as each fixed comparator AND have
+strictly smaller paired median measurement cost than BOTH, with zero wrong
+certificates. A tie fails that criterion. Do not redefine a tie as a win.
+
+**S1c:** zero structurally wrong terminal certificates across ALL96 corrected
+arms. Raw native laws and raw initial statuses are separately retained; their
+correct formula outputs do not imply known rivals were eliminated. Native is
+predicted to have0/24 twin resolutions while retaining its raw successful laws.
+Any wrong terminal certificate fails soundness; preserve the result and withdraw
+the gain claim. No core correction or threshold retuning occurs on scored data.
+
+**S1d:** every resolved wide case names a finite domain extending beyond the
+initial [.5,3] box; every result counts all actual follow-up oracle observations,
+including final and native holdouts. The400 shared initial rows are charged to
+each trial as the cost of reproducing its starting state; new actual oracle
+calls are recorded separately. Manufacturing the P2 bank cost6400 design rows
+and is reported as pilot setup, not silently charged only to one arm.
+
+Report all unresolved trials, not only successful pairs. For a complementary
+aggregate, charge unresolved trials the common ceiling+1=1801 (censored cost);
+never count stopping early unresolved as cheap resolution. Report both actual
+spent queries and this declared penalty. This finite controlled comparison
+cannot establish a universal soundness guarantee or a general optimality result.
+
+**Witnesses for scoring:** replacing a true terminal law with x+100 must mark
+it wrong; a missing arm or duplicated trial must invalidate completeness; a
+fixed-x10 tie must fail the strict-gain criterion; an unresolved400-query run
+must receive1801 rather than outperforming a resolved560-query run. These
+scoring counter-inputs must be exhibited before crediting the scored summary.
