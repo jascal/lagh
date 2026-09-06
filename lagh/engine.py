@@ -61,6 +61,9 @@ class Result:
     expr: sp.Expr | None
     tier: int
     n_candidates: int
+    # Refusal representatives are design evidence, not an exhaustive class or
+    # a guarantee that the truth is among the rivals.
+    rivals: tuple[sp.Expr, ...] = ()
 
     @property
     def abstained(self) -> bool:
@@ -856,7 +859,10 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                     f"partial determination over {cert.partial['n_certifying_read']} "
                     f"consistent laws: required {req or 'none'}, excluded "
                     f"{exc or 'none'}")
-        return finish(cert, None, tier, total)
+        result = finish(cert, None, tier, total)
+        result.rivals = tuple(min(members, key=lambda z: z.complexity).expr
+                              for _, members in classes)
+        return result
 
     # C6: escalate to the exact-integer quasi-polynomial tier when the float tiers
     # are exhausted AND the target is an integer lattice. Float tiers structurally

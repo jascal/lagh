@@ -2,10 +2,21 @@
 
 *(Scottish Gaelic: law)*
 
-A **certified symbolic law discoverer**: given data from a system with an exact
-underlying law, lagh returns either a symbolic law with a machine-checked
-certificate — carrying a stated significance bound α — or a machine-readable
-refusal saying why no law is certifiable. **Never a confident wrong answer.**
+A **symbolic law discoverer with explicit evidence checks**: lagh searches a
+declared hypothesis class and returns a law with a machine-checked certificate
+over the stated finite domain, or a machine-readable refusal. Certificates are
+conditional on the supplied error model and the checker’s assumptions; they do
+not establish global truth, causal identification, or correctness outside the
+checked domain. The significance bound α concerns chance agreement under its
+stated null assumptions, not the probability that the law is the true structure.
+
+**Empirical soundness record, not a universal guarantee.** Scored campaigns
+report their observed confident-wrong counts. The falsifiability pass also
+exposed invalid-evidence acceptance in the low-level checker, sometimes masked
+by caller guards, and subsequent review found further defects. Those failures
+and repairs remain part of the record ([audit](docs/FALSIFIABILITY_AUDIT.md),
+[review](docs/PR14_REVIEW_REVISION.md)); passing the recorded counter-inputs
+does not prove the absence of other defects.
 
 ## Headline results
 
@@ -13,12 +24,13 @@ refusal saying why no law is certifiable. **Never a confident wrong answer.**
   — a fully deterministic observation-planning agent (no LLM calls), one-shot
   blind read, pre-registered protocol
   ([report](docs/BLIND_READ_REPORT_GRAVITYBENCH.md)).
-- **Zero confident-wrong across ~600 scored tasks** spanning two data regimes
+- **Historical campaign report: zero confident-wrong across ~600 scored tasks** spanning two data regimes
   (active/oracle and passive/fixed-dataset) and two public benchmarks.
 - **Significance-bearing certificates**: every certification carries
   α ≤ |H|·q^h, null-validated at 0 false certifications / 200 true-random
-  targets. Refusals are certified randomness statements relative to a declared
-  hypothesis class.
+  targets. An ordinary search refusal does not establish randomness or exclude
+  laws outside the searched class; its meaning is the recorded failure to
+  certify under the declared evidence and checks.
 - An honest loss, fully reported: LLM-SRBench under the frozen blind protocol
   ([report](docs/BLIND_READ_REPORT.md)) — whose diagnosis (float32-quantized
   benchmark data; representation precision is *declared noise*) became
