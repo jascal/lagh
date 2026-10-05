@@ -33,6 +33,7 @@ from lagh.passive import discover_passive
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'experiments/results/escalation'
 RULES = ('first', 'pool', 'accumulate')
+GATES = ('marginal', 'joint')
 WRONG_REL = 1e-6        # registered: a certificate is wrong beyond this
 EXT_BOX = (.25, 6.)
 x = sp.Symbol('x_0')
@@ -81,16 +82,19 @@ def score(expr, fn, truth, dim, seed):
             'wrong_domain': wrong_domain, 'wrong_form': bool(wrong_form)}
 
 
-def run(name, rule):
-    path = OUT / rule / f'{name}.json'
+def run(name, rule, gate='marginal'):
+    arm = rule if gate == 'marginal' else f'{rule}+{gate}'
+    path = OUT / arm / f'{name}.json'
     if path.exists():
-        print(f'{rule} {name}: retained', flush=True)
+        print(f'{arm} {name}: retained', flush=True)
         return
     X, fn, truth = cases()[name]
     y = fn(X)
     t0 = time.time()
-    r = discover_passive(X, y, sigma=0.0, escalation=rule)
-    record = {'tag': 'empirical', 'case': name, 'rule': rule,
+    r = discover_passive(X, y, sigma=0.0, escalation=rule,
+                         coefficient_gate=gate)
+    record = {'tag': 'empirical', 'case': name, 'rule': rule, 'gate': gate,
+              'arm': arm,
               'certified': bool(r.certified), 'tier': r.result.tier,
               'abstain': r.result.certificate.abstain,
               'law': str(r.result.expr) if r.certified else None,
@@ -101,15 +105,15 @@ def run(name, rule):
                             zlib.crc32(name.encode())))
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(record, indent=1, allow_nan=False) + '\n')
-    print(f"{rule} {name}: certified={record['certified']} "
+    print(f"{arm} {name}: certified={record['certified']} "
           f"wrong_form={record.get('wrong_form')} {record['seconds']}s", flush=True)
 
 
 def summarize():
     rows = [json.loads(p.read_text()) for p in sorted(OUT.glob('*/*.json'))]
     summary = {}
-    for rule in RULES:
-        mine = [r for r in rows if r['rule'] == rule]
+    for rule in sorted({r.get('arm', r['rule']) for r in rows}):
+        mine = [r for r in rows if r.get('arm', r['rule']) == rule]
         for bank in ('p2', 'p1', 'reach'):
             b = [r for r in mine if r['case'].startswith(bank + '-')]
             cert = [r for r in b if r['certified']]
@@ -127,6 +131,7 @@ def main():
     ap.add_argument('--list', action='store_true')
     ap.add_argument('--case')
     ap.add_argument('--rule', choices=RULES)
+    ap.add_argument('--gate', choices=GATES, default='marginal')
     ap.add_argument('--summarize', action='store_true')
     a = ap.parse_args()
     if a.list:
@@ -134,7 +139,7 @@ def main():
     elif a.summarize:
         summarize()
     else:
-        run(a.case, a.rule)
+        run(a.case, a.rule, a.gate)
 
 
 if __name__ == '__main__':

@@ -33,6 +33,7 @@ def main(argv=None):
     ap.add_argument("--trials", type=int, default=N_TRIALS)
     ap.add_argument("--escalation", default="first",
                     help="engine escalation rule (docs/ESCALATION_REGISTRATION.md)")
+    ap.add_argument("--coefficient-gate", default="marginal")
     args = ap.parse_args(argv)
     rng = np.random.default_rng()          # OS-seeded: a true null, not replayable
     out = Path(args.out)
@@ -49,7 +50,8 @@ def main(argv=None):
         a, b = int(0.6 * n), int(0.8 * n)
         t0 = time.time()
         r = discover(X[:a], y[:a], X[a:b], y[a:b], X[b:], y[b:],
-                     escalation=args.escalation)
+                     escalation=args.escalation,
+                     coefficient_gate=args.coefficient_gate)
         rec = {"trial": t, "dim": dim, "n": n,
                "certified": bool(r.certificate.certified),
                "alpha_log10": r.certificate.alpha_log10,

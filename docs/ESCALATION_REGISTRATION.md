@@ -214,3 +214,54 @@ available opt-in as `escalation="accumulate"`; the default stays `"first"`.
 3. The dim ≥ 3 pre-pass shortcut remains untested.
 
 The P2 entry guard in `refusal_acquisition` stays in place.
+
+## Amendment A2 — the joint coefficient gate (registered 2026-10-05, before its scored run)
+
+**Diagnosis.** Every approximant that blocks or fools escalation is a dense,
+nearly collinear sum whose coefficients are huge-denominator rationals. These
+are gated atoms, but each passes `float_pinned`, which perturbs one atom at a
+time by ±10⁻⁵ and ±10⁻⁴ relative. At machine floor, any single-coordinate move
+breaks the fit. That does not show the coefficient **vector** is determined. A
+near-collinear support has a direction along which all coefficients move
+together while every prediction stays in the band. This is the same
+marginal-vs-joint distinction the state certificates already had to learn.
+
+**Rule.** `certify.joint_pinned` keeps the marginal gate's perturbation sizes
+(10⁻⁵ and 10⁻⁴ relative, the maximum over atoms). It takes them along the
+least-determined direction instead: the smallest right singular vector of the
+Jacobian of the predictions with respect to each gated atom's relative change,
+scaled by the band. The moved law goes through the real `check`. If it still
+certifies, the candidate is rejected exactly as a `float_pinned` failure is.
+There is no new tolerance. The gate only removes candidates; candidates with
+fewer than two gated atoms are left to the marginal gate. It applies on the
+same path as the marginal gate (clean data, not floor-dominated, per
+candidate). Opt-in: `discover(..., coefficient_gate="joint")`, default
+`"marginal"`.
+
+**Pilot (disclosed; not evidence for the predictions below):**
+- P2 seed 20, first split, `first` + joint gate, `max_tier=2`: the tier-1
+  approximant is rejected and escalation certifies the exact truth at tier 2
+  in 12 s.
+- reach `trig-sum-d1`, `accumulate` + joint gate: certifies the exact
+  `2 sin x0 + cos x0` with no rivals.
+
+**Arms.** `first+joint` and `accumulate+joint` on the same 55 cases, with the
+same scorer, plus 200 null trials for each arm.
+
+- **J1 (P2).** `first+joint`: 0 wrong; at least 5 exact certificates.
+- **J2 (P1).** `first+joint`: 0 wrong.
+- **J3 (reach).** `first+joint`: 0 wrong; at least 34/36 certified.
+- **J4.** `accumulate+joint`: 0 wrong on every bank; reach at least 33/36. The
+  four approximant-blocked cells may recover. linear-7term-d6's `sqrt((…)²)`
+  twin has no gated atoms and is expected to keep refusing.
+- **J5 (null).** 0/200 for both arms.
+- **J6 (cost).** `first+joint` median at most 2× `first` on every bank.
+- **J7 (measurement).** The full suite with the default temporarily set to
+  `"joint"`, to find which existing tests encode certificates that the gate
+  would remove. The default itself is not changed here.
+
+**Decision rule.** The joint gate is eligible to become the default (with
+`first`) only if J1–J3, J5 and J6 hold and J7 shows no failures. Even then the
+default changes in a separate change, after the campaign certificates in
+`CERTIFICATES.md` with two or more gated atoms are re-scored. Under that
+outcome, `accumulate` would remain the slower, more conservative opt-in.

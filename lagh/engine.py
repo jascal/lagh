@@ -19,7 +19,7 @@ from .base import Term as BaseTerm
 from .base import snap_all, to_expr
 from .certify import (MACHINE_REL, Abstain, Certificate,
                       arbitrate_significance, attach_check_evidence, check, coherent, determination,
-                      epsilon, float_pinned, free_atoms, free_dof,
+                      epsilon, float_pinned, free_atoms, free_dof, joint_pinned,
                       input_constraints, invariant_content,
                       parameter_interval, pinned,
                       reduce_mod_constraints, reduce_to_minimal,
@@ -381,7 +381,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              max_tier: int = 7, hard_cert=None, eps_model=None,
              declared_basis: bool = False, band_sel=None,
              linear_basis: bool = False,
-             escalation: str = "first") -> Result:
+             escalation: str = "first",
+             coefficient_gate: str = "marginal") -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
     Splits must be disjoint: fit, select, certify. Certification is exhaustive on
@@ -611,6 +612,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     #     library can drop a lower-tier truth (sparse5-d2).
     #   "accumulate": run every tier, keep each tier's own certifying
     #     candidates, and judge their union once after the last tier.
+    if coefficient_gate not in ("marginal", "joint"):
+        raise ValueError(f"unknown coefficient gate {coefficient_gate!r}")
     if escalation not in ("first", "pool", "accumulate"):
         raise ValueError(f"unknown escalation rule {escalation!r}")
     pooled: list[Candidate] = []
@@ -660,6 +663,10 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                         if not ok:
                             continue
                         c.expr = gated
+                        # EXPERIMENTAL (amendment A2): the same gate, jointly
+                        if coefficient_gate == "joint" and not joint_pinned(
+                                c.expr, syms, X_cert, y_cert, eps):
+                            continue
                     # floor-dominated: keep the candidate ungated so coherence
                     # sees the true rival; the winner is gated below. First
                     # collapse unsupported basis terms (refit parsimony) so a
