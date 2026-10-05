@@ -331,3 +331,74 @@ Its cost is the escalation that the correct answer requires.
 3. Noise. The gate is registered only for the clean-data per-candidate path;
    the declared-noise and floor-dominated winner gates are unchanged.
 4. The dim ≥ 3 pre-pass.
+
+## Amendment A3 — switching the default to the joint gate (registered 2026-10-05, before any scored run)
+
+**Change under test.** Make `coefficient_gate="joint"` the default of
+`discover` and `discover_passive`. Escalation stays `"first"`. Nothing else
+changes.
+
+**Why a new registration.** A2 left the gate opt-in on two registered failures:
+- **J6's cost criterion** compared against the old rule's time, which was
+  short because it stopped at wrong tier-1 certificates. Rewriting that
+  criterion after seeing the J6 data would be moving the goalposts, so the new
+  criterion below is evaluated **only on fresh banks** that no earlier run has
+  seen.
+- **J7** failed on a crash in the gate that has since been fixed. It is rerun
+  here.
+
+### Banks
+
+1. **Fresh rational (`fr`, 24 draws).** `(a·x+b)/(x+c)` on [.5, 3], 400 rows,
+   seeds 100–123. a, b, c are integers 1..5 from `rng(seed)`, redrawn
+   deterministically when a·c = b. Runner: `experiments/run_default_switch.py`.
+2. **Fresh reach (`frch`, 36 cells).** Every `reach/audit.py` cell re-drawn with
+   seed `crc32(name)+1`. Same runner.
+   Both fresh banks run both gates and use the A2 scorer: fresh in-box points
+   for the domain claim, the extended box [.25, 6]^d for the form claim.
+3. **Campaigns (14 scripts).** Every real-data campaign under `experiments/`
+   (gaia c0, p1, p2, p3; solar; macro; exoplanet c0, c1, c2, c5, ph2;
+   materials c0, c1, c2). This covers every certificate in `CERTIFICATES.md`.
+   Driver: `experiments/run_default_switch_campaigns.py`. Each arm runs in its
+   own clean worktree of the registered commit; the joint arm differs only by
+   the one-line default flip in `engine.py` and `passive.py`. Both arms run with
+   4 jobs, and the campaigns run alone, not alongside the fresh banks, because
+   `recover` has a 45 s wall-clock budget. Compared fields: every
+   `certified`, `law`, `alpha_log10` and `abstain` in every result file.
+   **Fresh marginal vs fresh joint, not the committed artifacts**: the engine
+   has changed since July, so marginal-vs-committed drift is reported
+   separately and not charged to the gate.
+4. **Null.** 200 new OS-seeded trials with `--coefficient-gate joint`.
+5. **Suite.** The full suite in a worktree with the default flipped (J7 rerun).
+
+### Predictions
+
+- **D1 (fresh rational).** Joint: 0 wrong; at least 20/24 exact.
+  Marginal: measured, no prediction.
+- **D2 (fresh reach).** Joint: 0 wrong; no cell that marginal certifies
+  correctly is lost.
+- **D3 (campaigns).** Every certificate the fresh marginal arm issues is
+  issued by the joint arm with the same law. Any new joint certificate is
+  reported and inspected; a new certificate that a campaign document records
+  as an abstain, conjecture or wrong counts as a failure.
+- **D4 (null).** 0/200.
+- **D5 (suite).** With the joint default, exactly one test fails:
+  `test_escalation::test_first_rule_stops_at_the_tier1_approximant`, which
+  documents the marginal default's recorded failure.
+- **D6 (cost, fair).** On each fresh bank, over the cases where marginal did
+  **not** issue a wrong certificate, the median per-case ratio of joint time
+  to marginal time is ≤ 2×. On campaigns, every script's wall time under joint
+  is ≤ 3× marginal, and no D3 difference is caused by a time-budget
+  truncation.
+
+### Decision rule
+
+If D1–D6 all hold, open the switch PR:
+- flip both defaults;
+- re-point the documenting test at `coefficient_gate="marginal"`;
+- add a ledger row to README;
+- add a note to `CERTIFICATES.md`.
+
+If any prediction fails, the default stays `marginal` and the failure is
+recorded. A D3 failure is decisive on its own: the gate may not cost a
+certificate the campaigns stand on.
