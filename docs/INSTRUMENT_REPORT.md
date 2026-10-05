@@ -3,8 +3,8 @@
 
 **One-sentence claim.** A symbolic law discoverer that returns either a
 machine-checked certificate carrying a stated significance bound, or a
-machine-readable refusal — never a confident wrong LAW (see §1 for what that
-covers and what it does not) — and whose
+machine-readable refusal, conditional on the declared domain and error model
+(see §1), and whose
 deterministic observation-planning agent nearly doubled LLM-agent SOTA on a
 sealed benchmark without a single LLM call.
 
@@ -13,9 +13,19 @@ sealed benchmark without a single LLM call.
 ## 1. The instrument
 
 lagh (`github.com/jascal/lagh`) discovers exact symbolic laws from data. Its
-product definition is an invariant, not a metric: **zero confident-wrong
-certifications**, inherited from a predecessor's 114-task record and preserved
-through every capability added since.
+target is **zero confident-wrong certifications**; observed campaign counts are
+empirical evidence toward that target, not a universal guarantee.
+
+**Current scope correction (empirical).** Certificates check a stated finite
+domain under supplied error declarations and checker assumptions; neither a
+certificate nor its chance-fit significance bound proves global truth or causal
+identification. The [44 committed falsifiability witnesses](FALSIFIABILITY_AUDIT.md)
+exposed low-level acceptance of invalid evidence, including empty domains, NaN
+observations and NaN bands; input-boundary review also exposed NaN input rows
+under constant laws. Caller filtering protected some reported results while the
+checker itself was defective. Repairs and passing witnesses do not establish
+that no other defects exist. The historical zero-wrong counts below describe
+their scored campaigns, not all checker inputs or future measurements.
 
 **Read that scope exactly.** The invariant covers CERTIFICATES — claims carrying
 an α — and it is pre-registered as covering only those
@@ -67,7 +77,7 @@ and the distinction is the reason the term is reserved. Architecture:
   ~1% noise minus one named, bounded exposure — *asymptotic degeneracy*
   (2/87 cells: the certified form is the true form's asymptote, deviating
   ~20× BELOW the noise floor; symbolically incomplete, numerically honest).
-- **The approximant-impostor boundary** (measured, then enforced): at
+- **The approximant-impostor boundary** (noise-specific restriction): at
   envelope-epsilon on a bounded box, dense linear/rational channels can
   certify Taylor-slop approximants of smooth laws whenever the true support
   goes unproposed. Since α bounds chance-fits, not wrong-form significant
@@ -75,6 +85,12 @@ and the distinction is the reason the term is reserved. Architecture:
   only small-hypothesis-class closed-form channels certify; dense-channel fits
   are labeled conjectures.** (The |H|-accounting extension that would relax
   this is future work.)
+  **Empirical scope correction (2026-09-06):** acquisition P2 also produced
+  false-exact certificates on 8/16 clean, noiseless initial draws. This
+  noise-specific restriction is not a general structural guarantee.
+  **Open:** stopping at the first non-empty certifying tier excludes later-tier
+  truth from the comparison. Whether and when to continue with unchanged
+  soundness remains untested. See [acquisition results](REFUSAL_ACQUISITION_RESULTS.md).
 
 ## 3. Benchmark results (both blind reads pre-registered; SOTA frozen before
 download; one shot each; crash-fixes logged; conservative local judges)

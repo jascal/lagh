@@ -71,6 +71,20 @@ the certificate stands; zero confident-wrong either way. The road through
 this boundary is significance-based arbitration (|H|·q^h accounting across
 rival classes) — the program's stated eventual direction, not patched here.
 
+## Scope correction after acquisition (2026-09-06)
+
+**Empirical:** the historical claims above describe the registered split-local
+audit. Checking rational-d1's archived representatives on all 400 original rows
+finds 2 and 3 misses. They are not surviving full-data twins; the permanent
+indistinguishability interpretation is withdrawn for this draw. P2 also found
+false-exact certificates on 8/16 noiseless rational draws. The archived 35/36
+audit count is unchanged. See [acquisition results](REFUSAL_ACQUISITION_RESULTS.md).
+
+**Open:** stopping on a single certifying class also excludes later-tier truth.
+Escalating only on ambiguity would not address initial false-exact certificates.
+A sound rule for continuing and adjudicating later tiers has not been tested;
+the suggestion below is a research direction, not a demonstrated repair.
+
 ## Standing caps (stated, not silent)
 
 - Sparse sums of size ≥ 6 over the wide basis sit at the proposal-reach

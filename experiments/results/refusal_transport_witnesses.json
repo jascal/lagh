@@ -1,0 +1,55 @@
+{
+  "tag": "empirical",
+  "baseline_revision": "cef9feef213c860e67c6eb8ec9bf4f9300032ea2",
+  "scope": "mocked-split transport only; no acquisition reach",
+  "before": {
+    "exit_code": 1,
+    "cases": {
+      "test_rivals_survive_later_split_without_rivals[False]": {
+        "passed": false,
+        "failure": "assert () == (x_0, x_0 + 1)\n  \n  Right contains 2 more items, first extra item: x_0\n  Use -v to get more diff"
+      },
+      "test_rivals_survive_later_split_without_rivals[True]": {
+        "passed": false,
+        "failure": "assert () == (x_0, x_0 + 1)\n  \n  Right contains 2 more items, first extra item: x_0\n  Use -v to get more diff"
+      },
+      "test_all_split_representatives_preserved_without_duplicate": {
+        "passed": false,
+        "failure": "assert (x_0 + 1, x_0 + 2) == (x_0, x_0 + 1, x_0 + 2)\n  \n  At index 0 diff: x_0 + 1 != x_0\n  Right contains one more item: x_0 + 2\n  Use -v to get more diff"
+      },
+      "test_mcp_passive_exposes_design_evidence_keeps_fixed_box": {
+        "passed": false,
+        "failure": "KeyError: 'design_evidence'"
+      },
+      "test_mcp_active_exposes_design_evidence": {
+        "passed": false,
+        "failure": "KeyError: 'design_evidence'"
+      }
+    }
+  },
+  "after": {
+    "exit_code": 0,
+    "cases": {
+      "test_rivals_survive_later_split_without_rivals[False]": {
+        "passed": true,
+        "failure": null
+      },
+      "test_rivals_survive_later_split_without_rivals[True]": {
+        "passed": true,
+        "failure": null
+      },
+      "test_all_split_representatives_preserved_without_duplicate": {
+        "passed": true,
+        "failure": null
+      },
+      "test_mcp_passive_exposes_design_evidence_keeps_fixed_box": {
+        "passed": true,
+        "failure": null
+      },
+      "test_mcp_active_exposes_design_evidence": {
+        "passed": true,
+        "failure": null
+      }
+    }
+  }
+}
