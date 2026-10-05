@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-cubic-cross-d2",
+ "rule": "first",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0**3 - x_0**2*x_1 + 2*x_1*sin(x_0)**2/3 + 2*x_1*cos(x_0)**2/3 + 4*x_1/3 - sin(x_1)**2/3 - cos(x_1)**2/3 - 2/3",
+ "rivals": [],
+ "seconds": 4.2,
+ "inbox_rel_error": 2.5996931820301587e-16,
+ "ext_rel_error": 1.541693824248687e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

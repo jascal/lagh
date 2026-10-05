@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-linear-7term-d6",
+ "rule": "pool",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "x_0 - x_1 + x_2 + 2*x_3 - x_4 + 3*x_5 - 1",
+ "rivals": [],
+ "seconds": 553.8,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

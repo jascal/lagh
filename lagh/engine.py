@@ -604,13 +604,20 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
         return Result(cert, expr, tier, count)
 
     tiers = [1] if linear_basis else [t for t, _ in CURRICULUM if t <= max_tier]
-    if escalation == "pool" and not linear_basis:
-        # EXPERIMENTAL (docs/ESCALATION_REGISTRATION.md): judge the certifying
-        # set of the highest tier, which includes every lower tier's candidates,
-        # instead of stopping at the first non-empty tier.
-        tiers = tiers[-1:]
-    elif escalation != "first":
+    # EXPERIMENTAL escalation rules (docs/ESCALATION_REGISTRATION.md); the
+    # default "first" stops at the first tier with a non-empty certifying set.
+    #   "pool": judge only the highest tier's certifying set. SCORED UNSOUND: a
+    #     tier includes the lower tiers' TERMS, not their PROPOSALS, so a larger
+    #     library can drop a lower-tier truth (sparse5-d2).
+    #   "accumulate": run every tier, keep each tier's own certifying
+    #     candidates, and judge their union once after the last tier.
+    if escalation not in ("first", "pool", "accumulate"):
         raise ValueError(f"unknown escalation rule {escalation!r}")
+    pooled: list[Candidate] = []
+    if escalation == "pool" and not linear_basis:
+        tiers = tiers[-1:]
+    elif escalation == "accumulate" and not linear_basis:
+        tiers = sorted(set(tiers))
     for tier in tiers:
         cands = _tier_candidates(tier, syms, dim, X_fit, y_fit, X_sel, y_sel,
                                  X_cert, sigma, band_sel=band_sel,
@@ -674,6 +681,12 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                     # closed-form channels.
                     continue
                 certifying.append(c)
+        if escalation == "accumulate" and not linear_basis:
+            seen = {sp.srepr(c.expr) for c in pooled}
+            pooled += [c for c in certifying if sp.srepr(c.expr) not in seen]
+            if tier != tiers[-1]:
+                continue                          # judge the union after the last tier
+            certifying = pooled
         if not certifying:
             continue                              # escalate: reach, not ambiguity
         # SCOPED to the declared-linear-basis path on purpose. The early exit

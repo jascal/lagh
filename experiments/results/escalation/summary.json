@@ -1,0 +1,57 @@
+{
+ "first/p2": {
+  "cases": 16,
+  "certified": 8,
+  "wrong_domain": [],
+  "wrong_form": [
+   "p2-seed20",
+   "p2-seed22",
+   "p2-seed23",
+   "p2-seed24",
+   "p2-seed25",
+   "p2-seed29",
+   "p2-seed33",
+   "p2-seed34"
+  ],
+  "median_seconds": 18.9
+ },
+ "first/p1": {
+  "cases": 3,
+  "certified": 1,
+  "wrong_domain": [],
+  "wrong_form": [
+   "p1-rational-a"
+  ],
+  "median_seconds": 19.5
+ },
+ "first/reach": {
+  "cases": 36,
+  "certified": 35,
+  "wrong_domain": [],
+  "wrong_form": [],
+  "median_seconds": 12.7
+ },
+ "pool/p2": {
+  "cases": 16,
+  "certified": 6,
+  "wrong_domain": [],
+  "wrong_form": [],
+  "median_seconds": 263.35
+ },
+ "pool/p1": {
+  "cases": 3,
+  "certified": 1,
+  "wrong_domain": [],
+  "wrong_form": [],
+  "median_seconds": 260.3
+ },
+ "pool/reach": {
+  "cases": 36,
+  "certified": 31,
+  "wrong_domain": [],
+  "wrong_form": [
+   "reach-sparse5-d2"
+  ],
+  "median_seconds": 269.2
+ }
+}

@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-exp-decay-d2",
+ "rule": "first",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0*exp(-Abs(x_1))",
+ "rivals": [],
+ "seconds": 4.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

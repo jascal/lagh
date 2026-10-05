@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-trig-sum-d1",
+ "rule": "first",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "2*sin(x_0) + cos(x_0)",
+ "rivals": [],
+ "seconds": 1.1,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

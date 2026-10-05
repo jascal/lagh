@@ -94,3 +94,67 @@ Three paths outside that loop are unchanged and still return early:
 A first-certifying shortcut therefore survives in the pre-pass. No failure has
 been measured there, so this registration does not touch it. It also gives no
 guarantee for a truth outside the grammar; that boundary stays **open**.
+
+## Results — `pool` (scored 2026-10-04)
+
+**Empirical: `pool` fails the registered decision rule. It produced a new wrong
+certificate.** Artifacts: `experiments/results/escalation/{first,pool}/`,
+`summary.json`, `null/`.
+
+| bank | `first` certified | `first` wrong | `pool` certified | `pool` wrong | median s (`first` → `pool`) |
+|---|---:|---:|---:|---:|---:|
+| P2 (16) | 8 | **8** | 6 (all exact) | 0 | 18.9 → 263.4 |
+| P1 (3) | 1 | **1** (rational-a) | 1 (rational-b, exact) | 0 | 19.5 → 260.3 |
+| reach (36) | 35 | 0 | 31 | **1** (sparse5-d2) | 12.7 → 269.2 |
+| null (200) | — | — | 0 false certs | — | — |
+
+- **E1 holds.** `pool` has 0 wrong and 6 exact certificates on P2: seeds 20, 25,
+  27, 29, 33 and 34. Seed 27 was unseen and refused under `first`. `first`
+  reproduced its 8 wrong certificates.
+- **E2 holds.** `pool` has 0 wrong on P1. rational-a goes from wrong to refused,
+  rational-b from refused to exact, and rational-c refuses under both rules.
+- **E3 fails.** `pool` certifies 31/36 (≥ 30 holds) but issues one wrong
+  certificate. On `sparse5-d2`, `first` certifies the exact truth
+  `x0² − x1 + log x1 + sin x0 + 2/x0` at tier 1. `pool` certifies a 29-term
+  approximant: in-box relative error 9×10⁻¹⁴, extended-box 6×10⁻⁶.
+- **E3′ (measured).** `first` has 0 wrong-form certificates on its 35 reach
+  certificates.
+- **E4 holds.** 0/200.
+- **E5 holds for the reach bank.** `first` reproduces `reach_audit.json`
+  exactly: same 35 certified cells, same laws. The full suite has not yet been
+  run against this commit.
+- **E6.** `pool` is about 21× slower on the median reach case.
+- **Decision.** `pool` is not eligible. Three conditions fail: one wrong
+  certificate; 4 reach cells lost (sparse3-d1, sparse4-d1, trig-prod-d2,
+  trig-sum-d1, all now structural refusals); and cost 21× against a 5× limit.
+
+**Cause, verified.** The rule's premise was false. `_tier_candidates(t)`
+includes the lower tiers' *terms*, not their *proposals*. On the
+`sparse5-d2` split, tiers 1–3 propose the exact truth among 20, 20 and 26
+candidates. Tiers 4 and 5 propose 36 and 73 candidates and none of them is
+the truth: the larger library changes which sparse supports the greedy
+channels emit. Judging only the top tier therefore discards lower-tier truths,
+which is the mirror image of the failure it was meant to fix.
+
+## Amendment A1 — `accumulate` (registered 2026-10-04, before its scored run)
+
+`discover(..., escalation="accumulate")` runs every tier in order, keeps each
+tier's own certifying candidates, and judges their **union** once, after the
+last tier, using the same downstream machinery. |H| (`total`) already
+accumulates across tiers; duplicates are counted again, which overstates α.
+That direction is conservative. The `pool` rule and its results are retained
+unchanged. Same runner, banks, scorer and null protocol.
+
+Predictions:
+
+- **A1 (P2).** 0 wrong. Exact certificates ≤ 6, `pool`'s count. A larger
+  certifying set can add rival classes, for example the tier-1 approximant,
+  which `pool` never saw.
+- **A2 (P1).** 0 wrong.
+- **A3 (reach).** 0 wrong. `sparse5-d2` either certifies the exact truth or
+  refuses. Certified count ≥ 30/36.
+- **A4 (null).** 0 false certifications in 200 trials.
+- **A5 (cost).** Median per bank within 1.3× of `pool`, because the lower tiers
+  are cheap next to tier 5. So the 5× default-eligibility condition is
+  **expected to fail**. If A1–A4 hold, `accumulate` is the sound opt-in rule,
+  and making it fast enough to be the default is a separate, open problem.

@@ -32,7 +32,7 @@ from lagh.passive import discover_passive
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'experiments/results/escalation'
-RULES = ('first', 'pool')
+RULES = ('first', 'pool', 'accumulate')
 WRONG_REL = 1e-6        # registered: a certificate is wrong beyond this
 EXT_BOX = (.25, 6.)
 x = sp.Symbol('x_0')
