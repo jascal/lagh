@@ -23,13 +23,15 @@ def _split():
 
 
 def test_first_rule_stops_at_the_tier1_approximant():
-    r = discover(*_split(), sigma=0., max_tier=2)
+    """The recorded failure of the former default (marginal gate)."""
+    r = discover(*_split(), sigma=0., max_tier=2, coefficient_gate="marginal")
     assert r.certificate.certified and r.tier == 1
     assert sp.cancel(r.expr - TRUTH) != 0          # the recorded false exactness
 
 
 def test_accumulate_never_returns_the_approximant():
-    r = discover(*_split(), sigma=0., max_tier=2, escalation="accumulate")
+    r = discover(*_split(), sigma=0., max_tier=2, escalation="accumulate",
+                 coefficient_gate="marginal")
     if r.certificate.certified:
         assert sp.cancel(r.expr - TRUTH) == 0
     else:
@@ -62,3 +64,32 @@ def test_joint_gate_passes_a_well_determined_law():
 def test_unknown_gate_is_refused():
     with pytest.raises(ValueError):
         discover(*_split(), sigma=0., max_tier=1, coefficient_gate="loose")
+
+
+def test_default_gate_certifies_the_truth():
+    """Since A4/A5 the default gate is joint_modulo: the witness that the
+    marginal default certified wrongly now escalates to the exact truth."""
+    r = discover(*_split(), sigma=0., max_tier=2)
+    assert r.certificate.certified and r.tier == 2
+    assert sp.cancel(r.expr - TRUTH) == 0
+
+
+def test_joint_modulo_ignores_the_constraint_ideal():
+    """A4: on unit-sphere inputs, the truth plus a multiple of the constraint is
+    an exact joint flat direction that the domain-restricted claim quotients
+    out; joint_modulo keeps the candidate, plain joint rejects it."""
+    from lagh.certify import epsilon, joint_pinned, input_constraints, reduce_mod_constraints
+    rng = np.random.default_rng(3)
+    v = rng.normal(size=(400, 3))
+    X = v / np.linalg.norm(v, axis=1, keepdims=True)
+    syms = list(sp.symbols('x_0:3'))
+    c = [sp.Float(0.4559837762), sp.Float(-0.8676661490), sp.Float(-0.1980763734)]
+    truth = sum(ci*s for ci, s in zip(c, syms))
+    y = np.asarray([float(truth.subs(dict(zip(syms, row)))) for row in X])
+    padded = truth + sp.Float(0.2169165373) * syms[1] * (syms[0]**2 + syms[1]**2 + syms[2]**2 - 1)
+    eps = epsilon(y)
+    assert not joint_pinned(sp.expand(padded), syms, X, y, eps)
+    cons = input_constraints(X, syms)
+    assert cons
+    reduced = reduce_mod_constraints(sp.expand(padded), syms, cons)
+    assert joint_pinned(reduced, syms, X, y, eps)

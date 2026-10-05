@@ -41,7 +41,7 @@ class PassiveResult:
 def discover_passive(X, y, *, sigma: float = 0.0, floor_abs: float = 1e-12,
                      max_tier: int = 7, n_resplits: int = 3,
                      seed: int = 0, escalation: str = "first",
-                     coefficient_gate: str = "marginal") -> PassiveResult:
+                     coefficient_gate: str = "joint_modulo") -> PassiveResult:
     """X (n,d), y (n,): the dataset as handed out. Returns the first split whose
     certification also survives the full-data gate, else the last abstain."""
     X = np.atleast_2d(np.asarray(X, float))

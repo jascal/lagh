@@ -382,7 +382,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              declared_basis: bool = False, band_sel=None,
              linear_basis: bool = False,
              escalation: str = "first",
-             coefficient_gate: str = "marginal") -> Result:
+             coefficient_gate: str = "joint_modulo") -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
     Splits must be disjoint: fit, select, certify. Certification is exhaustive on
@@ -409,6 +409,13 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     orders inside its own band), and the general curriculum's products of patch
     integrals are the C1b `u_xx*[1]**(3/2)` failure. Default False; it is a
     declaration about the claim, not a search-budget knob.
+
+    `coefficient_gate` (docs/ESCALATION_REGISTRATION.md): "joint_modulo"
+    (default since 2026-10-05) applies the clean-data exact-coefficient gate
+    jointly as well as per coefficient, modulo machine-exact input
+    constraints; "marginal" is the former default, "joint" the A2 form.
+    `escalation`: "first" (default), or the measured experimental "pool"
+    (unsound) and "accumulate" (sound, slow).
     """
     X_fit = np.asarray(X_fit, float)
     X_cert = np.asarray(X_cert, float)

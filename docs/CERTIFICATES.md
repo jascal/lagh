@@ -10,6 +10,13 @@ or an explicit abstention (the doctrine: certified / conjectured / abstained,
 never guessed). Engine as of the loose-ε parsimony and CAP-T reach closures
 (2026-07-27; exact commits in git history).
 
+**Engine default changed 2026-10-05:** the coefficient gate is now applied
+jointly, modulo machine-exact input constraints (`coefficient_gate="joint_modulo"`).
+Every certificate below was re-earned under it with an identical law and α: all 14
+campaign scripts, run side by side with the former default (19 certificates, 0
+differences; `experiments/results/default_switch_a4/campaigns/compare.json`,
+`docs/ESCALATION_REGISTRATION.md` A4).
+
 Conventions: `x_0, x_1` are the stated inputs in order; α ≤ 10^(value shown);
 rationals are exact (the coefficient gate demands the data pin them).
 
