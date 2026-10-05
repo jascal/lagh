@@ -43,14 +43,17 @@ def worktree(arm: str, base: Path) -> Path:
         subprocess.run(['git', 'worktree', 'add', '-q', '--detach', str(wt), 'HEAD'],
                        cwd=ROOT, check=True)
         (wt / '.venv').symlink_to(ROOT / '.venv')
-        if arm != 'marginal':
-            for f in ('lagh/engine.py', 'lagh/passive.py'):
-                p = wt / f
-                src = p.read_text()
-                if src.count(FLIP_FROM) != 1:
-                    raise RuntimeError(f'registered flip does not apply to {f}')
-                p.write_text(src.replace(FLIP_FROM,
-                                         f'coefficient_gate: str = "{arm}"'))
+        # every arm's worktree has its default set EXPLICITLY to the arm's gate
+        # (the committed default changed in PR #17, so no arm is "unflipped")
+        import re
+        for f in ('lagh/engine.py', 'lagh/passive.py'):
+            p = wt / f
+            src = p.read_text()
+            new_src, n = re.subn(r'coefficient_gate: str = "[a-z_]+"',
+                                 f'coefficient_gate: str = "{arm}"', src)
+            if n != 1:
+                raise RuntimeError(f'registered flip does not apply to {f}')
+            p.write_text(new_src)
     return wt
 
 
@@ -151,12 +154,14 @@ def main():
     ap.add_argument('--compare', action='store_true')
     ap.add_argument('--gate', default='joint',
                     help='second arm: the default the worktree is flipped to')
+    ap.add_argument('--first', default='marginal',
+                    help='first arm (A6 compares joint_modulo with joint_quotient)')
     ap.add_argument('--out', help='results directory (default: the A3 location)')
     ap.add_argument('--concurrent', action='store_true',
                     help='run both arms at once, so they share the same load (A4)')
     a = ap.parse_args()
     global ARMS, OUT
-    ARMS = ('marginal', a.gate)
+    ARMS = (a.first, a.gate)
     if a.out:
         OUT = ROOT / a.out
     if a.compare:
