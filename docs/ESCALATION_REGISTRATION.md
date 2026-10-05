@@ -468,3 +468,71 @@ non-identification. It must be registered with the frame rotation as a named
 cell, and the cost criterion will have to deal with the 2.26× fresh-rational
 ratio. That ratio is the price of escalating to the tier where the right
 answer is.
+
+## Amendment A4 — the joint gate modulo input constraints (registered 2026-10-05, before any A4 run)
+
+**Rule.** `coefficient_gate="joint_modulo"`. When `input_constraints` finds
+machine-exact polynomial constraints on the inputs (computed once per
+`discover`, on all rows), each candidate is reduced with
+`reduce_mod_constraints`, float dust is swept with `reduce_to_minimal`, the
+same canonicalization the constrained-input path already applies to winners,
+and `joint_pinned` tests that reduced law. The candidate itself enters the
+certifying set unchanged, so everything downstream is as before. Without
+constraints the rule is exactly A2's `joint`.
+
+The certificate on constrained inputs is already a domain-restricted claim,
+made modulo the constraint ideal. Identification is asked modulo the same
+ideal, so the ideal is not counted as an undetermined direction.
+
+**Pilot (disclosed):**
+- Gaia P3 frame rotation under `joint_modulo`: certifies the same law at
+  tier 1 in 10 s (α 10⁻⁷⁶⁴⁸ with the pilot's floor, which omits the campaign's
+  ulp term).
+- P2 seed 20 (`max_tier=2`): exact truth at tier 2.
+
+### Banks (all new or re-run; nothing from A3 is re-scored)
+
+1. **`fr2`**: 24 new rational draws, seeds 200–223, same generator as `fr`.
+2. **`frch2`**: the 36 reach cells on seed `crc32(name)+2`.
+   Both run marginal and `joint_modulo`, interleaved case by case so the two
+   gates share load.
+3. **Campaigns**: all 14 scripts. The marginal and `joint_modulo` worktrees
+   run **concurrently**, each script beside its twin, 4 jobs per arm. Output:
+   `experiments/results/default_switch_a4/campaigns/`.
+4. **Null**: 200 new trials, `--coefficient-gate joint_modulo`.
+5. **Suite**: the full suite with `joint_modulo` as the default.
+
+Every run sits under `systemd-inhibit` and records `suspended_seconds`. A run
+that slept is void, and both arms of it are rerun together.
+
+### Predictions
+
+- **E1 (`fr2`).** `joint_modulo`: 0 wrong, at least 20/24 exact.
+- **E2 (`frch2`).** `joint_modulo`: 0 wrong; no correct marginal certificate
+  lost.
+- **E3 (campaigns).** Every marginal certificate is issued under
+  `joint_modulo` with the same law and the same α. This names the **Gaia P3
+  frame rotation** explicitly. Any new certificate is reported and inspected.
+- **E4 (null).** 0/200.
+- **E5 (suite).** Only
+  `test_escalation::test_first_rule_stops_at_the_tier1_approximant` fails.
+- **E6 (cost).** A3's single fair ratio mixed two different things, so it is
+  split on fresh data:
+  - **same verdict** (both gates certify the same law, or both refuse): median
+    `joint_modulo`/marginal ratio ≤ 2×. This is the gate's own overhead;
+  - **changed verdict** (marginal refuses or is wrong, `joint_modulo`
+    certifies): no ratio limit, since this is the cost of reaching the tier
+    where the right answer is. Absolute caps instead: median ≤ 120 s, and no
+    fresh case over 600 s under `joint_modulo`;
+  - **campaigns:** every script ≤ 3× its concurrent marginal twin.
+
+### Decision rule
+
+If E1–E6 all hold, open the switch PR:
+- default `coefficient_gate="joint_modulo"`;
+- point the documenting test at `"marginal"`;
+- add a README ledger row;
+- add a `CERTIFICATES.md` note.
+
+Otherwise the default stays `marginal` and the failure is recorded. An E3
+failure is decisive on its own.

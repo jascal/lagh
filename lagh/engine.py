@@ -612,11 +612,12 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     #     library can drop a lower-tier truth (sparse5-d2).
     #   "accumulate": run every tier, keep each tier's own certifying
     #     candidates, and judge their union once after the last tier.
-    if coefficient_gate not in ("marginal", "joint"):
+    if coefficient_gate not in ("marginal", "joint", "joint_modulo"):
         raise ValueError(f"unknown coefficient gate {coefficient_gate!r}")
     if escalation not in ("first", "pool", "accumulate"):
         raise ValueError(f"unknown escalation rule {escalation!r}")
     pooled: list[Candidate] = []
+    gate_constraints = None              # A4: computed once, on first need
     if escalation == "pool" and not linear_basis:
         tiers = tiers[-1:]
     elif escalation == "accumulate" and not linear_basis:
@@ -664,9 +665,25 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                             continue
                         c.expr = gated
                         # EXPERIMENTAL (amendment A2): the same gate, jointly
-                        if coefficient_gate == "joint" and not joint_pinned(
-                                c.expr, syms, X_cert, y_cert, eps):
-                            continue
+                        if coefficient_gate in ("joint", "joint_modulo"):
+                            target = c.expr
+                            # A4: on machine-exact constrained inputs the
+                            # constraint ideal is an EXACT joint flat direction
+                            # (the Gaia frame rotation: truth + k*x1*(|x|^2-1)
+                            # equals the truth on the data) which the domain-
+                            # restricted claim already quotients out. Test the
+                            # canonical reduction, dust swept, instead.
+                            if coefficient_gate == "joint_modulo":
+                                if gate_constraints is None:
+                                    gate_constraints = input_constraints(X_all_m, syms)
+                                if gate_constraints:
+                                    red = reduce_mod_constraints(c.expr, syms,
+                                                                 gate_constraints)
+                                    if red != c.expr:
+                                        target = reduce_to_minimal(
+                                            red, syms, X_all_m, y_all_m, eps_all)
+                            if not joint_pinned(target, syms, X_cert, y_cert, eps):
+                                continue
                     # floor-dominated: keep the candidate ungated so coherence
                     # sees the true rival; the winner is gated below. First
                     # collapse unsupported basis terms (refit parsimony) so a

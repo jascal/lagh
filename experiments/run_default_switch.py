@@ -28,7 +28,7 @@ from lagh.passive import discover_passive
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'experiments/results/default_switch'
-GATES = ('marginal', 'joint')
+GATES = ('marginal', 'joint', 'joint_modulo')
 
 
 def _fresh_rational(seed):
@@ -41,6 +41,14 @@ def _fresh_rational(seed):
 
 def cases():
     out = {}
+    # A4 fresh banks (registered before any A4 run): new seeds, never run before
+    for seed in range(200, 224):
+        fn, truth = _rational(_fresh_rational(seed))
+        out[f'fr2-seed{seed}'] = (np.random.default_rng(seed).uniform(.5, 3., (400, 1)),
+                                  fn, truth)
+    for name, dim, fn in audit.CELLS:
+        out[f'frch2-{name}'] = (audit.X(dim, seed=zlib.crc32(name.encode()) + 2),
+                                fn, None)
     for seed in range(100, 124):
         fn, truth = _rational(_fresh_rational(seed))
         out[f'fr-seed{seed}'] = (np.random.default_rng(seed).uniform(.5, 3., (400, 1)),
@@ -79,12 +87,12 @@ def run(name, gate):
           flush=True)
 
 
-def summarize():
+def summarize(gates=('marginal', 'joint'), banks=('fr', 'frch')):
     rows = {g: {p.stem: json.loads(p.read_text()) for p in (OUT / g).glob('*.json')}
-            for g in GATES}
+            for g in gates}
     summary = {}
-    for bank in ('fr', 'frch'):
-        for g in GATES:
+    for bank in banks:
+        for g in gates:
             b = {k: r for k, r in rows[g].items() if k.startswith(bank + '-')}
             cert = [r for r in b.values() if r['certified']]
             summary[f'{g}/{bank}'] = {
@@ -95,7 +103,7 @@ def summarize():
                 'median_seconds': float(np.median([r['seconds'] for r in b.values()]))
                 if b else None}
         # D6: cost on the cases where the marginal default did NOT certify wrongly
-        m, j = rows['marginal'], rows['joint']
+        m, j = rows[gates[0]], rows[gates[1]]
         fair = [k for k in m if k.startswith(bank + '-') and k in j and not (
             m[k]['certified'] and (m[k]['wrong_form'] or m[k]['wrong_domain']))]
         ratios = [j[k]['seconds'] / max(m[k]['seconds'], 0.1) for k in fair]
@@ -104,7 +112,21 @@ def summarize():
             'median_ratio_joint_over_marginal': float(np.median(ratios)) if ratios else None,
             'lost_certificates': sorted(k for k in fair if m[k]['certified']
                                         and not j[k]['certified'])}
-    (OUT / 'summary.json').write_text(json.dumps(summary, indent=1) + '\n')
+        # A4's split: same verdict (gate overhead) vs changed verdict
+        same = [k for k in fair if m[k]['certified'] == j[k]['certified']
+                and m[k].get('law') == j[k].get('law')]
+        changed = [k for k in fair if k not in same]
+        summary[f'cost/{bank}'].update({
+            'same_verdict_cases': len(same),
+            'same_verdict_median_ratio': float(np.median(
+                [j[k]['seconds'] / max(m[k]['seconds'], 0.1) for k in same])) if same else None,
+            'changed_verdict_cases': len(changed),
+            'changed_verdict_median_seconds': float(np.median(
+                [j[k]['seconds'] for k in changed])) if changed else None,
+            'max_seconds_second_gate': max((j[k]['seconds'] for k in j
+                                            if k.startswith(bank + '-')), default=None)})
+    name = 'summary.json' if gates == ('marginal', 'joint') else f'summary_{gates[1]}.json'
+    (OUT / name).write_text(json.dumps(summary, indent=1) + '\n')
     print(json.dumps(summary, indent=1))
 
 
@@ -118,7 +140,10 @@ def main():
     if a.list:
         print('\n'.join(cases()))
     elif a.summarize:
-        summarize()
+        if a.gate == 'joint_modulo':
+            summarize(('marginal', 'joint_modulo'), ('fr2', 'frch2'))
+        else:
+            summarize()
     else:
         run(a.case, a.gate)
 

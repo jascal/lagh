@@ -33,7 +33,8 @@ SCRIPTS = ['gaia/run_c0.py', 'gaia/run_p1.py', 'gaia/run_p2.py', 'gaia/run_p3.py
            'exoplanet/run_c0.py', 'exoplanet/run_c1.py', 'exoplanet/run_c2.py',
            'exoplanet/run_c5.py', 'exoplanet/run_ph2.py',
            'materials/run_c0.py', 'materials/run_c1.py', 'materials/run_c2.py']
-FLIP = ('coefficient_gate: str = "marginal"', 'coefficient_gate: str = "joint"')
+FLIP_FROM = 'coefficient_gate: str = "marginal"'
+ARMS = ('marginal', 'joint')   # A3; A4 runs ('marginal', 'joint_modulo') via --gate
 
 
 def worktree(arm: str, base: Path) -> Path:
@@ -42,13 +43,14 @@ def worktree(arm: str, base: Path) -> Path:
         subprocess.run(['git', 'worktree', 'add', '-q', '--detach', str(wt), 'HEAD'],
                        cwd=ROOT, check=True)
         (wt / '.venv').symlink_to(ROOT / '.venv')
-        if arm == 'joint':
+        if arm != 'marginal':
             for f in ('lagh/engine.py', 'lagh/passive.py'):
                 p = wt / f
                 src = p.read_text()
-                if src.count(FLIP[0]) != 1:
+                if src.count(FLIP_FROM) != 1:
                     raise RuntimeError(f'registered flip does not apply to {f}')
-                p.write_text(src.replace(*FLIP))
+                p.write_text(src.replace(FLIP_FROM,
+                                         f'coefficient_gate: str = "{arm}"'))
     return wt
 
 
@@ -103,7 +105,7 @@ def collect(base: Path) -> None:
     scripts run concurrently in one worktree, so a git-status diff taken around
     one script also sees files its neighbours wrote (measured on the first
     rerun: 41 spurious 'differences')."""
-    for arm in ('marginal', 'joint'):
+    for arm in ARMS:
         wt = base / f'lagh-{arm}'
         lines = subprocess.run(['git', 'status', '--porcelain', '-uall',
                                 'experiments/results'], cwd=wt, capture_output=True,
@@ -117,22 +119,23 @@ def collect(base: Path) -> None:
 
 
 def compare() -> None:
-    report = {'differences': [], 'certified_marginal': 0, 'certified_joint': 0,
-              'files': []}
-    for f in sorted((OUT / 'marginal' / 'final').glob('*.json')):
-        other = OUT / 'joint' / 'final' / f.name
+    first, second = ARMS
+    report = {'arms': list(ARMS), 'differences': [], f'certified_{first}': 0,
+              f'certified_{second}': 0, 'files': []}
+    for f in sorted((OUT / first / 'final').glob('*.json')):
+        other = OUT / second / 'final' / f.name
         a = dict(_walk(json.loads(f.read_text())))
         b = dict(_walk(json.loads(other.read_text()))) if other.exists() else {}
         report['files'].append(f.name)
-        report['certified_marginal'] += sum(v['certified'] is True for v in a.values())
-        report['certified_joint'] += sum(v['certified'] is True for v in b.values())
+        report[f'certified_{first}'] += sum(v['certified'] is True for v in a.values())
+        report[f'certified_{second}'] += sum(v['certified'] is True for v in b.values())
         for key in sorted(set(a) | set(b)):
             if a.get(key) != b.get(key):
                 report['differences'].append({'file': f.name, 'key': key,
-                                              'marginal': a.get(key),
-                                              'joint': b.get(key)})
+                                              first: a.get(key),
+                                              second: b.get(key)})
     timing = {}
-    for arm in ('marginal', 'joint'):
+    for arm in ARMS:
         for t in (OUT / arm).glob('*/timing.json'):
             timing.setdefault(t.parent.name, {})[arm] = json.loads(t.read_text())
     report['timing'] = timing
@@ -146,16 +149,31 @@ def main():
     ap.add_argument('--base', required=True, help='directory for the two worktrees')
     ap.add_argument('--jobs', type=int, default=4)
     ap.add_argument('--compare', action='store_true')
+    ap.add_argument('--gate', default='joint',
+                    help='second arm: the default the worktree is flipped to')
+    ap.add_argument('--out', help='results directory (default: the A3 location)')
+    ap.add_argument('--concurrent', action='store_true',
+                    help='run both arms at once, so they share the same load (A4)')
     a = ap.parse_args()
+    global ARMS, OUT
+    ARMS = ('marginal', a.gate)
+    if a.out:
+        OUT = ROOT / a.out
     if a.compare:
         collect(Path(a.base))
         compare()
         return
     base = Path(a.base)
-    for arm in ('marginal', 'joint'):
-        wt = worktree(arm, base)
+    trees = {arm: worktree(arm, base) for arm in ARMS}
+    if a.concurrent:
+        with ThreadPoolExecutor(2 * a.jobs) as pool:
+            # interleave the arms so each script runs beside its twin
+            work = [(arm, s) for s in SCRIPTS for arm in ARMS]
+            list(pool.map(lambda w: run_one(w[0], trees[w[0]], w[1]), work))
+        return
+    for arm in ARMS:
         with ThreadPoolExecutor(a.jobs) as pool:
-            list(pool.map(lambda s: run_one(arm, wt, s), SCRIPTS))
+            list(pool.map(lambda s: run_one(arm, trees[arm], s), SCRIPTS))
 
 
 if __name__ == '__main__':
