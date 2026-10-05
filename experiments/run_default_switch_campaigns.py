@@ -22,6 +22,7 @@ import json
 import os
 import shutil
 import subprocess
+import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -60,8 +61,10 @@ def run_one(arm: str, wt: Path, script: str) -> None:
                OMP_NUM_THREADS='1')
     before = set(subprocess.run(['git', 'status', '--porcelain', '-uall', 'experiments'],
                                 cwd=wt, capture_output=True, text=True).stdout.splitlines())
+    t0 = time.time()
     proc = subprocess.run([str(wt / '.venv/bin/python'), f'experiments/{script}'],
                           cwd=wt, env=env, capture_output=True, text=True)
+    seconds = round(time.time() - t0, 1)
     after = subprocess.run(['git', 'status', '--porcelain', '-uall', 'experiments'],
                            cwd=wt, capture_output=True, text=True).stdout.splitlines()
     dest.mkdir(parents=True, exist_ok=True)
@@ -69,9 +72,11 @@ def run_one(arm: str, wt: Path, script: str) -> None:
         path = line[3:]
         if path.endswith('.json') or path.endswith('.jsonl'):
             shutil.copy(wt / path, dest / Path(path).name)
+    (dest / 'timing.json').write_text(json.dumps({'seconds': seconds,
+                                                  'exit': proc.returncode}) + '\n')
     (dest / 'stdout.txt').write_text(proc.stdout + f'\n[exit {proc.returncode}]\n'
                                      + proc.stderr[-4000:])
-    print(f'{arm} {script}: exit {proc.returncode}', flush=True)
+    print(f'{arm} {script}: exit {proc.returncode} {seconds}s', flush=True)
 
 
 def _walk(obj, path=''):
