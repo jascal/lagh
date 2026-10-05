@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "frch3-cubic-cross-d2",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0**3 - x_0**2*x_1 + 2*x_1*sin(x_0)**2/3 + 2*x_1*cos(x_0)**2/3 + 4*x_1/3 - 1",
+ "rivals": [],
+ "seconds": 13.9,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 1.6866934580737198e-16,
+ "ext_rel_error": 1.4711098193547603e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0**3 - x_0**2*x_1 + 2*x_1*sin(x_0)**2/3 + 2*x_1*cos(x_0)**2/3 + 4*x_1/3 - 1",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0**3 - x_0**2*x_1 + 2*x_1*sin(x_0)**2/3 + 2*x_1*cos(x_0)**2/3 + 4*x_1/3 - sin(x_1)**2/3 - cos(x_1)**2/3 - 2/3",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0**3 - x_0**2*x_1 + 2*x_1*sin(x_0)**2/3 + 2*x_1*cos(x_0)**2/3 + 4*x_1/3 - sin(x_1)**2/3 - cos(x_1)**2/3 - 2/3",
+   "wrong": false
+  }
+ ]
+}

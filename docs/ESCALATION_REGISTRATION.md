@@ -636,3 +636,23 @@ under `systemd-inhibit`, with suspend-voided runs rerun in both arms.
   Changed cases: median ≤ 120 s, and no case over 600 s.
 - **F3 (diagnosis).** On `fr3`, every case whose ratio exceeds 1.5× has a
   marginal split that certified a wrong law.
+
+## Results — A5 (scored 2026-10-05)
+
+**Empirical: F1 and F2 hold; F3 fails on 1 of 21 cases.** None of the 120
+runs recorded suspended time.
+
+| prediction | result |
+|---|---|
+| **F1** | **holds.** `fr3`: `joint_modulo` 24 certified, all 24 exact, 0 wrong. Marginal: 15 certified, 8 exact, **7 wrong**, and a wrong law certified on at least one split in 21/24 cases. `frch3`: `joint_modulo` 36/36, 0 wrong. Marginal: 34, **1 wrong** (`rational-d1`, for the fourth fresh draw running). No correct marginal certificate lost |
+| **F2** | **holds.** Same cases: `fr3` 0.99× (2 cases), `frch3` 1.00× (33). Changed cases: median 35.0 s (`fr3`) and 12.8 s (`frch3`); maximum 93.5 s and 423.4 s, against caps of 120 s and 600 s |
+| **F3** | **fails, 20 of 21.** 21 `fr3` cases exceed 1.5×. 20 have a marginal split that certified a wrong law. The exception, `fr3-seed322` (2.18×), never certified a wrong law: marginal splits 0 and 2 stopped at **tier 1 with a structural refusal** among dense fractional-power rivals, and `joint_modulo` removes those rivals and certifies the exact truth at tier 2 on every split |
+
+**Reading.** The registered diagnosis named the mechanism too narrowly. The
+measured cost is escalation past tier 1 whenever tier 1's certifying set was
+made of approximants: they either certify wrongly or force a refusal. On all
+60 A5 cases with an unchanged outcome, the gate costs 0.99–1.00×.
+
+**Status.** The default switch rests on the owner decision recorded above,
+which A5 is consistent with. The record shows E6 failing under A4's
+classification and F3 failing as worded; neither is rewritten.

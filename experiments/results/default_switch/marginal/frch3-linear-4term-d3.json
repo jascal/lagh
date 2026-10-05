@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "frch3-linear-4term-d3",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0 + 2*x_1 - 3*x_2 + sin(x_0)**2 + sin(x_1)**2 + cos(x_0)**2 + cos(x_1)**2 + 2",
+ "rivals": [],
+ "seconds": 7.8,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 1.6566198172547753e-16,
+ "ext_rel_error": 1.8724395036699707e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0 + 2*x_1 - 3*x_2 + sin(x_0)**2 + sin(x_1)**2 + cos(x_0)**2 + cos(x_1)**2 + 2",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0 + 2*x_1 - 3*x_2 + sin(x_0)**2 + sin(x_1)**2 + cos(x_0)**2 + cos(x_1)**2 + 2",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0 + x_1*sin(x_0)**2/2 + x_1*sin(x_2)**2/2 + x_1*cos(x_0)**2/2 + x_1*cos(x_2)**2/2 + x_1 - 3*x_2*sin(x_0)**2/4 - 3*x_2*sin(x_1)**2/4 - 3*x_2*cos(x_0)**2/4 - 3*x_2*cos(x_1)**2/4 - 3*x_2/2 + 4*sin(x_0)**2/5 + 4*sin(x_1)**2/5 + 4*sin(x_2)**2/5 + 4*cos(x_0)**2/5 + 4*cos(x_1)**2/5 + 4*cos(x_2)**2/5 + 8/5",
+   "wrong": false
+  }
+ ]
+}

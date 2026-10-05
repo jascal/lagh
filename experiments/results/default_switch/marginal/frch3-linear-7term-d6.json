@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "frch3-linear-7term-d6",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0 - x_1 + x_2 + 2*x_3 - x_4 + 3*x_5 - 1",
+ "rivals": [],
+ "seconds": 14.0,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0 - x_1 + x_2 + 2*x_3 - x_4 + 3*x_5 - 1",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0 - x_1 + x_2 + 2*x_3 - x_4 + 3*x_5 - 1",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0 - x_1 + x_2 + 2*x_3 - x_4 + 3*x_5 - 1",
+   "wrong": false
+  }
+ ]
+}

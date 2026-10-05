@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "frch3-inverse-square-sum-d2",
+ "gate": "joint_modulo",
+ "truth": null,
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "1/(x_0**2 + x_1**2)",
+ "rivals": [],
+ "seconds": 423.4,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 5,
+   "law": "1/(x_0**2 + x_1**2)",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 5,
+   "law": "1/(x_0**2 + x_1**2)",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 5,
+   "law": "1/(x_0**2 + x_1**2)",
+   "wrong": false
+  }
+ ]
+}
