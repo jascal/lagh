@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-rational-d2",
+ "rule": "pool",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "x_0/(x_1 + 1)",
+ "rivals": [],
+ "seconds": 321.7,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

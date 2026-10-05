@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-monomial-frac-d2",
+ "rule": "first",
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "x_0**(3/2)/sqrt(x_1)",
+ "rivals": [],
+ "seconds": 33.7,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

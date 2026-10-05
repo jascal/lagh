@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-log-sum-d2",
+ "rule": "accumulate",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "x_1 + 2*log(x_0)",
+ "rivals": [],
+ "seconds": 436.7,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

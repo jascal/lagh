@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-sparse6-d2",
+ "rule": "pool",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "-sqrt(x_0) + x_0*x_1 - sin(x_0)**2/3 + sin(x_0) - cos(x_0)**2/3 + cos(x_1) - 2/3 + exp(-Abs(x_1))",
+ "rivals": [],
+ "seconds": 78.2,
+ "inbox_rel_error": 2.6809950134852034e-16,
+ "ext_rel_error": 2.2656918410828184e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

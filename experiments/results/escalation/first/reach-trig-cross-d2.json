@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-trig-cross-d2",
+ "rule": "first",
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "sin(x_0)*cos(x_1)",
+ "rivals": [],
+ "seconds": 34.4,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

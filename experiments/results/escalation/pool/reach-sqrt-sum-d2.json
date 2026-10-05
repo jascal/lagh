@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-sqrt-sum-d2",
+ "rule": "pool",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "sqrt(x_0**2 + x_1**2)",
+ "rivals": [],
+ "seconds": 270.5,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

@@ -537,6 +537,58 @@ def gated_atoms(expr) -> list:
                   key=lambda f: abs(float(f)))
 
 
+def joint_pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps) -> bool:
+    """The exact-coefficient gate applied JOINTLY (docs/ESCALATION_REGISTRATION.md
+    amendment A2). `float_pinned` perturbs one gated atom at a time; a dense,
+    near-collinear support can still have a direction along which ALL its
+    coefficients move together while every prediction stays inside the band,
+    so no single coordinate is free but the coefficient VECTOR is not
+    determined (the marginal-vs-joint lesson of the state certificates).
+
+    Same perturbation sizes as the clean-data marginal gate (1e-5, 1e-4
+    relative, max over atoms), taken along the least-determined direction:
+    the smallest right singular vector of the band-scaled Jacobian of the
+    predictions with respect to the RELATIVE change of each gated atom. The
+    moved law is then put through the real `check`; if it still certifies,
+    the exact coefficients are not identified and the gate fails. It only
+    ever removes a candidate. Laws whose coefficients are small exact
+    rationals have no gated atoms and pass untouched.
+    """
+    atoms = gated_atoms(expr)
+    if len(atoms) < 2:
+        return True                    # one atom: the marginal gate decides
+    params = sp.symbols(f"_jp0:{len(atoms)}")
+    f = sp.lambdify(list(syms) + list(params),
+                    expr.xreplace(dict(zip(atoms, params))), "numpy")
+    v = np.array([float(a) for a in atoms])
+    cols = [np.asarray(X, float)[:, j] for j in range(len(syms))]
+
+    def pred(vals):
+        with np.errstate(all="ignore"):
+            return np.broadcast_to(np.asarray(f(*cols, *vals), float), (len(X),))
+
+    J = np.empty((len(X), len(v)))
+    for i in range(len(v)):
+        h = 1e-6 * abs(v[i]) or 1e-12
+        up, dn = v.copy(), v.copy()
+        up[i] += h
+        dn[i] -= h
+        J[:, i] = (pred(up) - pred(dn)) / (2 * h)
+    rows = np.broadcast_to(band(eps, expr), (len(X),))   # callable bands (weak form)
+    G = J * v[None, :] / rows[:, None]
+    if not np.all(np.isfinite(G)):
+        return True
+    d = np.linalg.svd(G, full_matrices=False)[2][-1]
+    d = d / np.max(np.abs(d))
+    for rel in (1e-5, 1e-4):
+        for s_ in (1, -1):
+            moved = v * (1 + s_ * rel * d)
+            alt = expr.xreplace({a: sp.Float(m) for a, m in zip(atoms, moved)})
+            if check(alt, syms, X, y, eps)["certified"]:
+                return False
+    return True
+
+
 def parameter_interval(expr, syms, X: np.ndarray, y: np.ndarray, eps, atom,
                        *, max_rel: float = 0.5, iters: int = 40):
     """The interval of values for `atom` over which the law STILL CERTIFIES,

@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "reach-monomial-frac-d1",
+ "rule": "accumulate",
+ "gate": "joint",
+ "arm": "accumulate+joint",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "2*sqrt(x_0**3)",
+ "rivals": [],
+ "seconds": 572.2,
+ "inbox_rel_error": 1.7119831358481005e-16,
+ "ext_rel_error": 1.2119582287148204e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

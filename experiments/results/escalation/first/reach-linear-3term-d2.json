@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-linear-3term-d2",
+ "rule": "first",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "2*x_0*sin(x_1)**2/3 + 2*x_0*cos(x_1)**2/3 + 4*x_0/3 - 5*x_1*sin(x_0)**2/3 - 5*x_1*cos(x_0)**2/3 - 10*x_1/3 + sin(x_1)**2 + cos(x_1)**2",
+ "rivals": [],
+ "seconds": 20.8,
+ "inbox_rel_error": 2.776066702832971e-16,
+ "ext_rel_error": 2.7227884596024396e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

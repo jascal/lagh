@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-gaussian-d1",
+ "rule": "pool",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "exp(-x_0**2 + 3*x_0 - 9/4)",
+ "rivals": [],
+ "seconds": 78.1,
+ "inbox_rel_error": 6.661338963517232e-16,
+ "ext_rel_error": 5.551129652967235e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

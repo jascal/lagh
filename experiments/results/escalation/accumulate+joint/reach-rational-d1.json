@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "reach-rational-d1",
+ "rule": "accumulate",
+ "gate": "joint",
+ "arm": "accumulate+joint",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "(2*x_0 + 1)/(x_0 + 3)",
+ "rivals": [],
+ "seconds": 211.2,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

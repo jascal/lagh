@@ -19,7 +19,7 @@ from .base import Term as BaseTerm
 from .base import snap_all, to_expr
 from .certify import (MACHINE_REL, Abstain, Certificate,
                       arbitrate_significance, attach_check_evidence, check, coherent, determination,
-                      epsilon, float_pinned, free_atoms, free_dof,
+                      epsilon, float_pinned, free_atoms, free_dof, joint_pinned,
                       input_constraints, invariant_content,
                       parameter_interval, pinned,
                       reduce_mod_constraints, reduce_to_minimal,
@@ -380,7 +380,9 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              sigma: float = 0.0, se_cert=None, floor_abs: float = 1e-12,
              max_tier: int = 7, hard_cert=None, eps_model=None,
              declared_basis: bool = False, band_sel=None,
-             linear_basis: bool = False) -> Result:
+             linear_basis: bool = False,
+             escalation: str = "first",
+             coefficient_gate: str = "marginal") -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
     Splits must be disjoint: fit, select, certify. Certification is exhaustive on
@@ -603,6 +605,22 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
         return Result(cert, expr, tier, count)
 
     tiers = [1] if linear_basis else [t for t, _ in CURRICULUM if t <= max_tier]
+    # EXPERIMENTAL escalation rules (docs/ESCALATION_REGISTRATION.md); the
+    # default "first" stops at the first tier with a non-empty certifying set.
+    #   "pool": judge only the highest tier's certifying set. SCORED UNSOUND: a
+    #     tier includes the lower tiers' TERMS, not their PROPOSALS, so a larger
+    #     library can drop a lower-tier truth (sparse5-d2).
+    #   "accumulate": run every tier, keep each tier's own certifying
+    #     candidates, and judge their union once after the last tier.
+    if coefficient_gate not in ("marginal", "joint"):
+        raise ValueError(f"unknown coefficient gate {coefficient_gate!r}")
+    if escalation not in ("first", "pool", "accumulate"):
+        raise ValueError(f"unknown escalation rule {escalation!r}")
+    pooled: list[Candidate] = []
+    if escalation == "pool" and not linear_basis:
+        tiers = tiers[-1:]
+    elif escalation == "accumulate" and not linear_basis:
+        tiers = sorted(set(tiers))
     for tier in tiers:
         cands = _tier_candidates(tier, syms, dim, X_fit, y_fit, X_sel, y_sel,
                                  X_cert, sigma, band_sel=band_sel,
@@ -645,6 +663,10 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                         if not ok:
                             continue
                         c.expr = gated
+                        # EXPERIMENTAL (amendment A2): the same gate, jointly
+                        if coefficient_gate == "joint" and not joint_pinned(
+                                c.expr, syms, X_cert, y_cert, eps):
+                            continue
                     # floor-dominated: keep the candidate ungated so coherence
                     # sees the true rival; the winner is gated below. First
                     # collapse unsupported basis terms (refit parsimony) so a
@@ -666,6 +688,12 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                     # closed-form channels.
                     continue
                 certifying.append(c)
+        if escalation == "accumulate" and not linear_basis:
+            seen = {sp.srepr(c.expr) for c in pooled}
+            pooled += [c for c in certifying if sp.srepr(c.expr) not in seen]
+            if tier != tiers[-1]:
+                continue                          # judge the union after the last tier
+            certifying = pooled
         if not certifying:
             continue                              # escalate: reach, not ambiguity
         # SCOPED to the declared-linear-basis path on purpose. The early exit

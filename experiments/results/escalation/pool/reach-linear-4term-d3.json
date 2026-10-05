@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "reach-linear-4term-d3",
+ "rule": "pool",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "x_2*(x_0/x_2 + 2*x_1/x_2 - 3 + 4/x_2)",
+ "rivals": [],
+ "seconds": 498.5,
+ "inbox_rel_error": 1.7522089383430266e-16,
+ "ext_rel_error": 2.912468120797322e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

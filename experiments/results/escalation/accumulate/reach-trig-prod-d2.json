@@ -1,0 +1,14 @@
+{
+ "tag": "empirical",
+ "case": "reach-trig-prod-d2",
+ "rule": "accumulate",
+ "certified": false,
+ "tier": 5,
+ "abstain": "structural",
+ "law": null,
+ "rivals": [
+  "x_0*sin(x_1)",
+  "sqrt(x_0**2*sin(x_1)**2)"
+ ],
+ "seconds": 843.6
+}

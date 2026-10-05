@@ -1,0 +1,14 @@
+{
+ "tag": "empirical",
+ "case": "reach-linear-7term-d6",
+ "rule": "accumulate",
+ "certified": false,
+ "tier": 5,
+ "abstain": "structural",
+ "law": null,
+ "rivals": [
+  "x_0 - x_1 + x_2 + 2*x_3 - x_4 + 3*x_5 - 1",
+  "sqrt(x_0**2 - 2*x_0*x_1 + 2*x_0*x_2 + 4*x_0*x_3 - 2*x_0*x_4 + 6*x_0*x_5 - 2*x_0 + x_1**2 - 2*x_1*x_2 - 4*x_1*x_3 + 2*x_1*x_4 - 6*x_1*x_5 + 2*x_1 + x_2**2 + 4*x_2*x_3 - 2*x_2*x_4 + 6*x_2*x_5 - 2*x_2 + 4*x_3**2 - 4*x_3*x_4 + 12*x_3*x_5 - 4*x_3 + x_4**2 - 6*x_4*x_5 + 2*x_4 + 9*x_5**2 - 6*x_5 + 1)"
+ ],
+ "seconds": 644.9
+}
