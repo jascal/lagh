@@ -109,8 +109,9 @@ speculative. Unrepaired findings are marked open. The ledger, in the order the f
 
 **Boundary, scope corrected and partly closed:** approximant impostors occur on clean data
 at machine floor as well as under declared noise; |H|·q^h bounds chance fits, not
-exact-form error. On clean data the joint coefficient gate (default) removes the
-dense-approximant class on every measured bank. **Open:** the declared-noise and
+exact-form error. On clean data the joint coefficient gate (default) removed the
+dense-approximant class on every measured bank; that is an empirical result on those
+banks, not a closure of false exactness. **Open:** the declared-noise and
 floor-dominated paths keep their own gates and were not re-measured; `sqrt(f²)`
 twins (no gated coefficients) still force refusals under `escalation="accumulate"`;
 the dim ≥ 3 pre-pass still returns its first certifying class. Escalation itself

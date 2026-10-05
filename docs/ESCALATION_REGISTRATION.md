@@ -656,3 +656,35 @@ made of approximants: they either certify wrongly or force a refusal. On all
 **Status.** The default switch rests on the owner decision recorded above,
 which A5 is consistent with. The record shows E6 failing under A4's
 classification and F3 failing as worded; neither is rewritten.
+
+## Review corrections (2026-10-05, PR #17)
+
+1. **A4's rule text overstated what `reduce_to_minimal` does.** It is not dust
+   sweeping. It drops any term whose removal still certifies on `X_all_m`,
+   the certify split included, so the law the joint gate tests was chosen
+   using the certify rows (a second use of that split), and it can remove more
+   than the constraint ideal. The path runs only when
+   `reduce_mod_constraints` changes the candidate. In principle a dense
+   candidate on constrained inputs could pass because the minimal law passes,
+   while the candidate itself enters the certifying set. Campaign identity (E3)
+   is the empirical guard. Nothing proves the gate target is the constraint
+   quotient, and the unit test exercises `reduce_mod_constraints` only, not
+   the engine path. **Open:** restrict the step to machine-scale coefficient
+   dust, or show the drop set lies in the ideal; either change requires
+   re-scoring.
+2. **The default flip itself was not re-scored.** Every A4/A5 artifact was
+   produced through the opt-in path (`coefficient_gate="joint_modulo"`,
+   introduced in 8574a7e and unchanged through 95da103). eea8b2d changes only
+   the default strings in `engine.py` and `passive.py`, plus docs and tests.
+   The artifacts carry over **only** for that branch as it stands. Any later
+   edit to the `joint_modulo` branch of the gate must be re-scored, not
+   credited with these results.
+3. **F3 stays failed as worded.** `fr3-seed322`'s tier-1 structural refusal
+   among approximants is the same mechanism that made those splits cheap
+   under marginal. It is not a near-pass.
+4. **Scope of the closure.** It covers the clean, non-floor-dominated,
+   per-candidate path only. The declared-noise and floor-dominated winner
+   gates, `sqrt(f²)` twins under `accumulate`, and the dim ≥ 3 pre-pass
+   (where this gate does not run) remain open. "Removed the dense-approximant
+   class on every measured bank" is a statement about those banks, not a
+   closure of false exactness.

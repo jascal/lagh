@@ -679,7 +679,12 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                             # (the Gaia frame rotation: truth + k*x1*(|x|^2-1)
                             # equals the truth on the data) which the domain-
                             # restricted claim already quotients out. Test the
-                            # canonical reduction, dust swept, instead.
+                            # reduction instead. NOTE (review of PR #17):
+                            # reduce_to_minimal is not dust sweeping -- it drops
+                            # ANY term whose removal still certifies on all rows,
+                            # certify split included, so the gate target is
+                            # chosen with the certify rows and can differ from
+                            # the constraint quotient. Open; see the registration.
                             if coefficient_gate == "joint_modulo":
                                 if gate_constraints is None:
                                     gate_constraints = input_constraints(X_all_m, syms)
