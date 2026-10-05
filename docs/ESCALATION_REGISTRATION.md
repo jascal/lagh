@@ -688,3 +688,70 @@ classification and F3 failing as worded; neither is rewritten.
    (where this gate does not run) remain open. "Removed the dense-approximant
    class on every measured bank" is a statement about those banks, not a
    closure of false exactness.
+
+## Amendment A6 — the joint test in the exact quotient space (registered 2026-10-05, before any A6 run)
+
+**Why.** The PR #17 review found that `joint_modulo` does not test the
+constraint quotient. Its `reduce_to_minimal` step drops any term that still
+certifies on all rows, certify split included. A "dust only" sweep was tried
+first and abandoned before any scored run. On the Gaia frame-rotation
+candidates, the post-reduction residue reaches 2.6–3.9×10⁻¹³ of the law's
+scale, above `MACHINE_REL` (2.2×10⁻¹³) and above the band in absolute terms.
+It is the candidate's own fit noise along the constraint direction, not
+rounding, so any dust threshold would be an arbitrary cut in a 12-order gap.
+
+**Rule.** `coefficient_gate="joint_quotient"` (opt-in; `joint_modulo` stays
+the default and stays reproducible). `joint_pinned(..., constraints=…)`
+reduces each gated atom's derivative term modulo the constraint ideal in
+exact arithmetic. The exact null space of those remainders is the set of
+ideal directions, and the least-determined direction is sought only in their
+orthogonal complement. The candidate is never reduced; no term is dropped;
+`y` is not used beyond `check`. The rule applies when the law is linear in its
+gated atoms. Otherwise, and whenever there are no constraints, it is exactly
+A2's joint test.
+
+**Pilot (disclosed):**
+- A padded sphere law, truth + 0.2169·x1·(|x|² − 1): plain joint rejects it,
+  `joint_quotient` passes it; the bare truth passes both.
+- Gaia frame rotation, end to end: same law and α as `joint_modulo`, 10 s.
+- Constrained `1/(2+x0)` on the sphere: marginal, `joint_modulo` and
+  `joint_quotient` all give the exact truth.
+
+**Observation, not part of the rule.** On the plane x0 + x1 + x2 = 1,
+`input_constraints` returns two arbitrary quadratic combinations with snapped
+rational coefficients instead of the linear constraint, because the quadratic
+feature matrix contains several multiples of it. This predates A6 and also
+feeds the constrained-input coherence path. Recorded as **open**.
+
+### Banks
+
+1. **`cs` (new):** 4 varieties (sphere, circle arc, hyperbola, plane) × 6 laws
+   (float-coefficient linear, integer linear, rational, product, exp bait,
+   sqrt bait), 400 rows each. Runner: `experiments/run_quotient_study.py`.
+   Gates: marginal, `joint_modulo`, `joint_quotient`. Scored **on the
+   variety** only: fresh in-region points for the domain claim, fresh points
+   from a wider region of the same variety for the form claim.
+2. **Campaigns:** all 14 scripts, `joint_modulo` and `joint_quotient`
+   worktrees concurrent. Output `experiments/results/joint_quotient/campaigns/`.
+3. **Unconstrained banks and null:** the code path is identical whenever
+   `input_constraints` returns nothing. Verified directly, with no
+   rediscovery: on every `fr*`/`frch*` case and on 200 null-style input
+   draws, it must return `[]`.
+4. **Suite** with `joint_quotient` as the default.
+
+### Predictions
+
+- **G1.** `joint_quotient`: 0 wrong on `cs`. marginal and `joint_modulo`:
+  measured; any wrong certificate there is reported as evidence about the
+  hole.
+- **G2.** Campaigns: `joint_quotient` matches `joint_modulo` exactly (19
+  certificates, same laws and α).
+- **G3.** `input_constraints` returns `[]` on all 180 fresh unconstrained
+  cases and all 200 null-style draws.
+- **G4.** Suite: only the documenting test fails.
+- **G5 (cost).** `cs` median `joint_quotient`/`joint_modulo` ≤ 1.5×; every
+  campaign script ≤ 1.5× its concurrent twin.
+
+**Decision rule.** If G1–G5 hold, open a PR making `joint_quotient` the
+default; `joint_modulo` stays as the recorded former default. Otherwise the
+default stays `joint_modulo` and the failure is recorded.

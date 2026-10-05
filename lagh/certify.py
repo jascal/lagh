@@ -537,7 +537,37 @@ def gated_atoms(expr) -> list:
                   key=lambda f: abs(float(f)))
 
 
-def joint_pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps) -> bool:
+def _ideal_directions(expr, atoms, params, syms, constraints):
+    """Columns spanning the coefficient perturbations (one row per gated atom)
+    whose effect on `expr` lies in the ideal of `constraints`, computed in exact
+    arithmetic; an empty (k, 0) array when there are none, or None when the
+    derivative terms are not polynomials in the inputs (then nothing is
+    excluded)."""
+    try:
+        exprp = expr.xreplace(dict(zip(atoms, params)))
+        derivs = [sp.expand(sp.diff(exprp, p)) for p in params]
+        if any(not d.free_symbols <= set(syms) or not d.is_polynomial(*syms)
+               for d in derivs):
+            return None
+        basis = [sp.expand(g) for g in constraints]
+        rems = [sp.reduced(d, basis, *syms)[1] if d != 0 else sp.Integer(0)
+                for d in derivs]
+        polys = [sp.Poly(r, *syms) for r in rems]
+        monos = sorted(set().union(*(set(q.monoms()) for q in polys)))
+        if not monos:
+            return np.eye(len(params))
+        R = sp.Matrix([[q.coeff_monomial(m) for q in polys] for m in monos])
+        null = R.nullspace()
+        if not null:
+            return np.empty((len(params), 0))
+        return np.column_stack([np.array([float(e) for e in n], float)
+                                for n in null])
+    except Exception:                                         # noqa: BLE001
+        return None
+
+
+def joint_pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps,
+                 constraints: list | None = None) -> bool:
     """The exact-coefficient gate applied JOINTLY (docs/ESCALATION_REGISTRATION.md
     amendment A2). `float_pinned` perturbs one gated atom at a time; a dense,
     near-collinear support can still have a direction along which ALL its
@@ -553,6 +583,17 @@ def joint_pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps) -> bool:
     the exact coefficients are not identified and the gate fails. It only
     ever removes a candidate. Laws whose coefficients are small exact
     rationals have no gated atoms and pass untouched.
+
+    `constraints` (amendment A6, `coefficient_gate="joint_quotient"`): exact
+    polynomial constraints the inputs satisfy. A coefficient direction whose
+    change to the law lies in their ideal moves nothing on the constraint
+    variety, which the domain-restricted claim already quotients out, so it is
+    excluded EXACTLY: each gated atom's derivative term is reduced modulo the
+    ideal in exact arithmetic, the null space of those remainders is the set of
+    ideal directions, and the least-determined direction is sought only in its
+    orthogonal complement. No reduction of the candidate, no thresholds, no use
+    of y. Applies when every derivative term is a polynomial in the inputs (the
+    law is linear in its gated atoms); otherwise no direction is excluded.
     """
     atoms = gated_atoms(expr)
     if len(atoms) < 2:
@@ -578,7 +619,22 @@ def joint_pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps) -> bool:
     G = J * v[None, :] / rows[:, None]
     if not np.all(np.isfinite(G)):
         return True
-    d = np.linalg.svd(G, full_matrices=False)[2][-1]
+    ideal = _ideal_directions(expr, atoms, params, syms, constraints) \
+        if constraints else None
+    if ideal is None:
+        d = np.linalg.svd(G, full_matrices=False)[2][-1]
+    else:
+        if ideal.size == 0:
+            d = np.linalg.svd(G, full_matrices=False)[2][-1]
+        else:
+            # ideal directions in RELATIVE coordinates: delta = v * d
+            Nd = ideal / v[:, None]
+            u, sv, vt = np.linalg.svd(Nd.T, full_matrices=True)
+            rank = int(np.sum(sv > 1e-12 * sv.max()))
+            Qc = vt[rank:].T                 # orthonormal complement basis
+            if Qc.shape[1] == 0:
+                return True                  # every direction is an ideal one
+            d = Qc @ np.linalg.svd(G @ Qc, full_matrices=False)[2][-1]
     d = d / np.max(np.abs(d))
     for rel in (1e-5, 1e-4):
         for s_ in (1, -1):

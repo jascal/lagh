@@ -619,7 +619,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     #     library can drop a lower-tier truth (sparse5-d2).
     #   "accumulate": run every tier, keep each tier's own certifying
     #     candidates, and judge their union once after the last tier.
-    if coefficient_gate not in ("marginal", "joint", "joint_modulo"):
+    if coefficient_gate not in ("marginal", "joint", "joint_modulo",
+                                "joint_quotient"):
         raise ValueError(f"unknown coefficient gate {coefficient_gate!r}")
     if escalation not in ("first", "pool", "accumulate"):
         raise ValueError(f"unknown escalation rule {escalation!r}")
@@ -672,7 +673,15 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                             continue
                         c.expr = gated
                         # EXPERIMENTAL (amendment A2): the same gate, jointly
-                        if coefficient_gate in ("joint", "joint_modulo"):
+                        if coefficient_gate == "joint_quotient":
+                            # A6: exclude the constraint ideal EXACTLY inside the
+                            # joint test (no reduction, no term dropping)
+                            if gate_constraints is None:
+                                gate_constraints = input_constraints(X_all_m, syms)
+                            if not joint_pinned(c.expr, syms, X_cert, y_cert, eps,
+                                                constraints=gate_constraints or None):
+                                continue
+                        elif coefficient_gate in ("joint", "joint_modulo"):
                             target = c.expr
                             # A4: on machine-exact constrained inputs the
                             # constraint ideal is an EXACT joint flat direction
