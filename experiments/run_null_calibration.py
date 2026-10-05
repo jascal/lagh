@@ -31,6 +31,8 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="experiments/results/null_calibration.jsonl")
     ap.add_argument("--trials", type=int, default=N_TRIALS)
+    ap.add_argument("--escalation", default="first",
+                    help="engine escalation rule (docs/ESCALATION_REGISTRATION.md)")
     args = ap.parse_args(argv)
     rng = np.random.default_rng()          # OS-seeded: a true null, not replayable
     out = Path(args.out)
@@ -46,7 +48,8 @@ def main(argv=None):
         y = rng.uniform(-scale, scale, n)          # i.i.d. -- the null
         a, b = int(0.6 * n), int(0.8 * n)
         t0 = time.time()
-        r = discover(X[:a], y[:a], X[a:b], y[a:b], X[b:], y[b:])
+        r = discover(X[:a], y[:a], X[a:b], y[a:b], X[b:], y[b:],
+                     escalation=args.escalation)
         rec = {"trial": t, "dim": dim, "n": n,
                "certified": bool(r.certificate.certified),
                "alpha_log10": r.certificate.alpha_log10,

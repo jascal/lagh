@@ -380,7 +380,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              sigma: float = 0.0, se_cert=None, floor_abs: float = 1e-12,
              max_tier: int = 7, hard_cert=None, eps_model=None,
              declared_basis: bool = False, band_sel=None,
-             linear_basis: bool = False) -> Result:
+             linear_basis: bool = False,
+             escalation: str = "first") -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
     Splits must be disjoint: fit, select, certify. Certification is exhaustive on
@@ -603,6 +604,13 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
         return Result(cert, expr, tier, count)
 
     tiers = [1] if linear_basis else [t for t, _ in CURRICULUM if t <= max_tier]
+    if escalation == "pool" and not linear_basis:
+        # EXPERIMENTAL (docs/ESCALATION_REGISTRATION.md): judge the certifying
+        # set of the highest tier, which includes every lower tier's candidates,
+        # instead of stopping at the first non-empty tier.
+        tiers = tiers[-1:]
+    elif escalation != "first":
+        raise ValueError(f"unknown escalation rule {escalation!r}")
     for tier in tiers:
         cands = _tier_candidates(tier, syms, dim, X_fit, y_fit, X_sel, y_sel,
                                  X_cert, sigma, band_sel=band_sel,
