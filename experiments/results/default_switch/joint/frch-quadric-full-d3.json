@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch-quadric-full-d3",
+ "gate": "joint",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0**2 - x_0*x_2 - x_0 + 2*x_1*x_2 + x_1*sin(x_0)**2/4 + x_1*sin(x_2)**2/4 + x_1*cos(x_0)**2/4 + x_1*cos(x_2)**2/4 + x_1/2 + x_2*sin(x_0)**2/4 + x_2*sin(x_1)**2/4 + x_2*cos(x_0)**2/4 + x_2*cos(x_1)**2/4 + x_2/2 + sin(x_1)**2/2 + sin(x_2)**2/2 + cos(x_1)**2/2 + cos(x_2)**2/2 + 1",
+ "rivals": [],
+ "seconds": 7.5,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 3.1691263494897083e-16,
+ "ext_rel_error": 3.952536077904785e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

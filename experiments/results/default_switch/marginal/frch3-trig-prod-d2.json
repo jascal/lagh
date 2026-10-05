@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "frch3-trig-prod-d2",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "x_0*sin(x_1)",
+ "rivals": [],
+ "seconds": 30.7,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 2,
+   "law": "x_0*sin(x_1)",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 2,
+   "law": "x_0*sin(x_1)",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 2,
+   "law": "x_0*sin(x_1)",
+   "wrong": false
+  }
+ ]
+}

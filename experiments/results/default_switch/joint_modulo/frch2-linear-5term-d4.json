@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch2-linear-5term-d4",
+ "gate": "joint_modulo",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0 - x_1 + 2*x_2 - 3*x_3 + 5",
+ "rivals": [],
+ "seconds": 4.9,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

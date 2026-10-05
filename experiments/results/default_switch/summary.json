@@ -1,0 +1,52 @@
+{
+ "marginal/fr": {
+  "cases": 24,
+  "certified": 14,
+  "exact": 5,
+  "wrong": [
+   "fr-seed101",
+   "fr-seed102",
+   "fr-seed104",
+   "fr-seed106",
+   "fr-seed109",
+   "fr-seed111",
+   "fr-seed114",
+   "fr-seed115",
+   "fr-seed119"
+  ],
+  "median_seconds": 9.6
+ },
+ "joint/fr": {
+  "cases": 24,
+  "certified": 24,
+  "exact": 24,
+  "wrong": [],
+  "median_seconds": 24.75
+ },
+ "cost/fr": {
+  "fair_cases": 15,
+  "median_ratio_joint_over_marginal": 2.2608695652173916,
+  "lost_certificates": []
+ },
+ "marginal/frch": {
+  "cases": 36,
+  "certified": 33,
+  "exact": 0,
+  "wrong": [
+   "frch-rational-d1"
+  ],
+  "median_seconds": 8.75
+ },
+ "joint/frch": {
+  "cases": 36,
+  "certified": 36,
+  "exact": 0,
+  "wrong": [],
+  "median_seconds": 8.85
+ },
+ "cost/frch": {
+  "fair_cases": 35,
+  "median_ratio_joint_over_marginal": 1.0040160642570282,
+  "lost_certificates": []
+ }
+}

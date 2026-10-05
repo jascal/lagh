@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "frch3-rational-d3",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "(x_0/2 + x_1/2)/(x_2/2 + 1)",
+ "rivals": [],
+ "seconds": 80.0,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 2,
+   "law": "(x_0/2 + x_1/2)/(x_2/2 + 1)",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 2,
+   "law": "(x_0/2 + x_1/2)/(x_2/2 + 1)",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 2,
+   "law": "(x_0/2 + x_1/2)/(x_2/2 + 1)",
+   "wrong": false
+  }
+ ]
+}

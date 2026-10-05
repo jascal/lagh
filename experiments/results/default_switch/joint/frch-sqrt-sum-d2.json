@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch-sqrt-sum-d2",
+ "gate": "joint",
+ "truth": null,
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "sqrt(x_0**2 + x_1**2)",
+ "rivals": [],
+ "seconds": 432.7,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

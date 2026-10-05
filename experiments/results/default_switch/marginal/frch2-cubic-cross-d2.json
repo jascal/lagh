@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch2-cubic-cross-d2",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0**3 - x_0**2*x_1 + 2*x_1*sin(x_0)**2/3 + 2*x_1*cos(x_0)**2/3 + 4*x_1/3 - 1",
+ "rivals": [],
+ "seconds": 36.9,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 1.7047060682480185e-16,
+ "ext_rel_error": 1.388478390758926e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

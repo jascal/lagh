@@ -331,3 +331,360 @@ Its cost is the escalation that the correct answer requires.
 3. Noise. The gate is registered only for the clean-data per-candidate path;
    the declared-noise and floor-dominated winner gates are unchanged.
 4. The dim ≥ 3 pre-pass.
+
+## Amendment A3 — switching the default to the joint gate (registered 2026-10-05, before any scored run)
+
+**Change under test.** Make `coefficient_gate="joint"` the default of
+`discover` and `discover_passive`. Escalation stays `"first"`. Nothing else
+changes.
+
+**Why a new registration.** A2 left the gate opt-in on two registered failures:
+- **J6's cost criterion** compared against the old rule's time, which was
+  short because it stopped at wrong tier-1 certificates. Rewriting that
+  criterion after seeing the J6 data would be moving the goalposts, so the new
+  criterion below is evaluated **only on fresh banks** that no earlier run has
+  seen.
+- **J7** failed on a crash in the gate that has since been fixed. It is rerun
+  here.
+
+### Banks
+
+1. **Fresh rational (`fr`, 24 draws).** `(a·x+b)/(x+c)` on [.5, 3], 400 rows,
+   seeds 100–123. a, b, c are integers 1..5 from `rng(seed)`, redrawn
+   deterministically when a·c = b. Runner: `experiments/run_default_switch.py`.
+2. **Fresh reach (`frch`, 36 cells).** Every `reach/audit.py` cell re-drawn with
+   seed `crc32(name)+1`. Same runner.
+   Both fresh banks run both gates and use the A2 scorer: fresh in-box points
+   for the domain claim, the extended box [.25, 6]^d for the form claim.
+3. **Campaigns (14 scripts).** Every real-data campaign under `experiments/`
+   (gaia c0, p1, p2, p3; solar; macro; exoplanet c0, c1, c2, c5, ph2;
+   materials c0, c1, c2). This covers every certificate in `CERTIFICATES.md`.
+   Driver: `experiments/run_default_switch_campaigns.py`. Each arm runs in its
+   own clean worktree of the registered commit; the joint arm differs only by
+   the one-line default flip in `engine.py` and `passive.py`. Both arms run with
+   4 jobs, and the campaigns run alone, not alongside the fresh banks, because
+   `recover` has a 45 s wall-clock budget. Compared fields: every
+   `certified`, `law`, `alpha_log10` and `abstain` in every result file.
+   **Fresh marginal vs fresh joint, not the committed artifacts**: the engine
+   has changed since July, so marginal-vs-committed drift is reported
+   separately and not charged to the gate.
+4. **Null.** 200 new OS-seeded trials with `--coefficient-gate joint`.
+5. **Suite.** The full suite in a worktree with the default flipped (J7 rerun).
+
+### Predictions
+
+- **D1 (fresh rational).** Joint: 0 wrong; at least 20/24 exact.
+  Marginal: measured, no prediction.
+- **D2 (fresh reach).** Joint: 0 wrong; no cell that marginal certifies
+  correctly is lost.
+- **D3 (campaigns).** Every certificate the fresh marginal arm issues is
+  issued by the joint arm with the same law. Any new joint certificate is
+  reported and inspected; a new certificate that a campaign document records
+  as an abstain, conjecture or wrong counts as a failure.
+- **D4 (null).** 0/200.
+- **D5 (suite).** With the joint default, exactly one test fails:
+  `test_escalation::test_first_rule_stops_at_the_tier1_approximant`, which
+  documents the marginal default's recorded failure.
+- **D6 (cost, fair).** On each fresh bank, over the cases where marginal did
+  **not** issue a wrong certificate, the median per-case ratio of joint time
+  to marginal time is ≤ 2×. On campaigns, every script's wall time under joint
+  is ≤ 3× marginal, and no D3 difference is caused by a time-budget
+  truncation.
+
+### Decision rule
+
+If D1–D6 all hold, open the switch PR:
+- flip both defaults;
+- re-point the documenting test at `coefficient_gate="marginal"`;
+- add a ledger row to README;
+- add a note to `CERTIFICATES.md`.
+
+If any prediction fails, the default stays `marginal` and the failure is
+recorded. A D3 failure is decisive on its own: the gate may not cost a
+certificate the campaigns stand on.
+
+**Protocol deviation (2026-10-05, before any result was compared).** The first
+campaign run was discarded unscored: the machine suspended three times during
+it, at 09:43–09:51, 10:24–10:37 and 10:58–12:15. Each was a logind suspend on
+AC power with no lid event. A sleep stretches wall times and can exhaust
+`recover`'s wall-clock budget, so both arms were contaminated. Only exit codes
+and times had been seen; no law or certificate comparison had been made.
+
+The rerun:
+- runs under `systemd-inhibit --what=sleep:idle`;
+- records each run's `suspended_seconds`, the drift between `CLOCK_BOOTTIME`
+  and `CLOCK_MONOTONIC`;
+- treats any run with non-zero `suspended_seconds` as void, and reruns it.
+
+An unrelated job from another session (`pic`) was loading the CPU during the
+run. It is outside this study's control and is noted, not corrected for.
+
+## Results — A3 default switch (scored 2026-10-05)
+
+**Empirical: the switch is rejected under the registered rule. D3 fails: the
+joint gate costs the Gaia P3 frame-rotation certificate (α ≤ 10⁻⁷⁶⁸⁰). The
+default stays `marginal`.** Every run used below recorded 0 s suspended.
+Void runs are kept under `experiments/results/default_switch/void/`, and both
+arms of each void run were rerun side by side.
+
+| prediction | result |
+|---|---|
+| **D1** fresh rational (24) | **holds.** joint: 24 certified, all 24 exact, 0 wrong. marginal: 14 certified, 5 exact, **9 wrong** |
+| **D2** fresh reach (36) | **holds.** joint: 36 certified, 0 wrong, no correct certificate lost. marginal: 33 certified, **1 wrong** (`rational-d1` on fresh data) |
+| **D3** campaigns (14 scripts, 13 result files) | **fails.** 19 certificates under marginal, 18 under joint. The one difference: `gaia_p3/P1_frame_rotation` is certified under marginal and structurally refused under joint. Every other certificate is identical, law and α included |
+| **D4** null | **holds.** 0/200 |
+| **D5** suite with joint default | **holds.** 428 passed; the only failure is the predicted `test_first_rule_stops_at_the_tier1_approximant` |
+| **D6** cost | **fails.** Fair median ratio: fresh rational 2.26× (limit 2×), fresh reach 1.00×. Campaigns: gaia p3 3.35× (limit 3×), and it is the D3 case, searching every tier before refusing. The other 13 scripts ran at 0.49–1.03× |
+
+macro's result file was unchanged from the committed artifact in both arms,
+so it is identical between them. Campaign wall times are confounded by load:
+another session's CPU job ran during the marginal arm and had stopped before
+most of the joint arm, so ratios below 1 are load, not speed. The fresh banks
+had all finished before the machine's power profile was changed at 14:30:43.
+
+**Cause of the D3 failure, verified.** The Gaia inputs are direction cosines,
+which satisfy x0² + x1² + x2² = 1 exactly. At tier 1 the engine never
+proposes the bare three-term linear law. It proposes three certifying
+candidates that are the truth plus multiples of the constraint, for example
+`−0.2169·x0²·x1 − 0.2169·x1³ − 0.2169·x1·x2² + …`, which equals
+`−0.2169·x1` on the sphere. Under marginal, the constrained-input path
+certifies one of them and reduces it modulo the constraint. The constraint
+ideal is an **exact** joint flat direction, so the joint gate correctly finds
+each candidate's coefficients undetermined and rejects all three. Nothing
+certifies through tier 7. The full-data three-term law itself passes the joint
+gate by a factor of about 3×10⁷.
+
+**What the fresh banks add, empirical.** The shipped default issues wrong
+certificates on 9 of 24 new clean rational draws and on fresh-seed
+`rational-d1`. Clean-data false exactness is not confined to the P2/P1
+witnesses; it is common on this family. Under the joint gate those cases
+certify the exact truth.
+
+**Open, and the next registration (A4).** Apply the joint test modulo
+machine-exact input constraints: reduce each candidate through
+`reduce_mod_constraints` when `input_constraints` finds any, and test joint
+pinning on the reduced law, so the constraint ideal does not count as
+non-identification. It must be registered with the frame rotation as a named
+cell, and the cost criterion will have to deal with the 2.26× fresh-rational
+ratio. That ratio is the price of escalating to the tier where the right
+answer is.
+
+## Amendment A4 — the joint gate modulo input constraints (registered 2026-10-05, before any A4 run)
+
+**Rule.** `coefficient_gate="joint_modulo"`. When `input_constraints` finds
+machine-exact polynomial constraints on the inputs (computed once per
+`discover`, on all rows), each candidate is reduced with
+`reduce_mod_constraints`, float dust is swept with `reduce_to_minimal`, the
+same canonicalization the constrained-input path already applies to winners,
+and `joint_pinned` tests that reduced law. The candidate itself enters the
+certifying set unchanged, so everything downstream is as before. Without
+constraints the rule is exactly A2's `joint`.
+
+The certificate on constrained inputs is already a domain-restricted claim,
+made modulo the constraint ideal. Identification is asked modulo the same
+ideal, so the ideal is not counted as an undetermined direction.
+
+**Pilot (disclosed):**
+- Gaia P3 frame rotation under `joint_modulo`: certifies the same law at
+  tier 1 in 10 s (α 10⁻⁷⁶⁴⁸ with the pilot's floor, which omits the campaign's
+  ulp term).
+- P2 seed 20 (`max_tier=2`): exact truth at tier 2.
+
+### Banks (all new or re-run; nothing from A3 is re-scored)
+
+1. **`fr2`**: 24 new rational draws, seeds 200–223, same generator as `fr`.
+2. **`frch2`**: the 36 reach cells on seed `crc32(name)+2`.
+   Both run marginal and `joint_modulo`, interleaved case by case so the two
+   gates share load.
+3. **Campaigns**: all 14 scripts. The marginal and `joint_modulo` worktrees
+   run **concurrently**, each script beside its twin, 4 jobs per arm. Output:
+   `experiments/results/default_switch_a4/campaigns/`.
+4. **Null**: 200 new trials, `--coefficient-gate joint_modulo`.
+5. **Suite**: the full suite with `joint_modulo` as the default.
+
+Every run sits under `systemd-inhibit` and records `suspended_seconds`. A run
+that slept is void, and both arms of it are rerun together.
+
+### Predictions
+
+- **E1 (`fr2`).** `joint_modulo`: 0 wrong, at least 20/24 exact.
+- **E2 (`frch2`).** `joint_modulo`: 0 wrong; no correct marginal certificate
+  lost.
+- **E3 (campaigns).** Every marginal certificate is issued under
+  `joint_modulo` with the same law and the same α. This names the **Gaia P3
+  frame rotation** explicitly. Any new certificate is reported and inspected.
+- **E4 (null).** 0/200.
+- **E5 (suite).** Only
+  `test_escalation::test_first_rule_stops_at_the_tier1_approximant` fails.
+- **E6 (cost).** A3's single fair ratio mixed two different things, so it is
+  split on fresh data:
+  - **same verdict** (both gates certify the same law, or both refuse): median
+    `joint_modulo`/marginal ratio ≤ 2×. This is the gate's own overhead;
+  - **changed verdict** (marginal refuses or is wrong, `joint_modulo`
+    certifies): no ratio limit, since this is the cost of reaching the tier
+    where the right answer is. Absolute caps instead: median ≤ 120 s, and no
+    fresh case over 600 s under `joint_modulo`;
+  - **campaigns:** every script ≤ 3× its concurrent marginal twin.
+
+### Decision rule
+
+If E1–E6 all hold, open the switch PR:
+- default `coefficient_gate="joint_modulo"`;
+- point the documenting test at `"marginal"`;
+- add a README ledger row;
+- add a `CERTIFICATES.md` note.
+
+Otherwise the default stays `marginal` and the failure is recorded. An E3
+failure is decisive on its own.
+
+## Results — A4 (scored 2026-10-05)
+
+**Empirical: every soundness and campaign prediction holds; the switch is
+rejected under the registered rule on cost alone. E6's same-verdict ratio on
+`fr2` is 2.10×, against a 2× limit.** No A4 run recorded any suspended time.
+
+| prediction | result |
+|---|---|
+| **E1** `fr2` (24 new rationals) | **holds.** `joint_modulo`: 24 certified, all 24 exact, 0 wrong. marginal: 13 certified, 5 exact, **8 wrong** |
+| **E2** `frch2` (36) | **holds.** `joint_modulo`: 36/36, 0 wrong, none lost. marginal: 34, **1 wrong** (`rational-d1` again) |
+| **E3** campaigns | **holds.** 19 certificates in each arm and 0 differences across all 13 result files: every law and α identical, Gaia P3 frame rotation included |
+| **E4** null | **holds.** 0/200 (median 32.7 s per trial) |
+| **E5** suite with `joint_modulo` default | **holds.** 428 passed; the only failure is the predicted documenting test |
+| **E6** cost | **fails.** Same verdict: `fr2` **2.10×** over 5 cases, `frch2` 1.00× over 33. Changed verdict: median 30.0 s and max 65.1 s (`fr2`), max 402.4 s (`frch2`), within the caps. Campaigns: worst script 1.03×, with each arm run concurrently beside its twin |
+
+**Where the 2.10× comes from.** The five same-verdict `fr2` cases all certify
+the same exact rational at tier 2 under both gates. Two show no overhead (1.01×,
+0.99×). Three roughly double: 7.2 → 15.6 s, 11.7 → 24.6 s and 8.9 → 19.1 s.
+The truth has no gated atoms, so it returns immediately; the added seconds
+are `joint_pinned` on rival tier-2 candidates that carry gated atoms, across
+three passive re-splits. That is a re-lambdify and up to four `check` calls
+per such candidate. It is the gate's own overhead, and it never changes the
+verdict on these cases.
+
+**Status.** The default stays `marginal`. `joint_modulo` is available opt-in
+and has the strongest record of any rule measured here:
+- 0 wrong certificates on every bank;
+- 24/24 and 24/24 exact on two independent fresh rational banks (marginal is
+  wrong on 9/24 and 8/24);
+- 36/36 reach on both fresh draws;
+- every campaign certificate unchanged.
+
+**Open:** the overhead of `joint_pinned` on cheap cases, which is
+engineering, not soundness.
+
+## Diagnosis after A4 (2026-10-05): the E6 overhead is not the gate
+
+A performance-only A5 was planned, on the reading that the 2.10× was
+`joint_pinned` overhead. Profiling **falsified that reading before any A5
+change was made.**
+
+- On `fr2-seed205`, `joint_pinned` ran 9 times for 0.2 s in total. The time
+  is in roughly 2000 ordinary `check`/`lambdify` calls.
+- Per split, without passive aggregation:
+  - seed 205, marginal: splits 0 and 2 certify at **tier 1** (2.5 s and
+    2.2 s); split 1 at tier 2.
+  - seed 205, `joint_modulo`: all three splits certify at tier 2 (7.2 s,
+    3.0 s, 6.6 s).
+  - seed 207: the same pattern on two splits (marginal 3.8 s and 5.3 s at
+    tier 1; `joint_modulo` 9.3 s and 11.8 s at tier 2).
+  - seed 201: tier 2 on every split under both rules, and no overhead
+    (2.4–2.6 s against 2.5–3.7 s).
+- The marginal tier-1 split certificates are approximants. The passive
+  full-data gate rejects them, so the final verdict is the same tier-2 truth.
+
+**Empirical:** E6's "same verdict" bucket classified cases by **final**
+verdict and so included cases where marginal certified a wrong law on
+individual splits. The measured 2.10× is the cost of escalating those splits
+to the correct tier, the same cost E6 meant to exempt under "changed
+verdict", not gate overhead. A performance-only change to `joint_pinned`
+cannot address it; the planned A5 is withdrawn. A criterion that classifies
+by per-split verdict would be a redefinition made after seeing data, so it
+could only be judged on a further fresh bank.
+
+## Owner decision (2026-10-05)
+
+The repository owner accepts E6's cost on the A4 evidence and authorizes
+switching the default to `coefficient_gate="joint_modulo"`. This is
+**recorded as the owner's judgment, not as a registered pass**: under the
+registered rule A4 fails E6. The judgment rests on:
+- A4's soundness and campaign results: 0 wrong on every bank; every campaign
+  certificate identical; null 0/200; suite clean;
+- the diagnosis above, that the extra time is escalation to the correct tier
+  on splits where marginal certified a wrong law.
+
+A5 below is run as independent measurement of that diagnosis, and its result
+is reported in the switch PR whichever way it comes out.
+
+## Amendment A5 — per-split cost classification (registered 2026-10-05, before any A5 run)
+
+**Change.** The cost criterion only; the gate code is A4's `joint_modulo`,
+unchanged. A fresh case counts as **changed** if the final verdicts differ
+**or** marginal certified a wrong law on any of the three passive splits.
+Per-split verdicts are recomputed outside the timed call, using passive's own
+split procedure, and each split's certified law is scored with the A2 scorer.
+Every other case counts as **same**. The A4 campaign (E3, campaign cost),
+null (E4) and suite (E5) results stand for A5 because the code is identical.
+
+**Banks.** `fr3`: 24 rationals, seeds 300–323, same generator. `frch3`: the 36
+reach cells on seed `crc32(name)+3`. Both gates, interleaved case by case,
+under `systemd-inhibit`, with suspend-voided runs rerun in both arms.
+
+**Predictions.**
+- **F1.** `joint_modulo`: 0 wrong on both banks; at least 20/24 exact on `fr3`;
+  no correct marginal certificate lost on `frch3`.
+- **F2 (cost).** Same cases: median `joint_modulo`/marginal ≤ 2× on each bank.
+  Changed cases: median ≤ 120 s, and no case over 600 s.
+- **F3 (diagnosis).** On `fr3`, every case whose ratio exceeds 1.5× has a
+  marginal split that certified a wrong law.
+
+## Results — A5 (scored 2026-10-05)
+
+**Empirical: F1 and F2 hold; F3 fails on 1 of 21 cases.** None of the 120
+runs recorded suspended time.
+
+| prediction | result |
+|---|---|
+| **F1** | **holds.** `fr3`: `joint_modulo` 24 certified, all 24 exact, 0 wrong. Marginal: 15 certified, 8 exact, **7 wrong**, and a wrong law certified on at least one split in 21/24 cases. `frch3`: `joint_modulo` 36/36, 0 wrong. Marginal: 34, **1 wrong** (`rational-d1`, for the fourth fresh draw running). No correct marginal certificate lost |
+| **F2** | **holds.** Same cases: `fr3` 0.99× (2 cases), `frch3` 1.00× (33). Changed cases: median 35.0 s (`fr3`) and 12.8 s (`frch3`); maximum 93.5 s and 423.4 s, against caps of 120 s and 600 s |
+| **F3** | **fails, 20 of 21.** 21 `fr3` cases exceed 1.5×. 20 have a marginal split that certified a wrong law. The exception, `fr3-seed322` (2.18×), never certified a wrong law: marginal splits 0 and 2 stopped at **tier 1 with a structural refusal** among dense fractional-power rivals, and `joint_modulo` removes those rivals and certifies the exact truth at tier 2 on every split |
+
+**Reading.** The registered diagnosis named the mechanism too narrowly. The
+measured cost is escalation past tier 1 whenever tier 1's certifying set was
+made of approximants: they either certify wrongly or force a refusal. On all
+60 A5 cases with an unchanged outcome, the gate costs 0.99–1.00×.
+
+**Status.** The default switch rests on the owner decision recorded above,
+which A5 is consistent with. The record shows E6 failing under A4's
+classification and F3 failing as worded; neither is rewritten.
+
+## Review corrections (2026-10-05, PR #17)
+
+1. **A4's rule text overstated what `reduce_to_minimal` does.** It is not dust
+   sweeping. It drops any term whose removal still certifies on `X_all_m`,
+   the certify split included, so the law the joint gate tests was chosen
+   using the certify rows (a second use of that split), and it can remove more
+   than the constraint ideal. The path runs only when
+   `reduce_mod_constraints` changes the candidate. In principle a dense
+   candidate on constrained inputs could pass because the minimal law passes,
+   while the candidate itself enters the certifying set. Campaign identity (E3)
+   is the empirical guard. Nothing proves the gate target is the constraint
+   quotient, and the unit test exercises `reduce_mod_constraints` only, not
+   the engine path. **Open:** restrict the step to machine-scale coefficient
+   dust, or show the drop set lies in the ideal; either change requires
+   re-scoring.
+2. **The default flip itself was not re-scored.** Every A4/A5 artifact was
+   produced through the opt-in path (`coefficient_gate="joint_modulo"`,
+   introduced in 8574a7e and unchanged through 95da103). eea8b2d changes only
+   the default strings in `engine.py` and `passive.py`, plus docs and tests.
+   The artifacts carry over **only** for that branch as it stands. Any later
+   edit to the `joint_modulo` branch of the gate must be re-scored, not
+   credited with these results.
+3. **F3 stays failed as worded.** `fr3-seed322`'s tier-1 structural refusal
+   among approximants is the same mechanism that made those splits cheap
+   under marginal. It is not a near-pass.
+4. **Scope of the closure.** It covers the clean, non-floor-dominated,
+   per-candidate path only. The declared-noise and floor-dominated winner
+   gates, `sqrt(f²)` twins under `accumulate`, and the dim ≥ 3 pre-pass
+   (where this gate does not run) remain open. "Removed the dense-approximant
+   class on every measured bank" is a statement about those banks, not a
+   closure of false exactness.

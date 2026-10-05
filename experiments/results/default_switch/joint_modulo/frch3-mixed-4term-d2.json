@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "frch3-mixed-4term-d2",
+ "gate": "joint_modulo",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0*x_1 + log(x_1) - sin(x_0)**2/2 + sin(x_0) - sin(x_1)**2/2 - cos(x_0)**2/2 - cos(x_1)**2/2 - 1",
+ "rivals": [],
+ "seconds": 4.1,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 4.480967845968588e-16,
+ "ext_rel_error": 2.07955263776007e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0*x_1 + log(x_1) - sin(x_0)**2/2 + sin(x_0) - sin(x_1)**2/2 - cos(x_0)**2/2 - cos(x_1)**2/2 - 1",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0*x_1 + log(x_1) - sin(x_0)**2/2 + sin(x_0) - sin(x_1)**2/2 - cos(x_0)**2/2 - cos(x_1)**2/2 - 1",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0*x_1 + log(x_1) - sin(x_0)**2/2 + sin(x_0) - sin(x_1)**2/2 - cos(x_0)**2/2 - cos(x_1)**2/2 - 1",
+   "wrong": false
+  }
+ ]
+}

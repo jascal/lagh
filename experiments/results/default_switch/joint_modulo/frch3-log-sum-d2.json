@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "frch3-log-sum-d2",
+ "gate": "joint_modulo",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_1 + 2*log(x_0)",
+ "rivals": [],
+ "seconds": 45.6,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 1,
+   "law": "x_1 + 2*log(x_0)",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 1,
+   "law": "x_1 + 2*log(x_0)",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 1,
+   "law": "x_1 + 2*log(x_0)",
+   "wrong": false
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch-inverse-square-sum-d2",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "1/(x_0**2 + x_1**2)",
+ "rivals": [],
+ "seconds": 476.7,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "frch3-inner-linear-trig-d1",
+ "gate": "joint_modulo",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "595304*sin(x_0)*cos(x_0)/550899 + 1244406*cos(x_0)**2/739423 - 622203/739423",
+ "rivals": [],
+ "seconds": 23.0,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 9.765199156805405e-13,
+ "ext_rel_error": 9.765660801373036e-13,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 1,
+   "law": "595304*sin(x_0)*cos(x_0)/550899 + 1244406*cos(x_0)**2/739423 - 622203/739423",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 1,
+   "law": "595304*sin(x_0)*cos(x_0)/550899 + 1244406*cos(x_0)**2/739423 - 622203/739423",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 1,
+   "law": "595304*sin(x_0)*cos(x_0)/550899 + 1244406*cos(x_0)**2/739423 - 622203/739423",
+   "wrong": false
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "frch3-gaussian-d1",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "exp(-x_0**2 + 3*x_0 - 9/4)",
+ "rivals": [],
+ "seconds": 89.7,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 6.66138127783833e-16,
+ "ext_rel_error": 6.661345796142007e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 5,
+   "law": "exp(-x_0**2 + 3*x_0 - 9/4)",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 5,
+   "law": "exp(-x_0**2 + 3*x_0 - 9/4)",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 5,
+   "law": "exp(-x_0**2 + 3*x_0 - 9/4)",
+   "wrong": false
+  }
+ ]
+}

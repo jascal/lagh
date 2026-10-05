@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch-monomial-frac-d2",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "x_0**(3/2)/sqrt(x_1)",
+ "rivals": [],
+ "seconds": 20.0,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

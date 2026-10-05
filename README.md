@@ -105,14 +105,17 @@ speculative. Unrepaired findings are marked open. The ledger, in the order the f
 | the same bead's near-surface record failed the timescale gate on both axes, so C2 refused it and read the leftover drag off a driven-stage scale — which at one drive frequency determines only Rd × f_c, and was handed the calibration's own corner: the quantity under test, returned as the answer (measured in simulation: wrong by exactly the drag ratio) | a gate that REPORTS rather than only refuses — a common-mode ratio with healthy equipartition variances is a measurement of κ/γ, and one axis is never enough to call it — plus attribution by signature: timescale, realized diffusion and variance read in the detector's own units respond differently to a drag, a stiffness and a scale change, so a one-parameter fit per hypothesis leaves a residual that can refuse (`drag` on both axes at 1.353 ± 0.079 × bulk, `consistent` on the control, `unattributed` on the contaminated axis) |
 | public `verify` discarded the signed residuals of refuted forms, retaining only a miss count | [refusal measurement audit](docs/REFUSAL_MEASUREMENT_AUDIT.md): retain a bounded sample of signed discrepancies and declared epsilon bands, candidate identity, original row indices, checked domain and complete counts; attribution remains unresolved; no partial determination (20-row split and 100-row full-data fixtures, no gate changes) |
 | C4 mixed stopband attenuation into a whiteness test and described native-band repeatability as alias validation | [review correction](docs/CASE_STUDY_TWEEZERS_C4.md): separate passband validation from training-band repeatability and rolloff; detector whiteness unresolved; restore axis gates and report unstable theta; 2.402 mV is a demeaned window statistic with unknown population uncertainty; no validation of Retention’s above-Nyquist extrapolation |
-| noiseless rational data produced false-exact approximant certificates on 8/16 P2 draws; P1 retained eight wrong arm outputs, including fresh in-box checks | **Empirical failure; escalation remains open:** the first non-empty certifying tier stops the search before later-tier truth is considered. The acquisition entry guard excludes initial certificates but does not repair the engine. [Evidence and scope](docs/REFUSAL_ACQUISITION_RESULTS.md) |
+| noiseless rational data produced false-exact approximant certificates on 8/16 P2 draws; P1 retained eight wrong arm outputs, including fresh in-box checks — and on fresh draws the shipped default was wrong on 9/24, 8/24 and 7/24 new clean rationals | the exact-coefficient gate applied **jointly, modulo machine-exact input constraints** (`certify.joint_pinned`, `coefficient_gate="joint_modulo"`, the default since 2026-10-05): `float_pinned` moves one coefficient at a time, so a dense near-collinear approximant passed while its coefficient vector slid along a joint flat direction; the same perturbations taken along the least-determined direction reject it, and escalation reaches the tier where the truth is. Fresh banks: 72/72 rationals exact, 108/108 reach cells, 0 wrong, null 0/200; every campaign certificate unchanged. A plain joint gate first cost the Gaia frame rotation (the unit-sphere constraint is an exact flat direction), hence "modulo". Adopted on the owner's judgment of the escalation cost after a registered cost criterion failed ([registration and record](docs/ESCALATION_REGISTRATION.md)) |
 
-**Open boundary, scope corrected:** approximant impostors occur on clean data
-at machine floor as well as under declared noise. The noise-specific restriction
-on dense channels does not protect the clean-data path; |H|·q^h bounds chance
-fits, not exact-form error. **Open:** when to escalate past the first non-empty
-certifying tier, and how to compare later-tier laws without weakening soundness.
-No escalation repair was tested in this study.
+**Boundary, scope corrected and partly closed:** approximant impostors occur on clean data
+at machine floor as well as under declared noise; |H|·q^h bounds chance fits, not
+exact-form error. On clean data the joint coefficient gate (default) removed the
+dense-approximant class on every measured bank; that is an empirical result on those
+banks, not a closure of false exactness. **Open:** the declared-noise and
+floor-dominated paths keep their own gates and were not re-measured; `sqrt(f²)`
+twins (no gated coefficients) still force refusals under `escalation="accumulate"`;
+the dim ≥ 3 pre-pass still returns its first certifying class. Escalation itself
+stays `first`; `pool` was measured unsound and `accumulate` sound but ~31× slower.
 
 **Open boundary:** constrained twins compatible with all available evidence
 may require measurements outside the sampled box. The archived `rational-d1`

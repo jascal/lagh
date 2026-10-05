@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "fr3-seed318",
+ "gate": "joint_modulo",
+ "truth": "(4*x_0 + 2)/(x_0 + 5)",
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "(4*x_0/5 + 2/5)/(x_0/5 + 1)",
+ "rivals": [],
+ "seconds": 33.8,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 2.5384780710072813e-16,
+ "ext_rel_error": 3.7609774621124933e-16,
+ "exact": true,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 2,
+   "law": "(4*x_0/5 + 2/5)/(x_0/5 + 1)",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 2,
+   "law": "(4*x_0/5 + 2/5)/(x_0/5 + 1)",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 2,
+   "law": "(4*x_0/5 + 2/5)/(x_0/5 + 1)",
+   "wrong": false
+  }
+ ]
+}

@@ -33,7 +33,8 @@ def main(argv=None):
     ap.add_argument("--trials", type=int, default=N_TRIALS)
     ap.add_argument("--escalation", default="first",
                     help="engine escalation rule (docs/ESCALATION_REGISTRATION.md)")
-    ap.add_argument("--coefficient-gate", default="marginal")
+    ap.add_argument("--coefficient-gate", default="joint_modulo",
+                    help="engine coefficient gate (default: the engine default)")
     args = ap.parse_args(argv)
     rng = np.random.default_rng()          # OS-seeded: a true null, not replayable
     out = Path(args.out)

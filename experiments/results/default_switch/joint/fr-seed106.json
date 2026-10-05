@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "fr-seed106",
+ "gate": "joint",
+ "truth": "(3*x_0 + 5)/(x_0 + 3)",
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "(x_0 + 5/3)/(x_0/3 + 1)",
+ "rivals": [],
+ "seconds": 24.8,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 3.8069257999148144e-16,
+ "ext_rel_error": 3.4772809276831164e-16,
+ "exact": true,
+ "wrong_domain": false,
+ "wrong_form": false
+}

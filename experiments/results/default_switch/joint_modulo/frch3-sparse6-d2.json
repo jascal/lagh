@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "frch3-sparse6-d2",
+ "gate": "joint_modulo",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "-sqrt(x_0) + x_0*x_1 + sin(x_0) + cos(x_1) - 1 + exp(-Abs(x_1))",
+ "rivals": [],
+ "seconds": 18.3,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 2.5696856034873566e-16,
+ "ext_rel_error": 1.6543873374718058e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 1,
+   "law": "-sqrt(x_0) + x_0*x_1 + sin(x_0) + cos(x_1) - 1 + exp(-Abs(x_1))",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 1,
+   "law": "-sqrt(x_0) + x_0*x_1 + sin(x_0) + cos(x_1) - 1 + exp(-Abs(x_1))",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 1,
+   "law": "-sqrt(x_0) + x_0*x_1 + sin(x_0) + cos(x_1) - 1 + exp(-Abs(x_1))",
+   "wrong": false
+  }
+ ]
+}

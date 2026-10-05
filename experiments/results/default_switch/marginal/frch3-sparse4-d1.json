@@ -1,0 +1,41 @@
+{
+ "tag": "empirical",
+ "case": "frch3-sparse4-d1",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0 + sin(x_0) + cos(x_0) - exp(-Abs(x_0))",
+ "rivals": [],
+ "seconds": 2.2,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 3.7286551778149954e-16,
+ "ext_rel_error": 1.3340475664882647e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false,
+ "splits": [
+  {
+   "split": 0,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0 + sin(x_0) + cos(x_0) - exp(-Abs(x_0))",
+   "wrong": false
+  },
+  {
+   "split": 1,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0 + sin(x_0) + cos(x_0) - exp(-Abs(x_0))",
+   "wrong": false
+  },
+  {
+   "split": 2,
+   "certified": true,
+   "tier": 1,
+   "law": "x_0 + sin(x_0) + cos(x_0) - exp(-Abs(x_0))",
+   "wrong": false
+  }
+ ]
+}
