@@ -571,3 +571,32 @@ and has the strongest record of any rule measured here:
 
 **Open:** the overhead of `joint_pinned` on cheap cases, which is
 engineering, not soundness.
+
+## Diagnosis after A4 (2026-10-05): the E6 overhead is not the gate
+
+A performance-only A5 was planned, on the reading that the 2.10× was
+`joint_pinned` overhead. Profiling **falsified that reading before any A5
+change was made.**
+
+- On `fr2-seed205`, `joint_pinned` ran 9 times for 0.2 s in total. The time
+  is in roughly 2000 ordinary `check`/`lambdify` calls.
+- Per split, without passive aggregation:
+  - seed 205, marginal: splits 0 and 2 certify at **tier 1** (2.5 s and
+    2.2 s); split 1 at tier 2.
+  - seed 205, `joint_modulo`: all three splits certify at tier 2 (7.2 s,
+    3.0 s, 6.6 s).
+  - seed 207: the same pattern on two splits (marginal 3.8 s and 5.3 s at
+    tier 1; `joint_modulo` 9.3 s and 11.8 s at tier 2).
+  - seed 201: tier 2 on every split under both rules, and no overhead
+    (2.4–2.6 s against 2.5–3.7 s).
+- The marginal tier-1 split certificates are approximants. The passive
+  full-data gate rejects them, so the final verdict is the same tier-2 truth.
+
+**Empirical:** E6's "same verdict" bucket classified cases by **final**
+verdict and so included cases where marginal certified a wrong law on
+individual splits. The measured 2.10× is the cost of escalating those splits
+to the correct tier, the same cost E6 meant to exempt under "changed
+verdict", not gate overhead. A performance-only change to `joint_pinned`
+cannot address it; the planned A5 is withdrawn. A criterion that classifies
+by per-split verdict would be a redefinition made after seeing data, so it
+could only be judged on a further fresh bank.
