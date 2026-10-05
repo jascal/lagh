@@ -1,0 +1,32 @@
+{
+ "c3_snapshot": "/tmp/claude-1000/-home-allans-code/02b2179b-1344-407d-b7db-076a566203e7/scratchpad/wt4/lagh-joint_modulo/experiments/gaia/data/c3_67fabb172bf7.csv",
+ "c3_n": 1000,
+ "P1_no_single_kepler": {
+  "certified": false,
+  "abstain": "structural"
+ },
+ "P2_mass_proxy": {
+  "median_msun": 0.04888634875758393,
+  "q10": 0.008823516111582563,
+  "q90": 0.11014592937829114
+ },
+ "c4rr_snapshot": "/tmp/claude-1000/-home-allans-code/02b2179b-1344-407d-b7db-076a566203e7/scratchpad/wt4/lagh-joint_modulo/experiments/gaia/data/c4rr_bf9b07ed638a.csv",
+ "c4rr_n": 800,
+ "P3_floor_abs": 4.20168062554053e-07,
+ "P3_rrab_metallicity": {
+  "certified": true,
+  "law": "5178136*x_0*x_1/825859 - 15295147*x_0/759912 - 18000001*x_1**2/25000000 + 1029763*x_1/752516 + 1354664/446541",
+  "alpha_log10": -1009.3275771993847,
+  "abstain": null
+ },
+ "c4cep_snapshot": "/tmp/claude-1000/-home-allans-code/02b2179b-1344-407d-b7db-076a566203e7/scratchpad/wt4/lagh-joint_modulo/experiments/gaia/data/c4cep_db0dbc7d8842.csv",
+ "c4cep_n": 500,
+ "P4_leavitt": {
+  "track": "conjecture",
+  "tag": "empirical",
+  "expr": "0.0712349906724989 - 2.21145713747103*x_0",
+  "slope": -2.21145713747103
+ }
+}
+
+[exit 0]

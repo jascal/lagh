@@ -536,3 +536,38 @@ If E1–E6 all hold, open the switch PR:
 
 Otherwise the default stays `marginal` and the failure is recorded. An E3
 failure is decisive on its own.
+
+## Results — A4 (scored 2026-10-05)
+
+**Empirical: every soundness and campaign prediction holds; the switch is
+rejected under the registered rule on cost alone. E6's same-verdict ratio on
+`fr2` is 2.10×, against a 2× limit.** No A4 run recorded any suspended time.
+
+| prediction | result |
+|---|---|
+| **E1** `fr2` (24 new rationals) | **holds.** `joint_modulo`: 24 certified, all 24 exact, 0 wrong. marginal: 13 certified, 5 exact, **8 wrong** |
+| **E2** `frch2` (36) | **holds.** `joint_modulo`: 36/36, 0 wrong, none lost. marginal: 34, **1 wrong** (`rational-d1` again) |
+| **E3** campaigns | **holds.** 19 certificates in each arm and 0 differences across all 13 result files: every law and α identical, Gaia P3 frame rotation included |
+| **E4** null | **holds.** 0/200 (median 32.7 s per trial) |
+| **E5** suite with `joint_modulo` default | **holds.** 428 passed; the only failure is the predicted documenting test |
+| **E6** cost | **fails.** Same verdict: `fr2` **2.10×** over 5 cases, `frch2` 1.00× over 33. Changed verdict: median 30.0 s and max 65.1 s (`fr2`), max 402.4 s (`frch2`), within the caps. Campaigns: worst script 1.03×, with each arm run concurrently beside its twin |
+
+**Where the 2.10× comes from.** The five same-verdict `fr2` cases all certify
+the same exact rational at tier 2 under both gates. Two show no overhead (1.01×,
+0.99×). Three roughly double: 7.2 → 15.6 s, 11.7 → 24.6 s and 8.9 → 19.1 s.
+The truth has no gated atoms, so it returns immediately; the added seconds
+are `joint_pinned` on rival tier-2 candidates that carry gated atoms, across
+three passive re-splits. That is a re-lambdify and up to four `check` calls
+per such candidate. It is the gate's own overhead, and it never changes the
+verdict on these cases.
+
+**Status.** The default stays `marginal`. `joint_modulo` is available opt-in
+and has the strongest record of any rule measured here:
+- 0 wrong certificates on every bank;
+- 24/24 and 24/24 exact on two independent fresh rational banks (marginal is
+  wrong on 9/24 and 8/24);
+- 36/36 reach on both fresh draws;
+- every campaign certificate unchanged.
+
+**Open:** the overhead of `joint_pinned` on cheap cases, which is
+engineering, not soundness.

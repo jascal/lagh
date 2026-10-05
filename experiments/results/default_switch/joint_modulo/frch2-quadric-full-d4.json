@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch2-quadric-full-d4",
+ "gate": "joint_modulo",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0*x_1 + x_0 + x_1 - x_2*x_3 + x_2 + x_3**2 + x_3 + 1",
+ "rivals": [],
+ "seconds": 18.5,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 2.453737894893053e-16,
+ "ext_rel_error": 1.9312516869781126e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

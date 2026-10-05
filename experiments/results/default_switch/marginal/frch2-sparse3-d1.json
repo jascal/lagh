@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch2-sparse3-d1",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0**2 + 2*sin(x_0) - 3/x_0",
+ "rivals": [],
+ "seconds": 1.1,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}
