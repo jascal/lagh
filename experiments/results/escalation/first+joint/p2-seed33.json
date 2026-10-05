@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "p2-seed33",
+ "rule": "first",
+ "gate": "joint",
+ "arm": "first+joint",
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "(3*x_0/4 + 1/2)/(x_0/4 + 1)",
+ "rivals": [],
+ "seconds": 80.7,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": true,
+ "wrong_domain": false,
+ "wrong_form": false
+}

@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "p2-seed22",
+ "rule": "accumulate",
+ "gate": "joint",
+ "arm": "accumulate+joint",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "(3*x_0/4 + 1/2)/(x_0/4 + 1)",
+ "rivals": [],
+ "seconds": 212.4,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": true,
+ "wrong_domain": false,
+ "wrong_form": false
+}

@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "reach-sparse3-d1",
+ "rule": "accumulate",
+ "gate": "joint",
+ "arm": "accumulate+joint",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "x_0**2 + 2*sin(x_0) - 3/x_0",
+ "rivals": [],
+ "seconds": 119.7,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

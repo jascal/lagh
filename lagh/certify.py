@@ -574,8 +574,8 @@ def joint_pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps) -> bool:
         up[i] += h
         dn[i] -= h
         J[:, i] = (pred(up) - pred(dn)) / (2 * h)
-    band = np.broadcast_to(np.asarray(eps, float), (len(X),))
-    G = J * v[None, :] / band[:, None]
+    rows = np.broadcast_to(band(eps, expr), (len(X),))   # callable bands (weak form)
+    G = J * v[None, :] / rows[:, None]
     if not np.all(np.isfinite(G)):
         return True
     d = np.linalg.svd(G, full_matrices=False)[2][-1]

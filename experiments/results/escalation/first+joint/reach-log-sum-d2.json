@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "reach-log-sum-d2",
+ "rule": "first",
+ "gate": "joint",
+ "arm": "first+joint",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_1 + 2*log(x_0)",
+ "rivals": [],
+ "seconds": 81.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

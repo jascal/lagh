@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "reach-trig-prod-d2",
+ "rule": "first",
+ "gate": "joint",
+ "arm": "first+joint",
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "x_0*sin(x_1)",
+ "rivals": [],
+ "seconds": 43.7,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

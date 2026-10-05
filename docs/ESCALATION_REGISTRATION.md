@@ -265,3 +265,69 @@ same scorer, plus 200 null trials for each arm.
 default changes in a separate change, after the campaign certificates in
 `CERTIFICATES.md` with two or more gated atoms are re-scored. Under that
 outcome, `accumulate` would remain the slower, more conservative opt-in.
+
+## Results — joint coefficient gate (scored 2026-10-05)
+
+**Empirical: the joint gate issued zero wrong certificates under both rules and
+kept null 0/200. Under the default `first` rule it certifies the exact truth on
+every P2 and P1 witness and 36/36 reach cells. As registered, it is not
+default-eligible: J6 (cost) fails, and J7 failed on a crash in the gate, now
+fixed.**
+
+| bank | `first` | `first+joint` | `accumulate` | `accumulate+joint` |
+|---|---|---|---|---|
+| P2 (16): cert / wrong / exact | 8 / **8** / 0 | **16 / 0 / 16** | 5 / 0 / 5 | 16 / 0 / 16 |
+| P1 (3) | 1 / **1** / 0 | **3 / 0 / 3** | 0 / 0 / 0 | 3 / 0 / 3 |
+| reach (36): cert / wrong | 35 / 0 | **36 / 0** | 30 / 0 | 34 / 0 |
+| null (200) false certs | — | 0 | 0 | 0 |
+| median s, P2 / P1 / reach | 18.9 / 19.5 / 12.7 | 68.2 / 78.1 / 21.2 | 289.8 / 239.1 / 393.9 | 373.0 / 340.2 / 287.4 |
+
+- **J1 holds.** All 16 P2 draws certify the exact truth at tier 2. That includes
+  the 8 former false certificates and the 8 former refusals.
+- **J2 holds.** All three P1 datasets certify their exact truths at tier 2.
+- **J3 holds.** 36/36, 0 wrong. `rational-d1`, the cell that kept the passive
+  reach audit at 35/36, now certifies `(2x/3+1/3)/(x/3+1)` = `(2x+1)/(x+3)`
+  exactly, with extended-box error 3×10⁻¹⁶. This is a new rule, so the
+  historical 35/36 artifact is not amended.
+- **J4 holds.** `accumulate+joint` has 0 wrong and reaches 34/36. sparse3-d1,
+  sparse4-d1, trig-sum-d1 and rational-d1 recover. trig-prod-d2 and
+  linear-7term-d6 keep refusing. Each pairs the truth with a `sqrt(f²)` twin,
+  which has no gated atoms. The twin equals the truth wherever f > 0, and the
+  probe leaves that region.
+- **J5 holds.** 0/200 for both arms. Null median per trial: 46.2 s
+  (`first+joint`), 29.2 s (`accumulate+joint`), 31.0 s (historical baseline).
+- **J6 fails.** `first+joint` over `first`: P2 3.6×, P1 4.0×, reach 1.67×,
+  against 2× on every bank. On P2/P1 most of the increase is the tier-2
+  escalation the correct answer needs: `first` was fast because it stopped at a
+  wrong tier-1 certificate. The registered criterion compared against that
+  cost, but it stands as written.
+- **J7 failed as registered.** The suite run with `"joint"` as the default had
+  2 failures out of 426:
+  - `test_escalation::test_first_rule_stops_at_the_tier1_approximant`, which
+    documents the default rule's recorded failure, so it is expected to fail
+    under a default that removes it;
+  - `test_pdesystem::test_both_equations_certify_the_true_support_over_shared_rows`,
+    which was a **crash in `joint_pinned`**. It assumed an array band; weak-form
+    rows pass a per-candidate callable `PatchEpsilon`. Fixed by resolving the
+    band through `certify.band(eps, expr)`, as the other gates do. With the fix
+    and the joint default, `test_pdesystem.py` passes 7/7. For array bands the
+    fix is a no-op, so the scored arms above are unaffected.
+- **Decision.** As registered, not eligible: J6 and J7 failed. The gate stays
+  opt-in and the default is unchanged.
+
+## Status after A2
+
+**Empirical:** the joint gate closes clean-data false exactness on every
+measured bank, under the default escalation rule. It turns each wrong
+certificate into the exact truth instead of a refusal, and adds one reach cell.
+Its cost is the escalation that the correct answer requires.
+
+**Open:**
+1. Whether to adopt it as the default. That needs a new registration with a
+   cost criterion that doesn't credit the old rule for stopping at wrong
+   answers, a clean J7 rerun, and re-scoring of the campaign certificates
+   with two or more gated atoms (`CERTIFICATES.md`).
+2. `sqrt(f²)` twins (trig-prod-d2, linear-7term-d6) under `accumulate`.
+3. Noise. The gate is registered only for the clean-data per-candidate path;
+   the declared-noise and floor-dominated winner gates are unchanged.
+4. The dim ≥ 3 pre-pass.

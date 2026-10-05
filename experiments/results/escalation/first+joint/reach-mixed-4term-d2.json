@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "reach-mixed-4term-d2",
+ "rule": "first",
+ "gate": "joint",
+ "arm": "first+joint",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0*x_1 + log(x_1) - sin(x_0)**2/2 + sin(x_0) - sin(x_1)**2/2 - cos(x_0)**2/2 - cos(x_1)**2/2 - 1",
+ "rivals": [],
+ "seconds": 8.5,
+ "inbox_rel_error": 2.2743223271438698e-16,
+ "ext_rel_error": 3.3015022331986034e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

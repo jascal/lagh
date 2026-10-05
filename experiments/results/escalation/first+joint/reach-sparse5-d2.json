@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "reach-sparse5-d2",
+ "rule": "first",
+ "gate": "joint",
+ "arm": "first+joint",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0**2 - x_1 + log(x_1) + sin(x_0) + 2/x_0",
+ "rivals": [],
+ "seconds": 32.1,
+ "inbox_rel_error": 2.0374908577133833e-16,
+ "ext_rel_error": 2.097695583054198e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

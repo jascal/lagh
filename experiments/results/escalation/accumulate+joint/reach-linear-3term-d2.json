@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "reach-linear-3term-d2",
+ "rule": "accumulate",
+ "gate": "joint",
+ "arm": "accumulate+joint",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "x_0*(2 - 5*x_1/x_0 + 1/x_0)",
+ "rivals": [],
+ "seconds": 380.9,
+ "inbox_rel_error": 1.3880333514164855e-16,
+ "ext_rel_error": 1.3613942298012198e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

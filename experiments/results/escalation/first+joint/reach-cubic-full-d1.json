@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "reach-cubic-full-d1",
+ "rule": "first",
+ "gate": "joint",
+ "arm": "first+joint",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0**3 - 2*x_0**2 + x_0 - 1",
+ "rivals": [],
+ "seconds": 20.3,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "p1-rational-c",
+ "rule": "first",
+ "gate": "joint",
+ "arm": "first+joint",
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "(x_0/5 + 1/5)/(x_0/5 + 1)",
+ "rivals": [],
+ "seconds": 104.9,
+ "inbox_rel_error": 2.2204844233152615e-16,
+ "ext_rel_error": 1.7472690002464152e-16,
+ "exact": true,
+ "wrong_domain": false,
+ "wrong_form": false
+}
