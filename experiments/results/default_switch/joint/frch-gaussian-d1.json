@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch-gaussian-d1",
+ "gate": "joint",
+ "truth": null,
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "exp(-x_0**2 + 3*x_0 - 9/4)",
+ "rivals": [],
+ "seconds": 86.5,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 6.661377039548077e-16,
+ "ext_rel_error": 6.663400080914862e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

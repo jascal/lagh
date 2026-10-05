@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch-sparse4-d1",
+ "gate": "joint",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0 + sin(x_0) + cos(x_0) - exp(-Abs(x_0))",
+ "rivals": [],
+ "seconds": 7.4,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 3.728659409742822e-16,
+ "ext_rel_error": 1.3344657953110498e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

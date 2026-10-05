@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch-exp-decay-d1",
+ "gate": "joint",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "3*exp(-Abs(x_0))",
+ "rivals": [],
+ "seconds": 6.6,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

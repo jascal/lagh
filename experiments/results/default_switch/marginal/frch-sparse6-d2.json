@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch-sparse6-d2",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "-sqrt(x_0) + x_0*x_1 + sin(x_0) - sin(x_1)**2 - cos(x_1)**2 + cos(x_1) + exp(-Abs(x_1))",
+ "rivals": [],
+ "seconds": 6.4,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 3.386278168836978e-16,
+ "ext_rel_error": 1.1535335764101673e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

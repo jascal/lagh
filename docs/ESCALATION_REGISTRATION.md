@@ -418,3 +418,53 @@ The rerun:
 
 An unrelated job from another session (`pic`) was loading the CPU during the
 run. It is outside this study's control and is noted, not corrected for.
+
+## Results — A3 default switch (scored 2026-10-05)
+
+**Empirical: the switch is rejected under the registered rule. D3 fails: the
+joint gate costs the Gaia P3 frame-rotation certificate (α ≤ 10⁻⁷⁶⁸⁰). The
+default stays `marginal`.** Every run used below recorded 0 s suspended.
+Void runs are kept under `experiments/results/default_switch/void/`, and both
+arms of each void run were rerun side by side.
+
+| prediction | result |
+|---|---|
+| **D1** fresh rational (24) | **holds.** joint: 24 certified, all 24 exact, 0 wrong. marginal: 14 certified, 5 exact, **9 wrong** |
+| **D2** fresh reach (36) | **holds.** joint: 36 certified, 0 wrong, no correct certificate lost. marginal: 33 certified, **1 wrong** (`rational-d1` on fresh data) |
+| **D3** campaigns (14 scripts, 13 result files) | **fails.** 19 certificates under marginal, 18 under joint. The one difference: `gaia_p3/P1_frame_rotation` is certified under marginal and structurally refused under joint. Every other certificate is identical, law and α included |
+| **D4** null | **holds.** 0/200 |
+| **D5** suite with joint default | **holds.** 428 passed; the only failure is the predicted `test_first_rule_stops_at_the_tier1_approximant` |
+| **D6** cost | **fails.** Fair median ratio: fresh rational 2.26× (limit 2×), fresh reach 1.00×. Campaigns: gaia p3 3.35× (limit 3×), and it is the D3 case, searching every tier before refusing. The other 13 scripts ran at 0.49–1.03× |
+
+macro's result file was unchanged from the committed artifact in both arms,
+so it is identical between them. Campaign wall times are confounded by load:
+another session's CPU job ran during the marginal arm and had stopped before
+most of the joint arm, so ratios below 1 are load, not speed. The fresh banks
+had all finished before the machine's power profile was changed at 14:30:43.
+
+**Cause of the D3 failure, verified.** The Gaia inputs are direction cosines,
+which satisfy x0² + x1² + x2² = 1 exactly. At tier 1 the engine never
+proposes the bare three-term linear law. It proposes three certifying
+candidates that are the truth plus multiples of the constraint, for example
+`−0.2169·x0²·x1 − 0.2169·x1³ − 0.2169·x1·x2² + …`, which equals
+`−0.2169·x1` on the sphere. Under marginal, the constrained-input path
+certifies one of them and reduces it modulo the constraint. The constraint
+ideal is an **exact** joint flat direction, so the joint gate correctly finds
+each candidate's coefficients undetermined and rejects all three. Nothing
+certifies through tier 7. The full-data three-term law itself passes the joint
+gate by a factor of about 3×10⁷.
+
+**What the fresh banks add, empirical.** The shipped default issues wrong
+certificates on 9 of 24 new clean rational draws and on fresh-seed
+`rational-d1`. Clean-data false exactness is not confined to the P2/P1
+witnesses; it is common on this family. Under the joint gate those cases
+certify the exact truth.
+
+**Open, and the next registration (A4).** Apply the joint test modulo
+machine-exact input constraints: reduce each candidate through
+`reduce_mod_constraints` when `input_constraints` finds any, and test joint
+pinning on the reduced law, so the constraint ideal does not count as
+non-identification. It must be registered with the frame rotation as a named
+cell, and the cost criterion will have to deal with the 2.26× fresh-rational
+ratio. That ratio is the price of escalating to the tier where the right
+answer is.

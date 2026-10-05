@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch-linear-4term-d3",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0 + x_1*sin(x_0)**2/2 + x_1*sin(x_2)**2/2 + x_1*cos(x_0)**2/2 + x_1*cos(x_2)**2/2 + x_1 - 3*x_2*sin(x_0)**2/4 - 3*x_2*sin(x_1)**2/4 - 3*x_2*cos(x_0)**2/4 - 3*x_2*cos(x_1)**2/4 - 3*x_2/2 + 4*sin(x_0)**2/5 + 4*sin(x_1)**2/5 + 4*sin(x_2)**2/5 + 4*cos(x_0)**2/5 + 4*cos(x_1)**2/5 + 4*cos(x_2)**2/5 + 8/5",
+ "rivals": [],
+ "seconds": 7.6,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 2.5784524420609956e-16,
+ "ext_rel_error": 4.1951766514381825e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

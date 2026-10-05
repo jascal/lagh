@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch-quadric-full-d5",
+ "gate": "marginal",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0*x_4 + x_0 - x_1*x_3 + x_1 + x_2**2 + x_2 + x_3 + x_4 + 1",
+ "rivals": [],
+ "seconds": 4.0,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 2.8274272809397946e-16,
+ "ext_rel_error": 1.6605083048972515e-16,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}

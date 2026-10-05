@@ -97,22 +97,48 @@ def _walk(obj, path=''):
             yield from _walk(v, f'{path}[{i}]')
 
 
+def collect(base: Path) -> None:
+    """Copy each worktree's FINAL result files (every results file git sees as
+    changed) to <arm>/final/. Per-script capture is not used for comparison:
+    scripts run concurrently in one worktree, so a git-status diff taken around
+    one script also sees files its neighbours wrote (measured on the first
+    rerun: 41 spurious 'differences')."""
+    for arm in ('marginal', 'joint'):
+        wt = base / f'lagh-{arm}'
+        lines = subprocess.run(['git', 'status', '--porcelain', '-uall',
+                                'experiments/results'], cwd=wt, capture_output=True,
+                               text=True).stdout.splitlines()
+        dest = OUT / arm / 'final'
+        dest.mkdir(parents=True, exist_ok=True)
+        for line in lines:
+            path = line[3:]
+            if path.endswith('.json') or path.endswith('.jsonl'):
+                shutil.copy(wt / path, dest / Path(path).name)
+
+
 def compare() -> None:
-    report = {'differences': [], 'certified_marginal': 0, 'certified_joint': 0}
-    for d in sorted((OUT / 'marginal').iterdir()):
-        for f in sorted(d.glob('*.json')):
-            other = OUT / 'joint' / d.name / f.name
-            a = dict(_walk(json.loads(f.read_text())))
-            b = dict(_walk(json.loads(other.read_text()))) if other.exists() else {}
-            report['certified_marginal'] += sum(bool(v['certified']) for v in a.values())
-            report['certified_joint'] += sum(bool(v['certified']) for v in b.values())
-            for key in sorted(set(a) | set(b)):
-                if a.get(key) != b.get(key):
-                    report['differences'].append({'file': f'{d.name}/{f.name}',
-                                                  'key': key, 'marginal': a.get(key),
-                                                  'joint': b.get(key)})
+    report = {'differences': [], 'certified_marginal': 0, 'certified_joint': 0,
+              'files': []}
+    for f in sorted((OUT / 'marginal' / 'final').glob('*.json')):
+        other = OUT / 'joint' / 'final' / f.name
+        a = dict(_walk(json.loads(f.read_text())))
+        b = dict(_walk(json.loads(other.read_text()))) if other.exists() else {}
+        report['files'].append(f.name)
+        report['certified_marginal'] += sum(v['certified'] is True for v in a.values())
+        report['certified_joint'] += sum(v['certified'] is True for v in b.values())
+        for key in sorted(set(a) | set(b)):
+            if a.get(key) != b.get(key):
+                report['differences'].append({'file': f.name, 'key': key,
+                                              'marginal': a.get(key),
+                                              'joint': b.get(key)})
+    timing = {}
+    for arm in ('marginal', 'joint'):
+        for t in (OUT / arm).glob('*/timing.json'):
+            timing.setdefault(t.parent.name, {})[arm] = json.loads(t.read_text())
+    report['timing'] = timing
     (OUT / 'compare.json').write_text(json.dumps(report, indent=1, default=str) + '\n')
-    print(json.dumps(report, indent=1, default=str))
+    print(json.dumps({k: v for k, v in report.items() if k != 'timing'}, indent=1,
+                     default=str))
 
 
 def main():
@@ -122,6 +148,7 @@ def main():
     ap.add_argument('--compare', action='store_true')
     a = ap.parse_args()
     if a.compare:
+        collect(Path(a.base))
         compare()
         return
     base = Path(a.base)

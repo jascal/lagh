@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "frch-inner-linear-trig-d1",
+ "gate": "joint",
+ "truth": null,
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "595304*sin(x_0)*cos(x_0)/550899 + 1244406*cos(x_0)**2/739423 - 622203/739423",
+ "rivals": [],
+ "seconds": 20.5,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 9.76448740456647e-13,
+ "ext_rel_error": 9.76475938549244e-13,
+ "exact": null,
+ "wrong_domain": false,
+ "wrong_form": false
+}
