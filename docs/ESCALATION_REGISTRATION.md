@@ -402,3 +402,19 @@ If D1–D6 all hold, open the switch PR:
 If any prediction fails, the default stays `marginal` and the failure is
 recorded. A D3 failure is decisive on its own: the gate may not cost a
 certificate the campaigns stand on.
+
+**Protocol deviation (2026-10-05, before any result was compared).** The first
+campaign run was discarded unscored: the machine suspended three times during
+it, at 09:43–09:51, 10:24–10:37 and 10:58–12:15. Each was a logind suspend on
+AC power with no lid event. A sleep stretches wall times and can exhaust
+`recover`'s wall-clock budget, so both arms were contaminated. Only exit codes
+and times had been seen; no law or certificate comparison had been made.
+
+The rerun:
+- runs under `systemd-inhibit --what=sleep:idle`;
+- records each run's `suspended_seconds`, the drift between `CLOCK_BOOTTIME`
+  and `CLOCK_MONOTONIC`;
+- treats any run with non-zero `suspended_seconds` as void, and reruns it.
+
+An unrelated job from another session (`pic`) was loading the CPU during the
+run. It is outside this study's control and is noted, not corrected for.

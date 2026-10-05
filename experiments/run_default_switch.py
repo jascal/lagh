@@ -58,6 +58,7 @@ def run(name, gate):
         return
     X, fn, truth = cases()[name]
     t0 = time.time()
+    s0 = time.clock_gettime(time.CLOCK_BOOTTIME) - time.monotonic()
     r = discover_passive(X, fn(X), sigma=0.0, coefficient_gate=gate)
     rec = {'tag': 'empirical', 'case': name, 'gate': gate,
            'truth': None if truth is None else str(truth),
@@ -65,7 +66,9 @@ def run(name, gate):
            'abstain': r.result.certificate.abstain,
            'law': str(r.result.expr) if r.certified else None,
            'rivals': [str(z) for z in r.result.rivals],
-           'seconds': round(time.time() - t0, 1)}
+           'seconds': round(time.time() - t0, 1),
+           'suspended_seconds': round(time.clock_gettime(time.CLOCK_BOOTTIME)
+                                      - time.monotonic() - s0, 1)}
     if r.certified:
         rec.update(score(r.result.expr, fn, truth, X.shape[1],
                          zlib.crc32(name.encode())))

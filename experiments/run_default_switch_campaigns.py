@@ -62,9 +62,14 @@ def run_one(arm: str, wt: Path, script: str) -> None:
     before = set(subprocess.run(['git', 'status', '--porcelain', '-uall', 'experiments'],
                                 cwd=wt, capture_output=True, text=True).stdout.splitlines())
     t0 = time.time()
+    # CLOCK_BOOTTIME advances through a system suspend, CLOCK_MONOTONIC does
+    # not: their drift over the run is the time the machine slept (a sleep
+    # also eats `recover`'s wall-clock budget, so such a run is not usable)
+    s0 = time.clock_gettime(time.CLOCK_BOOTTIME) - time.monotonic()
     proc = subprocess.run([str(wt / '.venv/bin/python'), f'experiments/{script}'],
                           cwd=wt, env=env, capture_output=True, text=True)
     seconds = round(time.time() - t0, 1)
+    slept = round(time.clock_gettime(time.CLOCK_BOOTTIME) - time.monotonic() - s0, 1)
     after = subprocess.run(['git', 'status', '--porcelain', '-uall', 'experiments'],
                            cwd=wt, capture_output=True, text=True).stdout.splitlines()
     dest.mkdir(parents=True, exist_ok=True)
@@ -73,10 +78,11 @@ def run_one(arm: str, wt: Path, script: str) -> None:
         if path.endswith('.json') or path.endswith('.jsonl'):
             shutil.copy(wt / path, dest / Path(path).name)
     (dest / 'timing.json').write_text(json.dumps({'seconds': seconds,
+                                                  'suspended_seconds': slept,
                                                   'exit': proc.returncode}) + '\n')
     (dest / 'stdout.txt').write_text(proc.stdout + f'\n[exit {proc.returncode}]\n'
                                      + proc.stderr[-4000:])
-    print(f'{arm} {script}: exit {proc.returncode} {seconds}s', flush=True)
+    print(f'{arm} {script}: exit {proc.returncode} {seconds}s slept={slept}s', flush=True)
 
 
 def _walk(obj, path=''):
