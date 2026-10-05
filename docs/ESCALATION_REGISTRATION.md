@@ -121,8 +121,9 @@ certificate.** Artifacts: `experiments/results/escalation/{first,pool}/`,
   certificates.
 - **E4 holds.** 0/200.
 - **E5 holds for the reach bank.** `first` reproduces `reach_audit.json`
-  exactly: same 35 certified cells, same laws. The full suite has not yet been
-  run against this commit.
+  exactly: same 35 certified cells, same laws. With `accumulate` in place, the
+  full suite passes: 36 files, 423 tests, one process per file. The 3 new
+  tests in `tests/test_escalation.py` also pass.
 - **E6.** `pool` is about 21× slower on the median reach case.
 - **Decision.** `pool` is not eligible. Three conditions fail: one wrong
   certificate; 4 reach cells lost (sparse3-d1, sparse4-d1, trig-prod-d2,
@@ -158,3 +159,58 @@ Predictions:
   are cheap next to tier 5. So the 5× default-eligibility condition is
   **expected to fail**. If A1–A4 hold, `accumulate` is the sound opt-in rule,
   and making it fast enough to be the default is a separate, open problem.
+
+## Results — `accumulate` (scored 2026-10-04)
+
+**Empirical: `accumulate` issued zero wrong certificates on every bank and kept
+null 0/200. It is not eligible as the default: it loses 5 reach cells and is
+about 31× slower.**
+
+| bank | `first` cert / wrong | `pool` cert / wrong | `accumulate` cert / wrong | median s (`accumulate`) |
+|---|---:|---:|---:|---:|
+| P2 (16) | 8 / **8** | 6 / 0 | 5 / 0 (all exact) | 289.8 |
+| P1 (3) | 1 / **1** | 1 / 0 | 0 / 0 | 239.1 |
+| reach (36) | 35 / 0 | 31 / **1** | 30 / 0 | 393.9 |
+| null (200) | — | 0 | 0 | — |
+
+- **A1 holds.** 0 wrong. 5 exact (seeds 20, 25, 29, 33, 34), which is ≤ 6.
+  Seed 27 drops from `pool`'s exact certificate to a refusal: the larger union
+  adds a rival class.
+- **A2 holds.** 0 wrong. All three P1 datasets refuse; rational-b loses
+  `pool`'s exact certificate the same way.
+- **A3 holds.** 0 wrong. `sparse5-d2` certifies the exact truth
+  `x0² − x1 + log x1 + sin x0 + 2/x0`, the same law `first` returns. 30/36
+  certified, exactly the registered floor.
+- **A4 holds.** 0/200.
+- **A5 fails for reach.** Median cost relative to `pool`: P2 1.10× and P1 0.92×
+  (both within 1.3×), but reach 1.46×. Against `first` on reach, `accumulate`
+  is 31× slower.
+- **Decision.** Not eligible. Lost reach cells: linear-7term-d6, sparse3-d1,
+  sparse4-d1, trig-prod-d2, trig-sum-d1 (limit 2). Cost is 31× against a 5×
+  limit.
+
+**What the losses are.** Every lost cell now refuses with the true law among
+its rivals. In four cells the other rival is a dense fractional-power
+approximant with 11-digit coefficients, the same signature as P2's false
+certificates. linear-7term-d6 is instead paired with a `sqrt((…)²)` twin of the
+linear truth. Each is a structural refusal, which is sound but costs reach.
+The approximants keep held-out evidence (h/n ≥ 0.10), so registered
+significance arbitration (`MUNTZ_ARBITRATION.md`) correctly declines to
+dismiss them.
+
+## Status after this registration
+
+**Empirical:** clean-data false exactness is caused by the first-certifying-tier
+stop. Judging the union of every tier's certifying candidates removes it on
+all measured banks (9 → 0 wrong on P2/P1, 0 on reach, 0/200 null). It is
+available opt-in as `escalation="accumulate"`; the default stays `"first"`.
+
+**Open:**
+1. A sound way to dismiss the dense approximants that `accumulate` meets.
+   They are evidence-bearing fits of the wrong form, and |H|·q^h does not
+   separate them from the truth, so this needs a structural criterion, not a
+   significance margin.
+2. Cost. Every tier always runs, and tier 5 dominates.
+3. The dim ≥ 3 pre-pass shortcut remains untested.
+
+The P2 entry guard in `refusal_acquisition` stays in place.

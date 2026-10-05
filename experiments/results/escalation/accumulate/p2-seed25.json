@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "p2-seed25",
+ "rule": "accumulate",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "(3*x_0/4 + 1/2)/(x_0/4 + 1)",
+ "rivals": [],
+ "seconds": 410.2,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "exact": true,
+ "wrong_domain": false,
+ "wrong_form": false
+}

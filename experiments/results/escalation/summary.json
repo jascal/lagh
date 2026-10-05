@@ -53,5 +53,26 @@
    "reach-sparse5-d2"
   ],
   "median_seconds": 269.2
+ },
+ "accumulate/p2": {
+  "cases": 16,
+  "certified": 5,
+  "wrong_domain": [],
+  "wrong_form": [],
+  "median_seconds": 289.75
+ },
+ "accumulate/p1": {
+  "cases": 3,
+  "certified": 0,
+  "wrong_domain": [],
+  "wrong_form": [],
+  "median_seconds": 239.1
+ },
+ "accumulate/reach": {
+  "cases": 36,
+  "certified": 30,
+  "wrong_domain": [],
+  "wrong_form": [],
+  "median_seconds": 393.85
  }
 }
