@@ -24,6 +24,7 @@ import sympy as sp
 
 from experiments.reach import audit
 from experiments.run_escalation_study import _rational, score, x
+from lagh.engine import discover
 from lagh.passive import discover_passive
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +42,14 @@ def _fresh_rational(seed):
 
 def cases():
     out = {}
+    # A5 fresh banks (registered before any A5 run)
+    for seed in range(300, 324):
+        fn, truth = _rational(_fresh_rational(seed))
+        out[f'fr3-seed{seed}'] = (np.random.default_rng(seed).uniform(.5, 3., (400, 1)),
+                                  fn, truth)
+    for name, dim, fn in audit.CELLS:
+        out[f'frch3-{name}'] = (audit.X(dim, seed=zlib.crc32(name.encode()) + 3),
+                                fn, None)
     # A4 fresh banks (registered before any A4 run): new seeds, never run before
     for seed in range(200, 224):
         fn, truth = _rational(_fresh_rational(seed))
@@ -56,6 +65,28 @@ def cases():
     for name, dim, fn in audit.CELLS:
         out[f'frch-{name}'] = (audit.X(dim, seed=zlib.crc32(name.encode()) + 1),
                                fn, None)
+    return out
+
+
+def split_verdicts(X, fn, truth, gate, name):
+    """A5: the per-split verdicts of the passive run, recomputed OUTSIDE the
+    timed call with passive's own split procedure (seed 0 + k, 60/20/20).
+    A split that certifies a wrong law is a wrong verdict even when the
+    passive full-data gate later rejects it."""
+    y = fn(X)
+    out = []
+    for k in range(3):
+        idx = np.random.default_rng(k).permutation(len(X))
+        a, b = int(0.6 * len(X)), int(0.8 * len(X))
+        r = discover(X[idx[:a]], y[idx[:a]], X[idx[a:b]], y[idx[a:b]],
+                     X[idx[b:]], y[idx[b:]], sigma=0.0, coefficient_gate=gate)
+        rec = {'split': k, 'certified': bool(r.certificate.certified),
+               'tier': r.tier,
+               'law': str(r.expr) if r.certificate.certified else None}
+        if r.certificate.certified:
+            sc = score(r.expr, fn, truth, X.shape[1], zlib.crc32(name.encode()))
+            rec['wrong'] = bool(sc['wrong_form'] or sc['wrong_domain'])
+        out.append(rec)
     return out
 
 
@@ -80,6 +111,8 @@ def run(name, gate):
     if r.certified:
         rec.update(score(r.result.expr, fn, truth, X.shape[1],
                          zlib.crc32(name.encode())))
+    if name.startswith(('fr3-', 'frch3-')):
+        rec['splits'] = split_verdicts(X, fn, truth, gate, name)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(rec, indent=1, allow_nan=False) + '\n')
     print(f"{gate} {name}: certified={rec['certified']} "
@@ -130,17 +163,57 @@ def summarize(gates=('marginal', 'joint'), banks=('fr', 'frch')):
     print(json.dumps(summary, indent=1))
 
 
+def summarize_a5():
+    """A5 cost classification: a case is CHANGED if the final verdicts differ
+    or marginal certified a wrong law on any split; otherwise SAME."""
+    m = {p.stem: json.loads(p.read_text()) for p in (OUT / 'marginal').glob('fr*3-*.json')}
+    j = {p.stem: json.loads(p.read_text()) for p in (OUT / 'joint_modulo').glob('fr*3-*.json')}
+    summary = {}
+    for bank in ('fr3', 'frch3'):
+        keys = sorted(k for k in m if k.startswith(bank + '-') and k in j)
+        for g, rows in (('marginal', m), ('joint_modulo', j)):
+            cert = [rows[k] for k in keys if rows[k]['certified']]
+            summary[f'{g}/{bank}'] = {
+                'cases': len(keys), 'certified': len(cert),
+                'exact': sum(bool(r.get('exact')) for r in cert),
+                'wrong': sorted(r['case'] for r in cert
+                                if r['wrong_form'] or r['wrong_domain']),
+                'split_wrong_cases': sorted(k for k in keys if any(
+                    s_.get('wrong') for s_ in rows[k].get('splits', []))),
+                'median_seconds': float(np.median([rows[k]['seconds'] for k in keys]))}
+        def changed(k):
+            a, b = m[k], j[k]
+            return (a['certified'] != b['certified'] or a.get('law') != b.get('law')
+                    or any(s_.get('wrong') for s_ in a.get('splits', [])))
+        same = [k for k in keys if not changed(k)]
+        chg = [k for k in keys if changed(k)]
+        summary[f'cost/{bank}'] = {
+            'same_cases': len(same),
+            'same_median_ratio': float(np.median(
+                [j[k]['seconds'] / max(m[k]['seconds'], 0.1) for k in same])) if same else None,
+            'changed_cases': len(chg),
+            'changed_median_seconds': float(np.median([j[k]['seconds'] for k in chg])) if chg else None,
+            'max_seconds_joint_modulo': max(j[k]['seconds'] for k in keys),
+            'lost_correct_certificates': sorted(
+                k for k in keys if m[k]['certified'] and not (m[k]['wrong_form'] or m[k]['wrong_domain'])
+                and not j[k]['certified'])}
+    (OUT / 'summary_a5.json').write_text(json.dumps(summary, indent=1) + '\n')
+    print(json.dumps(summary, indent=1))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--list', action='store_true')
     ap.add_argument('--case')
-    ap.add_argument('--gate', choices=GATES)
+    ap.add_argument('--gate', choices=GATES + ('joint_modulo_a5',))
     ap.add_argument('--summarize', action='store_true')
     a = ap.parse_args()
     if a.list:
         print('\n'.join(cases()))
     elif a.summarize:
-        if a.gate == 'joint_modulo':
+        if a.gate == 'joint_modulo_a5':
+            summarize_a5()
+        elif a.gate == 'joint_modulo':
             summarize(('marginal', 'joint_modulo'), ('fr2', 'frch2'))
         else:
             summarize()

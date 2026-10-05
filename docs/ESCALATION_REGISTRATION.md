@@ -600,3 +600,39 @@ verdict", not gate overhead. A performance-only change to `joint_pinned`
 cannot address it; the planned A5 is withdrawn. A criterion that classifies
 by per-split verdict would be a redefinition made after seeing data, so it
 could only be judged on a further fresh bank.
+
+## Owner decision (2026-10-05)
+
+The repository owner accepts E6's cost on the A4 evidence and authorizes
+switching the default to `coefficient_gate="joint_modulo"`. This is
+**recorded as the owner's judgment, not as a registered pass**: under the
+registered rule A4 fails E6. The judgment rests on:
+- A4's soundness and campaign results: 0 wrong on every bank; every campaign
+  certificate identical; null 0/200; suite clean;
+- the diagnosis above, that the extra time is escalation to the correct tier
+  on splits where marginal certified a wrong law.
+
+A5 below is run as independent measurement of that diagnosis, and its result
+is reported in the switch PR whichever way it comes out.
+
+## Amendment A5 — per-split cost classification (registered 2026-10-05, before any A5 run)
+
+**Change.** The cost criterion only; the gate code is A4's `joint_modulo`,
+unchanged. A fresh case counts as **changed** if the final verdicts differ
+**or** marginal certified a wrong law on any of the three passive splits.
+Per-split verdicts are recomputed outside the timed call, using passive's own
+split procedure, and each split's certified law is scored with the A2 scorer.
+Every other case counts as **same**. The A4 campaign (E3, campaign cost),
+null (E4) and suite (E5) results stand for A5 because the code is identical.
+
+**Banks.** `fr3`: 24 rationals, seeds 300–323, same generator. `frch3`: the 36
+reach cells on seed `crc32(name)+3`. Both gates, interleaved case by case,
+under `systemd-inhibit`, with suspend-voided runs rerun in both arms.
+
+**Predictions.**
+- **F1.** `joint_modulo`: 0 wrong on both banks; at least 20/24 exact on `fr3`;
+  no correct marginal certificate lost on `frch3`.
+- **F2 (cost).** Same cases: median `joint_modulo`/marginal ≤ 2× on each bank.
+  Changed cases: median ≤ 120 s, and no case over 600 s.
+- **F3 (diagnosis).** On `fr3`, every case whose ratio exceeds 1.5× has a
+  marginal split that certified a wrong law.
