@@ -24,3 +24,7 @@ lab-mcp = "lagh.lab.server:main"
 
 [tool.setuptools.packages.find]
 include = ["lagh*"]
+
+[tool.pytest.ini_options]
+# several tests import the experiment runners as `experiments.*`
+pythonpath = ["."]

@@ -19,22 +19,22 @@ result nor significance against a random null settles this question. See the
 [retained pilot evidence](ACQUISITION_PILOT_FINDINGS.md).
 
 **Empirical result:** the implemented policy did not beat fixed x10 expansion.
-It resolved the same12/24 trials at the same560 measurements. It did beat the
-matched five-rung ladder's640 measurements on those successes. The registered
+It resolved the same 12/24 trials at the same 560 measurements. It did beat the
+matched five-rung ladder's 640 measurements on those successes. The registered
 stretch criterion required a strict gain against both; it **failed**.
 
 **Empirical soundness:** zero structurally wrong terminal certificates across
-all96 corrected scored arms. This is conditional evidence from the manufactured
+all 96 corrected scored arms. This is conditional evidence from the manufactured
 bank, not a universal checker guarantee. Earlier pilot failures remain recorded.
 
 ## Scored comparison
 
-S1 was committed in50db39d before any scored follow-up samples. Three frozen
-initial rival sets (P2 seeds30,32,35) each supplied a wide and a restricted
-problem, with four fresh follow-up seeds100–103. That is24 paired trials per
-arm and96 arm runs; it is one rational truth family and three initial design
-states, not24 independent physical laws. Each initial state has at least two
-representatives consistent with all400 available observations.
+S1 was committed in 50db39d before any scored follow-up samples. Three frozen
+initial rival sets (P2 seeds 30, 32, 35) each supplied a wide and a restricted
+problem, with four fresh follow-up seeds 100–103. That is 24 paired trials per
+arm and 96 arm runs; it is one rational truth family and three initial design
+states, not 24 independent physical laws. Each initial state has at least two
+representatives consistent with all 400 available observations.
 
 | Strategy | Twin resolutions | Unresolved | Measurements per resolution | Total additional measurements, all trials |
 |---|---:|---:|---:|---:|
@@ -43,27 +43,27 @@ representatives consistent with all400 available observations.
 | Matched five-rung ladder |12/24|12/24|640|3840|
 | Native ladder, with common rival criterion |0/24|24/24|—|2832|
 
-Successful totals include400 initial observations,80 new design observations
-(or160 for the matched ladder), and80 independent final observations. Shared
+Successful totals include 400 initial observations, 80 new design observations
+(or 160 for the matched ladder), and 80 independent final observations. Shared
 initial data are charged to every trial as the cost of reproducing its starting
-state; actual follow-up oracle calls are counted separately. The6400 observations
+state; actual follow-up oracle calls are counted separately. The 6400 observations
 used to screen the P2 bank are disclosed pilot setup, shared by every arm.
 
 The native ladder needs a careful reading: it returned the correct rational
-formula in all24 raw runs. Those original-box observations did not eliminate
+formula in all 24 raw runs. Those original-box observations did not eliminate
 previously supported competitors, so it failed the common **twin-resolution**
 criterion. Raw laws, verdicts and checks are preserved. This is not a claim that
 native cannot recover the truth. It is a distinction between recovering the
 right expression and measuring enough to reject the known alternatives.
 
-Unresolved cases were retained. Under the registered1801 penalty for unresolved
-trials, mean censored costs are1180.5 for both guided and x10,1220.5 for the
-matched ladder, and1801 for native. Stopping unresolved is never scored as a
-cheap resolution. Guided spent400 more actual follow-up measurements than x10
+Unresolved cases were retained. Under the registered 1801 penalty for unresolved
+trials, mean censored costs are 1180.5 for both guided and x10, 1220.5 for the
+matched ladder, and 1801 for native. Stopping unresolved is never scored as a
+cheap resolution. Guided spent 400 more actual follow-up measurements than x10
 across the unresolved controls, with no extra resolution.
 
-All numerical forecasts in S1 matched:12 guided resolutions,12 unresolved,
-paired median differences0 against x10 and-80 against the matched ladder,
+All numerical forecasts in S1 matched:12 guided resolutions, 12 unresolved,
+paired median differences 0 against x10 and -80 against the matched ladder,
 zero wrong terminal certificates, and expanded domains for every resolved wide
 case. The separate strict-gain criterion failed; the forecast tie is not a win.
 
@@ -95,7 +95,7 @@ an informative regime in one batch. Thus this bank supplies no evidence that
 reading the particular refusal yields a better choice than simple expansion.
 The ladder saving is avoiding its repeated original-box batch. In restricted
 seed30 trials, edge disagreement at x=.5 (and once x=3) justified additional
-probes, but none bought resolution. Restricted seeds32 and35 stopped without
+probes, but none bought resolution. Restricted seeds 32 and 35 stopped without
 new queries. No policy or tolerance was retuned after these scored outcomes.
 
 **Open:** broader usefulness across other law families, heterogeneous query
@@ -105,40 +105,40 @@ ineffective. The fixed x10 default remains unchanged.
 
 ## Apex: rational-d1
 
-**Empirical:** the historical crc32-seeded draw still structurally refuses at400
+**Empirical:** the historical crc32-seeded draw still structurally refuses at 400
 observations. Replaying the registered P1 refusal-model heuristic recovers the
-exact `(2*x+1)/(x+3)` after measurement, using560 observations and a new finite
-domain extending approximately from0.502 to300. All observed rows and80 fresh
+exact `(2*x+1)/(x+3)` after measurement, using 560 observations and a new finite
+domain extending approximately from 0.502 to 300. All observed rows and 80 fresh
 final observations pass, and the returned expression is exactly equivalent to
-the known truth. Fixed x10 also takes560; matched ladder640; native598 including
+the known truth. Fixed x10 also takes 560; matched ladder 640; native 598 including
 its own holdout and the additional common final check.
 
 There is an important limit to this result: both archived apex representatives
-already miss original observations (2 and3 misses on all400 rows). They were
+already miss original observations (2 and 3 misses on all 400 rows). They were
 certifying split-local competitors, not two surviving full-data explanations.
 The apex replay therefore demonstrates measurement-driven escape from the
 engine's reach ordering, not the first falsification of those old models.
-Its runner is pinned to5f64d9a and clearly separated from the strict survivor
-study. The original35/36 passive reach artifact is not changed to36/36; this is
+Its runner is pinned to 5f64d9a and clearly separated from the strict survivor
+study. The original 35/36 passive reach artifact is not changed to 36/36; this is
 a new acquisition regime and a new domain.
 
 ## Failures retained and guarantees scoped
 
 P1's nonstructural seed10 inputs exposed false-exact initial certificates:
 eight arm outputs accepted an approximant after original-box checks. P2 found
-eight other initial draws with false-exact certificates and only3/16 qualifying
-twin states, missing its predicted minimum of4. Every failed draw and the P1
+eight other initial draws with false-exact certificates and only 3/16 qualifying
+twin states, missing its predicted minimum of 4. Every failed draw and the P1
 policy are retained. P3 corrected the acquisition entry and rival-retention
 rules; it did not repair these underlying engine behaviors or erase them from
 the record. See [pilot findings](ACQUISITION_PILOT_FINDINGS.md).
 
 The scoped headline paragraphs in README and INSTRUMENT_REPORT were completed
 before the pilots. The new corrections have concrete before/after witnesses:
-four new gate inputs fail on pinned P1 and all15 gate cases pass afterward.
+four new gate inputs fail on pinned P1 and all 15 gate cases pass afterward.
 Scoring witnesses reject an x+100 replacement law, missing/duplicate arms,
 a purported strict win at a tie, inherited old bounds, and a law different
-from the one frozen before final observations. An unresolved400-query trial
-receives the registered1801 censored cost. These checks are not credited as
+from the one frozen before final observations. An unresolved 400-query trial
+receives the registered 1801 censored cost. These checks are not credited as
 new physical experiments.
 
 ## Reproduction and use
@@ -147,7 +147,7 @@ new physical experiments.
 predictions, failed forecasts and amendments. The principal artifacts are:
 
 - `experiments/acquisition_scored_protocol.json`: frozen code hash and S1 numbers.
-- `experiments/results/acquisition_scored/`: all96 outcomes and pre-query ledgers.
+- `experiments/results/acquisition_scored/`: all 96 outcomes and pre-query ledgers.
 - `experiments/results/acquisition_scored_summary.json`: completeness, cost,
   soundness and domain audits for every scored trial.
 - `experiments/results/acquisition_apex/`: the four qualified apex replays.
@@ -157,8 +157,8 @@ predictions, failed forecasts and amendments. The principal artifacts are:
   acquisition, certification and hypothesis-class sources against base e810b98.
 
 The audit reconstructs initial and queried inputs, checks their hashes and all
-oracle charges, verifies all197 pre-query plans, reconstructs the declared
-independent RNG stream for the36 final samples, checks frozen-law identity,
+oracle charges, verifies all 197 pre-query plans, reconstructs the declared
+independent RNG stream for the 36 final samples, checks frozen-law identity,
 rechecks accepted laws, and verifies that old compatible rivals were eliminated
 by design measurements. No full-suite result is claimed:43 targeted test cases
 passed, one test file per process. F/E9 lint and diff whitespace checks passed.
@@ -177,7 +177,7 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m experiments.run_acq
 ```
 
 For full historical P1/P2 reproduction, use their committed source revisions
-(5f64d9a for P1,577cefc for P2) in an isolated checkout with an empty stage output
+(5f64d9a for P1, 577cefc for P2) in an isolated checkout with an empty stage output
 directory. Each includes its registration and every retained original result;
 the current runners intentionally reject a changed code hash. Tweezers data
 were not reopened, no paid proposer was used, and no publication was pushed.
