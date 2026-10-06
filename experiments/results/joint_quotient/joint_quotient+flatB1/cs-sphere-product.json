@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "cs-sphere-product",
+ "gate": "joint_quotient",
+ "detection": "flat",
+ "arm": "joint_quotient+flatB1",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0*x_1 + 3",
+ "notes": [],
+ "seconds": 4.6,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "wrong_domain": false,
+ "wrong_form": false
+}

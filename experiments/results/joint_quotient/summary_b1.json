@@ -1,0 +1,281 @@
+{
+ "joint_modulo+flatB1": {
+  "cases": 24,
+  "certified": 23,
+  "certified_cases": [
+   "cs-circle-exp-bait",
+   "cs-circle-float-linear",
+   "cs-circle-int-linear",
+   "cs-circle-product",
+   "cs-circle-rational",
+   "cs-circle-sqrt-bait",
+   "cs-hyperbola-exp-bait",
+   "cs-hyperbola-float-linear",
+   "cs-hyperbola-int-linear",
+   "cs-hyperbola-rational",
+   "cs-hyperbola-sqrt-bait",
+   "cs-plane-exp-bait",
+   "cs-plane-float-linear",
+   "cs-plane-int-linear",
+   "cs-plane-product",
+   "cs-plane-rational",
+   "cs-plane-sqrt-bait",
+   "cs-sphere-exp-bait",
+   "cs-sphere-float-linear",
+   "cs-sphere-int-linear",
+   "cs-sphere-product",
+   "cs-sphere-rational",
+   "cs-sphere-sqrt-bait"
+  ],
+  "wrong": [],
+  "slept": [],
+  "median_seconds": 38.9
+ },
+ "joint_modulo+graded": {
+  "cases": 24,
+  "certified": 23,
+  "certified_cases": [
+   "cs-circle-exp-bait",
+   "cs-circle-float-linear",
+   "cs-circle-int-linear",
+   "cs-circle-product",
+   "cs-circle-rational",
+   "cs-circle-sqrt-bait",
+   "cs-hyperbola-exp-bait",
+   "cs-hyperbola-float-linear",
+   "cs-hyperbola-int-linear",
+   "cs-hyperbola-rational",
+   "cs-hyperbola-sqrt-bait",
+   "cs-plane-exp-bait",
+   "cs-plane-float-linear",
+   "cs-plane-int-linear",
+   "cs-plane-product",
+   "cs-plane-rational",
+   "cs-plane-sqrt-bait",
+   "cs-sphere-exp-bait",
+   "cs-sphere-float-linear",
+   "cs-sphere-int-linear",
+   "cs-sphere-product",
+   "cs-sphere-rational",
+   "cs-sphere-sqrt-bait"
+  ],
+  "wrong": [],
+  "slept": [],
+  "median_seconds": 38.849999999999994
+ },
+ "joint_quotient+flatB1": {
+  "cases": 24,
+  "certified": 22,
+  "certified_cases": [
+   "cs-circle-exp-bait",
+   "cs-circle-float-linear",
+   "cs-circle-int-linear",
+   "cs-circle-product",
+   "cs-circle-rational",
+   "cs-circle-sqrt-bait",
+   "cs-hyperbola-exp-bait",
+   "cs-hyperbola-float-linear",
+   "cs-hyperbola-int-linear",
+   "cs-hyperbola-rational",
+   "cs-hyperbola-sqrt-bait",
+   "cs-plane-exp-bait",
+   "cs-plane-int-linear",
+   "cs-plane-product",
+   "cs-plane-rational",
+   "cs-plane-sqrt-bait",
+   "cs-sphere-exp-bait",
+   "cs-sphere-float-linear",
+   "cs-sphere-int-linear",
+   "cs-sphere-product",
+   "cs-sphere-rational",
+   "cs-sphere-sqrt-bait"
+  ],
+  "wrong": [],
+  "slept": [],
+  "median_seconds": 56.0
+ },
+ "joint_quotient+graded": {
+  "cases": 24,
+  "certified": 23,
+  "certified_cases": [
+   "cs-circle-exp-bait",
+   "cs-circle-float-linear",
+   "cs-circle-int-linear",
+   "cs-circle-product",
+   "cs-circle-rational",
+   "cs-circle-sqrt-bait",
+   "cs-hyperbola-exp-bait",
+   "cs-hyperbola-float-linear",
+   "cs-hyperbola-int-linear",
+   "cs-hyperbola-rational",
+   "cs-hyperbola-sqrt-bait",
+   "cs-plane-exp-bait",
+   "cs-plane-float-linear",
+   "cs-plane-int-linear",
+   "cs-plane-product",
+   "cs-plane-rational",
+   "cs-plane-sqrt-bait",
+   "cs-sphere-exp-bait",
+   "cs-sphere-float-linear",
+   "cs-sphere-int-linear",
+   "cs-sphere-product",
+   "cs-sphere-rational",
+   "cs-sphere-sqrt-bait"
+  ],
+  "wrong": [],
+  "slept": [],
+  "median_seconds": 39.8
+ },
+ "pairs": {
+  "joint_modulo+flatB1 vs joint_modulo+graded": {
+   "law_differences": [
+    {
+     "case": "cs-plane-int-linear",
+     "joint_modulo+flatB1": [
+      true,
+      "2*x_0 - x_1 + x_2"
+     ],
+     "joint_modulo+graded": [
+      true,
+      "-3*x_1 - x_2 + 2"
+     ]
+    },
+    {
+     "case": "cs-plane-product",
+     "joint_modulo+flatB1": [
+      true,
+      "x_0*x_1 + 3"
+     ],
+     "joint_modulo+graded": [
+      true,
+      "-x_1**2 - x_1*x_2 + x_1 + 3"
+     ]
+    }
+   ],
+   "median_ratio": 0.9996871088861076
+  },
+  "joint_modulo+flatB1 vs joint_quotient+flatB1": {
+   "law_differences": [
+    {
+     "case": "cs-plane-float-linear",
+     "joint_modulo+flatB1": [
+      true,
+      "420133707219*x_0**2/2000000000000 - 10541467257*x_0*x_1/500000000000 + 505284143381*x_0*x_2/2500000000000 + 381931227*x_0/976562500 - 57787447031*x_1**2/250000000000 - 11955149219*x_1*x_2/50000000000 - 24566785351*x_1/50000000000 - 7953196257*x_2**2/1000000000000 - 22471261643*x_2/500000000000 - 145180653857/1000000000000"
+     ],
+     "joint_quotient+flatB1": [
+      false,
+      null
+     ]
+    }
+   ],
+   "median_ratio": 1.0211281572653563
+  },
+  "joint_modulo+flatB1 vs joint_quotient+graded": {
+   "law_differences": [
+    {
+     "case": "cs-plane-int-linear",
+     "joint_modulo+flatB1": [
+      true,
+      "2*x_0 - x_1 + x_2"
+     ],
+     "joint_quotient+graded": [
+      true,
+      "-3*x_1 - x_2 + 2"
+     ]
+    },
+    {
+     "case": "cs-plane-product",
+     "joint_modulo+flatB1": [
+      true,
+      "x_0*x_1 + 3"
+     ],
+     "joint_quotient+graded": [
+      true,
+      "-x_1**2 - x_1*x_2 + x_1 + 3"
+     ]
+    }
+   ],
+   "median_ratio": 1.0164936645429163
+  },
+  "joint_modulo+graded vs joint_quotient+flatB1": {
+   "law_differences": [
+    {
+     "case": "cs-plane-float-linear",
+     "joint_modulo+graded": [
+      true,
+      "420133707219*x_0**2/2000000000000 - 10541467257*x_0*x_1/500000000000 + 505284143381*x_0*x_2/2500000000000 + 381931227*x_0/976562500 - 57787447031*x_1**2/250000000000 - 11955149219*x_1*x_2/50000000000 - 24566785351*x_1/50000000000 - 7953196257*x_2**2/1000000000000 - 22471261643*x_2/500000000000 - 145180653857/1000000000000"
+     ],
+     "joint_quotient+flatB1": [
+      false,
+      null
+     ]
+    },
+    {
+     "case": "cs-plane-int-linear",
+     "joint_modulo+graded": [
+      true,
+      "-3*x_1 - x_2 + 2"
+     ],
+     "joint_quotient+flatB1": [
+      true,
+      "2*x_0 - x_1 + x_2"
+     ]
+    },
+    {
+     "case": "cs-plane-product",
+     "joint_modulo+graded": [
+      true,
+      "-x_1**2 - x_1*x_2 + x_1 + 3"
+     ],
+     "joint_quotient+flatB1": [
+      true,
+      "x_0*x_1 + 3"
+     ]
+    }
+   ],
+   "median_ratio": 1.0142512712607399
+  },
+  "joint_modulo+graded vs joint_quotient+graded": {
+   "law_differences": [],
+   "median_ratio": 1.018835829049641
+  },
+  "joint_quotient+flatB1 vs joint_quotient+graded": {
+   "law_differences": [
+    {
+     "case": "cs-plane-float-linear",
+     "joint_quotient+flatB1": [
+      false,
+      null
+     ],
+     "joint_quotient+graded": [
+      true,
+      "420133707219*x_0**2/2000000000000 - 10541467257*x_0*x_1/500000000000 + 505284143381*x_0*x_2/2500000000000 + 381931227*x_0/976562500 - 57787447031*x_1**2/250000000000 - 11955149219*x_1*x_2/50000000000 - 24566785351*x_1/50000000000 - 7953196257*x_2**2/1000000000000 - 22471261643*x_2/500000000000 - 145180653857/1000000000000"
+     ]
+    },
+    {
+     "case": "cs-plane-int-linear",
+     "joint_quotient+flatB1": [
+      true,
+      "2*x_0 - x_1 + x_2"
+     ],
+     "joint_quotient+graded": [
+      true,
+      "-3*x_1 - x_2 + 2"
+     ]
+    },
+    {
+     "case": "cs-plane-product",
+     "joint_quotient+flatB1": [
+      true,
+      "x_0*x_1 + 3"
+     ],
+     "joint_quotient+graded": [
+      true,
+      "-x_1**2 - x_1*x_2 + x_1 + 3"
+     ]
+    }
+   ],
+   "median_ratio": 0.9993389511901962
+  }
+ }
+}

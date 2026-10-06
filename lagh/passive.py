@@ -41,7 +41,8 @@ class PassiveResult:
 def discover_passive(X, y, *, sigma: float = 0.0, floor_abs: float = 1e-12,
                      max_tier: int = 7, n_resplits: int = 3,
                      seed: int = 0, escalation: str = "first",
-                     coefficient_gate: str = "joint_modulo") -> PassiveResult:
+                     coefficient_gate: str = "joint_modulo",
+                     constraint_detection: str = "graded") -> PassiveResult:
     """X (n,d), y (n,): the dataset as handed out. Returns the first split whose
     certification also survives the full-data gate, else the last abstain."""
     X = np.atleast_2d(np.asarray(X, float))
@@ -74,7 +75,8 @@ def discover_passive(X, y, *, sigma: float = 0.0, floor_abs: float = 1e-12,
         r = discover(X[idx[:a]], y[idx[:a]], X[idx[a:b]], y[idx[a:b]],
                      X[idx[b:]], y[idx[b:]], sigma=sigma, floor_abs=floor_abs,
                      max_tier=max_tier, escalation=escalation,
-                     coefficient_gate=coefficient_gate)
+                     coefficient_gate=coefficient_gate,
+                     constraint_detection=constraint_detection)
         last = r
         if not r.certificate.certified:
             for rival in r.rivals:

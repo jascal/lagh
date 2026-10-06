@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "cs-plane-product",
+ "gate": "marginal",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0*x_1 + 3",
+ "notes": [
+  "domain-restricted certificate: inputs satisfy 556551*x_0**2/966458 + 173917*x_0*x_1/642790 + x_0*x_2 - 359707*x_0/869271 - 161753*x_1**2/529815 + 85269*x_1*x_2/717557 + 460957*x_1/986290 + 409907*x_2*"
+ ],
+ "seconds": 8.7,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "wrong_domain": false,
+ "wrong_form": false
+}

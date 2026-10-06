@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "cs-sphere-sqrt-bait",
+ "gate": "marginal",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "sqrt(x_1 + 3)",
+ "notes": [],
+ "seconds": 350.8,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "wrong_domain": false,
+ "wrong_form": false
+}

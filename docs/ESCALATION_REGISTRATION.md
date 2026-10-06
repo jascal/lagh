@@ -688,3 +688,241 @@ classification and F3 failing as worded; neither is rewritten.
    (where this gate does not run) remain open. "Removed the dense-approximant
    class on every measured bank" is a statement about those banks, not a
    closure of false exactness.
+
+## Amendment A6 — the joint test in the exact quotient space (registered 2026-10-05, before any A6 run)
+
+**Why.** The PR #17 review found that `joint_modulo` does not test the
+constraint quotient. Its `reduce_to_minimal` step drops any term that still
+certifies on all rows, certify split included. A "dust only" sweep was tried
+first and abandoned before any scored run. On the Gaia frame-rotation
+candidates, the post-reduction residue reaches 2.6–3.9×10⁻¹³ of the law's
+scale, above `MACHINE_REL` (2.2×10⁻¹³) and above the band in absolute terms.
+It is the candidate's own fit noise along the constraint direction, not
+rounding, so any dust threshold would be an arbitrary cut in a 12-order gap.
+
+**Rule.** `coefficient_gate="joint_quotient"` (opt-in; `joint_modulo` stays
+the default and stays reproducible). `joint_pinned(..., constraints=…)`
+reduces each gated atom's derivative term modulo the constraint ideal in
+exact arithmetic. The exact null space of those remainders is the set of
+ideal directions, and the least-determined direction is sought only in their
+orthogonal complement. The candidate is never reduced; no term is dropped;
+`y` is not used beyond `check`. The rule applies when the law is linear in its
+gated atoms. Otherwise, and whenever there are no constraints, it is exactly
+A2's joint test.
+
+**Pilot (disclosed):**
+- A padded sphere law, truth + 0.2169·x1·(|x|² − 1): plain joint rejects it,
+  `joint_quotient` passes it; the bare truth passes both.
+- Gaia frame rotation, end to end: same law and α as `joint_modulo`, 10 s.
+- Constrained `1/(2+x0)` on the sphere: marginal, `joint_modulo` and
+  `joint_quotient` all give the exact truth.
+
+**Observation, not part of the rule.** On the plane x0 + x1 + x2 = 1,
+`input_constraints` returns two arbitrary quadratic combinations with snapped
+rational coefficients instead of the linear constraint, because the quadratic
+feature matrix contains several multiples of it. This predates A6 and also
+feeds the constrained-input coherence path. Recorded as **open**.
+
+### Banks
+
+1. **`cs` (new):** 4 varieties (sphere, circle arc, hyperbola, plane) × 6 laws
+   (float-coefficient linear, integer linear, rational, product, exp bait,
+   sqrt bait), 400 rows each. Runner: `experiments/run_quotient_study.py`.
+   Gates: marginal, `joint_modulo`, `joint_quotient`. Scored **on the
+   variety** only: fresh in-region points for the domain claim, fresh points
+   from a wider region of the same variety for the form claim.
+2. **Campaigns:** all 14 scripts, `joint_modulo` and `joint_quotient`
+   worktrees concurrent. Output `experiments/results/joint_quotient/campaigns/`.
+3. **Unconstrained banks and null:** the code path is identical whenever
+   `input_constraints` returns nothing. Verified directly, with no
+   rediscovery: on every `fr*`/`frch*` case and on 200 null-style input
+   draws, it must return `[]`.
+4. **Suite** with `joint_quotient` as the default.
+
+### Predictions
+
+- **G1.** `joint_quotient`: 0 wrong on `cs`. marginal and `joint_modulo`:
+  measured; any wrong certificate there is reported as evidence about the
+  hole.
+- **G2.** Campaigns: `joint_quotient` matches `joint_modulo` exactly (19
+  certificates, same laws and α).
+- **G3.** `input_constraints` returns `[]` on all 180 fresh unconstrained
+  cases and all 200 null-style draws.
+- **G4.** Suite: only the documenting test fails.
+- **G5 (cost).** `cs` median `joint_quotient`/`joint_modulo` ≤ 1.5×; every
+  campaign script ≤ 1.5× its concurrent twin.
+
+**Decision rule.** If G1–G5 hold, open a PR making `joint_quotient` the
+default; `joint_modulo` stays as the recorded former default. Otherwise the
+default stays `joint_modulo` and the failure is recorded.
+
+## Results — A6 (scored 2026-10-05)
+
+**Empirical: G1, G2, G3 and G5 hold. G4 fails as worded, in the safe
+direction. `joint_quotient` also loses one correct certificate that
+`joint_modulo` issues, on the variety where constraint detection is
+malformed.** No A6 run recorded suspended time.
+
+| prediction | result |
+|---|---|
+| **G1** `cs` (24) | **holds.** `joint_quotient`: 22 certified, 0 wrong. `joint_modulo`: 23 certified, 0 wrong. marginal: 23 certified, **4 wrong**: circle exp-bait (form error 1.7×10⁻¹), plane rational (5.4×10⁻²), plane exp-bait and plane sqrt-bait (domain wrong) |
+| **G2** campaigns | **holds.** 19 certificates in each arm, 0 differences across 13 result files |
+| **G3** | **holds.** `input_constraints` returns `[]` on all 180 fresh unconstrained cases and all 200 null-style draws, so `joint_quotient` takes exactly the A2/A4 code path there |
+| **G4** suite with `joint_quotient` default | **fails as worded.** It predicted the documenting test would fail; **no test failed** (431 passed), because PR #17 had already pinned that test to `"marginal"`. A stale prediction, not a regression |
+| **G5** cost | **holds.** `cs` median per-case ratio `joint_quotient`/`joint_modulo` 1.00×; worst campaign script 1.02× |
+
+**The difference between the two gates.** On `cs-plane-float-linear`,
+marginal and `joint_modulo` certify the same 10-term quadratic
+representative with 11-digit coefficients. It agrees with the linear truth on
+the plane to 1.6×10⁻¹² (in-region and extended): a correct domain-restricted
+certificate with an unreduced representative. `joint_quotient` refuses
+structurally: a split certifies but fails the full-data gate. This is the
+variety where `input_constraints` returns two snapped quadratic combinations
+instead of x0 + x1 + x2 − 1, so the ideal that `joint_quotient` excludes is
+not the variety's ideal.
+
+**What this says about the review's hole.** On this bank it did not occur
+empirically: `joint_modulo` issued no wrong certificate on any constrained
+case. `joint_quotient` closes it by construction and costs one cell, and that
+cost traces to the constraint-detection defect, not to the quotient rule.
+
+**Decision.** Under the registered rule (G1–G5 must all hold), G4's wording
+fails and the default stays `joint_modulo`. G4's miss is in the safe
+direction, so the substantive trade is the plane cell. **Open, and the
+natural next step:** make `input_constraints` return minimal-degree
+generators (the linear constraint on the plane), then re-register the switch
+with the plane cell named.
+
+## B1 — graded constraint detection (registered 2026-10-05, before any B1 run)
+
+**Defect (measured in A6).** `input_constraints` SVDs the full quadratic
+feature matrix at once. A linear constraint l = 0 produces a (d+1)-dimensional
+null space (l and each x_i·l), and the function returned two arbitrary,
+snapped mixtures of it, never l itself. On the plane x0 + x1 + x2 = 1 that
+cost `joint_quotient` a correct certificate. The same detector feeds the
+default engine's constrained-input coherence.
+
+**Rule.** `constraint_detection="graded"` (opt-in; default stays `"flat"`).
+- Find linear constraints first, from the null space of (1, x_i).
+- Then keep only the quadratic null directions outside the span of
+  {1, x_i}·l for each linear l, using a rank-revealing basis.
+- Report each degree's constraints in reduced row echelon form, so rational
+  constraints come out with rational coefficients.
+- Same tolerance, rationalization and cap as before.
+
+Pilot (disclosed):
+- plane → `−x0 − x1 − x2 + 1`;
+- sphere, circle and hyperbola unchanged (up to sign);
+- a line in 3-D → two linear constraints;
+- x2 = x0² + x1 → `x0² + x1 − x2`;
+- log-uniform random inputs → `[]`.
+
+### Banks
+
+1. **Detection directly:**
+   - each `cs` variety, plus the line and quadric pilots, as unit tests;
+   - all 180 fresh unconstrained cases and 200 null-style draws, which must
+     return `[]`.
+2. **`cs`:** four arms, all run in this study under the same load:
+   `joint_modulo` and `joint_quotient`, each with `flat` (rerun, tagged
+   `+flatB1`) and `graded`.
+3. **Campaigns:** all 14 scripts, default gate (`joint_modulo`), `flat` and
+   `graded` worktrees concurrent. Named cells: the Gaia P3 frame rotation
+   and every certificate whose inputs carry an exact linear relation.
+4. **Suite** with `graded` as the default.
+
+### Predictions
+
+- **H1.** Graded detection returns the minimal generators on every `cs`
+  variety and on the pilot shapes, and `[]` on all 180 + 200 unconstrained
+  inputs.
+- **H2.** Campaigns: every certificate under `flat` is issued under `graded`
+  with the same law and α.
+- **H3.** `cs`, both gates: 0 wrong under `graded`, and no cell certified
+  under `flat` is lost under `graded` for the same gate.
+  `cs-plane-float-linear` certifies under `joint_quotient+graded`.
+- **H4.** Suite with `graded` default: no failures.
+- **H5 (cost).** `cs` median per-case ratio `graded`/`flat` ≤ 1.5× per gate;
+  every campaign script ≤ 1.5× its concurrent twin.
+
+**Decision rule.** If H1–H5 hold, open a PR making `graded` the default
+detection. Re-registering the `joint_quotient` default switch, with the plane
+cell named, follows as a separate step.
+
+## Results — B1 (scored 2026-10-05)
+
+**Empirical: H1–H5 all hold. Graded detection becomes the default.** No B1
+run recorded suspended time.
+
+| prediction | result |
+|---|---|
+| **H1** | **holds.** The minimal generators on every `cs` variety and pilot shape (unit tests, 4 pass); `[]` on all 180 fresh unconstrained cases and all 200 null-style draws |
+| **H2** campaigns | **holds.** 19 certificates under each detection, 0 differences across 13 result files |
+| **H3** `cs` | **holds.** 0 wrong in all four arms. No cell certified under `flat` is lost under `graded` for either gate. **`cs-plane-float-linear` certifies under `joint_quotient+graded`** (extended-region error 1.6×10⁻¹²): the cell `joint_quotient` lost in A6 is restored |
+| **H4** suite with `graded` default | **holds.** 435 passed, 0 failed |
+| **H5** cost | **holds.** `cs` median per-case ratio `graded`/`flat` 1.00× for both gates; worst campaign script 1.01× |
+
+**Changed representatives, not changed laws.** On `cs-plane-int-linear` and
+`cs-plane-product`, both gates under `graded` return a different
+representative of the same law on the plane:
+- `2·x0 − x1 + x2` becomes `−3·x1 − x2 + 2`;
+- `x0·x1 + 3` becomes `−x1² − x1·x2 + x1 + 3`.
+
+Each is the old law with x0 = 1 − x1 − x2 substituted (extended-region error
+around 10⁻¹⁶). The engine now canonicalizes modulo the true constraint and
+names `−x0 − x1 − x2 + 1 = 0` in the certificate, where under `flat` it named
+a snapped quadratic that is not the variety's ideal. The cost is readability:
+the elimination form is less natural than the input's own form.
+
+**For the next registration (joint_quotient as default gate):** under
+`graded`, `joint_modulo` and `joint_quotient` produce identical results on all
+24 `cs` cells (median ratio 1.02×). That is evidence, not a registered pass.
+
+## Review of PR #18 (2026-10-06): one fix landed, four preconditions named
+
+Verdict: merge for B1, keep `joint_quotient` opt-in.
+
+**Fixed in this PR: the certified payload did not carry the constraint.** The
+review asked to confirm that the named constraint reaches the serialized
+certificate. **It did not.** `mcp.core.recover`'s certified payload dropped
+the certificate's notes entirely, so on the plane it returned
+`law: "-3*x_1 - x_2 + 2"` with only bounds. That is an affine chart presented
+as an ambient law. It predates B1 (the Gaia frame rotation's constraint never
+reached the payload either), but B1 puts chart representatives on more cells.
+
+`Certificate` now has a first-class `constraints` field, set by the engine
+whenever it issues a domain-restricted certificate. The certified `recover`
+payload serializes `constraints`, a `domain_restriction` statement and every
+note. Unconstrained laws have no `constraints` key. Tested in
+`tests/test_constraint_detection.py`. Verdicts are unchanged: only the payload
+gains fields.
+
+**Also added:** the A6 pilot is now a unit test
+(`test_joint_quotient_excludes_exactly_the_ideal_directions`). The padded
+sphere law fails plain joint and passes `joint_quotient`; the bare truth passes
+both.
+
+**Preconditions for re-registering `joint_quotient` as the default gate:**
+
+1. **Gröbner basis.** `sp.reduced` is given the raw generator list. A single
+   linear, a single quadratic, or an RREF set of linears is already a Gröbner
+   basis. A linear plus a kept quadratic need not be: LM(l) can divide a term
+   of the quadratic, and the remainder is then not unique. `cs` never mixes
+   degrees. Reduce modulo `groebner(constraints)` instead.
+2. **The float step after the exact null space.** Exact null vectors are cast
+   to float, divided by v, then rank-cut at 1e-12. Over-ranking would exclude
+   a real direction, and a non-identified candidate could pass. Make it a
+   named prediction, with fixtures whose ideal directions are nearly
+   degenerate.
+3. **`max_constraints=2` truncates a graded basis.** Linears are appended
+   first, so a quadratic beside two linears, or a third linear, is dropped.
+   The cap was inherited from the flat detector, but graded detection is what
+   makes a multi-generator return meaningful. This goes with the dim ≥ 3
+   work.
+4. **Three unshared cutoffs** in graded detection: null space at
+   `tol_rel·s₀` (1e-10), implied span at 1e-9, new quadratic directions at
+   1e-6 absolute when small. That is conservative against false constraints,
+   but a weak genuine quadratic can vanish, and a slightly-off float RREF row
+   could leave a residual of l above 1e-6 and reintroduce a quadratic
+   mixture, the bug B1 fixes. Needs an adversarial fixture with a poorly
+   scaled linear constraint.

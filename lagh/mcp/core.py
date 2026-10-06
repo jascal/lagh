@@ -248,6 +248,13 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
             "alpha_log10": c.alpha_log10, "n_hypotheses": c.n_hypotheses,
             "domain_size": c.domain_size, "tier": r.tier,
             "bounds": [[float(X[:, j].min()), float(X[:, j].max())] for j in range(dim)],
+            **({"constraints": list(c.constraints),
+                "domain_restriction": ("the inputs satisfy these machine-exact "
+                                       "constraints; the law holds ON that variety "
+                                       "and is one representative modulo their "
+                                       "ideal, not a law in the ambient space")}
+               if c.constraints else {}),
+            "notes": [str(n) for n in c.notes],
             "note": "certified over the stated finite domain, not proved for the world"}
 
 

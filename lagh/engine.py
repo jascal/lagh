@@ -382,7 +382,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              declared_basis: bool = False, band_sel=None,
              linear_basis: bool = False,
              escalation: str = "first",
-             coefficient_gate: str = "joint_modulo") -> Result:
+             coefficient_gate: str = "joint_modulo",
+             constraint_detection: str = "graded") -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
     Splits must be disjoint: fit, select, certify. Certification is exhaustive on
@@ -416,6 +417,11 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     constraints; "marginal" is the former default, "joint" the A2 form.
     `escalation`: "first" (default), or the measured experimental "pool"
     (unsound) and "accumulate" (sound, slow).
+    `constraint_detection`: "graded" (default since 2026-10-05, B1) finds
+    linear input constraints before quadratic ones; "flat" is the former
+    detector, which returned snapped quadratic mixtures for a linear constraint.
+    The joint_quotient gate excludes directions in the ideal of the constraints
+    detected here.
     """
     X_fit = np.asarray(X_fit, float)
     X_cert = np.asarray(X_cert, float)
@@ -619,7 +625,11 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     #     library can drop a lower-tier truth (sparse5-d2).
     #   "accumulate": run every tier, keep each tier's own certifying
     #     candidates, and judge their union once after the last tier.
-    if coefficient_gate not in ("marginal", "joint", "joint_modulo"):
+    if constraint_detection not in ("flat", "graded"):
+        raise ValueError(f"unknown constraint detection {constraint_detection!r}")
+    graded_detection = constraint_detection == "graded"
+    if coefficient_gate not in ("marginal", "joint", "joint_modulo",
+                                "joint_quotient"):
         raise ValueError(f"unknown coefficient gate {coefficient_gate!r}")
     if escalation not in ("first", "pool", "accumulate"):
         raise ValueError(f"unknown escalation rule {escalation!r}")
@@ -672,7 +682,15 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                             continue
                         c.expr = gated
                         # EXPERIMENTAL (amendment A2): the same gate, jointly
-                        if coefficient_gate in ("joint", "joint_modulo"):
+                        if coefficient_gate == "joint_quotient":
+                            # A6: exclude the constraint ideal EXACTLY inside the
+                            # joint test (no reduction, no term dropping)
+                            if gate_constraints is None:
+                                gate_constraints = input_constraints(X_all_m, syms, graded=graded_detection)
+                            if not joint_pinned(c.expr, syms, X_cert, y_cert, eps,
+                                                constraints=gate_constraints or None):
+                                continue
+                        elif coefficient_gate in ("joint", "joint_modulo"):
                             target = c.expr
                             # A4: on machine-exact constrained inputs the
                             # constraint ideal is an EXACT joint flat direction
@@ -687,7 +705,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                             # the constraint quotient. Open; see the registration.
                             if coefficient_gate == "joint_modulo":
                                 if gate_constraints is None:
-                                    gate_constraints = input_constraints(X_all_m, syms)
+                                    gate_constraints = input_constraints(X_all_m, syms, graded=graded_detection)
                                 if gate_constraints:
                                     red = reduce_mod_constraints(c.expr, syms,
                                                                  gate_constraints)
@@ -750,7 +768,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             # domain claim applies. Detect the constraint; re-run coherence
             # with the DATA as the probe; a single on-manifold class is a
             # verdict, with the winner canonicalized modulo the constraint.
-            constraints = input_constraints(X_all_m, syms)
+            constraints = input_constraints(X_all_m, syms, graded=graded_detection)
             if constraints:
                 mclasses = coherent(certifying, syms, X_all_m, yscale,
                                     n_evidence=(len(y_cert) if linear_basis
@@ -889,6 +907,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                n_hypotheses=total, partial=partial_cert)
             if constraint_note:
                 cert.notes.append(constraint_note)
+                cert.constraints = [sp.sstr(g) for g in constraints]
             if arb_note:
                 cert.notes.append(arb_note)
             if interval_note:

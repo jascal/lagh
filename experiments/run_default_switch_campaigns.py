@@ -34,6 +34,7 @@ SCRIPTS = ['gaia/run_c0.py', 'gaia/run_p1.py', 'gaia/run_p2.py', 'gaia/run_p3.py
            'exoplanet/run_c5.py', 'exoplanet/run_ph2.py',
            'materials/run_c0.py', 'materials/run_c1.py', 'materials/run_c2.py']
 FLIP_FROM = 'coefficient_gate: str = "marginal"'
+PARAM = 'coefficient_gate'     # B1 flips constraint_detection via --param
 ARMS = ('marginal', 'joint')   # A3; A4 runs ('marginal', 'joint_modulo') via --gate
 
 
@@ -43,14 +44,18 @@ def worktree(arm: str, base: Path) -> Path:
         subprocess.run(['git', 'worktree', 'add', '-q', '--detach', str(wt), 'HEAD'],
                        cwd=ROOT, check=True)
         (wt / '.venv').symlink_to(ROOT / '.venv')
-        if arm != 'marginal':
-            for f in ('lagh/engine.py', 'lagh/passive.py'):
-                p = wt / f
-                src = p.read_text()
-                if src.count(FLIP_FROM) != 1:
-                    raise RuntimeError(f'registered flip does not apply to {f}')
-                p.write_text(src.replace(FLIP_FROM,
-                                         f'coefficient_gate: str = "{arm}"'))
+        # every arm's worktree has its default set EXPLICITLY to the arm's gate
+        # (the committed default changed in PR #17, so no arm is "unflipped")
+        import re
+        param, value = PARAM, arm.split('+')[-1] if PARAM != 'coefficient_gate' else arm
+        for f in ('lagh/engine.py', 'lagh/passive.py'):
+            p = wt / f
+            src = p.read_text()
+            new_src, n = re.subn(rf'{param}: str = "[a-z_]+"',
+                                 f'{param}: str = "{value}"', src)
+            if n != 1:
+                raise RuntimeError(f'registered flip does not apply to {f}')
+            p.write_text(new_src)
     return wt
 
 
@@ -151,12 +156,17 @@ def main():
     ap.add_argument('--compare', action='store_true')
     ap.add_argument('--gate', default='joint',
                     help='second arm: the default the worktree is flipped to')
+    ap.add_argument('--param', default='coefficient_gate',
+                    choices=('coefficient_gate', 'constraint_detection'))
+    ap.add_argument('--first', default='marginal',
+                    help='first arm (A6 compares joint_modulo with joint_quotient)')
     ap.add_argument('--out', help='results directory (default: the A3 location)')
     ap.add_argument('--concurrent', action='store_true',
                     help='run both arms at once, so they share the same load (A4)')
     a = ap.parse_args()
-    global ARMS, OUT
-    ARMS = ('marginal', a.gate)
+    global ARMS, OUT, PARAM
+    PARAM = a.param
+    ARMS = (a.first, a.gate)
     if a.out:
         OUT = ROOT / a.out
     if a.compare:

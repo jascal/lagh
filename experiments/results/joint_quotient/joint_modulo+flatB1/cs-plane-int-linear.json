@@ -1,0 +1,20 @@
+{
+ "tag": "empirical",
+ "case": "cs-plane-int-linear",
+ "gate": "joint_modulo",
+ "detection": "flat",
+ "arm": "joint_modulo+flatB1",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "2*x_0 - x_1 + x_2",
+ "notes": [
+  "domain-restricted certificate: inputs satisfy -631629*x_0**2/931115 - 291031*x_0*x_1/731531 - 725858*x_0*x_2/998111 + x_0 + 275359*x_1**2/981604 + 219916*x_1*x_2/949365 + 23863*x_1/580285 - 8254*x_2**"
+ ],
+ "seconds": 12.2,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "wrong_domain": false,
+ "wrong_form": false
+}

@@ -93,3 +93,24 @@ def test_joint_modulo_ignores_the_constraint_ideal():
     assert cons
     reduced = reduce_mod_constraints(sp.expand(padded), syms, cons)
     assert joint_pinned(reduced, syms, X, y, eps)
+
+
+def test_joint_quotient_excludes_exactly_the_ideal_directions():
+    """A6 pilot as a locked rule (PR #18 review, finding 2): the padded sphere
+    law fails plain joint pinning and passes joint pinning modulo the ideal;
+    the bare truth passes both."""
+    from lagh.certify import epsilon, joint_pinned, input_constraints
+    rng = np.random.default_rng(3)
+    v = rng.normal(size=(400, 3))
+    X = v / np.linalg.norm(v, axis=1, keepdims=True)
+    syms = list(sp.symbols('x_0:3'))
+    c = [sp.Float(0.4559837762), sp.Float(-0.8676661490), sp.Float(-0.1980763734)]
+    truth = sum(ci*s for ci, s in zip(c, syms))
+    y = X @ np.array([float(a) for a in c])
+    padded = sp.expand(truth + sp.Float(0.2169165373) * syms[1]
+                       * (syms[0]**2 + syms[1]**2 + syms[2]**2 - 1))
+    cons, eps = input_constraints(X, syms), epsilon(y)
+    assert not joint_pinned(padded, syms, X, y, eps)
+    assert joint_pinned(padded, syms, X, y, eps, constraints=cons)
+    assert joint_pinned(truth, syms, X, y, eps)
+    assert joint_pinned(truth, syms, X, y, eps, constraints=cons)

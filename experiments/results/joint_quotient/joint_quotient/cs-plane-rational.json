@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "cs-plane-rational",
+ "gate": "joint_quotient",
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "1/(x_0 + 2)",
+ "notes": [
+  "domain-restricted certificate: inputs satisfy -x_0**2 - 843822*x_0*x_1/851383 - 106055*x_0*x_2/347928 + 707417*x_0/893693 + 7561*x_1**2/851383 + 591567*x_1*x_2/840220 - 138513*x_1/637384 + 241873*x_2*"
+ ],
+ "seconds": 107.6,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "wrong_domain": false,
+ "wrong_form": false
+}
