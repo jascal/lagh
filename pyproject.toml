@@ -17,6 +17,10 @@ mcp = ["mcp>=1.0"]
 # the research state-machine driver (machine/driver.py) needs the Orca runtime to drive
 # the verified spec. `import lagh` and the tools work without it; only the driver needs it.
 machine = ["orca-runtime-python"]
+# what the test suite imports beyond the core (CI installs .[mcp,machine,test]):
+# scipy for the tweezers/PDE fixtures, matplotlib because a C4 test imports its
+# plotting module
+test = ["pytest", "scipy", "matplotlib"]
 
 [project.scripts]
 lagh-mcp = "lagh.mcp.server:main"
