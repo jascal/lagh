@@ -69,6 +69,14 @@ class Certificate:
                                        # this band agrees on, reported ALONGSIDE
                                        # an abstain so the determined part is not
                                        # discarded (see invariant_content)
+    constraints: list = field(default_factory=list)
+                                       # DOMAIN RESTRICTION, first-class: the
+                                       # machine-exact input constraints a
+                                       # domain-restricted certificate holds on.
+                                       # The law is then a representative modulo
+                                       # their ideal (an affine chart on a plane,
+                                       # say), not an ambient law, and a consumer
+                                       # must see that without parsing notes
 
     measurement: dict | None = None  # empirical checked-row evidence, never attribution
     measurement_omitted: str | None = None

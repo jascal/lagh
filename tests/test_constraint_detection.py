@@ -51,3 +51,20 @@ def test_unconstrained_inputs_give_nothing():
     rng = np.random.default_rng(4)
     X = np.exp(rng.uniform(np.log(.5), np.log(10.), (300, 3)))
     assert input_constraints(X, S3, graded=True) == []
+
+
+def test_domain_restricted_certificate_names_its_constraints_in_the_payload():
+    """PR #18 review: on a plane the certified law is an affine chart
+    (2x0 - x1 + x2 comes back as -3x1 - x2 + 2); the serialized certificate
+    must carry the generators, not only a note in the study artifacts."""
+    from lagh.mcp.core import recover
+    rng = np.random.default_rng(1)
+    a, b = rng.uniform(.2, 1, 400), rng.uniform(.2, 1, 400)
+    X = np.column_stack([a, b, 1 - a - b])
+    r = recover(X.tolist(), (2 * X[:, 0] - X[:, 1] + X[:, 2]).tolist())
+    assert r["certified"]
+    assert [sp.sympify(g) for g in r["constraints"]] == [-S3[0] - S3[1] - S3[2] + 1]
+    assert "representative" in r["domain_restriction"]
+    X = np.exp(rng.uniform(np.log(.5), np.log(3.), (300, 2)))
+    r = recover(X.tolist(), (3 * X[:, 0] - 2 * X[:, 1]).tolist())
+    assert r["certified"] and "constraints" not in r

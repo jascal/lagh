@@ -877,3 +877,52 @@ the elimination form is less natural than the input's own form.
 **For the next registration (joint_quotient as default gate):** under
 `graded`, `joint_modulo` and `joint_quotient` produce identical results on all
 24 `cs` cells (median ratio 1.02×). That is evidence, not a registered pass.
+
+## Review of PR #18 (2026-10-06): one fix landed, four preconditions named
+
+Verdict: merge for B1, keep `joint_quotient` opt-in.
+
+**Fixed in this PR: the certified payload did not carry the constraint.** The
+review asked to confirm that the named constraint reaches the serialized
+certificate. **It did not.** `mcp.core.recover`'s certified payload dropped
+the certificate's notes entirely, so on the plane it returned
+`law: "-3*x_1 - x_2 + 2"` with only bounds. That is an affine chart presented
+as an ambient law. It predates B1 (the Gaia frame rotation's constraint never
+reached the payload either), but B1 puts chart representatives on more cells.
+
+`Certificate` now has a first-class `constraints` field, set by the engine
+whenever it issues a domain-restricted certificate. The certified `recover`
+payload serializes `constraints`, a `domain_restriction` statement and every
+note. Unconstrained laws have no `constraints` key. Tested in
+`tests/test_constraint_detection.py`. Verdicts are unchanged: only the payload
+gains fields.
+
+**Also added:** the A6 pilot is now a unit test
+(`test_joint_quotient_excludes_exactly_the_ideal_directions`). The padded
+sphere law fails plain joint and passes `joint_quotient`; the bare truth passes
+both.
+
+**Preconditions for re-registering `joint_quotient` as the default gate:**
+
+1. **Gröbner basis.** `sp.reduced` is given the raw generator list. A single
+   linear, a single quadratic, or an RREF set of linears is already a Gröbner
+   basis. A linear plus a kept quadratic need not be: LM(l) can divide a term
+   of the quadratic, and the remainder is then not unique. `cs` never mixes
+   degrees. Reduce modulo `groebner(constraints)` instead.
+2. **The float step after the exact null space.** Exact null vectors are cast
+   to float, divided by v, then rank-cut at 1e-12. Over-ranking would exclude
+   a real direction, and a non-identified candidate could pass. Make it a
+   named prediction, with fixtures whose ideal directions are nearly
+   degenerate.
+3. **`max_constraints=2` truncates a graded basis.** Linears are appended
+   first, so a quadratic beside two linears, or a third linear, is dropped.
+   The cap was inherited from the flat detector, but graded detection is what
+   makes a multi-generator return meaningful. This goes with the dim ≥ 3
+   work.
+4. **Three unshared cutoffs** in graded detection: null space at
+   `tol_rel·s₀` (1e-10), implied span at 1e-9, new quadratic directions at
+   1e-6 absolute when small. That is conservative against false constraints,
+   but a weak genuine quadratic can vanish, and a slightly-off float RREF row
+   could leave a residual of l above 1e-6 and reintroduce a quadratic
+   mixture, the bug B1 fixes. Needs an adversarial fixture with a poorly
+   scaled linear constraint.

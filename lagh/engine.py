@@ -907,6 +907,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                n_hypotheses=total, partial=partial_cert)
             if constraint_note:
                 cert.notes.append(constraint_note)
+                cert.constraints = [sp.sstr(g) for g in constraints]
             if arb_note:
                 cert.notes.append(arb_note)
             if interval_note:
