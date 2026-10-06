@@ -755,3 +755,40 @@ feeds the constrained-input coherence path. Recorded as **open**.
 **Decision rule.** If G1–G5 hold, open a PR making `joint_quotient` the
 default; `joint_modulo` stays as the recorded former default. Otherwise the
 default stays `joint_modulo` and the failure is recorded.
+
+## Results — A6 (scored 2026-10-05)
+
+**Empirical: G1, G2, G3 and G5 hold. G4 fails as worded, in the safe
+direction. `joint_quotient` also loses one correct certificate that
+`joint_modulo` issues, on the variety where constraint detection is
+malformed.** No A6 run recorded suspended time.
+
+| prediction | result |
+|---|---|
+| **G1** `cs` (24) | **holds.** `joint_quotient`: 22 certified, 0 wrong. `joint_modulo`: 23 certified, 0 wrong. marginal: 23 certified, **4 wrong**: circle exp-bait (form error 1.7×10⁻¹), plane rational (5.4×10⁻²), plane exp-bait and plane sqrt-bait (domain wrong) |
+| **G2** campaigns | **holds.** 19 certificates in each arm, 0 differences across 13 result files |
+| **G3** | **holds.** `input_constraints` returns `[]` on all 180 fresh unconstrained cases and all 200 null-style draws, so `joint_quotient` takes exactly the A2/A4 code path there |
+| **G4** suite with `joint_quotient` default | **fails as worded.** It predicted the documenting test would fail; **no test failed** (431 passed), because PR #17 had already pinned that test to `"marginal"`. A stale prediction, not a regression |
+| **G5** cost | **holds.** `cs` median per-case ratio `joint_quotient`/`joint_modulo` 1.00×; worst campaign script 1.02× |
+
+**The difference between the two gates.** On `cs-plane-float-linear`,
+marginal and `joint_modulo` certify the same 10-term quadratic
+representative with 11-digit coefficients. It agrees with the linear truth on
+the plane to 1.6×10⁻¹² (in-region and extended): a correct domain-restricted
+certificate with an unreduced representative. `joint_quotient` refuses
+structurally: a split certifies but fails the full-data gate. This is the
+variety where `input_constraints` returns two snapped quadratic combinations
+instead of x0 + x1 + x2 − 1, so the ideal that `joint_quotient` excludes is
+not the variety's ideal.
+
+**What this says about the review's hole.** On this bank it did not occur
+empirically: `joint_modulo` issued no wrong certificate on any constrained
+case. `joint_quotient` closes it by construction and costs one cell, and that
+cost traces to the constraint-detection defect, not to the quotient rule.
+
+**Decision.** Under the registered rule (G1–G5 must all hold), G4's wording
+fails and the default stays `joint_modulo`. G4's miss is in the safe
+direction, so the substantive trade is the plane cell. **Open, and the
+natural next step:** make `input_constraints` return minimal-degree
+generators (the linear constraint on the plane), then re-register the switch
+with the plane cell named.

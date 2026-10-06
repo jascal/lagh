@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "cs-sphere-exp-bait",
+ "gate": "marginal",
+ "certified": true,
+ "tier": 4,
+ "abstain": null,
+ "law": "-x_0*exp(500000*x_0/999999)/2000000 + exp(500000*x_0/999999)",
+ "notes": [],
+ "seconds": 108.8,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 3.74523301726064e-13,
+ "ext_rel_error": 3.745503522877718e-13,
+ "wrong_domain": false,
+ "wrong_form": false
+}

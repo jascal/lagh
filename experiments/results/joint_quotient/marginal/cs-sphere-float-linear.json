@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "cs-sphere-float-linear",
+ "gate": "marginal",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "2279918881*x_0**3/20000000000 - 39439370409*x_0**2*x_1/250000000000 + 2279918881*x_0*x_1**2/20000000000 + 2279918881*x_0*x_2**2/20000000000 + 6839756643*x_0/20000000000 - 39439370409*x_1**3/250000000000 - 39439370409*x_1*x_2**2/250000000000 - 141981733473*x_1/200000000000 - 990381867*x_2/5000000000",
+ "notes": [
+  "domain-restricted certificate: inputs satisfy -x_0**2 - x_1**2 - x_2**2 + 1 = 0 (machine-exact); rivals coincide on the constraint variety and the representative is canonicalized modulo it"
+ ],
+ "seconds": 24.3,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 9.98785701288349e-13,
+ "ext_rel_error": 1.000900356447287e-12,
+ "wrong_domain": false,
+ "wrong_form": false
+}

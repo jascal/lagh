@@ -1,0 +1,14 @@
+{
+ "tag": "empirical",
+ "case": "cs-plane-float-linear",
+ "gate": "joint_quotient",
+ "certified": false,
+ "tier": 2,
+ "abstain": "structural",
+ "law": null,
+ "notes": [
+  "passive: certified on a split but failed the full-data exhaustive gate"
+ ],
+ "seconds": 52.5,
+ "suspended_seconds": 0.0
+}

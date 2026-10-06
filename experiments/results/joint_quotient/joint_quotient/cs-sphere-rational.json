@@ -1,0 +1,16 @@
+{
+ "tag": "empirical",
+ "case": "cs-sphere-rational",
+ "gate": "joint_quotient",
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "1/(2*(x_0/2 + 1))",
+ "notes": [],
+ "seconds": 33.8,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "wrong_domain": false,
+ "wrong_form": false
+}
