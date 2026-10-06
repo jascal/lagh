@@ -34,6 +34,7 @@ SCRIPTS = ['gaia/run_c0.py', 'gaia/run_p1.py', 'gaia/run_p2.py', 'gaia/run_p3.py
            'exoplanet/run_c5.py', 'exoplanet/run_ph2.py',
            'materials/run_c0.py', 'materials/run_c1.py', 'materials/run_c2.py']
 FLIP_FROM = 'coefficient_gate: str = "marginal"'
+COMMITS: dict = {}             # C1: arm -> commit, worktree used as committed
 PARAM = 'coefficient_gate'     # B1 flips constraint_detection via --param
 ARMS = ('marginal', 'joint')   # A3; A4 runs ('marginal', 'joint_modulo') via --gate
 
@@ -41,12 +42,15 @@ ARMS = ('marginal', 'joint')   # A3; A4 runs ('marginal', 'joint_modulo') via --
 def worktree(arm: str, base: Path) -> Path:
     wt = base / f'lagh-{arm}'
     if not wt.exists():
-        subprocess.run(['git', 'worktree', 'add', '-q', '--detach', str(wt), 'HEAD'],
+        commit = COMMITS.get(arm, 'HEAD')
+        subprocess.run(['git', 'worktree', 'add', '-q', '--detach', str(wt), commit],
                        cwd=ROOT, check=True)
         (wt / '.venv').symlink_to(ROOT / '.venv')
         # every arm's worktree has its default set EXPLICITLY to the arm's gate
         # (the committed default changed in PR #17, so no arm is "unflipped")
         import re
+        if arm in COMMITS:
+            return wt                  # C1: an arm pinned to a commit, as committed
         param, value = PARAM, arm.split('+')[-1] if PARAM != 'coefficient_gate' else arm
         for f in ('lagh/engine.py', 'lagh/passive.py'):
             p = wt / f
@@ -158,6 +162,8 @@ def main():
                     help='second arm: the default the worktree is flipped to')
     ap.add_argument('--param', default='coefficient_gate',
                     choices=('coefficient_gate', 'constraint_detection'))
+    ap.add_argument('--first-commit',
+                    help='C1: create the first arm at this commit, with no flip')
     ap.add_argument('--first', default='marginal',
                     help='first arm (A6 compares joint_modulo with joint_quotient)')
     ap.add_argument('--out', help='results directory (default: the A3 location)')
@@ -166,6 +172,8 @@ def main():
     a = ap.parse_args()
     global ARMS, OUT, PARAM
     PARAM = a.param
+    if a.first_commit:
+        COMMITS[a.first] = a.first_commit
     ARMS = (a.first, a.gate)
     if a.out:
         OUT = ROOT / a.out

@@ -114,3 +114,61 @@ def test_joint_quotient_excludes_exactly_the_ideal_directions():
     assert joint_pinned(padded, syms, X, y, eps, constraints=cons)
     assert joint_pinned(truth, syms, X, y, eps)
     assert joint_pinned(truth, syms, X, y, eps, constraints=cons)
+
+
+def _mixed_variety(n=400, seed=8):
+    """4-D inputs on {x3 = 1 - x0, x1 = x0^2}: a linear and a quadratic
+    generator, whose raw list is not a Groebner basis under lex."""
+    rng = np.random.default_rng(seed)
+    a, b = rng.uniform(.5, 2., n), rng.uniform(-1., 1., n)
+    return np.column_stack([a, a * a, b, 1 - a])
+
+
+def test_joint_quotient_on_mixed_degree_constraints():
+    """Finding 1: the truth padded by multiples of BOTH generators passes
+    joint_quotient (exclusion modulo a Groebner basis) and fails plain joint."""
+    from lagh.certify import epsilon, joint_pinned, input_constraints
+    X = _mixed_variety()
+    s = list(sp.symbols('x_0:4'))
+    truth = sp.Float(0.7213) * s[0] + sp.Float(-1.3307) * s[2]
+    y = 0.7213 * X[:, 0] - 1.3307 * X[:, 2]
+    pad = sp.expand(truth + sp.Float(0.31417) * s[2] * (s[3] - 1 + s[0])
+                    + sp.Float(0.27183) * s[0] * (s[1] - s[0]**2))
+    cons, eps = input_constraints(X, s), epsilon(y)
+    assert len(cons) == 2
+    assert not joint_pinned(pad, s, X, y, eps)
+    assert joint_pinned(pad, s, X, y, eps, constraints=cons)
+
+
+def test_joint_quotient_still_rejects_a_non_ideal_flat_direction():
+    """Finding 2: excluding the ideal must not exclude a genuine flat
+    direction. A candidate carrying an ideal padding AND a near-collinear pair
+    (x2 and x2 + 1e-9*x2**3 move together) is still not identified."""
+    from lagh.certify import epsilon, joint_pinned, input_constraints
+    X = _mixed_variety()
+    s = list(sp.symbols('x_0:4'))
+    y = 0.7213 * X[:, 0] - 1.3307 * X[:, 2]
+    cand = sp.expand(sp.Float(0.7213) * s[0] + sp.Float(-0.66535) * s[2]
+                     + sp.Float(-0.66535) * (s[2] + sp.Float(1e-9) * s[2]**3)
+                     + sp.Float(0.31417) * s[2] * (s[3] - 1 + s[0]))
+    cons, eps = input_constraints(X, s), epsilon(y)
+    assert not joint_pinned(cand, s, X, y, np.maximum(eps, 1e-6),
+                            constraints=cons)
+
+
+def test_joint_quotient_with_ill_scaled_coefficients():
+    """Finding 2: coefficients spanning nine decades do not perturb the exact
+    exclusion; the padded truth still passes and the bare truth still passes."""
+    from lagh.certify import epsilon, joint_pinned, input_constraints
+    rng = np.random.default_rng(9)
+    v = rng.normal(size=(400, 3))
+    X = v / np.linalg.norm(v, axis=1, keepdims=True)
+    s = list(sp.symbols('x_0:3'))
+    c = [sp.Float(4.559837762e-4), sp.Float(-867.666149), sp.Float(-1.980763734e-1)]
+    truth = sum(ci*si for ci, si in zip(c, s))
+    y = X @ np.array([float(a) for a in c])
+    pad = sp.expand(truth + sp.Float(2.169165373e-6) * s[1]
+                    * (s[0]**2 + s[1]**2 + s[2]**2 - 1))
+    cons, eps = input_constraints(X, s), epsilon(y)
+    assert joint_pinned(truth, s, X, y, eps, constraints=cons)
+    assert joint_pinned(pad, s, X, y, eps, constraints=cons)

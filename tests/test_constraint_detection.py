@@ -63,8 +63,38 @@ def test_domain_restricted_certificate_names_its_constraints_in_the_payload():
     X = np.column_stack([a, b, 1 - a - b])
     r = recover(X.tolist(), (2 * X[:, 0] - X[:, 1] + X[:, 2]).tolist())
     assert r["certified"]
-    assert [sp.sympify(g) for g in r["constraints"]] == [-S3[0] - S3[1] - S3[2] + 1]
+    assert _same_ideal([sp.sympify(g) for g in r["constraints"]],
+                       [S3[0] + S3[1] + S3[2] - 1], S3)
     assert "representative" in r["domain_restriction"]
     X = np.exp(rng.uniform(np.log(.5), np.log(3.), (300, 2)))
     r = recover(X.tolist(), (3 * X[:, 0] - 2 * X[:, 1]).tolist())
     assert r["certified"] and "constraints" not in r
+
+
+S4 = list(sp.symbols('x_0:4'))
+
+
+def test_two_linears_and_a_quadratic_all_returned():
+    """Findings 3 and 4: a quadratic beside two linear constraints is neither
+    truncated nor mistaken for (or mixed with) the linear multiples."""
+    rng = np.random.default_rng(5)
+    a, b = rng.uniform(.5, 2., 400), rng.uniform(-1., 1., 400)
+    X = np.column_stack([a, a * a, a + a * a, 1 - a + b * 0])      # x1 = x0^2
+    X[:, 3] = 1 - X[:, 0]
+    found = input_constraints(X, S4)
+    assert len(found) == 3      # nothing truncated (the reduced lex basis
+                                # parameterizes by x3: degrees 1, 2, 2)
+    assert _same_ideal(found, [S4[2] - S4[0] - S4[1], S4[3] - 1 + S4[0],
+                               S4[1] - S4[0]**2], S4)
+
+
+def test_poorly_scaled_linear_constraint_comes_back_linear():
+    """Finding 4: a badly scaled linear constraint must not leave a residual
+    that reintroduces quadratic mixtures."""
+    rng = np.random.default_rng(6)
+    x0, x1 = rng.uniform(1e-4, 5e-4, 400), rng.uniform(.1, .5, 400)
+    x2 = (1 - 1000 * x0 - x1) / 0.001
+    X = np.column_stack([x0, x1, x2])
+    found = input_constraints(X, S3)
+    assert len(found) == 1 and sp.Poly(found[0], *S3).total_degree() == 1
+    assert _same_ideal(found, [1000 * S3[0] + S3[1] + sp.Rational(1, 1000) * S3[2] - 1], S3)
