@@ -557,9 +557,12 @@ def _ideal_directions(expr, atoms, params, syms, constraints):
         if any(not d.free_symbols <= set(syms) or not d.is_polynomial(*syms)
                for d in derivs):
             return None
-        basis = [sp.expand(g) for g in constraints]
-        rems = [sp.reduced(d, basis, *syms)[1] if d != 0 else sp.Integer(0)
-                for d in derivs]
+        # a remainder is unique only modulo a GROEBNER basis: a linear plus a
+        # kept quadratic need not be one (PR #18 review, finding 1)
+        basis = list(sp.groebner([sp.expand(g) for g in constraints], *syms,
+                                 order='lex').exprs)
+        rems = [sp.reduced(d, basis, *syms, order='lex')[1] if d != 0
+                else sp.Integer(0) for d in derivs]
         polys = [sp.Poly(r, *syms) for r in rems]
         monos = sorted(set().union(*(set(q.monoms()) for q in polys)))
         if not monos:
@@ -635,11 +638,16 @@ def joint_pinned(expr, syms, X: np.ndarray, y: np.ndarray, eps,
         if ideal.size == 0:
             d = np.linalg.svd(G, full_matrices=False)[2][-1]
         else:
-            # ideal directions in RELATIVE coordinates: delta = v * d
+            # ideal directions in RELATIVE coordinates: delta = v * d. Their
+            # number is EXACT (an exact null-space basis is independent, and the
+            # diagonal scaling by v cannot change rank), so the complement comes
+            # from a complete QR with that rank -- no float rank cut, so a real
+            # direction can never be excluded by over-ranking (finding 2).
             Nd = ideal / v[:, None]
-            u, sv, vt = np.linalg.svd(Nd.T, full_matrices=True)
-            rank = int(np.sum(sv > 1e-12 * sv.max()))
-            Qc = vt[rank:].T                 # orthonormal complement basis
+            k = ideal.shape[1]
+            if k >= len(v):
+                return True                  # every direction is an ideal one
+            Qc = np.linalg.qr(Nd, mode='complete')[0][:, k:]
             if Qc.shape[1] == 0:
                 return True                  # every direction is an ideal one
             d = Qc @ np.linalg.svd(G @ Qc, full_matrices=False)[2][-1]
@@ -1080,7 +1088,8 @@ def _graded_constraints(X, syms, tol_rel, max_constraints):
     (l, x_i*l) from which it returned arbitrary snapped mixtures (measured on
     the plane x0+x1+x2 = 1: two quadratic combinations, never l itself). Here
     each degree's new null space is taken modulo the multiples of the
-    lower-degree generators and put in reduced row echelon form."""
+    lower-degree generators and put in reduced row echelon form.
+    `max_constraints` is not applied here (finding 3)."""
     n, d = X.shape
     lin_terms = [sp.S.One] + [syms[i] for i in range(d)]
     quad_terms = lin_terms + [syms[i] * syms[j] for i in range(d) for j in range(i, d)]
@@ -1096,49 +1105,58 @@ def _graded_constraints(X, syms, tol_rel, max_constraints):
 
     out = []
     lin = null_rows(L)
-    if len(lin):
-        for row in _rref_rows(lin):
-            g = _rationalize(row, lin_terms)
-            if g is not None:
-                out.append(g)
-    # quadratic: null space of Q modulo {1, x_i} * (linear constraints)
+    lin_exact = []
+    for row in (_rref_rows(lin) if len(lin) else []):
+        g = _rationalize(row, lin_terms)
+        if g is None:
+            # a linear constraint with no exact rational form: its multiples
+            # cannot be removed exactly from the quadratic stage, which would
+            # then report mixtures of it -- the defect this detector exists to
+            # remove. Report the linear constraints found and stop there.
+            return out
+        lin_exact.append(g)
+    out += lin_exact
+    # quadratic: the null space of Q, minus the span of {1, x_i} * l for each
+    # EXACT linear l. ONE tolerance decides nullity (tol_rel above); the
+    # implied span's rank is computed in exact arithmetic, and the number of
+    # NEW quadratic constraints is a count, dim(quadratic null) - rank(implied),
+    # not a second cutoff (PR #18 review, finding 4).
     quad = null_rows(Q)
     if len(quad):
+        index = {sp.Poly(t, *syms).monoms()[0]: k for k, t in enumerate(quad_terms)}
         implied = []
-        for row in (_rref_rows(lin) if len(lin) else []):
-            base = np.zeros(len(quad_terms))
-            base[:d + 1] = row
-            implied.append(base)
-            for i in range(d):          # x_i * l, expressed on quad_terms
-                v = np.zeros(len(quad_terms))
-                for j in range(d + 1):
-                    if row[j] == 0:
-                        continue
-                    if j == 0:
-                        v[1 + i] += row[0]          # x_i * 1
-                    else:
-                        a, b = sorted((i, j - 1))
-                        k = d + 1 + sum(d - t for t in range(a)) + (b - a)
-                        v[k] += row[j]
+        for g in lin_exact:
+            for m in [sp.S.One] + [syms[i] for i in range(d)]:
+                v = [sp.S.Zero] * len(quad_terms)
+                for mono, c in sp.Poly(sp.expand(m * g), *syms).terms():
+                    v[index[mono]] = c
                 implied.append(v)
-        if implied:
-            P = np.array(implied)
-            # orthonormal basis of the implied span, RANK-REVEALING (two linear
-            # constraints make the x_i*l products linearly dependent; a plain QR
-            # would return spurious extra directions and over-project)
-            _, sp_, vp = np.linalg.svd(P, full_matrices=False)
-            basis = vp[sp_ > 1e-9 * sp_.max()]
-            resid = quad - (quad @ basis.T) @ basis
-            _, s_, vt = np.linalg.svd(resid, full_matrices=False)
-            new = vt[s_ > 1e-6 * max(1.0, s_.max())]
-        else:
-            new = quad
-        if len(new):
+        r_imp = sp.Matrix(implied).rank() if implied else 0
+        k_new = len(quad) - r_imp
+        if k_new > 0:
+            if r_imp:
+                P = np.array([[float(c) for c in v] for v in implied])
+                basis = np.linalg.svd(P, full_matrices=False)[2][:r_imp]
+                resid = quad - (quad @ basis.T) @ basis
+            else:
+                resid = quad
+            new = np.linalg.svd(resid, full_matrices=False)[2][:k_new]
             for row in _rref_rows(new):
                 g = _rationalize(row, quad_terms)
                 if g is not None:
                     out.append(g)
-    return out[:max_constraints]
+    # no truncation: a graded basis is the ideal, and dropping a generator
+    # (the quadratic went first) silently enlarges the variety (finding 3).
+    # Return the REDUCED Groebner basis: unique, so certificates name the same
+    # generators however the null space came out (the quadratic stage yields
+    # q plus multiples of l, a valid but unreadable generator). If the snapped
+    # generators are inconsistent the basis collapses to {1}: claim nothing.
+    if out:
+        gb = list(sp.groebner(out, *syms, order='lex').exprs)
+        if gb == [sp.S.One] or any(g.is_number for g in gb):
+            return []
+        out = [sp.expand(g) for g in gb]
+    return out
 
 
 def reduce_mod_constraints(expr, syms, constraints: list):
@@ -1147,8 +1165,9 @@ def reduce_mod_constraints(expr, syms, constraints: list):
     try:
         if not expr.is_polynomial(*syms):
             return expr
-        _, r = sp.reduced(sp.expand(expr), [sp.expand(g) for g in constraints],
-                          *syms)
+        gb = list(sp.groebner([sp.expand(g) for g in constraints], *syms,
+                              order='lex').exprs)
+        _, r = sp.reduced(sp.expand(expr), gb, *syms, order='lex')
         return sp.expand(r)
     except Exception:                                          # noqa: BLE001
         return expr

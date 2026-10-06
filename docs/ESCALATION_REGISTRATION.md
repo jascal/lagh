@@ -926,3 +926,67 @@ both.
    could leave a residual of l above 1e-6 and reintroduce a quadratic
    mixture, the bug B1 fixes. Needs an adversarial fixture with a poorly
    scaled linear constraint.
+
+## C1 — the four preconditions, and joint_quotient as default (registered 2026-10-06, before any C1 run)
+
+**The fixes**, in code on this branch:
+1. **Gröbner basis.** `_ideal_directions` and `reduce_mod_constraints` reduce
+   modulo `groebner(constraints, order='lex')`, not the raw list.
+2. **No float rank cut.** The ideal directions come from an exact null
+   space, so their number is exact, and diagonal scaling by v cannot change
+   rank. The complement comes from a complete QR with that rank. Over-ranking
+   cannot occur.
+3. **No truncation of a graded basis.** `max_constraints` now applies only to
+   the legacy flat detector.
+4. **One tolerance.** Nullity is decided only by `tol_rel` (1e-10). The
+   implied span is built from the exact rationalized linear constraints and
+   its rank is exact. The number of new quadratic constraints is a count,
+   dim(quadratic null) − rank(implied). If any linear row has no exact
+   rational form, the quadratic stage is skipped. The detector returns the
+   **reduced lex Gröbner basis** (unique and readable); if the snapped
+   generators are inconsistent (basis {1}) it returns no constraints.
+
+**Fixtures** (`tests/test_constraint_detection.py`, `tests/test_escalation.py`;
+19 pass on this branch). Run against master's code:
+- **`test_two_linears_and_a_quadratic_all_returned` fails on master:** 2
+  generators, the quadratic truncated.
+- **`test_joint_quotient_on_mixed_degree_constraints` fails on master.** With
+  the new detector but the raw-list reduction, it still fails; with the
+  Gröbner reduction it passes. So finding 1 matters on its own.
+- The poorly-scaled linear, non-ideal flat direction and ill-scaled
+  coefficient fixtures pass on master too. They are regression guards, not
+  evidence for a fix.
+
+**Change under test.** The default `coefficient_gate` becomes
+`"joint_quotient"`, with fixes 1–4 in place. **Baseline:** master at 34bfddc,
+as committed (`joint_modulo`, the pre-fix graded detector). **Candidate:**
+this branch with the gate default set to `joint_quotient`.
+
+### Banks
+
+1. **Detection:** all 180 fresh unconstrained cases and 200 null-style draws
+   must return `[]` under the new detector.
+2. **`cs`** (24 cells): baseline (from a master worktree) and candidate, run
+   concurrently, case by case.
+3. **Campaigns:** all 14 scripts, baseline worktree at 34bfddc and candidate
+   worktree, concurrent.
+4. **Suite** with the candidate default.
+
+### Predictions
+
+- **C-1.** The fixtures above pass on the candidate.
+- **C-2.** `[]` on all 380 unconstrained inputs.
+- **C-3 (`cs`).** Candidate: 0 wrong. No cell the baseline certifies is lost.
+  Any law difference must be a representative of the same law on the variety
+  (extended-region error ≤ 1e-6); each one is reported.
+- **C-4 (campaigns).** The same 19 certificates with the same laws and α.
+  Constraint generators may change form (reduced Gröbner basis); each change
+  is reported.
+- **C-5.** The suite with the candidate default: no failures.
+- **C-6 (cost).** `cs` median per-case ratio ≤ 1.5×; every campaign script
+  ≤ 1.5× its concurrent twin.
+
+**Decision rule.** If C-1 to C-6 hold, open a PR that makes `joint_quotient`
+the default gate, carrying fixes 1–4. Otherwise record the failure; the
+default stays `joint_modulo`, and any fix that held still lands on its own
+evidence.
