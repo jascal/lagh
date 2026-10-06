@@ -31,6 +31,10 @@ def test_registry_and_unknown_source():
 def test_newtonbench_source_same_contract():
     # the REAL dev benchmark behind the same interface (needs the newtonbench adapter)
     nb = pytest.importorskip("lagh.adapters.newtonbench")
+    # the adapter imports lazily, so it loads without the benchmark; the cells
+    # live in a separate NewtonBench checkout (NEWTONBENCH_DIR), absent on CI
+    if not (nb.NB / "modules").is_dir():
+        pytest.skip(f"NewtonBench checkout not found at {nb.NB} (set NEWTONBENCH_DIR)")
     src = get_source("newtonbench")
     cards = src.problems()
     assert len(cards) == 108 and all("/" in c["id"] for c in cards)

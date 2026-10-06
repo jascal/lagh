@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # one BLAS thread per process: the suite runs one process per test file
+  OPENBLAS_NUM_THREADS: "1"
+  OMP_NUM_THREADS: "1"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff
+      # syntax errors, undefined names and invalid comparisons only: the
+      # bug-class subset. Style findings (unused imports etc.) are not gated.
+      - run: ruff check --select E9,F63,F7,F82 lagh tests experiments
+
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        # the four slowest files run alone (each takes 6-18 min locally);
+        # everything else runs in one shard, one process per file
+        shard: [lagh, submit, passive, mcp, rest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[mcp,machine,test]"
+      - name: Run tests (${{ matrix.shard }})
+        run: |
+          if [ "${{ matrix.shard }}" = "rest" ]; then
+            ls tests/test_*.py \
+              | grep -vE 'tests/test_(lagh|submit|passive|mcp)\.py' \
+              | xargs -P 4 -n 1 python -m pytest -q -p no:cacheprovider -rs
+          else
+            python -m pytest -q -p no:cacheprovider -rs "tests/test_${{ matrix.shard }}.py"
+          fi
