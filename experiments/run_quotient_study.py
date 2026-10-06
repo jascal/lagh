@@ -88,16 +88,19 @@ def _rel(expr, X, y):
     return float(np.max(np.abs(p - y)) / np.max(np.abs(y)))
 
 
-def run(name, gate):
-    path = OUT / gate / f'{name}.json'
+def run(name, gate, detection='flat', tag=''):
+    arm = gate if detection == 'flat' and not tag else f'{gate}+{detection}{tag}'
+    path = OUT / arm / f'{name}.json'
     if path.exists():
-        print(f'{gate} {name}: retained', flush=True)
+        print(f'{arm} {name}: retained', flush=True)
         return
     X, y = _data(name, 400, wide=False)
     t0 = time.time()
     s0 = time.clock_gettime(time.CLOCK_BOOTTIME) - time.monotonic()
-    r = discover_passive(X, y, sigma=0.0, coefficient_gate=gate)
-    rec = {'tag': 'empirical', 'case': name, 'gate': gate,
+    r = discover_passive(X, y, sigma=0.0, coefficient_gate=gate,
+                         constraint_detection=detection)
+    rec = {'tag': 'empirical', 'case': name, 'gate': gate, 'detection': detection,
+           'arm': arm,
            'certified': bool(r.certified), 'tier': r.result.tier,
            'abstain': r.result.certificate.abstain,
            'law': str(r.result.expr) if r.certified else None,
@@ -114,7 +117,7 @@ def run(name, gate):
         rec['wrong_form'] = rec['ext_rel_error'] is None or rec['ext_rel_error'] > WRONG_REL
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(rec, indent=1, allow_nan=False) + '\n')
-    print(f"{gate} {name}: certified={rec['certified']} "
+    print(f"{arm} {name}: certified={rec['certified']} "
           f"wrong={rec.get('wrong_form') or rec.get('wrong_domain')} {rec['seconds']}s",
           flush=True)
 
@@ -145,19 +148,54 @@ def summarize():
     print(json.dumps(out, indent=1))
 
 
+def summarize_arms(arms, name):
+    """B1: per-arm counts plus pairwise law differences for the listed arms."""
+    rows = {g: {p.stem: json.loads(p.read_text()) for p in (OUT / g).glob('*.json')}
+            for g in arms}
+    out = {}
+    for g in arms:
+        cert = [r for r in rows[g].values() if r['certified']]
+        out[g] = {'cases': len(rows[g]), 'certified': len(cert),
+                  'certified_cases': sorted(r['case'] for r in cert),
+                  'wrong': sorted(r['case'] for r in cert
+                                  if r['wrong_form'] or r['wrong_domain']),
+                  'slept': sorted(r['case'] for r in rows[g].values()
+                                  if r['suspended_seconds'] > 1),
+                  'median_seconds': float(np.median([r['seconds'] for r in rows[g].values()]))}
+    pairs = {}
+    for i, a in enumerate(arms):
+        for b in arms[i + 1:]:
+            keys = sorted(set(rows[a]) & set(rows[b]))
+            pairs[f'{a} vs {b}'] = {
+                'law_differences': [{'case': k, a: (rows[a][k]['certified'], rows[a][k]['law']),
+                                     b: (rows[b][k]['certified'], rows[b][k]['law'])}
+                                    for k in keys if (rows[a][k]['certified'], rows[a][k]['law'])
+                                    != (rows[b][k]['certified'], rows[b][k]['law'])],
+                'median_ratio': float(np.median([rows[b][k]['seconds'] / max(rows[a][k]['seconds'], .1)
+                                                 for k in keys]))}
+    out['pairs'] = pairs
+    (OUT / name).write_text(json.dumps(out, indent=1) + '\n')
+    print(json.dumps(out, indent=1))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--list', action='store_true')
     ap.add_argument('--case')
     ap.add_argument('--gate', choices=GATES)
     ap.add_argument('--summarize', action='store_true')
+    ap.add_argument('--detection', choices=('flat', 'graded'), default='flat')
+    ap.add_argument('--tag', default='', help='suffix for a fresh rerun arm (B1: flat arms rerun as +flatB1)')
     a = ap.parse_args()
     if a.list:
         print('\n'.join(cases()))
+    elif a.summarize and a.detection == 'graded':
+        summarize_arms(['joint_modulo+flatB1', 'joint_modulo+graded',
+                        'joint_quotient+flatB1', 'joint_quotient+graded'], 'summary_b1.json')
     elif a.summarize:
         summarize()
     else:
-        run(a.case, a.gate)
+        run(a.case, a.gate, a.detection, a.tag)
 
 
 if __name__ == '__main__':

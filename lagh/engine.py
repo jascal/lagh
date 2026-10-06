@@ -382,7 +382,8 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              declared_basis: bool = False, band_sel=None,
              linear_basis: bool = False,
              escalation: str = "first",
-             coefficient_gate: str = "joint_modulo") -> Result:
+             coefficient_gate: str = "joint_modulo",
+             constraint_detection: str = "flat") -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
     Splits must be disjoint: fit, select, certify. Certification is exhaustive on
@@ -619,6 +620,9 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     #     library can drop a lower-tier truth (sparse5-d2).
     #   "accumulate": run every tier, keep each tier's own certifying
     #     candidates, and judge their union once after the last tier.
+    if constraint_detection not in ("flat", "graded"):
+        raise ValueError(f"unknown constraint detection {constraint_detection!r}")
+    graded_detection = constraint_detection == "graded"
     if coefficient_gate not in ("marginal", "joint", "joint_modulo",
                                 "joint_quotient"):
         raise ValueError(f"unknown coefficient gate {coefficient_gate!r}")
@@ -677,7 +681,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                             # A6: exclude the constraint ideal EXACTLY inside the
                             # joint test (no reduction, no term dropping)
                             if gate_constraints is None:
-                                gate_constraints = input_constraints(X_all_m, syms)
+                                gate_constraints = input_constraints(X_all_m, syms, graded=graded_detection)
                             if not joint_pinned(c.expr, syms, X_cert, y_cert, eps,
                                                 constraints=gate_constraints or None):
                                 continue
@@ -696,7 +700,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                             # the constraint quotient. Open; see the registration.
                             if coefficient_gate == "joint_modulo":
                                 if gate_constraints is None:
-                                    gate_constraints = input_constraints(X_all_m, syms)
+                                    gate_constraints = input_constraints(X_all_m, syms, graded=graded_detection)
                                 if gate_constraints:
                                     red = reduce_mod_constraints(c.expr, syms,
                                                                  gate_constraints)
@@ -759,7 +763,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
             # domain claim applies. Detect the constraint; re-run coherence
             # with the DATA as the probe; a single on-manifold class is a
             # verdict, with the winner canonicalized modulo the constraint.
-            constraints = input_constraints(X_all_m, syms)
+            constraints = input_constraints(X_all_m, syms, graded=graded_detection)
             if constraints:
                 mclasses = coherent(certifying, syms, X_all_m, yscale,
                                     n_evidence=(len(y_cert) if linear_basis

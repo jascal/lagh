@@ -792,3 +792,59 @@ direction, so the substantive trade is the plane cell. **Open, and the
 natural next step:** make `input_constraints` return minimal-degree
 generators (the linear constraint on the plane), then re-register the switch
 with the plane cell named.
+
+## B1 — graded constraint detection (registered 2026-10-05, before any B1 run)
+
+**Defect (measured in A6).** `input_constraints` SVDs the full quadratic
+feature matrix at once. A linear constraint l = 0 produces a (d+1)-dimensional
+null space (l and each x_i·l), and the function returned two arbitrary,
+snapped mixtures of it, never l itself. On the plane x0 + x1 + x2 = 1 that
+cost `joint_quotient` a correct certificate. The same detector feeds the
+default engine's constrained-input coherence.
+
+**Rule.** `constraint_detection="graded"` (opt-in; default stays `"flat"`).
+- Find linear constraints first, from the null space of (1, x_i).
+- Then keep only the quadratic null directions outside the span of
+  {1, x_i}·l for each linear l, using a rank-revealing basis.
+- Report each degree's constraints in reduced row echelon form, so rational
+  constraints come out with rational coefficients.
+- Same tolerance, rationalization and cap as before.
+
+Pilot (disclosed):
+- plane → `−x0 − x1 − x2 + 1`;
+- sphere, circle and hyperbola unchanged (up to sign);
+- a line in 3-D → two linear constraints;
+- x2 = x0² + x1 → `x0² + x1 − x2`;
+- log-uniform random inputs → `[]`.
+
+### Banks
+
+1. **Detection directly:**
+   - each `cs` variety, plus the line and quadric pilots, as unit tests;
+   - all 180 fresh unconstrained cases and 200 null-style draws, which must
+     return `[]`.
+2. **`cs`:** four arms, all run in this study under the same load:
+   `joint_modulo` and `joint_quotient`, each with `flat` (rerun, tagged
+   `+flatB1`) and `graded`.
+3. **Campaigns:** all 14 scripts, default gate (`joint_modulo`), `flat` and
+   `graded` worktrees concurrent. Named cells: the Gaia P3 frame rotation
+   and every certificate whose inputs carry an exact linear relation.
+4. **Suite** with `graded` as the default.
+
+### Predictions
+
+- **H1.** Graded detection returns the minimal generators on every `cs`
+  variety and on the pilot shapes, and `[]` on all 180 + 200 unconstrained
+  inputs.
+- **H2.** Campaigns: every certificate under `flat` is issued under `graded`
+  with the same law and α.
+- **H3.** `cs`, both gates: 0 wrong under `graded`, and no cell certified
+  under `flat` is lost under `graded` for the same gate.
+  `cs-plane-float-linear` certifies under `joint_quotient+graded`.
+- **H4.** Suite with `graded` default: no failures.
+- **H5 (cost).** `cs` median per-case ratio `graded`/`flat` ≤ 1.5× per gate;
+  every campaign script ≤ 1.5× its concurrent twin.
+
+**Decision rule.** If H1–H5 hold, open a PR making `graded` the default
+detection. Re-registering the `joint_quotient` default switch, with the plane
+cell named, follows as a separate step.

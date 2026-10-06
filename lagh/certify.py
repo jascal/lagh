@@ -981,7 +981,7 @@ def refit_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
 
 
 def input_constraints(X: np.ndarray, syms, tol_rel: float = 1e-10,
-                      max_constraints: int = 2) -> list:
+                      max_constraints: int = 2, graded: bool = False) -> list:
     """Detect MACHINE-EXACT low-degree polynomial constraints the input data
     satisfies (the constrained-input coherence closure, CASE_STUDY_GAIA_P3.md):
     an SVD null direction of the quadratic feature matrix with singular value
@@ -992,6 +992,8 @@ def input_constraints(X: np.ndarray, syms, tol_rel: float = 1e-10,
     n, d = X.shape
     if n < 3 * (1 + d + d * (d + 1) // 2):
         return []
+    if graded:
+        return _graded_constraints(X, syms, tol_rel, max_constraints)
     feats = [np.ones(n)]
     terms = [sp.S.One]
     for i in range(d):
@@ -1024,6 +1026,111 @@ def input_constraints(X: np.ndarray, syms, tol_rel: float = 1e-10,
         if expr is not None and expr != 0:
             out.append(sp.expand(expr))
     return out
+
+
+def _rref_rows(B: np.ndarray, tol: float = 1e-9) -> np.ndarray:
+    """Reduced row echelon form of the row space of B (partial pivoting):
+    a CANONICAL basis, so a constraint with rational coefficients comes out
+    with rational coefficients instead of as an arbitrary SVD mixture."""
+    A = np.array(B, float)
+    rows, cols = A.shape
+    r = 0
+    for c in range(cols):
+        if r >= rows:
+            break
+        p = r + int(np.argmax(np.abs(A[r:, c])))
+        if abs(A[p, c]) <= tol * max(1.0, np.max(np.abs(A))):
+            continue
+        A[[r, p]] = A[[p, r]]
+        A[r] = A[r] / A[r, c]
+        for i in range(rows):
+            if i != r:
+                A[i] = A[i] - A[i, c] * A[r]
+        r += 1
+    return A[:r]
+
+
+def _rationalize(coef, terms):
+    from fractions import Fraction
+    expr = sp.S.Zero
+    for c, t in zip(coef, terms):
+        if abs(c) < 1e-9:
+            continue
+        fr = Fraction(float(c)).limit_denominator(10 ** 6)
+        if abs(float(fr) - float(c)) > 1e-9 * max(1.0, abs(float(c))):
+            return None
+        expr = expr + sp.Rational(fr.numerator, fr.denominator) * t
+    return sp.expand(expr) if expr != 0 else None
+
+
+def _graded_constraints(X, syms, tol_rel, max_constraints):
+    """GRADED detection (constraint-detection registration): linear constraints
+    first, then only the quadratic null directions NOT implied by them.
+
+    The flat detector SVDs the full quadratic feature matrix at once, so one
+    linear constraint l = 0 shows up as a (d+1)-dimensional null space
+    (l, x_i*l) from which it returned arbitrary snapped mixtures (measured on
+    the plane x0+x1+x2 = 1: two quadratic combinations, never l itself). Here
+    each degree's new null space is taken modulo the multiples of the
+    lower-degree generators and put in reduced row echelon form."""
+    n, d = X.shape
+    lin_terms = [sp.S.One] + [syms[i] for i in range(d)]
+    quad_terms = lin_terms + [syms[i] * syms[j] for i in range(d) for j in range(i, d)]
+    L = np.column_stack([np.ones(n)] + [X[:, i] for i in range(d)])
+    Q = np.column_stack([L] + [X[:, i] * X[:, j] for i in range(d) for j in range(i, d)])
+
+    def null_rows(M):
+        scale = np.sqrt(np.mean(M ** 2, axis=0))
+        scale[scale == 0] = 1.0
+        _, s, vt = np.linalg.svd(M / scale, full_matrices=False)
+        keep = [k for k in range(len(s)) if s[k] <= tol_rel * s[0]]
+        return np.array([vt[k] / scale for k in keep]) if keep else np.empty((0, M.shape[1]))
+
+    out = []
+    lin = null_rows(L)
+    if len(lin):
+        for row in _rref_rows(lin):
+            g = _rationalize(row, lin_terms)
+            if g is not None:
+                out.append(g)
+    # quadratic: null space of Q modulo {1, x_i} * (linear constraints)
+    quad = null_rows(Q)
+    if len(quad):
+        implied = []
+        for row in (_rref_rows(lin) if len(lin) else []):
+            base = np.zeros(len(quad_terms))
+            base[:d + 1] = row
+            implied.append(base)
+            for i in range(d):          # x_i * l, expressed on quad_terms
+                v = np.zeros(len(quad_terms))
+                for j in range(d + 1):
+                    if row[j] == 0:
+                        continue
+                    if j == 0:
+                        v[1 + i] += row[0]          # x_i * 1
+                    else:
+                        a, b = sorted((i, j - 1))
+                        k = d + 1 + sum(d - t for t in range(a)) + (b - a)
+                        v[k] += row[j]
+                implied.append(v)
+        if implied:
+            P = np.array(implied)
+            # orthonormal basis of the implied span, RANK-REVEALING (two linear
+            # constraints make the x_i*l products linearly dependent; a plain QR
+            # would return spurious extra directions and over-project)
+            _, sp_, vp = np.linalg.svd(P, full_matrices=False)
+            basis = vp[sp_ > 1e-9 * sp_.max()]
+            resid = quad - (quad @ basis.T) @ basis
+            _, s_, vt = np.linalg.svd(resid, full_matrices=False)
+            new = vt[s_ > 1e-6 * max(1.0, s_.max())]
+        else:
+            new = quad
+        if len(new):
+            for row in _rref_rows(new):
+                g = _rationalize(row, quad_terms)
+                if g is not None:
+                    out.append(g)
+    return out[:max_constraints]
 
 
 def reduce_mod_constraints(expr, syms, constraints: list):
