@@ -17,6 +17,11 @@ campaign scripts, run side by side with the former default (19 certificates, 0
 differences; `experiments/results/default_switch_a4/campaigns/compare.json`,
 `docs/ESCALATION_REGISTRATION.md` A4).
 
+**Engine default changed again 2026-10-06:** `coefficient_gate="joint_quotient"`
+with graded constraint detection (reduced Gröbner basis). All 14 campaign scripts
+were re-run side by side with the previous default: the same 19 certificates, 0
+differences in law or α (`experiments/results/joint_quotient/campaigns_c1/`).
+
 Conventions: `x_0, x_1` are the stated inputs in order; α ≤ 10^(value shown);
 rationals are exact (the coefficient gate demands the data pin them).
 

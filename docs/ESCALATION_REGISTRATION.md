@@ -990,3 +990,31 @@ this branch with the gate default set to `joint_quotient`.
 the default gate, carrying fixes 1–4. Otherwise record the failure; the
 default stays `joint_modulo`, and any fix that held still lands on its own
 evidence.
+
+## Results — C1 (scored 2026-10-06)
+
+**Empirical: C-1 to C-6 all hold. `joint_quotient` becomes the default gate,
+with fixes 1–4.** No C1 run recorded suspended time.
+
+| prediction | result |
+|---|---|
+| **C-1** | **holds.** All fixtures pass on the candidate (in the suite below) |
+| **C-2** | **holds.** `[]` on all 180 fresh unconstrained cases and all 200 null-style draws |
+| **C-3** `cs` (24) | **holds.** Baseline (master 34bfddc, `joint_modulo`) and candidate (`joint_quotient`, fixes 1–4) both certify 23, **0 wrong**, nothing lost or gained, and **no law differences** |
+| **C-4** campaigns | **holds.** 19 certificates in each arm, 0 differences in `certified`, `law`, `alpha_log10` or `abstain` across 13 result files. Not compared: the text of constraint generators in notes, which may now read in reduced Gröbner form |
+| **C-5** suite with candidate default | **holds.** 442 passed, 0 failed |
+| **C-6** cost | **holds.** `cs` median per-case ratio 1.00×; worst campaign script 1.03× (macro) |
+
+**What changes for users.** The default exact-coefficient gate now tests joint
+pinning with the constraint ideal excluded exactly, so the #17 concern (a
+`reduce_to_minimal` target chosen with the certify rows) no longer applies to
+the default path. `joint_modulo` stays available and reproduces A4/A5.
+Detection returns a reduced Gröbner basis with no truncation, and
+constrained-coherence canonicalization reduces modulo a Gröbner basis.
+
+**Still open:**
+- gates whose law is non-linear in its gated atoms get no ideal exclusion
+  (they fall back to the plain joint test, so they refuse more, never accept
+  more);
+- the declared-noise and floor-dominated paths;
+- the dim ≥ 3 pre-pass.

@@ -1,0 +1,20 @@
+{
+ "tag": "empirical",
+ "case": "cs-circle-sqrt-bait",
+ "gate": "joint_quotient",
+ "detection": "graded",
+ "arm": "joint_quotient+gradedC1",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "sqrt(x_1 + 3)",
+ "notes": [
+  "domain-restricted certificate: inputs satisfy x_0**2 + x_1**2 - 1 = 0 (machine-exact); rivals coincide on the constraint variety and the representative is canonicalized modulo it"
+ ],
+ "seconds": 320.4,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "wrong_domain": false,
+ "wrong_form": false
+}

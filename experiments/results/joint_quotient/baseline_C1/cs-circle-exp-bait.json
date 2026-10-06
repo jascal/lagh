@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "cs-circle-exp-bait",
+ "gate": "joint_modulo",
+ "detection": "graded",
+ "arm": "joint_modulo+gradedC1",
+ "certified": true,
+ "tier": 4,
+ "abstain": null,
+ "law": "sqrt(exp(x_0))",
+ "notes": [],
+ "seconds": 107.0,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 1.3468510289902753e-16,
+ "ext_rel_error": 1.346823811721744e-16,
+ "wrong_domain": false,
+ "wrong_form": false
+}

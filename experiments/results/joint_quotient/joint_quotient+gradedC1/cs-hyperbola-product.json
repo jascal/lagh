@@ -1,0 +1,17 @@
+{
+ "tag": "empirical",
+ "case": "cs-hyperbola-product",
+ "gate": "joint_quotient",
+ "detection": "graded",
+ "arm": "joint_quotient+gradedC1",
+ "certified": false,
+ "tier": 1,
+ "abstain": "noise",
+ "law": null,
+ "notes": [
+  "domain-restricted certificate: inputs satisfy x_0*x_1 - 1 = 0 (machine-exact); rivals coincide on the constraint variety and the representative is canonicalized modulo it",
+  "significance gate: alpha_log10 0.000 > -6 -- the domain carries too little evidence for this form's dof"
+ ],
+ "seconds": 9.2,
+ "suspended_seconds": 0.0
+}

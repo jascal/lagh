@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "cs-plane-float-linear",
+ "gate": "joint_modulo",
+ "detection": "graded",
+ "arm": "joint_modulo+gradedC1",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "420133707219*x_0**2/2000000000000 - 10541467257*x_0*x_1/500000000000 + 505284143381*x_0*x_2/2500000000000 + 381931227*x_0/976562500 - 57787447031*x_1**2/250000000000 - 11955149219*x_1*x_2/50000000000 - 24566785351*x_1/50000000000 - 7953196257*x_2**2/1000000000000 - 22471261643*x_2/500000000000 - 145180653857/1000000000000",
+ "notes": [],
+ "seconds": 12.6,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 1.3477107795925756e-12,
+ "ext_rel_error": 1.617556065658327e-12,
+ "wrong_domain": false,
+ "wrong_form": false
+}

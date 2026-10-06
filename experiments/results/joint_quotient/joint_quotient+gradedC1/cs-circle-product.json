@@ -1,0 +1,18 @@
+{
+ "tag": "empirical",
+ "case": "cs-circle-product",
+ "gate": "joint_quotient",
+ "detection": "graded",
+ "arm": "joint_quotient+gradedC1",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "x_0*x_1 + 3",
+ "notes": [],
+ "seconds": 8.5,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "wrong_domain": false,
+ "wrong_form": false
+}

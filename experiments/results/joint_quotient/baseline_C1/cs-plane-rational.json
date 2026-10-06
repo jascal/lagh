@@ -1,0 +1,20 @@
+{
+ "tag": "empirical",
+ "case": "cs-plane-rational",
+ "gate": "joint_modulo",
+ "detection": "graded",
+ "arm": "joint_modulo+gradedC1",
+ "certified": true,
+ "tier": 2,
+ "abstain": null,
+ "law": "1/(x_0 + 2)",
+ "notes": [
+  "domain-restricted certificate: inputs satisfy -x_0 - x_1 - x_2 + 1 = 0 (machine-exact); rivals coincide on the constraint variety and the representative is canonicalized modulo it"
+ ],
+ "seconds": 108.9,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "wrong_domain": false,
+ "wrong_form": false
+}

@@ -382,7 +382,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              declared_basis: bool = False, band_sel=None,
              linear_basis: bool = False,
              escalation: str = "first",
-             coefficient_gate: str = "joint_modulo",
+             coefficient_gate: str = "joint_quotient",
              constraint_detection: str = "graded") -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
@@ -411,10 +411,12 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     integrals are the C1b `u_xx*[1]**(3/2)` failure. Default False; it is a
     declaration about the claim, not a search-budget knob.
 
-    `coefficient_gate` (docs/ESCALATION_REGISTRATION.md): "joint_modulo"
-    (default since 2026-10-05) applies the clean-data exact-coefficient gate
-    jointly as well as per coefficient, modulo machine-exact input
-    constraints; "marginal" is the former default, "joint" the A2 form.
+    `coefficient_gate` (docs/ESCALATION_REGISTRATION.md): "joint_quotient"
+    (default since 2026-10-06, C1) applies the clean-data exact-coefficient
+    gate jointly as well as per coefficient, excluding the directions in the
+    ideal of the machine-exact input constraints EXACTLY; "joint_modulo" (the
+    2026-10-05 default) tested a reduce_to_minimal target instead; "marginal"
+    is the original per-coefficient gate, "joint" the A2 form.
     `escalation`: "first" (default), or the measured experimental "pool"
     (unsound) and "accumulate" (sound, slow).
     `constraint_detection`: "graded" (default since 2026-10-05, B1) finds

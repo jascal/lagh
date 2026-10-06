@@ -1,0 +1,194 @@
+{
+ "arms": [
+  "master",
+  "joint_quotient"
+ ],
+ "differences": [],
+ "certified_master": 19,
+ "certified_joint_quotient": 19,
+ "files": [
+  "exoplanet_c0.json",
+  "exoplanet_c1.json",
+  "exoplanet_c2.json",
+  "exoplanet_c5.json",
+  "exoplanet_ph2.json",
+  "gaia_c0.json",
+  "gaia_p1.json",
+  "gaia_p2.json",
+  "gaia_p3.json",
+  "materials_c0.json",
+  "materials_c1.json",
+  "materials_c2.json",
+  "solar_case_study.json"
+ ],
+ "timing": {
+  "exoplanet__run_c0": {
+   "master": {
+    "seconds": 1412.2,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 1409.9,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "gaia__run_p3": {
+   "master": {
+    "seconds": 354.4,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 350.4,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "exoplanet__run_c1": {
+   "master": {
+    "seconds": 339.7,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 342.7,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "gaia__run_p2": {
+   "master": {
+    "seconds": 160.4,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 161.4,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   }
+  },
+  "materials__run_c1": {
+   "master": {
+    "seconds": 327.1,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 336.1,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "materials__run_c0": {
+   "master": {
+    "seconds": 941.5,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 935.2,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "gaia__run_p1": {
+   "master": {
+    "seconds": 714.0,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 698.6,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   }
+  },
+  "exoplanet__run_ph2": {
+   "master": {
+    "seconds": 212.5,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 209.6,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   }
+  },
+  "gaia__run_c0": {
+   "master": {
+    "seconds": 86.1,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 88.3,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "solar__run_case_study": {
+   "master": {
+    "seconds": 373.6,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 384.4,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   }
+  },
+  "exoplanet__run_c2": {
+   "master": {
+    "seconds": 215.5,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 217.3,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   }
+  },
+  "exoplanet__run_c5": {
+   "master": {
+    "seconds": 1602.3,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 1600.9,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "materials__run_c2": {
+   "master": {
+    "seconds": 351.9,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 349.3,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "macro__run_case_study": {
+   "master": {
+    "seconds": 168.4,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "joint_quotient": {
+    "seconds": 173.6,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   }
+  }
+ }
+}
