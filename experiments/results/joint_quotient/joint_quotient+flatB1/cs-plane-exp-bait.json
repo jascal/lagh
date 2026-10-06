@@ -1,0 +1,20 @@
+{
+ "tag": "empirical",
+ "case": "cs-plane-exp-bait",
+ "gate": "joint_quotient",
+ "detection": "flat",
+ "arm": "joint_quotient+flatB1",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "exp(x_0/2)",
+ "notes": [
+  "domain-restricted certificate: inputs satisfy -355187*x_0**2/999127 - 537103*x_0*x_1/570176 - 256396*x_0*x_2/333415 + 200113*x_0/616359 - 127175*x_1**2/216838 - x_1*x_2 + 495437*x_1/891603 - 89663*x_2"
+ ],
+ "seconds": 1713.8,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "wrong_domain": false,
+ "wrong_form": false
+}

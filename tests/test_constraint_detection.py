@@ -23,7 +23,7 @@ def test_plane_gives_the_linear_constraint_not_quadratic_mixtures():
     found = input_constraints(X, S3, graded=True)
     assert len(found) == 1 and sp.Poly(found[0], *S3).total_degree() == 1
     assert _same_ideal(found, [S3[0] + S3[1] + S3[2] - 1], S3)
-    flat = input_constraints(X, S3)                  # the recorded defect
+    flat = input_constraints(X, S3, graded=False)    # the recorded defect
     assert all(sp.Poly(g, *S3).total_degree() == 2 for g in flat)
 
 

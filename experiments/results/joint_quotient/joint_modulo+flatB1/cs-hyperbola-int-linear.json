@@ -1,0 +1,20 @@
+{
+ "tag": "empirical",
+ "case": "cs-hyperbola-int-linear",
+ "gate": "joint_modulo",
+ "detection": "flat",
+ "arm": "joint_modulo+flatB1",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "2*x_0 - x_1",
+ "notes": [
+  "domain-restricted certificate: inputs satisfy x_0*x_1 - 1 = 0 (machine-exact); rivals coincide on the constraint variety and the representative is canonicalized modulo it"
+ ],
+ "seconds": 7.8,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "wrong_domain": false,
+ "wrong_form": false
+}

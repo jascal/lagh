@@ -1,0 +1,194 @@
+{
+ "arms": [
+  "flat",
+  "graded"
+ ],
+ "differences": [],
+ "certified_flat": 19,
+ "certified_graded": 19,
+ "files": [
+  "exoplanet_c0.json",
+  "exoplanet_c1.json",
+  "exoplanet_c2.json",
+  "exoplanet_c5.json",
+  "exoplanet_ph2.json",
+  "gaia_c0.json",
+  "gaia_p1.json",
+  "gaia_p2.json",
+  "gaia_p3.json",
+  "materials_c0.json",
+  "materials_c1.json",
+  "materials_c2.json",
+  "solar_case_study.json"
+ ],
+ "timing": {
+  "exoplanet__run_c0": {
+   "flat": {
+    "seconds": 1094.2,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 1086.2,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "gaia__run_p3": {
+   "flat": {
+    "seconds": 309.2,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 309.0,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "exoplanet__run_c1": {
+   "flat": {
+    "seconds": 257.0,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 254.4,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "gaia__run_p2": {
+   "flat": {
+    "seconds": 163.1,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 165.1,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   }
+  },
+  "materials__run_c1": {
+   "flat": {
+    "seconds": 260.8,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 260.4,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "materials__run_c0": {
+   "flat": {
+    "seconds": 741.6,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 731.1,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "gaia__run_p1": {
+   "flat": {
+    "seconds": 570.4,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 573.3,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   }
+  },
+  "exoplanet__run_ph2": {
+   "flat": {
+    "seconds": 156.9,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 158.0,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   }
+  },
+  "gaia__run_c0": {
+   "flat": {
+    "seconds": 88.1,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 87.3,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   }
+  },
+  "solar__run_case_study": {
+   "flat": {
+    "seconds": 304.0,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 305.4,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "exoplanet__run_c2": {
+   "flat": {
+    "seconds": 163.4,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 165.7,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "exoplanet__run_c5": {
+   "flat": {
+    "seconds": 1359.1,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 1349.3,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   }
+  },
+  "materials__run_c2": {
+   "flat": {
+    "seconds": 262.6,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 262.9,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  },
+  "macro__run_case_study": {
+   "flat": {
+    "seconds": 139.6,
+    "suspended_seconds": -0.0,
+    "exit": 0
+   },
+   "graded": {
+    "seconds": 140.6,
+    "suspended_seconds": 0.0,
+    "exit": 0
+   }
+  }
+ }
+}

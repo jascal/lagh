@@ -383,7 +383,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
              linear_basis: bool = False,
              escalation: str = "first",
              coefficient_gate: str = "joint_modulo",
-             constraint_detection: str = "flat") -> Result:
+             constraint_detection: str = "graded") -> Result:
     """propose -> certify -> vacuity -> coherence -> answer or abstain.
 
     Splits must be disjoint: fit, select, certify. Certification is exhaustive on
@@ -417,6 +417,11 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     constraints; "marginal" is the former default, "joint" the A2 form.
     `escalation`: "first" (default), or the measured experimental "pool"
     (unsound) and "accumulate" (sound, slow).
+    `constraint_detection`: "graded" (default since 2026-10-05, B1) finds
+    linear input constraints before quadratic ones; "flat" is the former
+    detector, which returned snapped quadratic mixtures for a linear constraint.
+    The joint_quotient gate excludes directions in the ideal of the constraints
+    detected here.
     """
     X_fit = np.asarray(X_fit, float)
     X_cert = np.asarray(X_cert, float)

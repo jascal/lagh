@@ -1,0 +1,20 @@
+{
+ "tag": "empirical",
+ "case": "cs-circle-float-linear",
+ "gate": "joint_modulo",
+ "detection": "flat",
+ "arm": "joint_modulo+flatB1",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "2279918881*x_0/5000000000 - 867666149*x_1/1000000000",
+ "notes": [
+  "domain-restricted certificate: inputs satisfy x_0**2 + x_1**2 - 1 = 0 (machine-exact); rivals coincide on the constraint variety and the representative is canonicalized modulo it"
+ ],
+ "seconds": 7.6,
+ "suspended_seconds": 0.0,
+ "inbox_rel_error": 1.2803313383079773e-16,
+ "ext_rel_error": 1.13266959219459e-16,
+ "wrong_domain": false,
+ "wrong_form": false
+}

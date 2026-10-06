@@ -1,0 +1,20 @@
+{
+ "tag": "empirical",
+ "case": "cs-sphere-int-linear",
+ "gate": "joint_quotient",
+ "detection": "graded",
+ "arm": "joint_quotient+graded",
+ "certified": true,
+ "tier": 1,
+ "abstain": null,
+ "law": "4*x_0**3/11 - 2*x_0**2*x_1/11 + 4*x_0*x_1**2/11 + 4*x_0*x_2**2/11 + 18*x_0/11 - 2*x_1**3/11 - 2*x_1*x_2**2/11 - 9*x_1/11 + x_2",
+ "notes": [
+  "domain-restricted certificate: inputs satisfy -x_0**2 - x_1**2 - x_2**2 + 1 = 0 (machine-exact); rivals coincide on the constraint variety and the representative is canonicalized modulo it"
+ ],
+ "seconds": 7.9,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 1.8180165087813024e-16,
+ "ext_rel_error": 1.815291276287913e-16,
+ "wrong_domain": false,
+ "wrong_form": false
+}

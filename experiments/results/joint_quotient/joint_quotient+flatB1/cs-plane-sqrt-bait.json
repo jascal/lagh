@@ -1,0 +1,20 @@
+{
+ "tag": "empirical",
+ "case": "cs-plane-sqrt-bait",
+ "gate": "joint_quotient",
+ "detection": "flat",
+ "arm": "joint_quotient+flatB1",
+ "certified": true,
+ "tier": 5,
+ "abstain": null,
+ "law": "sqrt(x_1 + 3)",
+ "notes": [
+  "domain-restricted certificate: inputs satisfy -837755*x_0**2/851286 - 6235*x_0*x_1/25841 - x_0*x_2 + 70779*x_0/87440 + 476992*x_1**2/642135 + 205993*x_1*x_2/283375 - 235663*x_1/256862 - 13531*x_2**2/8"
+ ],
+ "seconds": 779.0,
+ "suspended_seconds": -0.0,
+ "inbox_rel_error": 0.0,
+ "ext_rel_error": 0.0,
+ "wrong_domain": false,
+ "wrong_form": false
+}

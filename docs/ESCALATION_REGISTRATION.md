@@ -848,3 +848,32 @@ Pilot (disclosed):
 **Decision rule.** If H1–H5 hold, open a PR making `graded` the default
 detection. Re-registering the `joint_quotient` default switch, with the plane
 cell named, follows as a separate step.
+
+## Results — B1 (scored 2026-10-05)
+
+**Empirical: H1–H5 all hold. Graded detection becomes the default.** No B1
+run recorded suspended time.
+
+| prediction | result |
+|---|---|
+| **H1** | **holds.** The minimal generators on every `cs` variety and pilot shape (unit tests, 4 pass); `[]` on all 180 fresh unconstrained cases and all 200 null-style draws |
+| **H2** campaigns | **holds.** 19 certificates under each detection, 0 differences across 13 result files |
+| **H3** `cs` | **holds.** 0 wrong in all four arms. No cell certified under `flat` is lost under `graded` for either gate. **`cs-plane-float-linear` certifies under `joint_quotient+graded`** (extended-region error 1.6×10⁻¹²): the cell `joint_quotient` lost in A6 is restored |
+| **H4** suite with `graded` default | **holds.** 435 passed, 0 failed |
+| **H5** cost | **holds.** `cs` median per-case ratio `graded`/`flat` 1.00× for both gates; worst campaign script 1.01× |
+
+**Changed representatives, not changed laws.** On `cs-plane-int-linear` and
+`cs-plane-product`, both gates under `graded` return a different
+representative of the same law on the plane:
+- `2·x0 − x1 + x2` becomes `−3·x1 − x2 + 2`;
+- `x0·x1 + 3` becomes `−x1² − x1·x2 + x1 + 3`.
+
+Each is the old law with x0 = 1 − x1 − x2 substituted (extended-region error
+around 10⁻¹⁶). The engine now canonicalizes modulo the true constraint and
+names `−x0 − x1 − x2 + 1 = 0` in the certificate, where under `flat` it named
+a snapped quadratic that is not the variety's ideal. The cost is readability:
+the elimination form is less natural than the input's own form.
+
+**For the next registration (joint_quotient as default gate):** under
+`graded`, `joint_modulo` and `joint_quotient` produce identical results on all
+24 `cs` cells (median ratio 1.02×). That is evidence, not a registered pass.

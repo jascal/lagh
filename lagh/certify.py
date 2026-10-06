@@ -981,7 +981,7 @@ def refit_minimal(expr, syms, X: np.ndarray, y: np.ndarray,
 
 
 def input_constraints(X: np.ndarray, syms, tol_rel: float = 1e-10,
-                      max_constraints: int = 2, graded: bool = False) -> list:
+                      max_constraints: int = 2, graded: bool = True) -> list:
     """Detect MACHINE-EXACT low-degree polynomial constraints the input data
     satisfies (the constrained-input coherence closure, CASE_STUDY_GAIA_P3.md):
     an SVD null direction of the quadratic feature matrix with singular value
