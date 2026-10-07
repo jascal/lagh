@@ -30,9 +30,14 @@ with a `proved` / `open` tag — not a tool name.
 | **`verify(X, y, form, sigma)`** | bounded | check a *declared* form (restricted math grammar, never evaluated as Python) | `Certificate` \| `Abstention` |
 | **`fit(X, y, sigma)`** | **UNBOUNDED** | best-guess + identifiability diagnosis | `Conjecture[]` + `Diagnosis` — **no `certified` field** |
 
-- **Certificate strength** (`recover`/`verify`): `pinned` = this exact law, no rival
-  within the noise; `consistent` = a *declared irrational* (`x_0**E`) fits but the
-  constant is not identifiable from finite data. Only `pinned` is the strong claim.
+- **Certificate strength** (`recover`/`verify`): `pinned` records passage through
+  the clean-data operational gates; it does not prove the generating form.
+  `consistent` covers declared noise, loose floors, other declared error, and
+  declared irrational constants. The machine-readable `claim` states the scope.
+  Neither strength implies exact structure or exact coefficients from finite data.
+- Parameter slices, when supplied in `partial`, hold the other parameters fixed.
+  They are not marginal uncertainty intervals or a simultaneous parameter box;
+  read their `scope` before using them. A missing bound can be a search limit.
 - **The wall is structural.** `fit`'s result has no `certified` key — a guarantee
   cannot be read off it by accident. `fit` is a scout; to make a conjecture
   trustworthy, feed it to `recover` or `verify`.
@@ -79,6 +84,8 @@ so the scout → declare → check loop is driven by the caller, guided by `next
 
 - The certificate is over the **domain you sampled**, not a claim about the world —
   check the returned `bounds` match your question.
-- Under noise, `recover` certifies the exact **structure** or abstains; coefficients
-  are noise-limited (`RNOISE_STUDY.md`: structure-or-abstain holds to ~1% relative).
+- Under noise, `recover` checks **finite-row band consistency** or abstains.
+  Significant approximants and unresolved small terms can pass; significance
+  against a random null does not establish exact structure. See the
+  [boundary study](../../docs/CERTIFICATION_BOUNDARIES_REGISTRATION.md).
 - A `fit` conjecture is **not** a certificate and must never be reported as one.

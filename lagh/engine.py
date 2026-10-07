@@ -19,9 +19,9 @@ from .base import Term as BaseTerm
 from .base import snap_all, to_expr
 from .certify import (MACHINE_REL, Abstain, Certificate,
                       arbitrate_significance, attach_check_evidence, check, coherent, determination,
-                      epsilon, float_pinned, free_atoms, free_dof, joint_pinned,
+                      claim_scope, epsilon, float_pinned, free_atoms, free_dof, joint_pinned,
                       input_constraints, invariant_content,
-                      parameter_interval, pinned,
+                      loose_floor, parameter_interval, pinned,
                       reduce_mod_constraints, reduce_to_minimal,
                       refit_minimal, sample_box, significance_log10, vacuous)
 from .classes import CURRICULUM, c5_transforms, c6_quasipoly, c7_levy
@@ -486,8 +486,53 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     # Gaia C0 at floor 2e-4: the 2-term truth gated out, a 14-term whale
     # certified alone. Same lesson as the noise-gate move at PO12: coherence
     # must see the full certifying set; the gate moves to the winner.
-    med_y = float(np.median(np.abs(y_cert)))
-    floor_dom = sigma <= 0 and floor_abs > max(1e-9, 100 * MACHINE_REL * med_y)
+    floor_dom = loose_floor(y_cert, sigma, floor_abs)
+    if constraint_detection not in ("flat", "graded"):
+        raise ValueError(f"unknown constraint detection {constraint_detection!r}")
+    graded_detection = constraint_detection == "graded"
+    if coefficient_gate not in ("marginal", "joint", "joint_modulo", "joint_quotient"):
+        raise ValueError(f"unknown coefficient gate {coefficient_gate!r}")
+    if escalation not in ("first", "pool", "accumulate"):
+        raise ValueError(f"unknown escalation rule {escalation!r}")
+    gate_constraints = None
+    closest_failure = last_checked = None
+
+    def finish(cert, expr, tier, count, *, checked=None,
+               domain="engine certification rows"):
+        if cert.certified:
+            cert.claim = claim_scope(y_cert, sigma=sigma, floor_abs=floor_abs,
+                declared_error=any(v is not None for v in (eps_model, hard_cert, se_cert)))
+            if cert.partial and "CONDITIONAL coordinate" in cert.partial.get("note", ""):
+                cert.partial["scope"] = {
+                    "kind": "conditional-numeric-atom-slices",
+                    "fixed_law": str(expr), "joint_box": False,
+                    "marginal_coverage": False,
+                    "method": "local bisection with checked endpoints",
+                    "missing_bound": "no rejecting bracket within search limit, or slice unavailable"}
+        else:
+            evidence = checked if checked is not None else (
+                closest_failure if closest_failure is not None else last_checked)
+            attach_check_evidence(cert, evidence, domain=domain,
+                                  role="already checked candidate diagnostic; not necessarily the refusal cause")
+        return Result(cert, expr, tier, count)
+
+    def clean_gate(expr):
+        """One clean gate for the pre-pass and ordinary tiers (BND1 witness)."""
+        nonlocal gate_constraints
+        ok, gated = float_pinned(expr, syms, X_cert, y_cert, eps, sigma)
+        if not ok or coefficient_gate == "marginal":
+            return ok, gated
+        if coefficient_gate in ("joint_modulo", "joint_quotient") and gate_constraints is None:
+            gate_constraints = input_constraints(X_all_m, syms, graded=graded_detection)
+        if coefficient_gate == "joint_quotient":
+            return joint_pinned(gated, syms, X_cert, y_cert, eps,
+                                constraints=gate_constraints or None), gated
+        target = gated
+        if coefficient_gate == "joint_modulo" and gate_constraints:
+            red = reduce_mod_constraints(gated, syms, gate_constraints)
+            if red != gated:
+                target = reduce_to_minimal(red, syms, X_all_m, y_all_m, eps_all)
+        return joint_pinned(target, syms, X_cert, y_cert, eps), gated
 
     # minimum-domain guard: certifying on too few TOTAL valid points is not
     # significant (a constant over 4 overflow-artifact points produced the only
@@ -541,7 +586,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                        w.expr, y_cert, eps, len(lc)),
                                    n_hypotheses=len(lc))
                 cert = _significance_gate(cert)
-                return Result(cert, w.expr if cert.certified else None,
+                return finish(cert, w.expr if cert.certified else None,
                               7, len(lc))
             cert = Certificate(False, 0, 0, len(X_cert), bounds, "",
                                abstain=Abstain.STRUCTURAL.value,
@@ -582,8 +627,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
         for c in sorted(pcands, key=lambda z: z.complexity):
             if check(c.expr, syms, X_cert, y_cert, eps)["certified"]:
                 if sigma <= 0:      # same ordering rule as the main loop: under
-                    ok, gated = float_pinned(c.expr, syms, X_cert, y_cert, eps,
-                                             sigma)
+                    ok, gated = clean_gate(c.expr)
                     if not ok:      # noise, coherence sees the full set and the
                         continue    # winner is gated below
                     c.expr = gated
@@ -603,22 +647,14 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                            w.expr, y_cert, eps, len(pcands)),
                                        n_hypotheses=len(pcands))
                     cert = _significance_gate(cert)
-                    return Result(cert, w.expr if cert.certified else None,
+                    if gate_constraints:
+                        cert.constraints = [sp.sstr(g) for g in gate_constraints]
+                        cert.notes.append("domain-restricted pre-pass: coefficient gate is modulo the named input constraints")
+                    return finish(cert, w.expr if cert.certified else None,
                                   3, len(pcands))
             # ambiguity or unpinned -> the full loop decides (conservative)
 
     total = 0
-    closest_failure = last_checked = None
-
-    def finish(cert, expr, tier, count, *, checked=None,
-               domain="engine certification rows"):
-        if not cert.certified:
-            evidence = checked if checked is not None else (
-                closest_failure if closest_failure is not None else last_checked)
-            attach_check_evidence(cert, evidence, domain=domain,
-                                  role="already checked candidate diagnostic; not necessarily the refusal cause")
-        return Result(cert, expr, tier, count)
-
     tiers = [1] if linear_basis else [t for t, _ in CURRICULUM if t <= max_tier]
     # EXPERIMENTAL escalation rules (docs/ESCALATION_REGISTRATION.md); the
     # default "first" stops at the first tier with a non-empty certifying set.
@@ -627,16 +663,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
     #     library can drop a lower-tier truth (sparse5-d2).
     #   "accumulate": run every tier, keep each tier's own certifying
     #     candidates, and judge their union once after the last tier.
-    if constraint_detection not in ("flat", "graded"):
-        raise ValueError(f"unknown constraint detection {constraint_detection!r}")
-    graded_detection = constraint_detection == "graded"
-    if coefficient_gate not in ("marginal", "joint", "joint_modulo",
-                                "joint_quotient"):
-        raise ValueError(f"unknown coefficient gate {coefficient_gate!r}")
-    if escalation not in ("first", "pool", "accumulate"):
-        raise ValueError(f"unknown escalation rule {escalation!r}")
     pooled: list[Candidate] = []
-    gate_constraints = None              # A4: computed once, on first need
     if escalation == "pool" and not linear_basis:
         tiers = tiers[-1:]
     elif escalation == "accumulate" and not linear_basis:
@@ -678,44 +705,10 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                 # unpinned coefficients.
                 if sigma <= 0:
                     if not floor_dom:
-                        ok, gated = float_pinned(c.expr, syms, X_cert, y_cert,
-                                                 eps, sigma)
+                        ok, gated = clean_gate(c.expr)
                         if not ok:
                             continue
                         c.expr = gated
-                        # EXPERIMENTAL (amendment A2): the same gate, jointly
-                        if coefficient_gate == "joint_quotient":
-                            # A6: exclude the constraint ideal EXACTLY inside the
-                            # joint test (no reduction, no term dropping)
-                            if gate_constraints is None:
-                                gate_constraints = input_constraints(X_all_m, syms, graded=graded_detection)
-                            if not joint_pinned(c.expr, syms, X_cert, y_cert, eps,
-                                                constraints=gate_constraints or None):
-                                continue
-                        elif coefficient_gate in ("joint", "joint_modulo"):
-                            target = c.expr
-                            # A4: on machine-exact constrained inputs the
-                            # constraint ideal is an EXACT joint flat direction
-                            # (the Gaia frame rotation: truth + k*x1*(|x|^2-1)
-                            # equals the truth on the data) which the domain-
-                            # restricted claim already quotients out. Test the
-                            # reduction instead. NOTE (review of PR #17):
-                            # reduce_to_minimal is not dust sweeping -- it drops
-                            # ANY term whose removal still certifies on all rows,
-                            # certify split included, so the gate target is
-                            # chosen with the certify rows and can differ from
-                            # the constraint quotient. Open; see the registration.
-                            if coefficient_gate == "joint_modulo":
-                                if gate_constraints is None:
-                                    gate_constraints = input_constraints(X_all_m, syms, graded=graded_detection)
-                                if gate_constraints:
-                                    red = reduce_mod_constraints(c.expr, syms,
-                                                                 gate_constraints)
-                                    if red != c.expr:
-                                        target = reduce_to_minimal(
-                                            red, syms, X_all_m, y_all_m, eps_all)
-                            if not joint_pinned(target, syms, X_cert, y_cert, eps):
-                                continue
                     # floor-dominated: keep the candidate ungated so coherence
                     # sees the true rival; the winner is gated below. First
                     # collapse unsupported basis terms (refit parsimony) so a
@@ -849,11 +842,11 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                         if det:
                             partial_cert = determination(
                                 det, status="certified",
-                                note="parameter ranges over which THIS certified "
-                                     "law still certifies")
+                                note="CONDITIONAL coordinate slices: other numeric atoms fixed; "
+                                     "not marginal coverage or a simultaneous box")
                         if told:
-                            interval_note = ("parameter precision at "
-                                             f"sigma={sigma:g}: certifies for "
+                            interval_note = ("conditional parameter slices at "
+                                             f"sigma={sigma:g}, other numeric atoms fixed: "
                                              + "; ".join(told))
                     else:
                         # INTERVAL-PARAMETER CERTIFICATE. An exact rational is
@@ -865,7 +858,7 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                         # the interval over which the law still certifies -- and
                         # claim that. An unbounded interval still abstains: then
                         # the parameter really is undetermined.
-                        ivs, centred = [], winner.expr
+                        ivs = []
                         for a_ in free_atoms(winner.expr):
                             iv = parameter_interval(winner.expr, syms, X_cert,
                                                     y_cert, eps, a_)
@@ -873,8 +866,6 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                 ivs = None
                                 break
                             ivs.append((str(a_), float(iv[0]), float(iv[1])))
-                            centred = centred.xreplace(
-                                {a_: sp.Float(0.5 * (iv[0] + iv[1]))})
                         if not ivs:
                             cert = Certificate(
                                 False, 0, 0, len(X_cert), bounds,
@@ -883,10 +874,13 @@ def discover(X_fit, y_fit, X_sel, y_sel, X_cert, y_cert, *,
                                 notes=["declared-basis winner gate: parameters "
                                        f"not determined at sigma={sigma:g}"])
                             return finish(cert, None, tier, total)
-                        winner.expr = centred
+                        partial_cert = determination(
+                            [(v, lo, hi) for v, lo, hi in ivs], status="certified",
+                            note="CONDITIONAL coordinate slices: other numeric atoms fixed; "
+                                 "not marginal coverage or a simultaneous box")
                         interval_note = (
-                            "interval-parameter certificate: no exact value is "
-                            "claimed; the law certifies for every parameter in "
+                            "interval-parameter consistency: no exact value is "
+                            "claimed; conditional slices with other numeric atoms fixed: "
                             + "; ".join(f"{v} in [{lo:.10g}, {hi:.10g}]"
                                         for v, lo, hi in ivs))
             elif floor_dom:

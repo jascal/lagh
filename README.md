@@ -10,6 +10,14 @@ not establish global truth, causal identification, or correctness outside the
 checked domain. The significance bound α concerns chance agreement under its
 stated null assumptions, not the probability that the law is the true structure.
 
+**Certification boundary study (BND1):** noisy and loose-floor certificates
+explicitly claim finite-row band consistency, not exact generating structure or
+coefficients. Clean `pinned` results describe operational gates, not a proof of
+the generator. Returned conditional parameter slices hold other parameters
+fixed; they are not marginal coverage intervals or a simultaneous box. The
+[registration and retained baseline](docs/CERTIFICATION_BOUNDARIES_REGISTRATION.md)
+cover the multidimensional pre-pass, noise, floors and interval diagnostics.
+
 **Empirical soundness record, not a universal guarantee.** Scored campaigns
 report their observed confident-wrong counts. The falsifiability pass also
 exposed invalid-evidence acceptance in the low-level checker, sometimes masked

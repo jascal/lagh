@@ -1,0 +1,54 @@
+{
+  "coordinate_slices": {
+    "intervals": [
+      [
+        1.2965857567823464,
+        1.3034142432176536
+      ],
+      [
+        0.6965849620419411,
+        0.7034150379580615
+      ]
+    ],
+    "each_upper_endpoint_fits": [
+      true,
+      true
+    ],
+    "simultaneous_upper_corner_fits": false,
+    "alternative_vector_fits": true,
+    "alternative_coefficients_inside_slices": [
+      false,
+      false
+    ]
+  },
+  "controlled_prepass": {
+    "marginal_gate_passes": true,
+    "joint_gate_passes_snapped_candidate": false,
+    "arms": {
+      "marginal": {
+        "certified": true,
+        "law": "314159265359*x_0/100000000000 + 1414213562373*x_1/1000000000000",
+        "notes": [
+          "CAP-S cheap pre-pass"
+        ]
+      },
+      "joint_quotient": {
+        "certified": false,
+        "law": "None",
+        "notes": [
+          "no law certifies through tier 3"
+        ]
+      }
+    }
+  },
+  "indistinguishable_coefficients": {
+    "noise": [
+      true,
+      true
+    ],
+    "floor": [
+      true,
+      true
+    ]
+  }
+}

@@ -23,8 +23,9 @@ def submission(X, y, *, sigma: float = 0.0, seed: int = 0) -> dict:
         c = r.result.certificate
         return {"track": "certified", "expr": str(r.result.expr), "tag": "proved",
                 "alpha_log10": c.alpha_log10,
-                "detail": "machine-checked exact certificate over the dataset's "
-                          "finite domain"
+                "claim": dict(c.claim),
+                "detail": "machine-checked consistency over the dataset's "
+                          "finite domain under the supplied error model"
                           + (f"; chance-fit significance alpha <= 1e{c.alpha_log10:.0f}"
                              if c.alpha_log10 is not None else "")}
     # Track B, in the pre-registered order: fit scout, then the engine's best

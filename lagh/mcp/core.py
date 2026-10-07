@@ -24,7 +24,7 @@ import sympy as sp
 
 from ..acquisition import run_active, run_active_boxsearch
 from ..base import eval_expr, lstsq, snap
-from ..certify import (Abstain, check, epsilon, float_pinned, pinned, sample_box,
+from ..certify import (Abstain, check, claim_scope, epsilon, float_pinned, pinned, sample_box,
                        significance_log10, vacuous)
 from ..characterize import characterize
 from ..engine import ALPHA_CERT_MAX_LOG10, Result, discover
@@ -119,6 +119,18 @@ def _strength(expr, syms, X_cert, y_cert, eps, sigma) -> str:
         else "not-pinned"
 
 
+def _certificate_metadata(cert):
+    """Carry claim limitations on every successful recover route."""
+    out = {"claim": dict(cert.claim), "notes": [str(n) for n in cert.notes],
+           "alpha_log10": cert.alpha_log10, "n_hypotheses": cert.n_hypotheses}
+    if cert.partial is not None:
+        out["partial"] = cert.partial
+    if cert.constraints:
+        out.update(constraints=list(cert.constraints),
+            domain_restriction="the law is a representative on the named input constraint variety, not an ambient law")
+    return out
+
+
 # --------------------------------------------------------------------------- recover
 
 def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
@@ -190,10 +202,11 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
                 out["characterization"] = ch
                 out["next_action"] = ch["research"]["move"]
             return out
-        # the parametric gate already ran inside discover() -> certified ⇒ pinned
-        strength = "consistent" if _has_irrational(r.expr) else "pinned"
+        strength = ("consistent" if _has_irrational(r.expr)
+                    or c.claim.get("kind") == "finite-data-consistency" else "pinned")
         return {"tag": "proved", "tool": "recover", "certified": True,
                 "law": str(r.expr), "strength": strength, "domain_size": c.domain_size,
+                **_certificate_metadata(c),
                 "tier": r.tier, "bounds": bf.tolist(), "acquisition": acq,
                 "note": "certified over the actively-acquired domain, not proved for the world"}
 
@@ -244,7 +257,10 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
                          + "see characterization.research for the next move")}
     eps = epsilon(y, sigma=float(sigma), floor_abs=float(floor_abs))
     return {"tag": "proved", "tool": "recover", "certified": True,
-            "law": str(r.expr), "strength": _strength(r.expr, syms, X, y, eps, sigma),
+            "law": str(r.expr), "strength": ("consistent"
+                if c.claim.get("kind") == "finite-data-consistency"
+                else _strength(r.expr, syms, X, y, eps, sigma)),
+            **_certificate_metadata(c),
             "alpha_log10": c.alpha_log10, "n_hypotheses": c.n_hypotheses,
             "domain_size": c.domain_size, "tier": r.tier,
             "bounds": [[float(X[:, j].min()), float(X[:, j].max())] for j in range(dim)],
@@ -421,13 +437,18 @@ def verify(X, y, form: str, *, sigma: float = 0.0,
                         "little evidence for this form at this band",
                         law=str(scaled), alpha_log10=alpha_log10, n_hypotheses=1)
     bounds = [[float(X[:, j].min()), float(X[:, j].max())] for j in range(dim)]
+    claim = claim_scope(yc, sigma=float(sigma), floor_abs=float(floor_abs),
+                        declared_error=se_c is not None)
+    if claim["kind"] == "finite-data-consistency":
+        strength = "consistent"
     return {"tag": "proved", "tool": "verify", "certified": True,
             "law": str(scaled), "strength": strength,
+            "claim": claim,
             "alpha_log10": alpha_log10, "n_hypotheses": 1,
             "domain_size": n, "n_certification": len(Xc), "bounds": bounds,
-            "note": (("consistent: fits within eps, but the irrational constant is "
-                      "not identifiable from the data" if strength == "consistent"
-                      else "pinned: this exact form, no rival within the noise")
+            "note": (("consistent: fits within eps; exact form and coefficients "
+                      "are not identified" if strength == "consistent"
+                      else "pinned: passed the declared operational gates; not proof of the generating form")
                      + f"; domain = all {n} supplied points ({mode_note}); "
                      "certified over the stated finite domain, not proved for "
                      "the world")}
