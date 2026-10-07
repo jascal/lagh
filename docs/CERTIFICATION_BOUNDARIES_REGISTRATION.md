@@ -90,3 +90,55 @@ refuse the stronger claim, with the limitation carried through public payloads.
 Unresolved scientific identifiability is a valid measured boundary; silently
 claiming it is solved is not. Completion requires an outcome report, a route
 claim matrix, retained evidence, meaningful regression tests and required checks.
+
+## BND1 baseline and repair registration (before production edits)
+
+Baseline at registration commit `4701e5b`: all 120 rows completed, 40 certified,
+54 refused, 26 timed out, zero exceptions or missing diagnostic scores. Ten
+certified expressions mismatch the generator (9 noisy, 1 loose floor), while
+every returned law fits all supplied observations. All true laws fit their
+declared bands. No null target certified. Clean rational and perturbed 3-D
+monomial cases time out: this bounded study does not establish their reach.
+
+The interval diagnostic returns infeasible endpoints on 16 certified cases.
+`parameter_interval` initializes its near endpoint at half the first rejected
+step without checking it. The controlled pre-pass passes both gate selections
+although the same snapped candidate fails `joint_pinned`. Coordinate slices
+have feasible individual endpoints but an infeasible simultaneous corner, and
+can exclude a feasible true vector. Additional source-directed witness:
+`pdesystem.intervals_for` reports [1,1] for both coefficients of x0+x1 under a
+.01 band although 1.001*x0+.999*x1 fits. Repeated numeric atoms also alias
+different coefficient positions. The new regression file fails three tests
+and passes the slice-semantics witness on the baseline.
+
+One repair round is now registered:
+
+1. Apply the configured clean coefficient gate to the 3-D pre-pass, including
+   quotient constraints and their serialized domain restriction. Preserve the
+   noisy pre-pass policy; do not substitute a clean pinning test for uncertainty.
+2. Carry an explicit claim kind from engine certificates through public
+   recover (active/passive/tiny), verify, PDE and submission payloads. Noisy,
+   loose-floor and declared-error results claim finite-row band consistency,
+   not exact structure or coefficients. Clean pinning is an operational gate
+   result, not proof of the generating law. Preserve underlying certification
+   metrics: a generator mismatch remains a mismatch after a claim correction.
+3. Start interval bisection from a verified feasible point. Keep conditional
+   slice provenance explicit, never call slices a simultaneous box or marginal
+   coverage. Do not replace all coefficients by independently chosen slice
+   midpoints without rechecking the resulting law. Give unit/repeated linear
+   coefficients independent positions in the PDE adapter's interval diagnostic.
+
+Predictions: the pre-pass rejecting witness is repaired while the explicit
+legacy marginal arm remains reproducible; every reported slice endpoint fits;
+PDE unit/repeated coefficients have finite nonzero-width slices; the natural
+bank has no null certificates or new observed-row failures; clean baseline
+certificates retain their laws on cases completing in both arms. Runtime,
+timeouts, natural mismatches and refusal differences are reported without a
+post-hoc speed or reach win criterion. Noise/floor mismatch certificates must
+carry the consistency claim. Unresolved paths retain explicit limitations.
+
+The fixed bank replay and fresh 810/811 confirmation remain the last two
+natural discovery arms. Targeted wrapper, callable-band and interval fixtures
+are regression checks, not additional discovery success counts. Any failure of
+these predictions is retained and explained; no second capability campaign is
+authorized by this registration.

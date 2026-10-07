@@ -1,0 +1,97 @@
+{
+  "case": "basis-near__noise6__711",
+  "family": "basis-near",
+  "regime": "noise6",
+  "seed": 711,
+  "input_hash": "89c0710bb9db4c00bb68e22b61f0181ebb14373dcede13e3ff41abc118d03e64",
+  "truth": "13*x_0/10 - 7*x_1/10",
+  "sigma": 1e-06,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.5131643005150617,
+        2.9984983993016225
+      ],
+      [
+        0.5131647899559838,
+        2.998497873846895
+      ]
+    ],
+    "law": "539066069*x_0/898443408",
+    "abstain": null,
+    "notes": [
+      "domain-restricted certificate: inputs satisfy x_0**2 - 26662936007946886393*x_0*x_1/13331468260457131784 - 814379*x_0/22887112284643 + 6048582914736450388*x_1**2/6048583147473167397 + 640396699198*x_1/17997624051713292695 - 5700653/22300309612777038123 = 0 (machine-exact); rivals coincide on the constraint variety and the representative is canonicalized modulo it",
+      "parameter precision at sigma=1e-06: certifies for 539066069/898443408 in [0.5999998797, 0.6000011953]"
+    ],
+    "alpha_log10": -247.7194357695704,
+    "n_hypotheses": 10,
+    "partial": {
+      "status": "certified",
+      "components": {
+        "539066069/898443408": {
+          "kind": "interval",
+          "lo": 0.5999998796953896,
+          "hi": 0.6000011952696894,
+          "span": 1.3155742998316455e-06,
+          "resolved": true
+        }
+      },
+      "exact": [],
+      "interval": [
+        "539066069/898443408"
+      ],
+      "unconstrained": [],
+      "n_resolved": 1,
+      "note": "parameter ranges over which THIS certified law still certifies"
+    },
+    "constraints": [
+      "x_0**2 - 26662936007946886393*x_0*x_1/13331468260457131784 - 814379*x_0/22887112284643 + 6048582914736450388*x_1**2/6048583147473167397 + 640396699198*x_1/17997624051713292695 - 5700653/22300309612777038123"
+    ],
+    "measurement": null,
+    "measurement_omitted": null
+  },
+  "law": "539066069*x_0/898443408",
+  "tier": 1,
+  "n_candidates": 10,
+  "route": "tier-loop",
+  "discovery_seconds": 0.07726451999042183,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 4.257359463327886e-07,
+    "fresh_truth_band_misses": 0,
+    "extended_relative_error": 2.3545071516474829e-07,
+    "extended_truth_band_misses": 0,
+    "symbolically_equal": false,
+    "same_polynomial_support": false,
+    "max_coefficient_error": 0.7,
+    "generator_mismatch": true,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "539066069/898443408",
+          "value": 0.600000026935475,
+          "bounds": [
+            0.5999998796954538,
+            0.6000011952691213
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        }
+      ],
+      "simultaneous_corners_feasible": null,
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.07163123498321511
+}

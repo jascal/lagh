@@ -1,0 +1,70 @@
+{
+  "case": "small-term__noise3__711",
+  "family": "small-term",
+  "regime": "noise3",
+  "seed": 711,
+  "input_hash": "508940f75c83312b5d2a38534d497ac223cd69c6aecb200f65a8ce95a1b41e64",
+  "truth": "x_0**2/100000 + x_0",
+  "sigma": 0.001,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.6246033996158341,
+        2.9797486875881014
+      ]
+    ],
+    "law": "1.00013564892396*x_0",
+    "abstain": null,
+    "notes": [],
+    "alpha_log10": -103.86472457005063,
+    "n_hypotheses": 6,
+    "partial": null,
+    "constraints": [],
+    "measurement": null,
+    "measurement_omitted": null
+  },
+  "law": "1.00013564892396*x_0",
+  "tier": 3,
+  "n_candidates": 6,
+  "route": "tier-loop",
+  "discovery_seconds": 3.799283046013443,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 0.00010579279085745825,
+    "fresh_truth_band_misses": 0,
+    "extended_relative_error": 7.566753293560086e-05,
+    "extended_truth_band_misses": 0,
+    "symbolically_equal": false,
+    "same_polynomial_support": false,
+    "max_coefficient_error": 0.00013564892395923067,
+    "generator_mismatch": true,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "1.00013564892396",
+          "value": 1.0001356489239592,
+          "bounds": [
+            0.9983390992569832,
+            1.0020968209187477
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        }
+      ],
+      "simultaneous_corners_feasible": null,
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.03919790199142881
+}

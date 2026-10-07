@@ -1,0 +1,14 @@
+{
+  "case": "small-term3__floor6__711",
+  "family": "small-term3",
+  "regime": "floor6",
+  "seed": 711,
+  "input_hash": "1e3d46a2e47d2459770352b789de46be5c7d4a921707af8c2895014301b204cb",
+  "truth": "x_0**2/100000 + 13*x_0*sqrt(x_1)/(10*x_2)",
+  "sigma": 0.0,
+  "floor_abs": 1e-06,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "timeout",
+  "discovery_seconds": 20.001344275980955
+}

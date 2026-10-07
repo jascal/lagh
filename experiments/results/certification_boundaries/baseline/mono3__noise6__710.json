@@ -1,0 +1,97 @@
+{
+  "case": "mono3__noise6__710",
+  "family": "mono3",
+  "regime": "noise6",
+  "seed": 710,
+  "input_hash": "0dc9c7fe1d1bc90d2f554190f73ebebbb81f54ad2a7066f5726fd50f8b6bd78f",
+  "truth": "13*x_0*sqrt(x_1)/(10*x_2)",
+  "sigma": 1e-06,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.5034522882105426,
+        2.910206196496495
+      ],
+      [
+        0.5684257519899136,
+        2.9643607073346794
+      ],
+      [
+        0.5065936641745501,
+        2.8347872035908415
+      ]
+    ],
+    "law": "1.30000031802323*x_0*sqrt(x_1)/x_2",
+    "abstain": null,
+    "notes": [
+      "CAP-S cheap pre-pass"
+    ],
+    "alpha_log10": -267.79606723235776,
+    "n_hypotheses": 54,
+    "partial": null,
+    "constraints": [],
+    "measurement": null,
+    "measurement_omitted": null
+  },
+  "law": "1.30000031802323*x_0*sqrt(x_1)/x_2",
+  "tier": 3,
+  "n_candidates": 54,
+  "route": "prepass",
+  "discovery_seconds": 0.0739508850092534,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 2.446332538132559e-07,
+    "fresh_truth_band_misses": 0,
+    "extended_relative_error": 2.446332540563407e-07,
+    "extended_truth_band_misses": 0,
+    "symbolically_equal": false,
+    "generator_mismatch": true,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "1/2",
+          "value": 0.5,
+          "bounds": [
+            0.49999678327148445,
+            0.5000017901318359
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "1.30000031802323",
+          "value": 1.300000318023226,
+          "bounds": [
+            1.2999981872566893,
+            1.3000028415929843
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ],
+          "truth_value": 1.3,
+          "contains_truth": true
+        }
+      ],
+      "simultaneous_corners_feasible": [
+        false,
+        false,
+        true,
+        false
+      ],
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.0843251830083318
+}

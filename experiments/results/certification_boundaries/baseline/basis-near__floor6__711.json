@@ -1,0 +1,78 @@
+{
+  "case": "basis-near__floor6__711",
+  "family": "basis-near",
+  "regime": "floor6",
+  "seed": 711,
+  "input_hash": "4d1bea5b7cd98efc8a0e6c1fbef25ea43af1e93149a730cee6c7073ca57cd176",
+  "truth": "13*x_0/10 - 7*x_1/10",
+  "sigma": 0.0,
+  "floor_abs": 1e-06,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.5131643005150617,
+        2.9984983993016225
+      ],
+      [
+        0.5131647899559838,
+        2.998497873846895
+      ]
+    ],
+    "law": "3*x_0/5",
+    "abstain": null,
+    "notes": [
+      "domain-restricted certificate: inputs satisfy x_0**2 - 26662936007946886393*x_0*x_1/13331468260457131784 - 814379*x_0/22887112284643 + 6048582914736450388*x_1**2/6048583147473167397 + 640396699198*x_1/17997624051713292695 - 5700653/22300309612777038123 = 0 (machine-exact); rivals coincide on the constraint variety and the representative is canonicalized modulo it"
+    ],
+    "alpha_log10": -275.00778785455265,
+    "n_hypotheses": 10,
+    "partial": null,
+    "constraints": [
+      "x_0**2 - 26662936007946886393*x_0*x_1/13331468260457131784 - 814379*x_0/22887112284643 + 6048582914736450388*x_1**2/6048583147473167397 + 640396699198*x_1/17997624051713292695 - 5700653/22300309612777038123"
+    ],
+    "measurement": null,
+    "measurement_omitted": null
+  },
+  "law": "3*x_0/5",
+  "tier": 1,
+  "n_candidates": 10,
+  "route": "tier-loop",
+  "discovery_seconds": 0.030482264992315322,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 3.885266970678975e-07,
+    "fresh_truth_band_misses": 0,
+    "extended_relative_error": 1.9432297860529224e-07,
+    "extended_truth_band_misses": 0,
+    "symbolically_equal": false,
+    "same_polynomial_support": false,
+    "max_coefficient_error": 0.7,
+    "generator_mismatch": true,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "3/5",
+          "value": 0.6,
+          "bounds": [
+            0.5999998825319823,
+            0.6000001225954834
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        }
+      ],
+      "simultaneous_corners_feasible": null,
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.027334967016940936
+}
