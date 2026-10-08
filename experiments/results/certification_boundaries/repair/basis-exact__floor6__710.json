@@ -1,0 +1,85 @@
+{
+  "case": "basis-exact__floor6__710",
+  "family": "basis-exact",
+  "regime": "floor6",
+  "seed": 710,
+  "input_hash": "ca837bf241e9af3976a0d339b3eb743bf292c14774ec3e13f5434966d3798166",
+  "truth": "13*x_0/10 - 7*x_1/10",
+  "sigma": 0.0,
+  "floor_abs": 1e-06,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.5336663452792618,
+        2.9949472531846437
+      ],
+      [
+        0.5336663452792618,
+        2.9949472531846437
+      ]
+    ],
+    "law": "3*x_1/5",
+    "abstain": null,
+    "notes": [
+      "domain-restricted certificate: inputs satisfy x_0 - x_1 = 0 (machine-exact); rivals coincide on the constraint variety and the representative is canonicalized modulo it"
+    ],
+    "alpha_log10": -275.0311192605459,
+    "n_hypotheses": 6,
+    "partial": null,
+    "constraints": [
+      "x_0 - x_1"
+    ],
+    "measurement": null,
+    "measurement_omitted": null,
+    "claim": {
+      "kind": "finite-data-consistency",
+      "domain": "checked finite rows under the supplied error model",
+      "exact_form_identified": false,
+      "coefficient_precision": "not implied by pinning; read separately scoped intervals",
+      "significance_scope": "chance agreement under the stated null, not exact-form probability"
+    }
+  },
+  "law": "3*x_1/5",
+  "tier": 1,
+  "n_candidates": 6,
+  "route": "tier-loop",
+  "discovery_seconds": 0.019960011006332934,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 3.7071026230952235e-16,
+    "fresh_truth_band_misses": 0,
+    "extended_relative_error": 3.7018536263357457e-16,
+    "extended_truth_band_misses": 0,
+    "symbolically_equal": true,
+    "same_polynomial_support": true,
+    "max_coefficient_error": 0.0,
+    "generator_mismatch": false,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "3/5",
+          "value": 0.6,
+          "bounds": [
+            0.5999997466447267,
+            0.6000002772158204
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        }
+      ],
+      "simultaneous_corners_feasible": null,
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.024609908985439688
+}

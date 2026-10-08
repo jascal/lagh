@@ -1,0 +1,143 @@
+{
+  "case": "affine3__clean__711",
+  "family": "affine3",
+  "regime": "clean",
+  "seed": 711,
+  "input_hash": "400f473c3a868719c77baf544277055d3fb1fbff5f06722d3b0b2f2bcefca7bd",
+  "truth": "13*x_0/10 - 7*x_1/10 + 3*x_2/10",
+  "sigma": 0.0,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.6215507973441823,
+        2.95269555481443
+      ],
+      [
+        0.6503165104523624,
+        2.990961385172582
+      ],
+      [
+        0.5183750949306147,
+        2.9752302355709785
+      ]
+    ],
+    "law": "13*x_0*sin(x_1)**2/40 + 13*x_0*sin(x_2)**2/40 + 13*x_0*cos(x_1)**2/40 + 13*x_0*cos(x_2)**2/40 + 13*x_0/20 - 7*x_1*sin(x_0)**2/30 - 7*x_1*cos(x_0)**2/30 - 7*x_1/15 + 3*x_2/10",
+    "abstain": null,
+    "notes": [],
+    "alpha_log10": -509.89337701685525,
+    "n_hypotheses": 26,
+    "partial": null,
+    "constraints": [],
+    "measurement": null,
+    "measurement_omitted": null,
+    "claim": {
+      "kind": "gate-qualified-fit",
+      "domain": "checked finite rows under the supplied error model",
+      "exact_form_identified": false,
+      "coefficient_precision": "not implied by pinning; read separately scoped intervals",
+      "significance_scope": "chance agreement under the stated null, not exact-form probability"
+    }
+  },
+  "law": "13*x_0*sin(x_1)**2/40 + 13*x_0*sin(x_2)**2/40 + 13*x_0*cos(x_1)**2/40 + 13*x_0*cos(x_2)**2/40 + 13*x_0/20 - 7*x_1*sin(x_0)**2/30 - 7*x_1*cos(x_0)**2/30 - 7*x_1/15 + 3*x_2/10",
+  "tier": 1,
+  "n_candidates": 26,
+  "route": "tier-loop",
+  "discovery_seconds": 2.5126397680141963,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 2.1424211564058601e-16,
+    "fresh_truth_band_misses": 0,
+    "extended_relative_error": 2.057405228709644e-16,
+    "extended_truth_band_misses": 0,
+    "symbolically_equal": false,
+    "generator_mismatch": false,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "-7/30",
+          "value": -0.23333333333333334,
+          "bounds": [
+            -0.23333333333368228,
+            -0.2333333333329835
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "3/10",
+          "value": 0.3,
+          "bounds": [
+            0.2999999999996346,
+            0.30000000000036536
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "13/40",
+          "value": 0.325,
+          "bounds": [
+            0.3249999999997477,
+            0.3250000000002523
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "-7/15",
+          "value": -0.4666666666666667,
+          "bounds": [
+            -0.46666666666701606,
+            -0.46666666666631684
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "13/20",
+          "value": 0.65,
+          "bounds": [
+            0.6499999999994961,
+            0.650000000000504
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "2",
+          "value": 2.0,
+          "bounds": [
+            1.9999999999999962,
+            2.0000000000000036
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        }
+      ],
+      "simultaneous_corners_feasible": null,
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.5664397299988195
+}

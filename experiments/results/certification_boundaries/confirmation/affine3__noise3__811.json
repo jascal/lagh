@@ -1,0 +1,14 @@
+{
+  "case": "affine3__noise3__811",
+  "family": "affine3",
+  "regime": "noise3",
+  "seed": 811,
+  "input_hash": "59d6161a61553d5ecc961d53ae49ba57e108e3a959b8846b49a9c1fdd31d1e55",
+  "truth": "13*x_0/10 - 7*x_1/10 + 3*x_2/10",
+  "sigma": 0.001,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "timeout",
+  "discovery_seconds": 20.000177985988557
+}

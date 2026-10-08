@@ -1,0 +1,60 @@
+[
+  {
+    "target": "u:u_t",
+    "law": "9999999999*x_0/100000000000 + 9999999999*x_5/20000000000",
+    "truth_vector_fits": true,
+    "coefficients": [
+      {
+        "name": "u:u_xx",
+        "fitted": 0.09999999999,
+        "truth": 0.1,
+        "slice": [
+          0.09999999998570426,
+          0.09999999999450974
+        ],
+        "truth_in_slice": false,
+        "truth_coordinate_with_other_fits_fixed_passes": false
+      },
+      {
+        "name": "v:u",
+        "fitted": 0.49999999995,
+        "truth": 0.5,
+        "slice": [
+          0.4999999999272075,
+          0.49999999997171146
+        ],
+        "truth_in_slice": false,
+        "truth_coordinate_with_other_fits_fixed_passes": false
+      }
+    ]
+  },
+  {
+    "target": "v:u_t",
+    "law": "-3*x_2/10 + x_3/20",
+    "truth_vector_fits": true,
+    "coefficients": [
+      {
+        "name": "v:u_xx",
+        "fitted": 0.05,
+        "truth": 0.05,
+        "slice": [
+          0.049999999593968156,
+          0.050000000405998446
+        ],
+        "truth_in_slice": true,
+        "truth_coordinate_with_other_fits_fixed_passes": true
+      },
+      {
+        "name": "u:u",
+        "fitted": -0.3,
+        "truth": -0.3,
+        "slice": [
+          -0.30000000181834346,
+          -0.2999999981815065
+        ],
+        "truth_in_slice": true,
+        "truth_coordinate_with_other_fits_fixed_passes": true
+      }
+    ]
+  }
+]

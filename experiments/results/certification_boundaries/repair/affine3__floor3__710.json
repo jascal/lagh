@@ -1,0 +1,14 @@
+{
+  "case": "affine3__floor3__710",
+  "family": "affine3",
+  "regime": "floor3",
+  "seed": 710,
+  "input_hash": "6e5f8827895d69de34991d0780ff820d08209783fa4c42b2820104a9294427ee",
+  "truth": "13*x_0/10 - 7*x_1/10 + 3*x_2/10",
+  "sigma": 0.0,
+  "floor_abs": 0.001,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "timeout",
+  "discovery_seconds": 20.001088910998078
+}

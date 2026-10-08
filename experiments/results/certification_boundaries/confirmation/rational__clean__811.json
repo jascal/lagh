@@ -1,0 +1,14 @@
+{
+  "case": "rational__clean__811",
+  "family": "rational",
+  "regime": "clean",
+  "seed": 811,
+  "input_hash": "1932a23a0b54799b557ca66a0bfadc0485cc4192b043e7532cbe9ef275018c4a",
+  "truth": "(3*x_0 + 2)/(x_0 + 4)",
+  "sigma": 0.0,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "timeout",
+  "discovery_seconds": 20.000497130007716
+}

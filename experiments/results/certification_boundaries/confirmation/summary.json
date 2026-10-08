@@ -1,0 +1,93 @@
+{
+  "expected": 120,
+  "present": 120,
+  "by_regime": {
+    "clean": {
+      "n": 24,
+      "certified": 20,
+      "refused": 2,
+      "timeout": 2,
+      "error": 0,
+      "generator_mismatch": [],
+      "missing_scores": [],
+      "null_certificates": [],
+      "median_discovery_seconds": 4.744188415003009,
+      "refusal_reasons": {
+        "structural": 2
+      }
+    },
+    "noise6": {
+      "n": 24,
+      "certified": 7,
+      "refused": 9,
+      "timeout": 8,
+      "error": 0,
+      "generator_mismatch": [
+        "basis-exact__noise6__810",
+        "basis-exact__noise6__811",
+        "basis-independent__noise6__810",
+        "basis-independent__noise6__811",
+        "basis-near__noise6__810",
+        "mono3__noise6__810",
+        "mono3__noise6__811"
+      ],
+      "missing_scores": [],
+      "null_certificates": [],
+      "median_discovery_seconds": 6.322523047987488,
+      "refusal_reasons": {
+        "structural": 9
+      }
+    },
+    "noise3": {
+      "n": 24,
+      "certified": 4,
+      "refused": 14,
+      "timeout": 6,
+      "error": 0,
+      "generator_mismatch": [
+        "power__noise3__810",
+        "power__noise3__811",
+        "small-term__noise3__810",
+        "small-term__noise3__811"
+      ],
+      "missing_scores": [],
+      "null_certificates": [],
+      "median_discovery_seconds": 3.979139428018243,
+      "refusal_reasons": {
+        "structural": 14
+      }
+    },
+    "floor6": {
+      "n": 24,
+      "certified": 13,
+      "refused": 9,
+      "timeout": 2,
+      "error": 0,
+      "generator_mismatch": [
+        "basis-near__floor6__810"
+      ],
+      "missing_scores": [],
+      "null_certificates": [],
+      "median_discovery_seconds": 1.5586813289992278,
+      "refusal_reasons": {
+        "parametric": 3,
+        "structural": 6
+      }
+    },
+    "floor3": {
+      "n": 24,
+      "certified": 0,
+      "refused": 18,
+      "timeout": 6,
+      "error": 0,
+      "generator_mismatch": [],
+      "missing_scores": [],
+      "null_certificates": [],
+      "median_discovery_seconds": 3.8946805904852226,
+      "refusal_reasons": {
+        "parametric": 4,
+        "structural": 14
+      }
+    }
+  }
+}

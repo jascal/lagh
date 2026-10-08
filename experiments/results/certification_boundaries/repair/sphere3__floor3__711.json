@@ -1,0 +1,50 @@
+{
+  "case": "sphere3__floor3__711",
+  "family": "sphere3",
+  "regime": "floor3",
+  "seed": 711,
+  "input_hash": "9496efc26cd9efaef1ca91530bd149c5a4654fed2e432129c493a25ccab6e0e4",
+  "truth": "13*x_0/10 - 7*x_1/10 + 3*x_2/10",
+  "sigma": 0.0,
+  "floor_abs": 0.001,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "refused",
+  "certificate": {
+    "certified": false,
+    "nmiss": 48,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        -0.9964366778299731,
+        0.9791624974452845
+      ],
+      [
+        -0.9593574577207318,
+        0.9930319105935145
+      ],
+      [
+        -0.9837102360293277,
+        0.9993344900238933
+      ]
+    ],
+    "law": "",
+    "abstain": "structural",
+    "notes": [
+      "no law certifies through tier 3"
+    ],
+    "alpha_log10": null,
+    "n_hypotheses": null,
+    "partial": null,
+    "constraints": [],
+    "measurement": null,
+    "measurement_omitted": null,
+    "claim": {}
+  },
+  "law": "None",
+  "tier": 3,
+  "n_candidates": 0,
+  "route": "tier-loop",
+  "discovery_seconds": 7.055200992996106
+}

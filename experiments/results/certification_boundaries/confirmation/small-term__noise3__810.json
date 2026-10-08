@@ -1,0 +1,77 @@
+{
+  "case": "small-term__noise3__810",
+  "family": "small-term",
+  "regime": "noise3",
+  "seed": 810,
+  "input_hash": "2d997061583bfc23bc9b93812ba4791dfea488f570d4827d1781dbb760accf12",
+  "truth": "x_0**2/100000 + x_0",
+  "sigma": 0.001,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.5203576862176771,
+        2.9806309021261757
+      ]
+    ],
+    "law": "0.999798201827269*x_0",
+    "abstain": null,
+    "notes": [],
+    "alpha_log10": -107.02042553875796,
+    "n_hypotheses": 6,
+    "partial": null,
+    "constraints": [],
+    "measurement": null,
+    "measurement_omitted": null,
+    "claim": {
+      "kind": "finite-data-consistency",
+      "domain": "checked finite rows under the supplied error model",
+      "exact_form_identified": false,
+      "coefficient_precision": "not implied by pinning; read separately scoped intervals",
+      "significance_scope": "chance agreement under the stated null, not exact-form probability"
+    }
+  },
+  "law": "0.999798201827269*x_0",
+  "tier": 3,
+  "n_candidates": 6,
+  "route": "tier-loop",
+  "discovery_seconds": 3.9927338150155265,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 0.00023175224779754003,
+    "fresh_truth_band_misses": 0,
+    "extended_relative_error": 0.0002616659320648385,
+    "extended_truth_band_misses": 0,
+    "symbolically_equal": false,
+    "same_polynomial_support": false,
+    "max_coefficient_error": 0.00020179817273091594,
+    "generator_mismatch": true,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "0.999798201827269",
+          "value": 0.9997982018272691,
+          "bounds": [
+            0.9986686678111761,
+            1.0022220605982726
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        }
+      ],
+      "simultaneous_corners_feasible": null,
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.04541036201408133
+}
