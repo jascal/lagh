@@ -1,0 +1,12 @@
+...                                                                      [100%]
+=============================== warnings summary ===============================
+tests/test_submit.py::test_out_of_class_goes_track_b_labeled
+  /home/allans/code/lagh/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:190: RuntimeWarning: overflow encountered in square
+    x = um.square(x, out=x)
+
+tests/test_submit.py::test_out_of_class_goes_track_b_labeled
+  /home/allans/code/lagh/lagh/certify.py:383: RuntimeWarning: invalid value encountered in subtract
+    d = np.abs(va - vb)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+3 passed, 2 warnings in 463.14s (0:07:43)

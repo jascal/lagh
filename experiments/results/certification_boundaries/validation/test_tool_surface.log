@@ -1,0 +1,12 @@
+.......................................................                  [100%]
+=============================== warnings summary ===============================
+tests/test_tool_surface.py::test_tools_refuse_wrong_shapes_and_types_instead_of_raising
+  /home/allans/code/lagh/.venv/lib/python3.12/site-packages/numpy/_core/fromnumeric.py:3862: RuntimeWarning: Mean of empty slice
+    return _methods._mean(a, axis=axis, dtype=dtype,
+
+tests/test_tool_surface.py::test_tools_refuse_wrong_shapes_and_types_instead_of_raising
+  /home/allans/code/lagh/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+    ret = ret.dtype.type(ret / rcount)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+55 passed, 2 warnings in 5.22s

@@ -1,0 +1,10 @@
+.................                                                        [100%]
+=============================== warnings summary ===============================
+tests/test_mcp.py::test_recover_abstains_returns_structured_reason_not_a_guess
+tests/test_mcp.py::test_fit_flags_a_continuum_exponent_as_not_pinning
+tests/test_mcp.py::test_recover_data_abstain_offers_a_broadened_box_for_the_caller_loop
+  /home/allans/code/lagh/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:190: RuntimeWarning: overflow encountered in square
+    x = um.square(x, out=x)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+17 passed, 3 warnings in 224.96s (0:03:44)

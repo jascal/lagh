@@ -1,0 +1,491 @@
+{
+  "first_suite_runs": [
+    {
+      "file": "tests/test_arbitration.py",
+      "exit_code": 0,
+      "seconds": 0.6910438619961496,
+      "log": "/tmp/lagh-boundary-suite/test_arbitration.log"
+    },
+    {
+      "file": "tests/test_acquisition_scoring.py",
+      "exit_code": 0,
+      "seconds": 0.6947416410257574,
+      "log": "/tmp/lagh-boundary-suite/test_acquisition_scoring.log"
+    },
+    {
+      "file": "tests/test_certify_evidence.py",
+      "exit_code": 0,
+      "seconds": 0.7770130919816438,
+      "log": "/tmp/lagh-boundary-suite/test_certify_evidence.log"
+    },
+    {
+      "file": "tests/test_characterize.py",
+      "exit_code": 0,
+      "seconds": 0.5363652720116079,
+      "log": "/tmp/lagh-boundary-suite/test_characterize.log"
+    },
+    {
+      "file": "tests/test_certification_boundaries.py",
+      "exit_code": 0,
+      "seconds": 1.348199965985259,
+      "log": "/tmp/lagh-boundary-suite/test_certification_boundaries.log"
+    },
+    {
+      "file": "tests/test_boxsearch.py",
+      "exit_code": 0,
+      "seconds": 2.7047102299984545,
+      "log": "/tmp/lagh-boundary-suite/test_boxsearch.log"
+    },
+    {
+      "file": "tests/test_eiv.py",
+      "exit_code": 0,
+      "seconds": 2.087641955993604,
+      "log": "/tmp/lagh-boundary-suite/test_eiv.log"
+    },
+    {
+      "file": "tests/test_errormodel.py",
+      "exit_code": 0,
+      "seconds": 0.49909421798656695,
+      "log": "/tmp/lagh-boundary-suite/test_errormodel.log"
+    },
+    {
+      "file": "tests/test_constrained.py",
+      "exit_code": 0,
+      "seconds": 14.565976638987195,
+      "log": "/tmp/lagh-boundary-suite/test_constrained.log"
+    },
+    {
+      "file": "tests/test_float_gate.py",
+      "exit_code": 0,
+      "seconds": 2.0431064360018354,
+      "log": "/tmp/lagh-boundary-suite/test_float_gate.log"
+    },
+    {
+      "file": "tests/test_instrument.py",
+      "exit_code": 0,
+      "seconds": 6.192637170985108,
+      "log": "/tmp/lagh-boundary-suite/test_instrument.log"
+    },
+    {
+      "file": "tests/test_instrument_c4.py",
+      "exit_code": 0,
+      "seconds": 5.278042182006175,
+      "log": "/tmp/lagh-boundary-suite/test_instrument_c4.log"
+    },
+    {
+      "file": "tests/test_constraint_detection.py",
+      "exit_code": 0,
+      "seconds": 35.77756010199664,
+      "log": "/tmp/lagh-boundary-suite/test_constraint_detection.log"
+    },
+    {
+      "file": "tests/test_ito_selection.py",
+      "exit_code": 0,
+      "seconds": 0.8079054379777517,
+      "log": "/tmp/lagh-boundary-suite/test_ito_selection.log"
+    },
+    {
+      "file": "tests/test_lab.py",
+      "exit_code": 0,
+      "seconds": 1.7689397079811897,
+      "log": "/tmp/lagh-boundary-suite/test_lab.log"
+    },
+    {
+      "file": "tests/test_escalation.py",
+      "exit_code": 0,
+      "seconds": 48.182148378982674,
+      "log": "/tmp/lagh-boundary-suite/test_escalation.log"
+    },
+    {
+      "file": "tests/test_machine.py",
+      "exit_code": 0,
+      "seconds": 0.20054097101092339,
+      "log": "/tmp/lagh-boundary-suite/test_machine.log"
+    },
+    {
+      "file": "tests/test_c6_lattice.py",
+      "exit_code": 0,
+      "seconds": 97.28510658399318,
+      "log": "/tmp/lagh-boundary-suite/test_c6_lattice.log"
+    },
+    {
+      "file": "tests/test_measurement_design.py",
+      "exit_code": 0,
+      "seconds": 0.6625480150105432,
+      "log": "/tmp/lagh-boundary-suite/test_measurement_design.log"
+    },
+    {
+      "file": "tests/test_ito.py",
+      "exit_code": 0,
+      "seconds": 71.38167054098449,
+      "log": "/tmp/lagh-boundary-suite/test_ito.log"
+    },
+    {
+      "file": "tests/test_pde_verify.py",
+      "exit_code": 0,
+      "seconds": 0.9502911730087362,
+      "log": "/tmp/lagh-boundary-suite/test_pde_verify.log"
+    },
+    {
+      "file": "tests/test_pdebench.py",
+      "exit_code": 0,
+      "seconds": 0.8836397950071841,
+      "log": "/tmp/lagh-boundary-suite/test_pdebench.log"
+    },
+    {
+      "file": "tests/test_pdesystem.py",
+      "exit_code": 1,
+      "seconds": 5.38593789000879,
+      "log": "/tmp/lagh-boundary-suite/test_pdesystem.log"
+    },
+    {
+      "file": "tests/test_pr14_review.py",
+      "exit_code": 0,
+      "seconds": 0.8239905739901587,
+      "log": "/tmp/lagh-boundary-suite/test_pr14_review.log"
+    },
+    {
+      "file": "tests/test_refusal.py",
+      "exit_code": 0,
+      "seconds": 0.5479817440209445,
+      "log": "/tmp/lagh-boundary-suite/test_refusal.log"
+    },
+    {
+      "file": "tests/test_refusal_acquisition.py",
+      "exit_code": 0,
+      "seconds": 0.6194412500190083,
+      "log": "/tmp/lagh-boundary-suite/test_refusal_acquisition.log"
+    },
+    {
+      "file": "tests/test_refusal_transport.py",
+      "exit_code": 0,
+      "seconds": 0.5828441359917633,
+      "log": "/tmp/lagh-boundary-suite/test_refusal_transport.log"
+    },
+    {
+      "file": "tests/test_scientist_config.py",
+      "exit_code": 0,
+      "seconds": 0.4879025570116937,
+      "log": "/tmp/lagh-boundary-suite/test_scientist_config.log"
+    },
+    {
+      "file": "tests/test_significance.py",
+      "exit_code": 0,
+      "seconds": 1.3232125030190218,
+      "log": "/tmp/lagh-boundary-suite/test_significance.log"
+    },
+    {
+      "file": "tests/test_statecert.py",
+      "exit_code": 0,
+      "seconds": 3.47087205099524,
+      "log": "/tmp/lagh-boundary-suite/test_statecert.log"
+    },
+    {
+      "file": "tests/test_stochcheck.py",
+      "exit_code": 0,
+      "seconds": 0.7097102719999384,
+      "log": "/tmp/lagh-boundary-suite/test_stochcheck.log"
+    },
+    {
+      "file": "tests/test_mcp.py",
+      "exit_code": 0,
+      "seconds": 225.45399561399245,
+      "log": "/tmp/lagh-boundary-suite/test_mcp.log"
+    },
+    {
+      "file": "tests/test_systems.py",
+      "exit_code": 0,
+      "seconds": 19.483314353012247,
+      "log": "/tmp/lagh-boundary-suite/test_systems.log"
+    },
+    {
+      "file": "tests/test_tool_surface.py",
+      "exit_code": 0,
+      "seconds": 5.652398888982134,
+      "log": "/tmp/lagh-boundary-suite/test_tool_surface.log"
+    },
+    {
+      "file": "tests/test_weakform.py",
+      "exit_code": 0,
+      "seconds": 1.1407024319923948,
+      "log": "/tmp/lagh-boundary-suite/test_weakform.log"
+    },
+    {
+      "file": "tests/test_weakform_system.py",
+      "exit_code": 0,
+      "seconds": 0.9079102479736321,
+      "log": "/tmp/lagh-boundary-suite/test_weakform_system.log"
+    },
+    {
+      "file": "tests/test_passive.py",
+      "exit_code": 0,
+      "seconds": 290.04720873900806,
+      "log": "/tmp/lagh-boundary-suite/test_passive.log"
+    },
+    {
+      "file": "tests/test_submit.py",
+      "exit_code": 0,
+      "seconds": 463.6893738679937,
+      "log": "/tmp/lagh-boundary-suite/test_submit.log"
+    },
+    {
+      "file": "tests/test_lagh.py",
+      "exit_code": 0,
+      "seconds": 607.9551378139877,
+      "log": "/tmp/lagh-boundary-suite/test_lagh.log"
+    }
+  ],
+  "effective_final_results": [
+    {
+      "file": "tests/test_arbitration.py",
+      "passed": 11,
+      "log": "test_arbitration.log",
+      "source_sha256": "25b41cadcfe23eea6d81cf5f7000644415e384ce9b20159845c864f6489adb14"
+    },
+    {
+      "file": "tests/test_acquisition_scoring.py",
+      "passed": 7,
+      "log": "test_acquisition_scoring.log",
+      "source_sha256": "c556ecf7e6764edace0cccff91ebe27852af7f2776346394a1a25188567089f4"
+    },
+    {
+      "file": "tests/test_certify_evidence.py",
+      "passed": 9,
+      "log": "test_certify_evidence.log",
+      "source_sha256": "da5bb9bdc295e96e4d1b577b4e376d17254ab9cb32438b0490612d7901f5e30c"
+    },
+    {
+      "file": "tests/test_characterize.py",
+      "passed": 7,
+      "log": "test_characterize.log",
+      "source_sha256": "58dcc3ef5c2d8e42f63900d2042e5eee1d0533a695ae3bff85a6e0786f832b02"
+    },
+    {
+      "file": "tests/test_certification_boundaries.py",
+      "passed": 10,
+      "log": "test_certification_boundaries.log",
+      "source_sha256": "79a08fe476eedd5263a76f23aedb0a87b384d9c5be3c48be5e3bd7d881b39cbe"
+    },
+    {
+      "file": "tests/test_boxsearch.py",
+      "passed": 3,
+      "log": "test_boxsearch.log",
+      "source_sha256": "297807bb7619b61cc8cd9adc76fc2aef6f72bf481794a58c2e8a0a8ef1020273"
+    },
+    {
+      "file": "tests/test_eiv.py",
+      "passed": 8,
+      "log": "test_eiv.log",
+      "source_sha256": "208489ce8ba0ba03e15fb9130d2d65c3bc7939282682a9d27e57e633cd8eaa85"
+    },
+    {
+      "file": "tests/test_errormodel.py",
+      "passed": 7,
+      "log": "test_errormodel.log",
+      "source_sha256": "5046086e047ec85a089a8a2a3670e81f875564f70b74ae49b045d3257e4ae1b8"
+    },
+    {
+      "file": "tests/test_constrained.py",
+      "passed": 4,
+      "log": "test_constrained.log",
+      "source_sha256": "08d4d9c6231e20999686385313aa9e2b85e7abcabac2b8450ddce4883139c527"
+    },
+    {
+      "file": "tests/test_float_gate.py",
+      "passed": 5,
+      "log": "test_float_gate.log",
+      "source_sha256": "0c924dfb452d86101e1c023f07a59120d7383d3ee47f74d84bb27b9dd4024d21"
+    },
+    {
+      "file": "tests/test_instrument.py",
+      "passed": 21,
+      "log": "test_instrument.log",
+      "source_sha256": "9abd98329cf57a8d0d7bd06d9df4e213b5966c4458ebe4ab5b5c33d508b9be86"
+    },
+    {
+      "file": "tests/test_instrument_c4.py",
+      "passed": 25,
+      "log": "test_instrument_c4.log",
+      "source_sha256": "ed810ea56d81936eb538ed74bb1ef7f575b57cc0d454b142a9a7fe5b59648111"
+    },
+    {
+      "file": "tests/test_constraint_detection.py",
+      "passed": 7,
+      "log": "test_constraint_detection.log",
+      "source_sha256": "30cea80411310f336f08040c72ccd8d4989074a9f77ab0bfe6ba04127ce76ee7"
+    },
+    {
+      "file": "tests/test_ito_selection.py",
+      "passed": 2,
+      "log": "test_ito_selection.log",
+      "source_sha256": "4525962ac7d76006d4b4eb067ea0026d09aefc84d445a606e4660306ca56cca9"
+    },
+    {
+      "file": "tests/test_lab.py",
+      "passed": 5,
+      "log": "test_lab.log",
+      "source_sha256": "d4a3c19392d53721c4be025c27ac1a05b731cd74a32d53f528866fb06b0051c9"
+    },
+    {
+      "file": "tests/test_escalation.py",
+      "passed": 12,
+      "log": "test_escalation.log",
+      "source_sha256": "92b0d352791c7dc4c5d3788077ddee293c6fee8ffcbe1895a24e0c9c8c76f6d6"
+    },
+    {
+      "file": "tests/test_machine.py",
+      "passed": 6,
+      "log": "test_machine.log",
+      "source_sha256": "170ef44fa4a3b80d2300a827c1d7dbc8039ac7f57ce50d1f3d68bf5a8df261d9"
+    },
+    {
+      "file": "tests/test_c6_lattice.py",
+      "passed": 6,
+      "log": "test_c6_lattice.log",
+      "source_sha256": "03aa5ab902fb6bb276fc24dd3eccd799bcbfad39fc4fa2d93deeb325a8f7b000"
+    },
+    {
+      "file": "tests/test_measurement_design.py",
+      "passed": 13,
+      "log": "test_measurement_design.log",
+      "source_sha256": "43657d277bddc84d158a0b8d3790cfa9f769f484343f75432d26dc8298743e84"
+    },
+    {
+      "file": "tests/test_ito.py",
+      "passed": 42,
+      "log": "test_ito.log",
+      "source_sha256": "fad46575b1a2f385a29dd9e1672b35adcfc595d6d755680b4005e3ab6c8f26c2"
+    },
+    {
+      "file": "tests/test_pde_verify.py",
+      "passed": 7,
+      "log": "test_pde_verify.log",
+      "source_sha256": "6fdc92df180be323a2023e1baf7539f2b1612dab1a35eeb2c3dbd604c3a6fc11"
+    },
+    {
+      "file": "tests/test_pdebench.py",
+      "passed": 7,
+      "log": "test_pdebench.log",
+      "source_sha256": "962a3c298dd90b7c88f82aa1e1498190d1a79e92cba63f0d098dda330cf20515"
+    },
+    {
+      "file": "tests/test_pdesystem.py",
+      "passed": 7,
+      "log": "test_pdesystem_corrected.log",
+      "source_sha256": "264ab761fc719cb79ee220401f204871e7a4244905d5ee34d22f6cafe177740f"
+    },
+    {
+      "file": "tests/test_pr14_review.py",
+      "passed": 24,
+      "log": "test_pr14_review.log",
+      "source_sha256": "3b1d86033b32de8e85a4e7ecdc2a363c2f6ea40b11263a67958706fec052e84b"
+    },
+    {
+      "file": "tests/test_refusal.py",
+      "passed": 7,
+      "log": "test_refusal.log",
+      "source_sha256": "e90b96b0297369e38fe731be509f28f888034fb30f794329a52201d983a27156"
+    },
+    {
+      "file": "tests/test_refusal_acquisition.py",
+      "passed": 15,
+      "log": "test_refusal_acquisition.log",
+      "source_sha256": "89f83eff08d32403194caaad3bee740297291f647bb76b90f1a902edee8d6803"
+    },
+    {
+      "file": "tests/test_refusal_transport.py",
+      "passed": 5,
+      "log": "test_refusal_transport.log",
+      "source_sha256": "c4d6d684d7a7f7b6e8a613ea97abaebb3be724d79ad5a00026f60e27f9ceac76"
+    },
+    {
+      "file": "tests/test_scientist_config.py",
+      "passed": 3,
+      "log": "test_scientist_config.log",
+      "source_sha256": "b82e55863aa0bc323c382b4026a1616bea9c9aed2e88725aa813b7c64d70e06e"
+    },
+    {
+      "file": "tests/test_significance.py",
+      "passed": 3,
+      "log": "test_significance.log",
+      "source_sha256": "db62ccdd1f1b38b50d101b86cc1c5d89ae943a60661574f203b832bf23d0a803"
+    },
+    {
+      "file": "tests/test_statecert.py",
+      "passed": 9,
+      "log": "test_statecert.log",
+      "source_sha256": "bd60d3b32328ca4f95f97dd350f0bd252219c60286863b236cd48c6a2f14454c"
+    },
+    {
+      "file": "tests/test_stochcheck.py",
+      "passed": 33,
+      "log": "test_stochcheck.log",
+      "source_sha256": "98d9b266206146e7f732b5c3bfac0f38993a3b1f38d9754271ce51de32f52549"
+    },
+    {
+      "file": "tests/test_mcp.py",
+      "passed": 17,
+      "log": "test_mcp.log",
+      "source_sha256": "8a2638ad264f69f04a26c3be0723a34ef8ca4d57403ca249fe1d516000bf08e3"
+    },
+    {
+      "file": "tests/test_systems.py",
+      "passed": 3,
+      "log": "test_systems.log",
+      "source_sha256": "53cfbeb2efb2995fa73b66add8ef2fabd2c201dcaa2743eb46af986ea805538b"
+    },
+    {
+      "file": "tests/test_tool_surface.py",
+      "passed": 55,
+      "log": "test_tool_surface.log",
+      "source_sha256": "41f4645c326d306c823ca888f189f17a8b291224a2bbad59b896c137d06c2ff1"
+    },
+    {
+      "file": "tests/test_weakform.py",
+      "passed": 10,
+      "log": "test_weakform.log",
+      "source_sha256": "856a61d9a3bbc3cb19ef8b72d478f4abb0735d6fa366befb5b8499bcf7b349c3"
+    },
+    {
+      "file": "tests/test_weakform_system.py",
+      "passed": 8,
+      "log": "test_weakform_system.log",
+      "source_sha256": "158b36c79453847ab9ab0e5d72b14e7001aeb8a4691fccf1cc4e69e21d99b5cc"
+    },
+    {
+      "file": "tests/test_passive.py",
+      "passed": 5,
+      "log": "test_passive.log",
+      "source_sha256": "7d31e365d34d4248728884d71fecbea63e2d855267614ed5c882af001e679b93"
+    },
+    {
+      "file": "tests/test_submit.py",
+      "passed": 3,
+      "log": "test_submit.log",
+      "source_sha256": "05cb762af3b9d7c5546200097b3ff0fb4059198c872b93feba2ee1946e459a57"
+    },
+    {
+      "file": "tests/test_lagh.py",
+      "passed": 21,
+      "log": "test_lagh.log",
+      "source_sha256": "9319dd1da5e96c77613256c5149109ac61ed78fc1bc5caefe20d9f336e33dca4"
+    },
+    {
+      "file": "tests/test_boundary_audit.py",
+      "passed": 3,
+      "source_sha256": "49fae56eddad2085b9e3997c0668ec6c7f427e2504ef69d68c8e24d3a5bcec97",
+      "evidence": "separate pytest invocation, captured tool output: 3 passed in 0.85s"
+    }
+  ],
+  "passed": 455,
+  "failed": 0,
+  "skipped": 0,
+  "workers": 4,
+  "environment": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "first_suite_failure": "one obsolete marginal-coverage assertion in test_pdesystem; retained original log; corrected conditional assertion rerun 7/7",
+  "lint": "ruff check --select E9,F63,F7,F82 lagh tests experiments: passed",
+  "whitespace": "git diff --check: passed"
+}

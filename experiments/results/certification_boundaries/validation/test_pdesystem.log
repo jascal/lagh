@@ -1,0 +1,17 @@
+...F...                                                                  [100%]
+=================================== FAILURES ===================================
+________ test_both_equations_certify_the_true_support_over_shared_rows _________
+
+    def test_both_equations_certify_the_true_support_over_shared_rows():
+        r = rows()
+        eqs = [discover_equation(r, t_, sigma=0.0, max_tier=3) for t_ in TRUTH]
+        for eq in eqs:
+            assert eq["certified"], (eq["target"], eq.get("abstain"))
+            assert set(eq["coefficients"]) == set(TRUTH[eq["target"]])
+            for k, v in TRUTH[eq["target"]].items():
+                lo, hi = eq["intervals"][k]
+>               assert lo <= v <= hi
+E               assert 0.1 <= 0.09999999999450974
+
+tests/test_pdesystem.py:91: AssertionError
+1 failed, 6 passed in 4.99s

@@ -7,7 +7,7 @@ production sources and environment. No hypothesis vocabulary, tolerance or
 significance threshold was relaxed.
 
 The study found and repaired a bypass of the selected coefficient gate and
-three interval/reporting defects. It also measured a limit that a gate change
+interval/reporting defects. It also measured a limit that a gate change
 cannot erase: noisy/floor-limited observations support fits that differ from
 the generating law. Those outputs now explicitly claim finite-row band
 consistency. **The change is not an exact-recovery gain.**
@@ -19,6 +19,8 @@ All three registered arms completed, 120 discovery attempts each. Each row had
 separate diagnostic budget. Four workers, one BLAS thread per worker. Baseline
 and replay use seeds 710/711; confirmation uses 810/811. The full bank and its
 fixed stopping rule are in [the registration](CERTIFICATION_BOUNDARIES_REGISTRATION.md).
+These are twelve designed families (including the negative control) repeated
+across regimes and seeds, not 120 independent physical laws per arm.
 
 | Regime (24 attempts per arm) | Baseline/replay: certified / refused / timed out | Fresh: certified / refused / timed out | Generator mismatches: baseline/replay → fresh | Median discovery seconds: baseline → replay → fresh |
 |---|---:|---:|---:|---:|
@@ -155,3 +157,24 @@ study. Use isolated checkouts at the recorded revisions for historical baseline
 reproduction. Existing artifacts are never overwritten. The bounded campaign
 ends at the three registered arms; broader noisy identifiability and timeout
 reach remain open, explicitly outside the supported claims.
+
+## Final validation and completion audit
+
+**455 tests passed, zero outstanding failures or skips**, across all 40 current
+test files. The initial 39-file run had 451 passes and the single obsolete PDE
+coverage assertion described above; the corrected PDE file passed 7/7 and the
+new artifact-audit file passed 3/3. This is an aggregate of the full run and
+targeted reruns, not a claim that the original full invocation exited green.
+`validation/` retains that failure, corrected output, per-file source hashes,
+and the effective results. Bug-class Ruff (`E9,F63,F7,F82`) and whitespace checks
+passed. Current production/registration hashes match both scored candidate arms.
+
+| Goal requirement | Authoritative evidence |
+|---|---|
+| Register before measurement; bounded stopping rule | Registration commit `4701e5b`, 120-case manifests, exactly three completed discovery arms |
+| Cover noise, floors and multidimensional pre-pass | Five-regime bank plus controlled pre-pass witness; route contract above |
+| Separate false exactness, coefficient support, refusal and runtime | Preserved generator mismatches and symbolic equality, conditional slices and joint-corner diagnostics, all-case status rates and separate discovery/scoring times in `audit_verified.json` |
+| Change gates only after measured evidence | Baseline pre-pass witness and failing regression precede repair `20c9bd0`; noisy gates unchanged |
+| Limit unsupported claims and preserve public scope | Claim fields and transport tests; consistency for uncertainty, explicit slice limits; no global exactness/coverage assertion |
+| Verify repairs and retain negative results | Same-input replay unchanged, fresh-seed confirmation, independent checks of all hashes/laws/endpoints, original failures retained |
+| End the finite campaign | 360 attempts completed; no additional seed search or capability iteration; timeout reach and general noisy identifiability remain documented limits |
