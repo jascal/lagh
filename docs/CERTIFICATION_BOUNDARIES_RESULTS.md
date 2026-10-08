@@ -203,3 +203,30 @@ Follow-up validation: 31 tests passed across `test_certification_boundaries.py`,
 tests, no failures). This includes the new noisy scout regression, all three
 recover transport modes, noisy/floor verify, and MCP registration/delegation.
 Bug-class Ruff and `git diff --check` passed.
+
+## CI follow-up: exact replay depends on the numerical runtime
+
+The CI run for `16577d7` passed five checks but failed the `rest` shard: two
+boundary-audit tests and two existing acquisition-audit tests could not reproduce
+archived floating-point inputs byte for byte. Both the earlier passing CI run
+and this failing run used NumPy 2.5.3. Locally, disabling CPU dispatch features
+with `NPY_DISABLE_CPU_FEATURES=X86_V3,X86_V4,AVX512_ICL` reproduced all four
+failures under NumPy 2.5.1. This demonstrates that matching package versions and
+seeds alone is insufficient for exact replay of these generated observations.
+
+The unit tests now build explicitly synthetic plans/records in their current
+runtime, check that the undamaged fixture passes, then apply each mutation.
+Additional regressions reject a changed input hash, an infeasible saved interval
+endpoint, and a one-ULP change to the final sample even when its plan and observed
+hashes agree. Neither audit implementation, any historical artifact, nor the
+discovery engine changed. No tolerant hash comparison or skip was introduced.
+
+All 13 tests in the two affected files passed with default NumPy 2.5.1 dispatch,
+disabled dispatch under 2.5.1, and disabled dispatch under CI's NumPy 2.5.3.
+Ruff and whitespace checks passed. The full boundary archive was separately
+re-audited in the original compatible local runtime: all 360 input hashes, 124
+returned laws, and repaired/fresh endpoints passed; the 82 historical baseline
+endpoint failures remain recorded. Exact archive replay on another numerical
+runtime can still refuse with an input-hash or RNG-stream mismatch. That refusal
+must not be treated as validation of the archived observations or worked around
+by rewriting their saved hashes.
