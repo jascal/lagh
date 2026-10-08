@@ -1,10 +1,11 @@
 """Two-track benchmark submission (docs/DIRECTION_OUTPUT_POLICY.md).
 
-Per problem: submit the certified exact law when one exists (track A, tag `proved`,
-the only track the zero-wrong claim covers); otherwise the best available LABELED
+Per problem: submit a law that passed the finite-data checks when one exists
+(track A, tag `proved`, with its explicit `claim` scope); otherwise the best available LABELED
 conjecture (track B, tag `empirical`, never upgraded); otherwise an explicit abstain.
 Accuracy-scored benchmarks see both tracks; the certified partition is reported
-separately and cannot be redrawn after scoring.
+separately and cannot be redrawn after scoring. Certification does not establish
+exact recovery of the generating form or coefficients.
 """
 
 from __future__ import annotations

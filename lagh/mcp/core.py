@@ -5,14 +5,15 @@ thin wrapper that registers these over the MCP transport.
 
 The three acts, named for what they DO (Orca convention -- never `certify`):
 
-    recover(X, y)         bounded  -- discover an exact law     -> Certificate | Abstention
+    recover(X, y)         bounded  -- discover a checked law    -> Certificate | Abstention
     verify(X, y, form)    bounded  -- check a DECLARED form      -> Certificate | Abstention
     fit(X, y)             UNBOUNDED-- best-guess + diagnosis      -> Conjecture[] + Diagnosis
 
 The wall is structural: `fit`'s result has NO `certified` field -- a guarantee cannot
 be read off it by accident. `recover`/`verify` return a `certified` bool and a
-`strength` of `pinned` (rational, no rival within the noise) or `consistent` (a declared
-irrational fits, but the constant is not identifiable). See the doc for the full rationale.
+`strength` of `pinned` (clean-data operational gates passed) or `consistent`
+(uncertain data or declared irrational constants). The machine-readable `claim`
+limits both to the checked finite domain; neither proves the generating law.
 """
 
 from __future__ import annotations
@@ -137,7 +138,7 @@ def recover(X=None, y=None, *, oracle=None, box=None, sigma: float = 0.0,
             floor_abs: float = 1e-12,
             max_tier: int = 7, budget: int = 200, box_search: bool = False,
             seed: int = 0, time_budget_s: float | None = 45.0) -> dict:
-    """Bounded. Discover an exact law. Two modes:
+    """Bounded. Discover a law with an explicitly scoped finite-data check. Two modes:
 
     * **active** (`oracle` + `box` given, in-process only): lagh DRIVES the oracle --
       adaptive ranging, budget-metered multi-objective queries, per-round
@@ -517,7 +518,9 @@ def fit(X, y, *, sigma: float = 0.0, top: int = 5) -> dict:
             conj.insert(0, {"form": str(r.expr), "residual": 0.0,
                             "source": "bounded-grammar best certifiable form"})
             if diagnosis["kind"] == "unknown":
-                diagnosis = {"kind": "pinned", "detail": "a bounded exact law certifies"}
+                diagnosis = {"kind": "consistent",
+                             "detail": "a bounded-grammar law fits the observation band; "
+                                       "the generating form is not identified"}
                 next_action = "recover"
         elif r.certificate.abstain == Abstain.STRUCTURAL.value and diagnosis["kind"] == "unknown":
             diagnosis = {"kind": "under_determined",

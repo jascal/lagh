@@ -28,24 +28,27 @@ def build_server():
     server = FastMCP("lagh", instructions=(
         "lagh turns law-discovery subproblems into CERTIFIED results or explicit "
         "abstentions. Sample your black-box oracle, pass the points, and: use "
-        "`recover` to discover an exact law, `verify` to check a form you already "
+        "`recover` to discover a checked law, `verify` to check a form you already "
         "suspect, `fit` to scout the data before you commit. `recover`/`verify` are "
         "bounded (certificate or a reasoned abstention -- never a guess). `fit` is a "
         "SCOUT: its output is a conjecture with a diagnosis, NOT a certificate -- to "
-        "turn a conjecture into a guarantee, feed it to `recover` or `verify`."))
+        "check a conjecture, feed it to `recover` or `verify`. Read `claim` for the "
+        "finite-domain and error-model limits; certification does not identify "
+        "the exact generating law."))
 
     @server.tool()
     def recover(X: list[list[float]], y: list[float], sigma: float = 0.0) -> dict:
-        """BOUNDED. Discover an exact closed-form law from data points (X, y).
+        """BOUNDED. Discover a law checked against data points (X, y).
 
         Returns a CERTIFICATE (`tag:"proved"`, `certified:true`, the `law`, and a
-        `strength` of `pinned`) exhaustively checked over the stated finite domain,
+        `strength` of `pinned` or `consistent`) checked over the stated finite domain,
         OR an ABSTENTION (`tag:"open"`, `certified:false`, a machine-readable
-        `abstain` reason). It never fabricates: no law that fits is a refusal, not a
-        wrong answer. `sigma` = relative measurement noise (0 for a clean oracle);
-        under noise it certifies the exact STRUCTURE or abstains (coefficients are
-        noise-limited). The certificate is over the domain you sampled, not a claim
-        about the world -- check the `bounds` match your question.
+        `abstain` reason). `sigma` = relative measurement noise (0 for a clean oracle).
+        Under noise, success means `consistent`: the law fits the finite-row error
+        bands; its structure and coefficients may differ from the generator. Clean
+        `pinned` results pass operational gates but also do not prove the generator.
+        Read `claim` for the scope, including `exact_form_identified:false`, and
+        check the `bounds` match your question.
 
         ACTIVE ACQUISITION over the wire is CALLER-DRIVEN: on a thin/under-determined
         abstain this returns `next_action:"acquire"` + a broadened `suggested_box` --
@@ -64,11 +67,12 @@ def build_server():
         in a RESTRICTED grammar -- numbers, + - * / **, sqrt/exp/log/trig, and the
         constants E/pi/GoldenRatio/EulerGamma; it is never evaluated as Python. Its
         overall scale is refit, then it is checked over the domain. Returns a
-        CERTIFICATE or an ABSTENTION (a wrong form is REFUTED, not tolerated). The
-        `strength` field is load-bearing: a rational form certifies `pinned` (this
-        law, no rival within the noise); a form carrying a declared irrational (e.g.
-        `x_0**E`) can only certify `consistent` -- it fits, but the constant is not
-        identifiable from finite data. Use this for hypothesis-checking, including
+        CERTIFICATE or an ABSTENTION. The `strength` field is load-bearing:
+        declared noise or a declared irrational (e.g. `x_0**E`) yields `consistent`
+        on success: the form fits the observation bands, without identifying the
+        generator. Clean `pinned` results record operational gate passage, also
+        without proving exact structure or coefficients. Read `claim` for the
+        finite-domain and error-model limits. Use this for hypothesis-checking, including
         irrational/known-constant forms you have an a-priori reason to believe.
 
         A residual refusal may include `measurement`: an empirical diagnostic
@@ -84,7 +88,7 @@ def build_server():
     def fit(X: list[list[float]], y: list[float], sigma: float = 0.0) -> dict:
         """UNBOUNDED SCOUT -- returns a CONJECTURE, NOT a certificate.
 
-        Best-guess forms plus an identifiability DIAGNOSIS (`pinned` / `continuum` /
+        Best-guess forms plus an identifiability DIAGNOSIS (`pinned` / `consistent` / `continuum` /
         `under_determined`) and a `next_action` pointer that names your next move.
         Its value is the diagnosis, not the guess: it tells you whether a clean
         rational is there to `recover`, whether a free exponent is a continuum

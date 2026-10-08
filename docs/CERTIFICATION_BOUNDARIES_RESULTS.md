@@ -84,6 +84,7 @@ slices returned by the PDE adapter.
    from the checked central value. All **170 replay** and **194 fresh** diagnostic
    endpoints passed independent re-evaluation. Median clean slice width changed
    from 7.0e-10 to 9.3e-13; the wider historical numbers were not supported.
+   This measures operational slice tightness, not improved identification power.
 2. **Conditional is not marginal or simultaneous:** the controlled two-coefficient
    witness has valid individual endpoints but an invalid joint corner, and a
    feasible alternative vector outside both slices. Natural replay still has
@@ -160,14 +161,14 @@ reach remain open, explicitly outside the supported claims.
 
 ## Final validation and completion audit
 
-**455 tests passed, zero outstanding failures or skips**, across all 40 current
-test files. The initial 39-file run had 451 passes and the single obsolete PDE
+**At study completion (`40dff74`), 455 tests passed, zero outstanding failures or
+skips**, across all 40 test files. The initial 39-file run had 451 passes and the single obsolete PDE
 coverage assertion described above; the corrected PDE file passed 7/7 and the
 new artifact-audit file passed 3/3. This is an aggregate of the full run and
 targeted reruns, not a claim that the original full invocation exited green.
 `validation/` retains that failure, corrected output, per-file source hashes,
 and the effective results. Bug-class Ruff (`E9,F63,F7,F82`) and whitespace checks
-passed. Current production/registration hashes match both scored candidate arms.
+passed. Production/registration hashes at that revision match both scored candidate arms.
 
 | Goal requirement | Authoritative evidence |
 |---|---|
@@ -178,3 +179,27 @@ passed. Current production/registration hashes match both scored candidate arms.
 | Limit unsupported claims and preserve public scope | Claim fields and transport tests; consistency for uncertainty, explicit slice limits; no global exactness/coverage assertion |
 | Verify repairs and retain negative results | Same-input replay unchanged, fresh-seed confirmation, independent checks of all hashes/laws/endpoints, original failures retained |
 | End the finite campaign | 360 attempts completed; no additional seed search or capability iteration; timeout reach and general noisy identifiability remain documented limits |
+
+## PR review follow-up: public wording
+
+Review found residual exact-recovery promises in MCP tool descriptions consumed
+by calling models, the core/submission docstrings, and the bounded-grammar `fit`
+fallback diagnosis. The descriptions now agree with the claim payload. That
+scout fallback runs discovery with a positive noise band and now diagnoses
+`consistent`, preserving its conjecture-only output and `recover` next action.
+The separate positive-data exponent heuristic remains exploratory.
+
+This follow-up changes `lagh/mcp/core.py`, `lagh/mcp/server.py`, and
+`lagh/submit.py` relative to the frozen study sources; their current byte hashes
+therefore differ from the arm manifests. Recover/verify and submission logic
+are unchanged (also checked by AST comparison excluding docstrings and `fit`).
+Engine, checker, PDE, acquisition, study runner, and registration hashes still
+match the scored repair/confirmation sources. Historical manifests and evidence
+remain intact. This is a public-description and scout-diagnosis correction,
+not another discovery arm or an extension of the measured claims.
+
+Follow-up validation: 31 tests passed across `test_certification_boundaries.py`,
+`test_boundary_audit.py`, and `test_mcp.py` (three NumPy overflow warnings in scout
+tests, no failures). This includes the new noisy scout regression, all three
+recover transport modes, noisy/floor verify, and MCP registration/delegation.
+Bug-class Ruff and `git diff --check` passed.

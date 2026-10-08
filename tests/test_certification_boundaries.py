@@ -115,3 +115,23 @@ def test_coefficient_slice_rechecks_a_callable_band_for_each_candidate():
     assert iv is not None and len(set(seen)) > 4
     for v in iv:
         assert check(sp.Float(v)*x, [x], X, y, band)["certified"]
+
+
+def test_fit_does_not_promote_a_noisy_bounded_candidate_to_pinned(monkeypatch):
+    from lagh.certify import Certificate, claim_scope
+    from lagh.engine import Result
+    from lagh.mcp import core
+
+    # Crossing zero skips the positive-data exponent probe, isolating the
+    # fallback diagnosis for a law found under the scout's loose noise band.
+    X = np.linspace(-2., 2., 80)[:, None]
+    y = 2*X[:, 0]
+    cert = Certificate(True, 0, 0, len(X), [[-2., 2.]], "2*x_0",
+                       claim=claim_scope(y, sigma=1e-3))
+    monkeypatch.setattr(core, "discover", lambda *a, **kw:
+                        Result(cert, 2*sp.Symbol("x_0"), 1, 1))
+    out = core.fit(X, y, sigma=1e-3)
+    assert out["diagnosis"]["kind"] == "consistent"
+    assert out["next_action"] == "recover"
+    assert out["conjectures"][0]["form"] == "2*x_0"
+    assert "certified" not in out
