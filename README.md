@@ -10,6 +10,15 @@ not establish global truth, causal identification, or correctness outside the
 checked domain. The significance bound α concerns chance agreement under its
 stated null assumptions, not the probability that the law is the true structure.
 
+**Certification boundary study (BND1):** noisy and loose-floor certificates
+explicitly claim finite-row band consistency, not exact generating structure or
+coefficients. Clean `pinned` results describe operational gates, not a proof of
+the generator. Returned conditional parameter slices hold other parameters
+fixed; they are not marginal coverage intervals or a simultaneous box. The
+[registered study](docs/CERTIFICATION_BOUNDARIES_RESULTS.md) covers the
+multidimensional pre-pass, noise, floors and interval diagnostics (360 attempts,
+including unchanged-input replay; no exact-recovery gain claimed).
+
 **Empirical soundness record, not a universal guarantee.** Scored campaigns
 report their observed confident-wrong counts. The falsifiability pass also
 exposed invalid-evidence acceptance in the low-level checker, sometimes masked
@@ -112,8 +121,9 @@ speculative. Unrepaired findings are marked open. The ledger, in the order the f
 at machine floor as well as under declared noise; |H|·q^h bounds chance fits, not
 exact-form error. On clean data the joint coefficient gate (default) removed the
 dense-approximant class on every measured bank; that is an empirical result on those
-banks, not a closure of false exactness. **Open:** the declared-noise and
-floor-dominated paths keep their own gates and were not re-measured; `sqrt(f²)`
+banks, not a closure of false exactness. BND1 re-measured the declared-noise and
+floor-dominated paths: their supported claim is finite-data consistency. The
+dim ≥ 3 pre-pass now honors the selected clean coefficient gate. **Open:** `sqrt(f²)`
 twins (no gated coefficients) still force refusals under `escalation="accumulate"`;
 the dim ≥ 3 pre-pass still returns its first certifying class. Escalation itself
 stays `first`; `pool` was measured unsound and `accumulate` sound but ~31× slower.

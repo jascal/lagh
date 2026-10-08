@@ -1,0 +1,91 @@
+{
+  "expected": 120,
+  "present": 120,
+  "by_regime": {
+    "clean": {
+      "n": 24,
+      "certified": 18,
+      "refused": 2,
+      "timeout": 4,
+      "error": 0,
+      "generator_mismatch": [],
+      "missing_scores": [],
+      "null_certificates": [],
+      "median_discovery_seconds": 3.144649770008982,
+      "refusal_reasons": {
+        "structural": 2
+      }
+    },
+    "noise6": {
+      "n": 24,
+      "certified": 5,
+      "refused": 11,
+      "timeout": 8,
+      "error": 0,
+      "generator_mismatch": [
+        "basis-exact__noise6__710",
+        "basis-exact__noise6__711",
+        "basis-near__noise6__711",
+        "mono3__noise6__710",
+        "mono3__noise6__711"
+      ],
+      "missing_scores": [],
+      "null_certificates": [],
+      "median_discovery_seconds": 6.555835565988673,
+      "refusal_reasons": {
+        "structural": 11
+      }
+    },
+    "noise3": {
+      "n": 24,
+      "certified": 4,
+      "refused": 14,
+      "timeout": 6,
+      "error": 0,
+      "generator_mismatch": [
+        "power__noise3__710",
+        "power__noise3__711",
+        "small-term__noise3__710",
+        "small-term__noise3__711"
+      ],
+      "missing_scores": [],
+      "null_certificates": [],
+      "median_discovery_seconds": 3.8358839430002263,
+      "refusal_reasons": {
+        "structural": 14
+      }
+    },
+    "floor6": {
+      "n": 24,
+      "certified": 13,
+      "refused": 9,
+      "timeout": 2,
+      "error": 0,
+      "generator_mismatch": [
+        "basis-near__floor6__711"
+      ],
+      "missing_scores": [],
+      "null_certificates": [],
+      "median_discovery_seconds": 1.371661221011891,
+      "refusal_reasons": {
+        "parametric": 2,
+        "structural": 7
+      }
+    },
+    "floor3": {
+      "n": 24,
+      "certified": 0,
+      "refused": 18,
+      "timeout": 6,
+      "error": 0,
+      "generator_mismatch": [],
+      "missing_scores": [],
+      "null_certificates": [],
+      "median_discovery_seconds": 3.8630388014862547,
+      "refusal_reasons": {
+        "parametric": 4,
+        "structural": 14
+      }
+    }
+  }
+}

@@ -80,11 +80,33 @@ class Certificate:
 
     measurement: dict | None = None  # empirical checked-row evidence, never attribution
     measurement_omitted: str | None = None
+    claim: dict = field(default_factory=dict)  # scope survives serialization
 
     def one_line(self) -> str:
         if not self.certified:
             return f"ABSTAIN[{self.abstain}] |D|={self.domain_size} nmiss={self.nmiss}"
         return f"CERTIFIED over |D|={self.domain_size}: {self.law}"
+
+
+def loose_floor(y, sigma=0.0, floor_abs=1e-12) -> bool:
+    """The engine's registered floor-dominated boundary, shared with callers."""
+    return bool(sigma <= 0 and floor_abs > max(
+        1e-9, 100 * MACHINE_REL * float(np.median(np.abs(y)))))
+
+
+def claim_scope(y, *, sigma=0.0, floor_abs=1e-12, declared_error=False) -> dict:
+    """BND1: a successful check is not identification of the generator.
+
+    `gate-qualified-fit` records operational pinning at machine precision;
+    supplied uncertainty licenses only finite-row consistency. Neither kind
+    establishes exact structure, global truth or a probability of correctness.
+    """
+    uncertain = sigma > 0 or loose_floor(y, sigma, floor_abs) or declared_error
+    return {"kind": "finite-data-consistency" if uncertain else "gate-qualified-fit",
+            "domain": "checked finite rows under the supplied error model",
+            "exact_form_identified": False,
+            "coefficient_precision": "not implied by pinning; read separately scoped intervals",
+            "significance_scope": "chance agreement under the stated null, not exact-form probability"}
 
 
 def epsilon(y: np.ndarray, *, sigma: float = 0.0, prop: np.ndarray | None = None,
@@ -667,13 +689,15 @@ def parameter_interval(expr, syms, X: np.ndarray, y: np.ndarray, eps, atom,
     every other parameter held — measured by bisection on the certification
     predicate itself, not by a linearization or a covariance.
 
-    This is what a noisy measurement actually determines about a physical
-    coefficient. Demanding an exact rational instead is right for a definitional
-    identity and wrong for a diffusivity: measured on weak-form heat rows, the
+    This is a CONDITIONAL coordinate slice, not a marginal uncertainty interval
+    or a simultaneous parameter box. Repeated numeric atoms move together.
+    Measured on weak-form heat rows, the
     certifying interval for nu is 0.1 +- 1.5e-8 / 2.1e-6 / 2.6e-4 at field noise
     1e-8 / 1e-6 / 1e-4 -- linear in sigma, centred on the truth, and never an
-    exact rational. Returns (lo, hi), or None when the parameter is not bounded
-    within `max_rel` of its own value (the data does not determine it at all).
+    exact rational. Returns feasible endpoints from a local bisection, or None
+    when no rejecting bracket is found within `max_rel`. None is a search limit,
+    not proof of global unboundedness. With nonlinear/candidate-dependent bands
+    this does not prove feasibility of every interior value.
     """
     v0 = float(atom)
     if v0 == 0 or not np.isfinite(v0):
@@ -683,19 +707,36 @@ def parameter_interval(expr, syms, X: np.ndarray, y: np.ndarray, eps, atom,
         return check(expr.xreplace({atom: sp.Float(v)}), syms, X, y,
                      eps)["certified"]
 
-    if not ok(v0):
+    return _parameter_slice(ok, v0, max_rel=max_rel, iters=iters)
+
+
+def coefficient_interval(expr, syms, X, y, eps, term, value, *,
+                         max_rel=0.5, iters=40):
+    """Conditional slice for ONE linear coefficient position, including ±1.
+
+    Other positions stay fixed even when they contain the same numeric atom.
+    Callable bands are reevaluated for the actual perturbed expression.
+    """
+    def ok(v):
+        alt = expr + (sp.Float(v) - sp.Float(value)) * term
+        return check(alt, syms, X, y, eps)["certified"]
+    return _parameter_slice(ok, float(value), max_rel=max_rel, iters=iters)
+
+
+def _parameter_slice(ok, v0, *, max_rel, iters):
+    if not np.isfinite(v0) or v0 == 0 or not ok(v0):
         return None
     out = []
     for sign in (-1.0, 1.0):
-        step, far = abs(v0) * 1e-9, None
+        step, far, near = abs(v0) * 1e-9, None, v0
         while step <= abs(v0) * max_rel:
             if not ok(v0 + sign * step):
                 far = v0 + sign * step
                 break
+            near = v0 + sign * step
             step *= 2.0
         if far is None:
             return None                     # unbounded within max_rel
-        near = v0 + sign * step / 2.0
         for _ in range(iters):
             mid = 0.5 * (near + far)
             if ok(mid):

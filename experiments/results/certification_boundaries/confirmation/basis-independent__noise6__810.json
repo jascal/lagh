@@ -1,0 +1,134 @@
+{
+  "case": "basis-independent__noise6__810",
+  "family": "basis-independent",
+  "regime": "noise6",
+  "seed": 810,
+  "input_hash": "7672902732c3a1f2c54fcaab3afc99f4d80cde71407ba2bf6a937ed006b7b545",
+  "truth": "13*x_0/10 - 7*x_1/10",
+  "sigma": 1e-06,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.599023285371673,
+        2.933893839825461
+      ],
+      [
+        0.5444533781108067,
+        2.9789593271603785
+      ]
+    ],
+    "law": "1231858491*x_0/947583512 - 470693828*x_1/672419809",
+    "abstain": null,
+    "notes": [
+      "conditional parameter slices at sigma=1e-06, other numeric atoms fixed: -470693828/672419809 in [-0.700000066, -0.6999997755]; 1231858491/947583512 in [1.299999704, 1.300000217]"
+    ],
+    "alpha_log10": -263.2849857488971,
+    "n_hypotheses": 3,
+    "partial": {
+      "status": "certified",
+      "components": {
+        "-470693828/672419809": {
+          "kind": "interval",
+          "lo": -0.7000000660015504,
+          "hi": -0.6999997754595526,
+          "span": 2.9054199779388057e-07,
+          "resolved": true
+        },
+        "1231858491/947583512": {
+          "kind": "interval",
+          "lo": 1.299999704182285,
+          "hi": 1.300000217146565,
+          "span": 5.129642799417411e-07,
+          "resolved": true
+        }
+      },
+      "exact": [],
+      "interval": [
+        "-470693828/672419809",
+        "1231858491/947583512"
+      ],
+      "unconstrained": [],
+      "n_resolved": 2,
+      "note": "CONDITIONAL coordinate slices: other numeric atoms fixed; not marginal coverage or a simultaneous box",
+      "scope": {
+        "kind": "conditional-numeric-atom-slices",
+        "fixed_law": "1231858491*x_0/947583512 - 470693828*x_1/672419809",
+        "joint_box": false,
+        "marginal_coverage": false,
+        "method": "local bisection with checked endpoints",
+        "missing_bound": "no rejecting bracket within search limit, or slice unavailable"
+      }
+    },
+    "constraints": [],
+    "measurement": null,
+    "measurement_omitted": null,
+    "claim": {
+      "kind": "finite-data-consistency",
+      "domain": "checked finite rows under the supplied error model",
+      "exact_form_identified": false,
+      "coefficient_precision": "not implied by pinning; read separately scoped intervals",
+      "significance_scope": "chance agreement under the stated null, not exact-form probability"
+    }
+  },
+  "law": "1231858491*x_0/947583512 - 470693828*x_1/672419809",
+  "tier": 1,
+  "n_candidates": 3,
+  "route": "tier-loop",
+  "discovery_seconds": 0.1767897669924423,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 5.767528700354879e-08,
+    "fresh_truth_band_misses": 2,
+    "extended_relative_error": 5.981745580446255e-08,
+    "extended_truth_band_misses": 1,
+    "symbolically_equal": false,
+    "same_polynomial_support": true,
+    "max_coefficient_error": 7.872657032892738e-08,
+    "generator_mismatch": true,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "-470693828/672419809",
+          "value": -0.6999999430415352,
+          "bounds": [
+            -0.7000000660014984,
+            -0.6999997754595666
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "1231858491/947583512",
+          "value": 1.2999999212734297,
+          "bounds": [
+            1.2999997041823295,
+            1.3000002171465561
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        }
+      ],
+      "simultaneous_corners_feasible": [
+        false,
+        true,
+        true,
+        false
+      ],
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.06950015600887127
+}

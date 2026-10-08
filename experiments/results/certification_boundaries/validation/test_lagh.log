@@ -1,0 +1,14 @@
+.....................                                                    [100%]
+=============================== warnings summary ===============================
+tests/test_lagh.py::test_c4_decay
+tests/test_lagh.py::test_c5_bose_einstein_shape
+tests/test_lagh.py::test_c5_sqrt_rational
+tests/test_lagh.py::test_pure_noise_never_answers
+tests/test_lagh.py::test_noise_never_confidently_wrong
+tests/test_lagh.py::test_adaptive_ranging_contracts_dead_box
+tests/test_lagh.py::test_discover_escalates_to_c6_on_integer_lattice
+  /home/allans/code/lagh/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:190: RuntimeWarning: overflow encountered in square
+    x = um.square(x, out=x)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+21 passed, 7 warnings in 607.49s (0:10:07)

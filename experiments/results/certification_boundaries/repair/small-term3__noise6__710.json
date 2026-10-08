@@ -1,0 +1,14 @@
+{
+  "case": "small-term3__noise6__710",
+  "family": "small-term3",
+  "regime": "noise6",
+  "seed": 710,
+  "input_hash": "d38a1e389d531d41fa0da20659b10bd88185c340141438816d320d976f7052e4",
+  "truth": "x_0**2/100000 + 13*x_0*sqrt(x_1)/(10*x_2)",
+  "sigma": 1e-06,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "timeout",
+  "discovery_seconds": 20.000706335995346
+}

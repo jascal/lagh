@@ -33,7 +33,7 @@ from dataclasses import dataclass, field
 import numpy as np
 import sympy as sp
 
-from .certify import band, determination, free_atoms, parameter_interval
+from .certify import band, coefficient_interval, determination
 from .engine import discover
 from .systems import SystemCertificate, union_alpha_log10
 from .weakform import LIBRARY, PatchEpsilon, build_nd
@@ -158,31 +158,18 @@ def linear_coefficients(expr, feat) -> tuple:
 
 
 def intervals_for(expr, syms, X, y, eps, coeffs, feat) -> dict:
-    """{term: (lo, hi)} -- what the declared band actually determines about each
-    coefficient, measured by bisection on the certification predicate itself
-    (certify.parameter_interval), not by a covariance.
+    """Conditional slices for independent linear coefficient positions.
+
+    Other coefficients are fixed; these are not marginal coverage intervals or
+    a simultaneous box. Unit and repeated coefficients have no exact exemption.
 
     An atom the search cannot bound within `max_rel` is reported as UNDETERMINED
     (None) rather than as its point value; the runner must not quietly turn that
     into a number."""
-    out = {}
-    atoms = free_atoms(expr)
-    for a in atoms:
-        iv = parameter_interval(expr, syms, X, y, eps, a)
-        v = float(a)
-        # attach the atom to the term whose coefficient it is
-        for nm, c in coeffs.items():
-            if nm in out:
-                continue
-            if abs(c - v) <= 1e-12 * max(1.0, abs(v)) or \
-                    abs(abs(c) - abs(v)) <= 1e-12 * max(1.0, abs(v)):
-                s = 1.0 if abs(c - v) <= abs(c + v) else -1.0
-                out[nm] = None if iv is None else (
-                    (iv[0], iv[1]) if s > 0 else (-iv[1], -iv[0]))
-                break
-    for nm, c in coeffs.items():
-        out.setdefault(nm, (c, c))          # integers/±1: exact by construction
-    return out
+    terms = dict(zip(feat, syms))
+    terms["1"] = sp.S.One
+    return {nm: coefficient_interval(expr, syms, X, y, eps, terms[nm], c)
+            for nm, c in coeffs.items()}
 
 
 def truth_check(rows: SystemRows, target: str, truth: dict, *,
@@ -343,6 +330,7 @@ def discover_equation(rows: SystemRows, target: str, *, sigma: float = 0.0,
                  band_sel=m.subset(tr[a:])(None))
     c = r.certificate
     out = {"target": target, "certified": bool(c.certified),
+           "claim": dict(c.claim),
            "abstain": c.abstain, "alpha_log10": c.alpha_log10,
            "n_rows": int(len(y)), "n_cert_rows": int(len(ce)),
            "n_solutions": n_sol, "features": feat, "tier": r.tier,
@@ -371,8 +359,14 @@ def discover_equation(rows: SystemRows, target: str, *, sigma: float = 0.0,
         [(k, None if v is None else float(v[0]),
           None if v is None else float(v[1])) for k, v in ivs.items()],
         status="certified",
-        note="ranges over which THIS certified law still certifies",
+        note="CONDITIONAL coefficient slices: other coefficients fixed; not marginal coverage or a simultaneous box",
         qualifier=qualifier)
+    out["interval_scope"] = "conditional-coefficient-slices"
+    out["partial"]["scope"] = {
+        "kind": "conditional-coefficient-slices", "fixed_law": str(r.expr),
+        "joint_box": False, "marginal_coverage": False,
+        "method": "local bisection with checked endpoints",
+        "missing_bound": "no rejecting bracket within search limit, or slice unavailable"}
     out["median_signal_to_band"] = float(np.median(
         np.abs(y[ce]) / band(eps_ce, r.expr)))
     return out

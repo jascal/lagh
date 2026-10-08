@@ -1,0 +1,117 @@
+{
+  "case": "affine3__floor6__710",
+  "family": "affine3",
+  "regime": "floor6",
+  "seed": 710,
+  "input_hash": "a4d0f0c18ae081c0d375f6ef0f8b7ad8c02cba543199b857ab20cc7920ac6cbb",
+  "truth": "13*x_0/10 - 7*x_1/10 + 3*x_2/10",
+  "sigma": 0.0,
+  "floor_abs": 1e-06,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.5034522882105426,
+        2.910206196496495
+      ],
+      [
+        0.5684257519899136,
+        2.9643607073346794
+      ],
+      [
+        0.5065936641745501,
+        2.8347872035908415
+      ]
+    ],
+    "law": "13*x_0/10 - 7*x_1/10 + 3*x_2/10",
+    "abstain": null,
+    "notes": [],
+    "alpha_log10": -282.0281007105997,
+    "n_hypotheses": 22,
+    "partial": null,
+    "constraints": [],
+    "measurement": null,
+    "measurement_omitted": null
+  },
+  "law": "13*x_0/10 - 7*x_1/10 + 3*x_2/10",
+  "tier": 1,
+  "n_candidates": 22,
+  "route": "tier-loop",
+  "discovery_seconds": 3.563290378981037,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 0.0,
+    "fresh_truth_band_misses": 0,
+    "extended_relative_error": 0.0,
+    "extended_truth_band_misses": 0,
+    "symbolically_equal": true,
+    "same_polynomial_support": true,
+    "max_coefficient_error": 0.0,
+    "generator_mismatch": false,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "3/10",
+          "value": 0.3,
+          "bounds": [
+            0.29999970452006824,
+            0.3000002994593261
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ],
+          "truth_value": 0.3,
+          "contains_truth": true
+        },
+        {
+          "atom": "-7/10",
+          "value": -0.7,
+          "bounds": [
+            -0.7000002534644286,
+            -0.6999997042988771
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ],
+          "truth_value": -0.7,
+          "contains_truth": true
+        },
+        {
+          "atom": "13/10",
+          "value": 1.3,
+          "bounds": [
+            1.299999733680432,
+            1.3000003029569702
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ],
+          "truth_value": 1.3,
+          "contains_truth": true
+        }
+      ],
+      "simultaneous_corners_feasible": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.16614120500162244
+}

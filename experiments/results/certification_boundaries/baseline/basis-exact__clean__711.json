@@ -1,0 +1,78 @@
+{
+  "case": "basis-exact__clean__711",
+  "family": "basis-exact",
+  "regime": "clean",
+  "seed": 711,
+  "input_hash": "39c955557d3f115fe21446be3d35cee44521deba1673b632fd9a45d9b01908e7",
+  "truth": "13*x_0/10 - 7*x_1/10",
+  "sigma": 0.0,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.5131643005150617,
+        2.9984983993016225
+      ],
+      [
+        0.5131643005150617,
+        2.9984983993016225
+      ]
+    ],
+    "law": "3*x_1/5",
+    "abstain": null,
+    "notes": [
+      "domain-restricted certificate: inputs satisfy x_0 - x_1 = 0 (machine-exact); rivals coincide on the constraint variety and the representative is canonicalized modulo it"
+    ],
+    "alpha_log10": -552.988207780153,
+    "n_hypotheses": 6,
+    "partial": null,
+    "constraints": [
+      "x_0 - x_1"
+    ],
+    "measurement": null,
+    "measurement_omitted": null
+  },
+  "law": "3*x_1/5",
+  "tier": 1,
+  "n_candidates": 6,
+  "route": "tier-loop",
+  "discovery_seconds": 0.01648604398360476,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 3.7032356815763633e-16,
+    "fresh_truth_band_misses": 0,
+    "extended_relative_error": 3.7021036082372845e-16,
+    "extended_truth_band_misses": 0,
+    "symbolically_equal": true,
+    "same_polynomial_support": true,
+    "max_coefficient_error": 0.0,
+    "generator_mismatch": false,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "3/5",
+          "value": 0.6,
+          "bounds": [
+            0.5999999997,
+            0.6000000003
+          ],
+          "endpoints_feasible": [
+            false,
+            false
+          ]
+        }
+      ],
+      "simultaneous_corners_feasible": null,
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.01602634901064448
+}

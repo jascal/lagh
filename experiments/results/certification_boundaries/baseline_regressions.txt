@@ -1,0 +1,52 @@
+FF.F                                                                     [100%]
+=================================== FAILURES ===================================
+___________ test_prepass_honors_the_selected_joint_coefficient_gate ____________
+
+    def test_prepass_honors_the_selected_joint_coefficient_gate():
+        assert prepass_result("marginal").certificate.certified
+>       assert not prepass_result("joint_quotient").certificate.certified
+E       AssertionError: assert not True
+E        +  where True = Certificate(certified=True, nmiss=0, nuncov=0, domain_size=48, state_bounds=[(0.5135004932270655, 2.943645412930408), ...pha_log10=-564.9859026735443, n_hypotheses=1, partial=None, constraints=[], measurement=None, measurement_omitted=None).certified
+E        +    where Certificate(certified=True, nmiss=0, nuncov=0, domain_size=48, state_bounds=[(0.5135004932270655, 2.943645412930408), ...pha_log10=-564.9859026735443, n_hypotheses=1, partial=None, constraints=[], measurement=None, measurement_omitted=None) = Result(certificate=Certificate(certified=True, nmiss=0, nuncov=0, domain_size=48, state_bounds=[(0.5135004932270655, 2...omitted=None), expr=314159265359*x_0/100000000000 + 1414213562373*x_1/1000000000000, tier=3, n_candidates=1, rivals=()).certificate
+E        +      where Result(certificate=Certificate(certified=True, nmiss=0, nuncov=0, domain_size=48, state_bounds=[(0.5135004932270655, 2...omitted=None), expr=314159265359*x_0/100000000000 + 1414213562373*x_1/1000000000000, tier=3, n_candidates=1, rivals=()) = prepass_result('joint_quotient')
+
+tests/test_certification_boundaries.py:11: AssertionError
+____ test_parameter_interval_endpoints_are_checked_even_below_initial_step _____
+
+    def test_parameter_interval_endpoints_are_checked_even_below_initial_step():
+        x = sp.Symbol("x_0")
+        X = np.linspace(.5, 3., 80)[:, None]
+        a = sp.Rational(13, 10)
+        y = 1.3 * X[:, 0]
+        eps = epsilon(y)
+        iv = parameter_interval(a*x, [x], X, y, eps, a)
+        assert iv is not None
+        assert iv[0] <= 1.3 <= iv[1]
+        for endpoint in iv:
+>           assert check(sp.Float(endpoint)*x, [x], X, y, eps)["certified"]
+E           assert False
+
+tests/test_certification_boundaries.py:24: AssertionError
+________ test_pde_unit_and_repeated_coefficients_are_not_declared_exact ________
+
+    def test_pde_unit_and_repeated_coefficients_are_not_declared_exact():
+        from lagh.pdesystem import intervals_for
+        syms = list(sp.symbols("x_0:2"))
+        X = np.random.default_rng(714).uniform(.5, 3., (80, 2))
+        eps = np.full(len(X), .01)
+        for coefficient in (1., 1.3):
+            expr = sp.Float(coefficient)*(syms[0]+syms[1])
+            y = coefficient*X.sum(axis=1)
+            ivs = intervals_for(expr, syms, X, y, eps,
+                                {"a": coefficient, "b": coefficient}, ["a", "b"])
+            for name, symbol in zip(("a", "b"), syms):
+                lo, hi = ivs[name]
+>               assert lo < coefficient < hi
+E               assert 1.0 < 1.0
+
+tests/test_certification_boundaries.py:54: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_certification_boundaries.py::test_prepass_honors_the_selected_joint_coefficient_gate
+FAILED tests/test_certification_boundaries.py::test_parameter_interval_endpoints_are_checked_even_below_initial_step
+FAILED tests/test_certification_boundaries.py::test_pde_unit_and_repeated_coefficients_are_not_declared_exact
+3 failed, 1 passed in 0.77s

@@ -6,6 +6,7 @@ alpha is a union bound dominated by the weakest equation, and the truth check
 that must run before any abstain is read as a finding.
 """
 import numpy as np
+import sympy as sp
 
 from lagh.pdesystem import (agreement, assemble, conjoin, discover_equation,
                             truth_check, weakest)
@@ -81,14 +82,39 @@ def test_the_truth_check_reports_vacuity_rather_than_a_green_light():
 
 
 def test_both_equations_certify_the_true_support_over_shared_rows():
+    from lagh.certify import check
+    from lagh.weakform import PatchEpsilon
     r = rows()
     eqs = [discover_equation(r, t_, sigma=0.0, max_tier=3) for t_ in TRUTH]
     for eq in eqs:
         assert eq["certified"], (eq["target"], eq.get("abstain"))
         assert set(eq["coefficients"]) == set(TRUTH[eq["target"]])
+        assert eq["claim"]["kind"] == "finite-data-consistency"
+        assert eq["partial"]["scope"]["marginal_coverage"] is False
+        feat = eq["features"]
+        syms = list(sp.symbols(f"x_0:{len(feat)}"))
+        X = r.A[:, [r.names.index(k) for k in feat]]
+        y = r.A[:, r.names.index(eq["target"])]
+        ce = np.flatnonzero(r.sol == np.unique(r.sol)[-1])
+        eps = PatchEpsilon(r.names, eq["target"], y, X, r.det, r.gram,
+            sigma=0., floor_abs=0., coeff_max=2., feat_names=feat).subset(ce)
+        expr = sp.sympify(eq["expr"])
+        truth_expr = sum(sp.Float(v)*syms[feat.index(k)]
+                         for k, v in TRUTH[eq["target"]].items())
+        assert check(truth_expr, syms, X[ce], y[ce], eps)["certified"]
         for k, v in TRUTH[eq["target"]].items():
             lo, hi = eq["intervals"][k]
-            assert lo <= v <= hi
+            c = eq["coefficients"][k]
+            assert lo <= c <= hi
+            # BND1: other fitted coefficients are held fixed. Their joint truth
+            # may fit while a single true coordinate lies outside this slice.
+            term = syms[feat.index(k)]
+            for endpoint in (lo, hi):
+                alt = expr+(sp.Float(endpoint)-sp.Float(c))*term
+                assert check(alt, syms, X[ce], y[ce], eps)["certified"]
+            if not lo <= v <= hi:
+                alt = expr+(sp.Float(v)-sp.Float(c))*term
+                assert not check(alt, syms, X[ce], y[ce], eps)["certified"]
 
 
 def test_a_single_solution_refuses():

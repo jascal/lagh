@@ -1,0 +1,46 @@
+{
+  "case": "basis-near__floor3__711",
+  "family": "basis-near",
+  "regime": "floor3",
+  "seed": 711,
+  "input_hash": "54850a949cdb860818c2908de1cca3e768fb75693a047f062342f9fcb9d529c2",
+  "truth": "13*x_0/10 - 7*x_1/10",
+  "sigma": 0.0,
+  "floor_abs": 0.001,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "refused",
+  "certificate": {
+    "certified": false,
+    "nmiss": 48,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.5131643005150617,
+        2.9984983993016225
+      ],
+      [
+        0.5131647899559838,
+        2.998497873846895
+      ]
+    ],
+    "law": "",
+    "abstain": "structural",
+    "notes": [
+      "no law certifies through tier 3"
+    ],
+    "alpha_log10": null,
+    "n_hypotheses": null,
+    "partial": null,
+    "constraints": [],
+    "measurement": null,
+    "measurement_omitted": null,
+    "claim": {}
+  },
+  "law": "None",
+  "tier": 3,
+  "n_candidates": 0,
+  "route": "tier-loop",
+  "discovery_seconds": 0.001690101984422654
+}

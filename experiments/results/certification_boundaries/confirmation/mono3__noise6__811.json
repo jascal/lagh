@@ -1,0 +1,104 @@
+{
+  "case": "mono3__noise6__811",
+  "family": "mono3",
+  "regime": "noise6",
+  "seed": 811,
+  "input_hash": "066d2c4fc0f46b4de95485b496389f3489e152c4896e97f522aae613d42e59ef",
+  "truth": "13*x_0*sqrt(x_1)/(10*x_2)",
+  "sigma": 1e-06,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.6013575443915395,
+        2.9101614485826626
+      ],
+      [
+        0.5589902960915606,
+        2.9040912992932033
+      ],
+      [
+        0.512646732312033,
+        2.9160599951754675
+      ]
+    ],
+    "law": "1.29999982310256*x_0*sqrt(x_1)/x_2",
+    "abstain": null,
+    "notes": [
+      "CAP-S cheap pre-pass"
+    ],
+    "alpha_log10": -263.3820026815866,
+    "n_hypotheses": 59,
+    "partial": null,
+    "constraints": [],
+    "measurement": null,
+    "measurement_omitted": null,
+    "claim": {
+      "kind": "finite-data-consistency",
+      "domain": "checked finite rows under the supplied error model",
+      "exact_form_identified": false,
+      "coefficient_precision": "not implied by pinning; read separately scoped intervals",
+      "significance_scope": "chance agreement under the stated null, not exact-form probability"
+    }
+  },
+  "law": "1.29999982310256*x_0*sqrt(x_1)/x_2",
+  "tier": 3,
+  "n_candidates": 59,
+  "route": "prepass",
+  "discovery_seconds": 0.10352006097673438,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 1.360749538487121e-07,
+    "fresh_truth_band_misses": 0,
+    "extended_relative_error": 1.3607495394428736e-07,
+    "extended_truth_band_misses": 0,
+    "symbolically_equal": false,
+    "generator_mismatch": true,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "1/2",
+          "value": 0.5,
+          "bounds": [
+            0.4999976780761718,
+            0.5000029909960937
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "1.29999982310256",
+          "value": 1.299999823102561,
+          "bounds": [
+            1.299998065031804,
+            1.3000030271654062
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ],
+          "truth_value": 1.3,
+          "contains_truth": true
+        }
+      ],
+      "simultaneous_corners_feasible": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.09603214700473472
+}

@@ -1,0 +1,46 @@
+{
+  "case": "basis-independent__noise3__811",
+  "family": "basis-independent",
+  "regime": "noise3",
+  "seed": 811,
+  "input_hash": "7f1ed173ab3733b25fb968807b773c6161038d5b2f919eb7d5d4056c09dd6360",
+  "truth": "13*x_0/10 - 7*x_1/10",
+  "sigma": 0.001,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "refused",
+  "certificate": {
+    "certified": false,
+    "nmiss": 48,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.5458274293272174,
+        2.975690806195238
+      ],
+      [
+        0.5144117335087873,
+        2.9626150740366457
+      ]
+    ],
+    "law": "",
+    "abstain": "structural",
+    "notes": [
+      "no law certifies through tier 3"
+    ],
+    "alpha_log10": null,
+    "n_hypotheses": null,
+    "partial": null,
+    "constraints": [],
+    "measurement": null,
+    "measurement_omitted": null,
+    "claim": {}
+  },
+  "law": "None",
+  "tier": 3,
+  "n_candidates": 0,
+  "route": "tier-loop",
+  "discovery_seconds": 0.001712724013486877
+}

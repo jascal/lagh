@@ -1,0 +1,14 @@
+{
+  "case": "power__noise6__711",
+  "family": "power",
+  "regime": "noise6",
+  "seed": 711,
+  "input_hash": "651b6d87a26db4d73074d83b91d607279d72f1514c53b7a1639644de51559ed2",
+  "truth": "13*x_0**(3/2)/10",
+  "sigma": 1e-06,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "timeout",
+  "discovery_seconds": 20.01566216701758
+}

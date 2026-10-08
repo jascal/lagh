@@ -1,10 +1,11 @@
 """Two-track benchmark submission (docs/DIRECTION_OUTPUT_POLICY.md).
 
-Per problem: submit the certified exact law when one exists (track A, tag `proved`,
-the only track the zero-wrong claim covers); otherwise the best available LABELED
+Per problem: submit a law that passed the finite-data checks when one exists
+(track A, tag `proved`, with its explicit `claim` scope); otherwise the best available LABELED
 conjecture (track B, tag `empirical`, never upgraded); otherwise an explicit abstain.
 Accuracy-scored benchmarks see both tracks; the certified partition is reported
-separately and cannot be redrawn after scoring.
+separately and cannot be redrawn after scoring. Certification does not establish
+exact recovery of the generating form or coefficients.
 """
 
 from __future__ import annotations
@@ -23,8 +24,9 @@ def submission(X, y, *, sigma: float = 0.0, seed: int = 0) -> dict:
         c = r.result.certificate
         return {"track": "certified", "expr": str(r.result.expr), "tag": "proved",
                 "alpha_log10": c.alpha_log10,
-                "detail": "machine-checked exact certificate over the dataset's "
-                          "finite domain"
+                "claim": dict(c.claim),
+                "detail": "machine-checked consistency over the dataset's "
+                          "finite domain under the supplied error model"
                           + (f"; chance-fit significance alpha <= 1e{c.alpha_log10:.0f}"
                              if c.alpha_log10 is not None else "")}
     # Track B, in the pre-registered order: fit scout, then the engine's best

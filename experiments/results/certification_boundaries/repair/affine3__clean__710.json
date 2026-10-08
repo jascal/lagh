@@ -1,0 +1,155 @@
+{
+  "case": "affine3__clean__710",
+  "family": "affine3",
+  "regime": "clean",
+  "seed": 710,
+  "input_hash": "ad13314f883b866a0c219ae5c5d156b3814e3bc91e46d8d66b355062a679cbab",
+  "truth": "13*x_0/10 - 7*x_1/10 + 3*x_2/10",
+  "sigma": 0.0,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.5034522882105426,
+        2.910206196496495
+      ],
+      [
+        0.5684257519899136,
+        2.9643607073346794
+      ],
+      [
+        0.5065936641745501,
+        2.8347872035908415
+      ]
+    ],
+    "law": "13*x_0*sin(x_1)**2/40 + 13*x_0*sin(x_2)**2/40 + 13*x_0*cos(x_1)**2/40 + 13*x_0*cos(x_2)**2/40 + 13*x_0/20 - 7*x_1*sin(x_0)**2/40 - 7*x_1*sin(x_2)**2/40 - 7*x_1*cos(x_0)**2/40 - 7*x_1*cos(x_2)**2/40 - 7*x_1/20 + x_2*sin(x_0)**2/10 + x_2*cos(x_0)**2/10 + x_2/5",
+    "abstain": null,
+    "notes": [],
+    "alpha_log10": -496.656083267076,
+    "n_hypotheses": 23,
+    "partial": null,
+    "constraints": [],
+    "measurement": null,
+    "measurement_omitted": null,
+    "claim": {
+      "kind": "gate-qualified-fit",
+      "domain": "checked finite rows under the supplied error model",
+      "exact_form_identified": false,
+      "coefficient_precision": "not implied by pinning; read separately scoped intervals",
+      "significance_scope": "chance agreement under the stated null, not exact-form probability"
+    }
+  },
+  "law": "13*x_0*sin(x_1)**2/40 + 13*x_0*sin(x_2)**2/40 + 13*x_0*cos(x_1)**2/40 + 13*x_0*cos(x_2)**2/40 + 13*x_0/20 - 7*x_1*sin(x_0)**2/40 - 7*x_1*sin(x_2)**2/40 - 7*x_1*cos(x_0)**2/40 - 7*x_1*cos(x_2)**2/40 - 7*x_1/20 + x_2*sin(x_0)**2/10 + x_2*cos(x_0)**2/10 + x_2/5",
+  "tier": 1,
+  "n_candidates": 23,
+  "route": "tier-loop",
+  "discovery_seconds": 2.3550744979875162,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 3.3908434173614163e-16,
+    "fresh_truth_band_misses": 0,
+    "extended_relative_error": 3.1892052977522574e-16,
+    "extended_truth_band_misses": 0,
+    "symbolically_equal": false,
+    "generator_mismatch": false,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "1/10",
+          "value": 0.1,
+          "bounds": [
+            0.09999999999959076,
+            0.10000000000040944
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "-7/40",
+          "value": -0.175,
+          "bounds": [
+            -0.17500000000020038,
+            -0.1749999999997996
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "1/5",
+          "value": 0.2,
+          "bounds": [
+            0.19999999999959067,
+            0.20000000000040935
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "13/40",
+          "value": 0.325,
+          "bounds": [
+            0.32499999999973656,
+            0.32500000000026347
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "-7/20",
+          "value": -0.35,
+          "bounds": [
+            -0.35000000000040143,
+            -0.3499999999995985
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "13/20",
+          "value": 0.65,
+          "bounds": [
+            0.6499999999994726,
+            0.6500000000005275
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        },
+        {
+          "atom": "2",
+          "value": 2.0,
+          "bounds": [
+            1.9999999999999962,
+            2.0000000000000036
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        }
+      ],
+      "simultaneous_corners_feasible": null,
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.8648935990058817
+}

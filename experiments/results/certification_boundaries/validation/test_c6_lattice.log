@@ -1,0 +1,11 @@
+......                                                                   [100%]
+=============================== warnings summary ===============================
+tests/test_c6_lattice.py::test_perturbed_integer_data_abstains_instead_of_certifying_the_rounding
+tests/test_c6_lattice.py::test_c6_recheck_refuses_a_rounded_law_that_fails_the_original_band
+tests/test_c6_lattice.py::test_exact_integer_quasipolynomial_still_certifies_on_the_original_rows
+tests/test_c6_lattice.py::test_passive_discovery_passes_a_quasipoly_through_the_full_data_gate
+  /home/allans/code/lagh/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:190: RuntimeWarning: overflow encountered in square
+    x = um.square(x, out=x)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+6 passed, 4 warnings in 96.92s (0:01:36)

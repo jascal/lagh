@@ -1,0 +1,14 @@
+{
+  "case": "mono3__noise3__710",
+  "family": "mono3",
+  "regime": "noise3",
+  "seed": 710,
+  "input_hash": "1247c7d43f8475867d15cb1b156ce6e68c5f74460c7f031f61ebeb0fd364b498",
+  "truth": "13*x_0*sqrt(x_1)/(10*x_2)",
+  "sigma": 0.001,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "timeout",
+  "discovery_seconds": 20.00180257600732
+}

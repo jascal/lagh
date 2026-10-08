@@ -1,0 +1,964 @@
+{
+  "baseline": {
+    "audit": {
+      "checks": {
+        "input_hashes": 120,
+        "certified_row_rechecks": 40,
+        "interval_endpoint_rechecks": 170
+      },
+      "issues": [
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: 1/10=0.09999999995"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: 1/10=0.10000000005000001"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: -7/40=-0.1750000000875"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: -7/40=-0.17499999991249998"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: 1/5=0.1999999999"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: 1/5=0.20000000010000002"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: 13/40=0.3249999998375"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: 13/40=0.3250000001625"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: -7/20=-0.350000000175"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: -7/20=-0.34999999982499996"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: 13/20=0.649999999675"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: 13/20=0.650000000325"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: 2=1.999999999"
+        ],
+        [
+          "affine3__clean__710",
+          "infeasible slice endpoint: 2=2.000000001"
+        ],
+        [
+          "mono3__clean__710",
+          "infeasible slice endpoint: 1/2=0.49999999975"
+        ],
+        [
+          "mono3__clean__710",
+          "infeasible slice endpoint: 1/2=0.50000000025"
+        ],
+        [
+          "mono3__clean__710",
+          "infeasible slice endpoint: 13/10=1.29999999935"
+        ],
+        [
+          "mono3__clean__710",
+          "infeasible slice endpoint: 13/10=1.30000000065"
+        ],
+        [
+          "basis-near__clean__710",
+          "infeasible slice endpoint: -699999999771/1000000000000=-0.700000000121"
+        ],
+        [
+          "basis-near__clean__710",
+          "infeasible slice endpoint: -699999999771/1000000000000=-0.699999999421"
+        ],
+        [
+          "basis-near__clean__710",
+          "infeasible slice endpoint: 1299999999771/1000000000000=1.2999999991209998"
+        ],
+        [
+          "basis-near__clean__710",
+          "infeasible slice endpoint: 1299999999771/1000000000000=1.300000000421"
+        ],
+        [
+          "basis-near__clean__711",
+          "infeasible slice endpoint: -21875000001/31250000000=-0.700000000382"
+        ],
+        [
+          "basis-near__clean__711",
+          "infeasible slice endpoint: -21875000001/31250000000=-0.699999999682"
+        ],
+        [
+          "basis-near__clean__711",
+          "infeasible slice endpoint: 40625000001/31250000000=1.299999999382"
+        ],
+        [
+          "basis-near__clean__711",
+          "infeasible slice endpoint: 40625000001/31250000000=1.300000000682"
+        ],
+        [
+          "basis-exact__clean__710",
+          "infeasible slice endpoint: 3/5=0.5999999997"
+        ],
+        [
+          "basis-exact__clean__710",
+          "infeasible slice endpoint: 3/5=0.6000000003"
+        ],
+        [
+          "basis-exact__clean__711",
+          "infeasible slice endpoint: 3/5=0.5999999997"
+        ],
+        [
+          "basis-exact__clean__711",
+          "infeasible slice endpoint: 3/5=0.6000000003"
+        ],
+        [
+          "basis-independent__clean__710",
+          "infeasible slice endpoint: -7/10=-0.70000000035"
+        ],
+        [
+          "basis-independent__clean__710",
+          "infeasible slice endpoint: -7/10=-0.6999999996499999"
+        ],
+        [
+          "basis-independent__clean__710",
+          "infeasible slice endpoint: 13/10=1.29999999935"
+        ],
+        [
+          "basis-independent__clean__710",
+          "infeasible slice endpoint: 13/10=1.30000000065"
+        ],
+        [
+          "mono3__clean__711",
+          "infeasible slice endpoint: 1/2=0.49999999975"
+        ],
+        [
+          "mono3__clean__711",
+          "infeasible slice endpoint: 1/2=0.50000000025"
+        ],
+        [
+          "mono3__clean__711",
+          "infeasible slice endpoint: 13/10=1.29999999935"
+        ],
+        [
+          "mono3__clean__711",
+          "infeasible slice endpoint: 13/10=1.30000000065"
+        ],
+        [
+          "sphere3__clean__710",
+          "infeasible slice endpoint: 3/10=0.29999999985"
+        ],
+        [
+          "sphere3__clean__710",
+          "infeasible slice endpoint: 3/10=0.30000000015"
+        ],
+        [
+          "sphere3__clean__710",
+          "infeasible slice endpoint: -7/10=-0.70000000035"
+        ],
+        [
+          "sphere3__clean__710",
+          "infeasible slice endpoint: -7/10=-0.6999999996499999"
+        ],
+        [
+          "sphere3__clean__710",
+          "infeasible slice endpoint: 13/10=1.29999999935"
+        ],
+        [
+          "sphere3__clean__710",
+          "infeasible slice endpoint: 13/10=1.30000000065"
+        ],
+        [
+          "basis-independent__clean__711",
+          "infeasible slice endpoint: -7/10=-0.70000000035"
+        ],
+        [
+          "basis-independent__clean__711",
+          "infeasible slice endpoint: -7/10=-0.6999999996499999"
+        ],
+        [
+          "basis-independent__clean__711",
+          "infeasible slice endpoint: 13/10=1.29999999935"
+        ],
+        [
+          "basis-independent__clean__711",
+          "infeasible slice endpoint: 13/10=1.30000000065"
+        ],
+        [
+          "affine__clean__711",
+          "infeasible slice endpoint: 7/10=0.6999999996499999"
+        ],
+        [
+          "affine__clean__711",
+          "infeasible slice endpoint: 7/10=0.70000000035"
+        ],
+        [
+          "affine__clean__711",
+          "infeasible slice endpoint: 13/10=1.29999999935"
+        ],
+        [
+          "affine__clean__711",
+          "infeasible slice endpoint: 13/10=1.30000000065"
+        ],
+        [
+          "affine__clean__710",
+          "infeasible slice endpoint: 7/10=0.6999999996499999"
+        ],
+        [
+          "affine__clean__710",
+          "infeasible slice endpoint: 7/10=0.70000000035"
+        ],
+        [
+          "affine__clean__710",
+          "infeasible slice endpoint: 13/10=1.29999999935"
+        ],
+        [
+          "affine__clean__710",
+          "infeasible slice endpoint: 13/10=1.30000000065"
+        ],
+        [
+          "power__clean__710",
+          "infeasible slice endpoint: 13/10=1.29999999935"
+        ],
+        [
+          "power__clean__710",
+          "infeasible slice endpoint: 13/10=1.30000000065"
+        ],
+        [
+          "power__clean__710",
+          "infeasible slice endpoint: 3/2=1.49999999925"
+        ],
+        [
+          "power__clean__710",
+          "infeasible slice endpoint: 3/2=1.50000000075"
+        ],
+        [
+          "affine3__clean__711",
+          "infeasible slice endpoint: -7/30=-0.23333333345"
+        ],
+        [
+          "affine3__clean__711",
+          "infeasible slice endpoint: -7/30=-0.23333333321666666"
+        ],
+        [
+          "affine3__clean__711",
+          "infeasible slice endpoint: 3/10=0.29999999985"
+        ],
+        [
+          "affine3__clean__711",
+          "infeasible slice endpoint: 3/10=0.30000000015"
+        ],
+        [
+          "affine3__clean__711",
+          "infeasible slice endpoint: 13/40=0.3249999998375"
+        ],
+        [
+          "affine3__clean__711",
+          "infeasible slice endpoint: 13/40=0.3250000001625"
+        ],
+        [
+          "affine3__clean__711",
+          "infeasible slice endpoint: -7/15=-0.4666666669"
+        ],
+        [
+          "affine3__clean__711",
+          "infeasible slice endpoint: -7/15=-0.4666666664333333"
+        ],
+        [
+          "affine3__clean__711",
+          "infeasible slice endpoint: 13/20=0.649999999675"
+        ],
+        [
+          "affine3__clean__711",
+          "infeasible slice endpoint: 13/20=0.650000000325"
+        ],
+        [
+          "affine3__clean__711",
+          "infeasible slice endpoint: 2=1.999999999"
+        ],
+        [
+          "affine3__clean__711",
+          "infeasible slice endpoint: 2=2.000000001"
+        ],
+        [
+          "power__clean__711",
+          "infeasible slice endpoint: 13/10=1.29999999935"
+        ],
+        [
+          "power__clean__711",
+          "infeasible slice endpoint: 13/10=1.30000000065"
+        ],
+        [
+          "power__clean__711",
+          "infeasible slice endpoint: 3/2=1.49999999925"
+        ],
+        [
+          "power__clean__711",
+          "infeasible slice endpoint: 3/2=1.50000000075"
+        ],
+        [
+          "sphere3__clean__711",
+          "infeasible slice endpoint: 3/10=0.29999999985"
+        ],
+        [
+          "sphere3__clean__711",
+          "infeasible slice endpoint: 3/10=0.30000000015"
+        ],
+        [
+          "sphere3__clean__711",
+          "infeasible slice endpoint: -7/10=-0.70000000035"
+        ],
+        [
+          "sphere3__clean__711",
+          "infeasible slice endpoint: -7/10=-0.6999999996499999"
+        ],
+        [
+          "sphere3__clean__711",
+          "infeasible slice endpoint: 13/10=1.29999999935"
+        ],
+        [
+          "sphere3__clean__711",
+          "infeasible slice endpoint: 13/10=1.30000000065"
+        ]
+      ]
+    },
+    "measurements": {
+      "clean": {
+        "n": 24,
+        "status_counts": {
+          "certified": 18,
+          "timeout": 4,
+          "refused": 2
+        },
+        "refusal_rate_all_cases": 0.08333333333333333,
+        "timeout_rate_all_cases": 0.16666666666666666,
+        "certified_routes": {
+          "tier-loop": 16,
+          "prepass": 2
+        },
+        "generator_mismatches": [],
+        "not_symbolically_equal": [
+          "affine3__clean__710",
+          "basis-near__clean__710",
+          "basis-near__clean__711",
+          "affine3__clean__711"
+        ],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [],
+        "numeric_atom_slices": 45,
+        "bounded_slices": 45,
+        "median_slice_width": 7.000000579182597e-10,
+        "single_coordinate_truth_matches": 26,
+        "matched_truth_inside_slice": 26,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [
+          "mono3__clean__710",
+          "basis-near__clean__710",
+          "basis-near__clean__711",
+          "small-term__clean__710",
+          "small-term__clean__711",
+          "basis-independent__clean__710",
+          "mono3__clean__711",
+          "sphere3__clean__710",
+          "basis-independent__clean__711",
+          "affine__clean__711",
+          "affine__clean__710",
+          "power__clean__710",
+          "power__clean__711",
+          "sphere3__clean__711"
+        ],
+        "median_discovery_seconds_including_timeouts": 3.144649770008982,
+        "median_scoring_seconds": 0.061570664518512785
+      },
+      "noise6": {
+        "n": 24,
+        "status_counts": {
+          "refused": 11,
+          "certified": 5,
+          "timeout": 8
+        },
+        "refusal_rate_all_cases": 0.4583333333333333,
+        "timeout_rate_all_cases": 0.3333333333333333,
+        "certified_routes": {
+          "tier-loop": 3,
+          "prepass": 2
+        },
+        "generator_mismatches": [
+          "basis-exact__noise6__710",
+          "mono3__noise6__711",
+          "basis-near__noise6__711",
+          "basis-exact__noise6__711",
+          "mono3__noise6__710"
+        ],
+        "not_symbolically_equal": [
+          "basis-exact__noise6__710",
+          "mono3__noise6__711",
+          "basis-near__noise6__711",
+          "basis-exact__noise6__711",
+          "mono3__noise6__710"
+        ],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [
+          "mono3__noise6__711",
+          "mono3__noise6__710"
+        ],
+        "numeric_atom_slices": 7,
+        "bounded_slices": 7,
+        "median_slice_width": 4.062649978653354e-06,
+        "single_coordinate_truth_matches": 2,
+        "matched_truth_inside_slice": 2,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [
+          "mono3__noise6__711",
+          "mono3__noise6__710"
+        ],
+        "median_discovery_seconds_including_timeouts": 6.555835565988673,
+        "median_scoring_seconds": 0.07163123498321511
+      },
+      "noise3": {
+        "n": 24,
+        "status_counts": {
+          "refused": 14,
+          "timeout": 6,
+          "certified": 4
+        },
+        "refusal_rate_all_cases": 0.5833333333333334,
+        "timeout_rate_all_cases": 0.25,
+        "certified_routes": {
+          "tier-loop": 4
+        },
+        "generator_mismatches": [
+          "power__noise3__710",
+          "small-term__noise3__711",
+          "power__noise3__711",
+          "small-term__noise3__710"
+        ],
+        "not_symbolically_equal": [
+          "power__noise3__710",
+          "small-term__noise3__711",
+          "power__noise3__711",
+          "small-term__noise3__710"
+        ],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [
+          "power__noise3__710",
+          "small-term__noise3__711",
+          "power__noise3__711",
+          "small-term__noise3__710"
+        ],
+        "numeric_atom_slices": 6,
+        "bounded_slices": 6,
+        "median_slice_width": 0.004096926750000285,
+        "single_coordinate_truth_matches": 2,
+        "matched_truth_inside_slice": 2,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [
+          "power__noise3__710",
+          "power__noise3__711"
+        ],
+        "median_discovery_seconds_including_timeouts": 3.8358839430002263,
+        "median_scoring_seconds": 0.0629536544875009
+      },
+      "floor6": {
+        "n": 24,
+        "status_counts": {
+          "certified": 13,
+          "refused": 9,
+          "timeout": 2
+        },
+        "refusal_rate_all_cases": 0.375,
+        "timeout_rate_all_cases": 0.08333333333333333,
+        "certified_routes": {
+          "tier-loop": 13
+        },
+        "generator_mismatches": [
+          "basis-near__floor6__711"
+        ],
+        "not_symbolically_equal": [
+          "basis-near__floor6__711"
+        ],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [
+          "basis-near__floor6__711"
+        ],
+        "numeric_atom_slices": 27,
+        "bounded_slices": 27,
+        "median_slice_width": 5.341034179373594e-07,
+        "single_coordinate_truth_matches": 24,
+        "matched_truth_inside_slice": 24,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [
+          "mono3__floor6__711",
+          "affine3__floor6__710",
+          "sphere3__floor6__711",
+          "power__floor6__711",
+          "affine3__floor6__711",
+          "mono3__floor6__710",
+          "sphere3__floor6__710",
+          "basis-independent__floor6__711",
+          "basis-independent__floor6__710",
+          "power__floor6__710"
+        ],
+        "median_discovery_seconds_including_timeouts": 1.371661221011891,
+        "median_scoring_seconds": 0.07910975499544293
+      },
+      "floor3": {
+        "n": 24,
+        "status_counts": {
+          "refused": 18,
+          "timeout": 6
+        },
+        "refusal_rate_all_cases": 0.75,
+        "timeout_rate_all_cases": 0.25,
+        "certified_routes": {},
+        "generator_mismatches": [],
+        "not_symbolically_equal": [],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [],
+        "numeric_atom_slices": 0,
+        "bounded_slices": 0,
+        "median_slice_width": null,
+        "single_coordinate_truth_matches": 0,
+        "matched_truth_inside_slice": 0,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [],
+        "median_discovery_seconds_including_timeouts": 3.8630388014862547,
+        "median_scoring_seconds": null
+      }
+    }
+  },
+  "repair": {
+    "audit": {
+      "checks": {
+        "input_hashes": 120,
+        "certified_row_rechecks": 40,
+        "interval_endpoint_rechecks": 170
+      },
+      "issues": []
+    },
+    "measurements": {
+      "clean": {
+        "n": 24,
+        "status_counts": {
+          "certified": 18,
+          "timeout": 4,
+          "refused": 2
+        },
+        "refusal_rate_all_cases": 0.08333333333333333,
+        "timeout_rate_all_cases": 0.16666666666666666,
+        "certified_routes": {
+          "tier-loop": 16,
+          "prepass": 2
+        },
+        "generator_mismatches": [],
+        "not_symbolically_equal": [
+          "affine3__clean__710",
+          "basis-near__clean__710",
+          "basis-near__clean__711",
+          "affine3__clean__711"
+        ],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [],
+        "numeric_atom_slices": 45,
+        "bounded_slices": 45,
+        "median_slice_width": 9.319212068703564e-13,
+        "single_coordinate_truth_matches": 26,
+        "matched_truth_inside_slice": 26,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [
+          "mono3__clean__710",
+          "basis-near__clean__710",
+          "basis-near__clean__711",
+          "small-term__clean__710",
+          "small-term__clean__711",
+          "basis-independent__clean__710",
+          "mono3__clean__711",
+          "sphere3__clean__710",
+          "basis-independent__clean__711",
+          "affine__clean__711",
+          "affine__clean__710",
+          "power__clean__710",
+          "power__clean__711",
+          "sphere3__clean__711"
+        ],
+        "median_discovery_seconds_including_timeouts": 3.161307114001829,
+        "median_scoring_seconds": 0.06065946900343988
+      },
+      "noise6": {
+        "n": 24,
+        "status_counts": {
+          "refused": 11,
+          "certified": 5,
+          "timeout": 8
+        },
+        "refusal_rate_all_cases": 0.4583333333333333,
+        "timeout_rate_all_cases": 0.3333333333333333,
+        "certified_routes": {
+          "tier-loop": 3,
+          "prepass": 2
+        },
+        "generator_mismatches": [
+          "basis-exact__noise6__710",
+          "mono3__noise6__711",
+          "basis-near__noise6__711",
+          "basis-exact__noise6__711",
+          "mono3__noise6__710"
+        ],
+        "not_symbolically_equal": [
+          "basis-exact__noise6__710",
+          "mono3__noise6__711",
+          "basis-near__noise6__711",
+          "basis-exact__noise6__711",
+          "mono3__noise6__710"
+        ],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [],
+        "numeric_atom_slices": 7,
+        "bounded_slices": 7,
+        "median_slice_width": 4.062649978653354e-06,
+        "single_coordinate_truth_matches": 2,
+        "matched_truth_inside_slice": 2,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [
+          "mono3__noise6__711",
+          "mono3__noise6__710"
+        ],
+        "median_discovery_seconds_including_timeouts": 6.706820134000736,
+        "median_scoring_seconds": 0.023505577992182225
+      },
+      "noise3": {
+        "n": 24,
+        "status_counts": {
+          "refused": 14,
+          "timeout": 6,
+          "certified": 4
+        },
+        "refusal_rate_all_cases": 0.5833333333333334,
+        "timeout_rate_all_cases": 0.25,
+        "certified_routes": {
+          "tier-loop": 4
+        },
+        "generator_mismatches": [
+          "power__noise3__710",
+          "small-term__noise3__711",
+          "power__noise3__711",
+          "small-term__noise3__710"
+        ],
+        "not_symbolically_equal": [
+          "power__noise3__710",
+          "small-term__noise3__711",
+          "power__noise3__711",
+          "small-term__noise3__710"
+        ],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [],
+        "numeric_atom_slices": 6,
+        "bounded_slices": 6,
+        "median_slice_width": 0.004096926750000285,
+        "single_coordinate_truth_matches": 2,
+        "matched_truth_inside_slice": 2,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [
+          "power__noise3__710",
+          "power__noise3__711"
+        ],
+        "median_discovery_seconds_including_timeouts": 3.9003436640050495,
+        "median_scoring_seconds": 0.05908091500168666
+      },
+      "floor6": {
+        "n": 24,
+        "status_counts": {
+          "certified": 13,
+          "refused": 9,
+          "timeout": 2
+        },
+        "refusal_rate_all_cases": 0.375,
+        "timeout_rate_all_cases": 0.08333333333333333,
+        "certified_routes": {
+          "tier-loop": 13
+        },
+        "generator_mismatches": [
+          "basis-near__floor6__711"
+        ],
+        "not_symbolically_equal": [
+          "basis-near__floor6__711"
+        ],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [],
+        "numeric_atom_slices": 27,
+        "bounded_slices": 27,
+        "median_slice_width": 5.341034179373594e-07,
+        "single_coordinate_truth_matches": 24,
+        "matched_truth_inside_slice": 24,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [
+          "mono3__floor6__711",
+          "affine3__floor6__710",
+          "sphere3__floor6__711",
+          "power__floor6__711",
+          "affine3__floor6__711",
+          "mono3__floor6__710",
+          "sphere3__floor6__710",
+          "basis-independent__floor6__711",
+          "basis-independent__floor6__710",
+          "power__floor6__710"
+        ],
+        "median_discovery_seconds_including_timeouts": 1.377543084017816,
+        "median_scoring_seconds": 0.08278036300907843
+      },
+      "floor3": {
+        "n": 24,
+        "status_counts": {
+          "refused": 18,
+          "timeout": 6
+        },
+        "refusal_rate_all_cases": 0.75,
+        "timeout_rate_all_cases": 0.25,
+        "certified_routes": {},
+        "generator_mismatches": [],
+        "not_symbolically_equal": [],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [],
+        "numeric_atom_slices": 0,
+        "bounded_slices": 0,
+        "median_slice_width": null,
+        "single_coordinate_truth_matches": 0,
+        "matched_truth_inside_slice": 0,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [],
+        "median_discovery_seconds_including_timeouts": 3.8763558575010393,
+        "median_scoring_seconds": null
+      }
+    }
+  },
+  "confirmation": {
+    "audit": {
+      "checks": {
+        "input_hashes": 120,
+        "certified_row_rechecks": 44,
+        "interval_endpoint_rechecks": 194
+      },
+      "issues": []
+    },
+    "measurements": {
+      "clean": {
+        "n": 24,
+        "status_counts": {
+          "refused": 2,
+          "certified": 20,
+          "timeout": 2
+        },
+        "refusal_rate_all_cases": 0.08333333333333333,
+        "timeout_rate_all_cases": 0.08333333333333333,
+        "certified_routes": {
+          "tier-loop": 18,
+          "prepass": 2
+        },
+        "generator_mismatches": [],
+        "not_symbolically_equal": [
+          "basis-near__clean__811",
+          "affine3__clean__810",
+          "basis-near__clean__810",
+          "affine3__clean__811"
+        ],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [],
+        "numeric_atom_slices": 53,
+        "bounded_slices": 53,
+        "median_slice_width": 9.381384558082573e-13,
+        "single_coordinate_truth_matches": 34,
+        "matched_truth_inside_slice": 34,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [
+          "basis-near__clean__811",
+          "sphere3__clean__811",
+          "affine__clean__811",
+          "power__clean__810",
+          "small-term3__clean__811",
+          "basis-independent__clean__811",
+          "sphere3__clean__810",
+          "basis-near__clean__810",
+          "mono3__clean__810",
+          "mono3__clean__811",
+          "small-term3__clean__810",
+          "small-term__clean__810",
+          "affine__clean__810",
+          "basis-independent__clean__810",
+          "power__clean__811",
+          "small-term__clean__811"
+        ],
+        "median_discovery_seconds_including_timeouts": 4.744188415003009,
+        "median_scoring_seconds": 0.06883538201509509
+      },
+      "noise6": {
+        "n": 24,
+        "status_counts": {
+          "refused": 9,
+          "certified": 7,
+          "timeout": 8
+        },
+        "refusal_rate_all_cases": 0.375,
+        "timeout_rate_all_cases": 0.3333333333333333,
+        "certified_routes": {
+          "tier-loop": 5,
+          "prepass": 2
+        },
+        "generator_mismatches": [
+          "basis-independent__noise6__810",
+          "basis-exact__noise6__810",
+          "basis-exact__noise6__811",
+          "basis-near__noise6__810",
+          "mono3__noise6__811",
+          "basis-independent__noise6__811",
+          "mono3__noise6__810"
+        ],
+        "not_symbolically_equal": [
+          "basis-independent__noise6__810",
+          "basis-exact__noise6__810",
+          "basis-exact__noise6__811",
+          "basis-near__noise6__810",
+          "mono3__noise6__811",
+          "basis-independent__noise6__811",
+          "mono3__noise6__810"
+        ],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [],
+        "numeric_atom_slices": 11,
+        "bounded_slices": 11,
+        "median_slice_width": 2.031227432808258e-06,
+        "single_coordinate_truth_matches": 2,
+        "matched_truth_inside_slice": 2,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [
+          "basis-independent__noise6__810",
+          "mono3__noise6__811",
+          "basis-independent__noise6__811",
+          "mono3__noise6__810"
+        ],
+        "median_discovery_seconds_including_timeouts": 6.322523047987488,
+        "median_scoring_seconds": 0.06663616999867372
+      },
+      "noise3": {
+        "n": 24,
+        "status_counts": {
+          "refused": 14,
+          "timeout": 6,
+          "certified": 4
+        },
+        "refusal_rate_all_cases": 0.5833333333333334,
+        "timeout_rate_all_cases": 0.25,
+        "certified_routes": {
+          "tier-loop": 4
+        },
+        "generator_mismatches": [
+          "power__noise3__810",
+          "power__noise3__811",
+          "small-term__noise3__810",
+          "small-term__noise3__811"
+        ],
+        "not_symbolically_equal": [
+          "power__noise3__810",
+          "power__noise3__811",
+          "small-term__noise3__810",
+          "small-term__noise3__811"
+        ],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [],
+        "numeric_atom_slices": 6,
+        "bounded_slices": 6,
+        "median_slice_width": 0.004597401654006683,
+        "single_coordinate_truth_matches": 2,
+        "matched_truth_inside_slice": 2,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [
+          "power__noise3__810",
+          "power__noise3__811"
+        ],
+        "median_discovery_seconds_including_timeouts": 3.979139428018243,
+        "median_scoring_seconds": 0.059903326007770374
+      },
+      "floor6": {
+        "n": 24,
+        "status_counts": {
+          "refused": 9,
+          "certified": 13,
+          "timeout": 2
+        },
+        "refusal_rate_all_cases": 0.375,
+        "timeout_rate_all_cases": 0.08333333333333333,
+        "certified_routes": {
+          "tier-loop": 13
+        },
+        "generator_mismatches": [
+          "basis-near__floor6__810"
+        ],
+        "not_symbolically_equal": [
+          "basis-near__floor6__810"
+        ],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [],
+        "numeric_atom_slices": 27,
+        "bounded_slices": 27,
+        "median_slice_width": 5.304193604338536e-07,
+        "single_coordinate_truth_matches": 24,
+        "matched_truth_inside_slice": 24,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [
+          "power__floor6__811",
+          "basis-independent__floor6__811",
+          "basis-independent__floor6__810",
+          "power__floor6__810",
+          "mono3__floor6__810",
+          "mono3__floor6__811",
+          "affine3__floor6__811",
+          "sphere3__floor6__810",
+          "sphere3__floor6__811",
+          "affine3__floor6__810"
+        ],
+        "median_discovery_seconds_including_timeouts": 1.5586813289992278,
+        "median_scoring_seconds": 0.07853766699554399
+      },
+      "floor3": {
+        "n": 24,
+        "status_counts": {
+          "refused": 18,
+          "timeout": 6
+        },
+        "refusal_rate_all_cases": 0.75,
+        "timeout_rate_all_cases": 0.25,
+        "certified_routes": {},
+        "generator_mismatches": [],
+        "not_symbolically_equal": [],
+        "explicit_false_exactness_claims": [],
+        "unqualified_generator_mismatches": [],
+        "numeric_atom_slices": 0,
+        "bounded_slices": 0,
+        "median_slice_width": null,
+        "single_coordinate_truth_matches": 0,
+        "matched_truth_inside_slice": 0,
+        "truth_inclusion_limit": "conditional slice, only uniquely matched single-coordinate replacements; not marginal coverage",
+        "infeasible_joint_corner_cases": [],
+        "median_discovery_seconds_including_timeouts": 3.8946805904852226,
+        "median_scoring_seconds": null
+      }
+    }
+  },
+  "replay_differences": [],
+  "clean_law_regressions_completed_in_both_arms": [],
+  "scope_correction_is_not_recovery_gain": true
+}

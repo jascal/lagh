@@ -1,0 +1,14 @@
+{
+  "case": "mono3__floor3__810",
+  "family": "mono3",
+  "regime": "floor3",
+  "seed": 810,
+  "input_hash": "935310486d2c4f3d7f3a26abf34b0dda41024b99f3891900bb17eef9b263d9f7",
+  "truth": "13*x_0*sqrt(x_1)/(10*x_2)",
+  "sigma": 0.0,
+  "floor_abs": 0.001,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "timeout",
+  "discovery_seconds": 20.001317284011748
+}

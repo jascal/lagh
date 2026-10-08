@@ -1,0 +1,112 @@
+{
+  "case": "basis-near__noise6__810",
+  "family": "basis-near",
+  "regime": "noise6",
+  "seed": 810,
+  "input_hash": "9a181eeafa3088bad2835bd21c5583e40dfe980bc3e72603e5308e3b64f32753",
+  "truth": "13*x_0/10 - 7*x_1/10",
+  "sigma": 1e-06,
+  "floor_abs": 1e-12,
+  "truth_within_observed_band": true,
+  "truth_within_cert_band": true,
+  "status": "certified",
+  "certificate": {
+    "certified": true,
+    "nmiss": 0,
+    "nuncov": 0,
+    "domain_size": 48,
+    "state_bounds": [
+      [
+        0.599023285371673,
+        2.933893839825461
+      ],
+      [
+        0.5990224858131621,
+        2.933894674809039
+      ]
+    ],
+    "law": "573544363*x_1/955907234",
+    "abstain": null,
+    "notes": [
+      "domain-restricted certificate: inputs satisfy x_0**2 - 2979064979744795225*x_0*x_1/1489532502445875354 - 343025*x_0/5513172855002 + 332300975052317085*x_1**2/332300980662390548 + 63221565650*x_1/1016108079627571111 - 1715125/4435171140317748936 = 0 (machine-exact); rivals coincide on the constraint variety and the representative is canonicalized modulo it",
+      "conditional parameter slices at sigma=1e-06, other numeric atoms fixed: 573544363/955907234 in [0.5999995388, 0.6000012361]"
+    ],
+    "alpha_log10": -245.8828861318293,
+    "n_hypotheses": 8,
+    "partial": {
+      "status": "certified",
+      "components": {
+        "573544363/955907234": {
+          "kind": "interval",
+          "lo": 0.5999995387974345,
+          "hi": 0.6000012360915055,
+          "span": 1.6972940709569784e-06,
+          "resolved": true
+        }
+      },
+      "exact": [],
+      "interval": [
+        "573544363/955907234"
+      ],
+      "unconstrained": [],
+      "n_resolved": 1,
+      "note": "CONDITIONAL coordinate slices: other numeric atoms fixed; not marginal coverage or a simultaneous box",
+      "scope": {
+        "kind": "conditional-numeric-atom-slices",
+        "fixed_law": "573544363*x_1/955907234",
+        "joint_box": false,
+        "marginal_coverage": false,
+        "method": "local bisection with checked endpoints",
+        "missing_bound": "no rejecting bracket within search limit, or slice unavailable"
+      }
+    },
+    "constraints": [
+      "x_0**2 - 2979064979744795225*x_0*x_1/1489532502445875354 - 343025*x_0/5513172855002 + 332300975052317085*x_1**2/332300980662390548 + 63221565650*x_1/1016108079627571111 - 1715125/4435171140317748936"
+    ],
+    "measurement": null,
+    "measurement_omitted": null,
+    "claim": {
+      "kind": "finite-data-consistency",
+      "domain": "checked finite rows under the supplied error model",
+      "exact_form_identified": false,
+      "coefficient_precision": "not implied by pinning; read separately scoped intervals",
+      "significance_scope": "chance agreement under the stated null, not exact-form probability"
+    }
+  },
+  "law": "573544363*x_1/955907234",
+  "tier": 1,
+  "n_candidates": 8,
+  "route": "tier-loop",
+  "discovery_seconds": 0.17801999699440785,
+  "score": {
+    "all_observed_rows_fit": true,
+    "fresh_relative_error": 7.54895773660194e-07,
+    "fresh_truth_band_misses": 0,
+    "extended_relative_error": 3.9036638275295334e-07,
+    "extended_truth_band_misses": 5,
+    "symbolically_equal": false,
+    "same_polynomial_support": false,
+    "max_coefficient_error": 1.3000000236424616,
+    "generator_mismatch": true,
+    "interval_diagnostics": {
+      "kind": "coordinate_slices_other_atoms_fixed",
+      "slices": [
+        {
+          "atom": "573544363/955907234",
+          "value": 0.6000000236424615,
+          "bounds": [
+            0.5999995387976181,
+            0.6000012360913373
+          ],
+          "endpoints_feasible": [
+            true,
+            true
+          ]
+        }
+      ],
+      "simultaneous_corners_feasible": null,
+      "truth_inclusion_scope": "only uniquely matched single-coordinate replacements"
+    }
+  },
+  "scoring_seconds": 0.025057987979380414
+}
